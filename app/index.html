@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="">
+<html ng-app="app">
 <meta charset="UTF-8">
     <head>
         <!-- jquery required for bootstrap -->
@@ -13,11 +13,29 @@
 
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    </head>
-    <body>
-        <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
-        <script type="text/javascript" src="app.module.js"></script>
 
-        <p>{{ "Hello," + " Angular!" }}</p>
-    </body>
+
+
+        <!-- Dev Scripts -->
+
+        <script src="bower_components/angular/angular.js"></script>
+        <!--Main App js -->
+        <script src="app.js"></script>
+
+
+        <!-- Menu Bar js -->
+        <script src="menu_bar/menu.module.js"></script>
+        <script src="menu_bar/menu.component.js"></script>
+
+        <!-- Table JS -->
+        <script src="table/table.module.js"></script>
+        <script src="table/table.component.js"></script>
+
+    </head>
+        <body>
+          <menu></menu>
+
+          {{1}} + {{2}}
+
+        </body>
 </html>

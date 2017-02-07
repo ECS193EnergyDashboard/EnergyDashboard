@@ -1,28 +1,28 @@
 <!DOCTYPE html>
-<html ng-app="app">
-<meta charset="UTF-8">
+<html ng-app="energyDashboard">
     <head>
-        <!-- jquery required for bootstrap -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <meta charset="UTF-8">
 
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <!-- JQuery -->
+        <script src="bower_components/jquery/dist/jquery.min.js"></script>
 
-        <!-- Optional theme -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <!-- Angular -->
+        <script src="bower_components/angular/angular.min.js"></script>
+
+        <!--Main App js -->
+        <script src="app.module.js"></script>
 
         <!-- Angular Smart Table -->
-        <script type="text/javascript" src="bower_components/angular-smart-table/smart-table.min.js"
+        <script src="bower_components/angular-smart-table/dist/smart-table.min.js"></script>
 
-        <!-- Dev Scripts -->
-
-        <script src="bower_components/angular/angular.js"></script>
-        <!--Main App js -->
-        <script src="app.js"></script>
-
+        <!-- Core Modules -->
+        <script src="core/core.module.js"></script>
+        <script src="core/sensor/sensor.module.js"></script>
+        <script src="core/sensor/sensor.service.js"></script>
 
         <!-- Menu Bar js -->
         <script src="menu_bar/menu.module.js"></script>
@@ -32,10 +32,40 @@
         <script src="table/table.module.js"></script>
         <script src="table/table.component.js"></script>
 
+        <script>
+            // Test table for visualization
+            angular.module('energyDashboard').component('test', {
+                template: '<table class="table-bordered table-hover">' +
+                            '<thead class="thead-inverse">' +
+                                '<tr>' +
+                                    '<td>Room</td>' +
+                                    '<td ng-repeat="v in $ctrl.data.Rooms[0].Values">{{v.Name}}</td>' +
+                                '</tr>' +
+                            '</thead>' +
+                            '<tr ng-repeat="room in $ctrl.data.Rooms">' +
+                                '<td>{{room.Name}}</td>' +
+                                '<td ng-repeat="v in room.Values">{{v.Value}}</td>' +
+                            '</tr>' +
+                          '</table>',
+                controller: function(sensor) {
+                    this.data = {};
+                    var ctrl = this;
+                    sensor.query().then(function(result) {
+                        ctrl.data = result;
+                        console.log(result);
+                    });
+                }
+            })
+        </script>
+
     </head>
     <body>
+        <!--
         <menu></menu>
+        -->
 
-        {{1}} + {{2}}
+        <test></test>
+
+        {{ 1 + 2 }}
     </body>
 </html>

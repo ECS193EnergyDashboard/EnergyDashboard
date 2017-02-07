@@ -1,17 +1,21 @@
 
 
 
-<table st-table="$ctrl.Rooms" class="table table-striped">
+<table st-table="$ctrl.rooms" class="table table-striped">
     <thead>
-    <tr>
-        <th>first name</th>
-        <th>last name</th>
+    <tr ng-repeat="room in $ctrl.rooms|limitTo:1">
+        <th>Room</th>
+        <th>{{room.Values[0].Name}}</th>
+        <th>{{room.Values[1].Name}}</th>
+        <th>{{room.Values[2].Name}}</th>
     </tr>
     </thead>
     <tbody>
-		<tr ng-repeat="room in $ctrl.Rooms">
-        <td>{{room.Values.Name}}</td>
+		<tr ng-repeat="room in $ctrl.rooms">
         <td>{{room.Room}}</td>
+        <td>{{room.Values[0].Value}}</td>
+        <td>{{room.Values[1].Value}}</td>
+        <td>{{room.Values[2].Value}}</td>
     </tr> 
 
     </tbody>

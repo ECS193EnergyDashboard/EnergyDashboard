@@ -39,21 +39,25 @@
 
 
 
-<!--         <table st-table="$ctrl.phones" class="table table-striped">
-            <thead>
-            <tr>
-                <th>first name</th>
-                <th>last name</th>
-            </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="room in $ctrl.phones">
-                <td>{{room.name}}</td>
-                <td>{{room.snippet}}</td>
-            </tr> 
+<!-- <table st-table="$ctrl.rooms" class="table table-striped">
+    <thead>
+    <tr ng-repeat="room in $ctrl.rooms|limitTo:1">
+        <th>Room</th>
+        <th>{{room.Values[0].Name}}</th>
+        <th>{{room.Values[1].Name}}</th>
+        <th>{{room.Values[2].Name}}</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="room in $ctrl.rooms">
+        <td>{{room.Room}}</td>
+        <td>{{room.Values[0].Value}}</td>
+        <td>{{room.Values[1].Value}}</td>
+        <td>{{room.Values[2].Value}}</td>
+    </tr> 
 
-            </tbody>
-        </table> -->
+    </tbody>
+</table> -->
 
 
         <table></table>

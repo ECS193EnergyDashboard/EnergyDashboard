@@ -1,0 +1,60 @@
+/*
+    Format of data:
+        - Node objects
+            - 'Name' = name of node
+            - 'Elements' = array of children
+
+    Potential Issues:
+        - Do we want to have whole hierarchy in memory?
+            - Perhaps only send buildings, then when expand building, send that buildings hierarchy?
+
+    Potential Service Ideas:
+        - Ex: service.getBuildings()
+        - Ex: service.getBuilding("Ghausi")
+*/
+{
+    "Name": "Buildings",
+    "Elements": [
+        {
+            "Name": "Ghausi",
+            "Elements": [
+                {
+                    "Name": "Subsystem",
+                    "Elements": [
+                        {
+                            "Name": "AHU", 
+                            "Elements": [
+                                {
+                                    "Name": "AHU01",
+                                    "Elements": [ ]
+                                },
+                                {
+                                    "Name": "AHU02",
+                                    "Elements": [ ]
+                                },
+                                {
+                                    "Name": "AHU03",
+                                    "Elements": [ ]
+                                },
+                                {
+                                    "Name": "AHU04",
+                                    "Elements": [ ]
+                                },
+                                {
+                                    "Name": "AHU05",
+                                    "Elements": [ ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Name": "PES",
+            "Elements": [
+
+            ]
+        }
+    ] 
+}

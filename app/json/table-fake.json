@@ -1,0 +1,93 @@
+/*
+    Format of data:
+    - 'Rooms' = array of room objects
+        - index 0
+            - 'Room' = room name 
+            - 'Value' = array of sensor value objects
+                - 'Name' = name of value
+                - 'Value' = value of sensor/calc
+                - 'UnitsAbbreviation': units of value
+                - 'Good': true if value is valid, otherwise false
+        - index 1
+        - ...
+
+    Contract:
+        - Every room objects 'Values' array will have the same type of sensor readings
+        - Every key in a value object will exist, no need to null check
+
+    Potential Service Ideas:
+        - Query service for different subsets of values 
+            - Ex: service.getAHU("AHU01", [ "Room Temperature", "Supply Fan Speed", "Supply Air Temperature" ])
+            - Ex: service.getAHU("AHU01", [ "Supply Fan Speed", "Supply Air Temperature" ])
+*/
+{
+    "Rooms": [
+        {
+            "Room": "RM1105",
+            "Values": [
+                {   
+                    "Name": "Room Temperature",
+                    "Value": 69.0,
+                    "UnitsAbbreviation": "°F",
+                    "Good": true
+                },
+                {
+                    "Name": "Supply Fan Speed",
+                    "Value": 65.0,
+                    "UnitsAbbreviation": "%",
+                    "Good": true
+                },
+                {
+                    "Name": "Supply Air Temperature",
+                    "Value": 61.0,
+                    "UnitsAbbreviation": "°F",
+                    "Good": true
+                }
+            ]
+        },
+        {
+            "Room": "RM1113",
+            "Values": [
+                {   "Name": "Room Temperature",
+                    "Value": 70.1,
+                    "UnitsAbbreviation": "°F",
+                    "Good": true
+                },
+                {
+                    "Name": "Supply Fan Speed",
+                    "Value": 43.0,
+                    "UnitsAbbreviation": "%",
+                    "Good": true
+                },
+                {
+                    "Name": "Supply Air Temperature",
+                    "Value": -1234.5,
+                    "UnitsAbbreviation": "°F",
+                    "Good": false
+                }
+            ]
+        },
+        {
+            "Room": "RM1114A",
+            "Values": [
+                {   "Name": "Room Temperature",
+                    "Value": 100.0,
+                    "UnitsAbbreviation": "°F",
+                    "Good": false
+                },
+                {
+                    "Name": "Supply Fan Speed",
+                    "Value": 200.0,
+                    "UnitsAbbreviation": "%",
+                    "Good": false
+                },
+                {
+                    "Name": "Supply Air Temperature",
+                    "Value": 0.0,
+                    "UnitsAbbreviation": "°F",
+                    "Good": false
+                }
+            ]
+        }
+    ] 
+}

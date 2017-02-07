@@ -1,0 +1,18 @@
+
+
+
+<table st-table="$ctrl.Rooms" class="table table-striped">
+    <thead>
+    <tr>
+        <th>first name</th>
+        <th>last name</th>
+    </tr>
+    </thead>
+    <tbody>
+		<tr ng-repeat="room in $ctrl.Rooms">
+        <td>{{room.Values.Name}}</td>
+        <td>{{room.Room}}</td>
+    </tr> 
+
+    </tbody>
+</table>

@@ -1,4 +1,4 @@
 'use strict';
 
 // Define the `phonecatApp` module
-angular.module('table', []);
+angular.module('menuBar', []);

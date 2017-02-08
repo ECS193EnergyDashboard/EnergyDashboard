@@ -2,12 +2,11 @@
 angular.module('tableModule').component('table',{
 	templateUrl: 'table/table.template.html',
 	controller: ['$http', function TableController($http){
-		var self = this;
-		// self.orderProp = 'carrier';
+		var self = this;	
 
 		$http.get('json/use.json').then(function(response){
 			self.rooms = response.data;
-			self.values = response.data.Values;
+			self.valueNames = self.rooms[1].Values;
 
 
 	    // $scope.artists = [];
@@ -22,10 +21,17 @@ angular.module('tableModule').component('table',{
 			// $scope.albums = data.artists.albums; /this is where im getting trouble
 
 
+
+
 		})
 	}]
 });
 
+
+// $scope.number = 5;
+// $scope.getNumber = function(num) {
+//     return new Array(num);   
+// }
 
 // angular.module('tableModule').component('table',{
 // 	templateUrl: 'table/table.template.html',

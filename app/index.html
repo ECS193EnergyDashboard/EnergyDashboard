@@ -38,16 +38,13 @@
         <menu-bar></menu-bar>
 
 
-
-<!-- <table st-table="$ctrl.rooms" class="table table-striped">
+<table st-table="$ctrl.rooms" class="table table-striped">
     <thead>
-    <tr ng-repeat="room in $ctrl.rooms|limitTo:1">
-        <th>Room</th>
-        <th>{{room.Values[0].Name}}</th>
-        <th>{{room.Values[1].Name}}</th>
-        <th>{{room.Values[2].Name}}</th>
+    <tr>
+        <th ng-repeat="value in $ctrl.valueNames"> {{value.Name}} </th>
     </tr>
     </thead>
+
     <tbody>
         <tr ng-repeat="room in $ctrl.rooms">
         <td>{{room.Room}}</td>
@@ -57,9 +54,10 @@
     </tr> 
 
     </tbody>
-</table> -->
+</table>
 
 
         <table></table>
+
     </body>
 </html>

@@ -1,7 +1,30 @@
 
-
-
+<!-- New way -->
 <table st-table="$ctrl.rooms" class="table table-striped">
+    <thead>
+    <tr>
+        <th> Room </th>
+        <th ng-repeat="value in $ctrl.valueNames"> {{value.Name}} </th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    <tr ng-repeat="room in $ctrl.rooms">
+        <td>{{room.Room}}</td>
+        <td ng-repeat="value in room.Values">{{value.Value}}{{value.UnitsAbbreviation}} </td> 
+    </tr> 
+
+    </tbody>
+</table>
+
+
+
+
+
+<!-- ORGINAL WAY I DID IT -->
+
+<!-- <table st-table="$ctrl.rooms" class="table table-striped">
     <thead>
     <tr ng-repeat="room in $ctrl.rooms|limitTo:1">
         <th>Room</th>
@@ -19,4 +42,4 @@
     </tr> 
 
     </tbody>
-</table>
+</table> -->

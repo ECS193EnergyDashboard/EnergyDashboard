@@ -52,18 +52,18 @@ https.get('https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/elements/E0bgZy4oKQ9ki
 
 
 
-            // insert into db if doesnt exist
-            db.any('insert into buildings values(${Name}, ${WebId}, ${url})',
+            // insert into db if doesnt exist, or update if does exist
+            db.any('insert into buildings values(${Name}, ${url}, ${WebId}) ON CONFLICT (name) DO UPDATE SET (url,webid) = ( ${url},${WebId})',
                 {
                     Name:   datajs.Items[i].Name,
                     WebId:  datajs.Items[i].WebId,
                     url:    datajs.Items[i].Links.Self
                 })
                 .then(function (data) {
-                    console.log("Inserted in DB"); // print data;
+                    console.log("Inserted/updated in DB");
                 })
                 .catch(function (error) {
-                    console.log("ERROR:", error.message || error); // print the error;
+                    console.log(error); // print the error;
                 });
 
         }

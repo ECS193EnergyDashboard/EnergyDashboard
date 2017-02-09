@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html ng-app="energyDashboard">
+<html ng-app="energyDashboardModule">
+<meta charset="UTF-8">
     <head>
-        <meta charset="UTF-8">
-
         <!-- jquery required for bootstrap -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
@@ -18,9 +17,12 @@
         <!-- Dev Scripts -->
 
         <script src="bower_components/angular/angular.js"></script>
-
         <!--Main App js -->
         <script src="app.module.js"></script>
+
+        <!-- Angular Smart Table -->
+        <script type="text/javascript" src="bower_components/angular-smart-table/dist/smart-table.min.js"></script>
+
 
         <!-- Core Modules -->
         <script src="core/core.module.js"></script>
@@ -41,6 +43,6 @@
     <body>
         <menu-bar></menu-bar>
 
-        {{1}} + {{2}}
+        <room-table></room-table>
     </body>
 </html>

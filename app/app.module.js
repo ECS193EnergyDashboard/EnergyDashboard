@@ -1,4 +1,4 @@
-angular.module('energyDashboard', [
+angular.module('energyDashboardModule', [
     'tableModule',
     'menuBarModule',
     'core',

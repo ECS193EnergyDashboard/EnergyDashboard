@@ -14,21 +14,17 @@ var cn = {
 var db = pgp(cn);
 
 // create buildings table if doesnt exist
-db.any("CREATE TABLE IF NOT EXISTS buildings(name varchar(80) PRIMARY KEY, url varchar(256), webid varchar(256) )");
-
-//make select
-/*db.any("select * from weather")
-    .then(function (data) {
-        // success;
-        console.log(data);
-    })
+db.any("CREATE TABLE IF NOT EXISTS buildings(name varchar(80) PRIMARY KEY, url varchar(256), webid varchar(256), elementsurl varchar(256) )")
     .catch(function (error) {
-        // error;
-        console.error("Error: ", error);
-    });*/
+        console.log(error);
+    });
+// create AHU table if doesnt exist
+/*db.any("CREATE TABLE IF NOT EXISTS ahu(name varchar(80) ,building varchar(80), url varchar(256), webid varchar(256), attrurl varchar(256), valueurl varchar(256) )");*/
 
-// get buildings
 
+
+// query buildings via https to webAPI
+var buildingData;
 https.get('https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/elements/E0bgZy4oKQ9kiBiZJTW7eugwDBxX8Kms5BG77JiQlqSuWwVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdT/elements', (res) => {
 /*    console.log('statusCode:', res.statusCode);
     console.log('headers:', res.headers);*/
@@ -42,36 +38,47 @@ https.get('https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/elements/E0bgZy4oKQ9ki
 
     // end of data
     res.on('end', () => {
-        var datajs = JSON.parse(body);
+        buildingData = JSON.parse(body);
         //console.log('ITEM: ')
-        for(var i in datajs.Items){
-            /*console.log(datajs.Items[i].Name); //works
-            console.log(datajs.Items[i].WebId);
-            console.log(datajs.Items[i].Links.Self);
-            console.log("length: ", datajs.Items.length);*/
-
-
+        for(var i in buildingData.Items){
+            /*console.log(buildingData.Items[i].Name); //works
+            console.log(buildingData.Items[i].WebId);
+            console.log(buildingData.Items[i].Links.Self);
+            console.log("length: ", buildingData.Items.length);*/
 
             // insert into db if doesnt exist, or update if does exist
-            db.any('insert into buildings values(${Name}, ${url}, ${WebId}) ON CONFLICT (name) DO UPDATE SET (url,webid) = ( ${url},${WebId})',
+            db.any('insert into buildings values(${Name}, ${url}, ${WebId}, ${Elements}) ON CONFLICT (name) DO UPDATE SET (url,webid) = ( ${url},${WebId})',
                 {
-                    Name:   datajs.Items[i].Name,
-                    WebId:  datajs.Items[i].WebId,
-                    url:    datajs.Items[i].Links.Self
+                    Name:   buildingData.Items[i].Name,
+                    WebId:  buildingData.Items[i].WebId,
+                    url:    buildingData.Items[i].Links.Self,
+                    Elements: buildingData.Items[i].Links.Elements
                 })
                 .then(function (data) {
-                    console.log("Inserted/updated in DB");
+                    //console.log("Inserted/updated in DB");
                 })
                 .catch(function (error) {
                     console.log(error); // print the error;
                 });
 
-        }
+                //for each building make https get for elements
 
-        //console.log(datajs);
+                //if that response.name = subsystem grab the elements url
+
+                //make https get for that elemets (gives AHU, CHW ...)
+
+                //if that response.name = AHU grab the elements url
+
+                //store AHU stuff in json
+
+        }
+        console.log("buildings json: ", JSON.stringify(buildingData));
+        //console.log(buildingData);
         //console.log(body);
     });
-});
+}); //end https get building
+
+
 
 
 

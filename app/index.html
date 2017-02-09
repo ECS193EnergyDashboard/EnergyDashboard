@@ -32,39 +32,11 @@
         <script src="table/table.module.js"></script>
         <script src="table/table.component.js"></script>
 
-        <script>
-            // Test table for visualization
-            angular.module('energyDashboard').component('test', {
-                template: '<table class="table-bordered table-hover">' +
-                            '<thead class="thead-inverse">' +
-                                '<tr>' +
-                                    '<td>Room</td>' +
-                                    '<td ng-repeat="v in $ctrl.data.Rooms[0].Values">{{v.Name}}</td>' +
-                                '</tr>' +
-                            '</thead>' +
-                            '<tr ng-repeat="room in $ctrl.data.Rooms">' +
-                                '<td>{{room.Name}}</td>' +
-                                '<td ng-repeat="v in room.Values">{{v.Value}}</td>' +
-                            '</tr>' +
-                          '</table>',
-                controller: function(sensor) {
-                    this.data = {};
-                    var ctrl = this;
-                    sensor.query().then(function(result) {
-                        ctrl.data = result;
-                        console.log(result);
-                    });
-                }
-            })
-        </script>
-
     </head>
     <body>
         <!--
         <menu></menu>
         -->
-
-        <test></test>
 
         {{ 1 + 2 }}
     </body>

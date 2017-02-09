@@ -14,15 +14,14 @@
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-        <!-- Angular Smart Table -->
-        <script type="text/javascript" src="bower_components/angular-smart-table/smart-table.min.js"></script>
-
-
         <!-- Dev Scripts -->
 
         <script src="bower_components/angular/angular.js"></script>
         <!--Main App js -->
         <script src="app.js"></script>
+
+        <!-- Angular Smart Table -->
+        <script type="text/javascript" src="bower_components/angular-smart-table/dist/smart-table.min.js"></script>
 
 
         <!-- Menu Bar js -->
@@ -33,31 +32,17 @@
         <script src="table/table.module.js"></script>
         <script src="table/table.component.js"></script>
 
+
+
+
     </head>
     <body>
         <menu-bar></menu-bar>
 
 
-<table st-table="$ctrl.rooms" class="table table-striped">
-    <thead>
-    <tr>
-        <th ng-repeat="value in $ctrl.valueNames"> {{value.Name}} </th>
-    </tr>
-    </thead>
-
-    <tbody>
-        <tr ng-repeat="room in $ctrl.rooms">
-        <td>{{room.Room}}</td>
-        <td>{{room.Values[0].Value}}</td>
-        <td>{{room.Values[1].Value}}</td>
-        <td>{{room.Values[2].Value}}</td>
-    </tr> 
-
-    </tbody>
-</table>
 
 
-        <table></table>
+        <room-table></room-table>
 
     </body>
 </html>

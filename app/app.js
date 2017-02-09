@@ -3,6 +3,7 @@
 // Define the `phonecatApp` module
 angular.module('appModule', [
 'menuBarModule',
-'tableModule'
+'tableModule',
+'smart-table'
 
 ]);

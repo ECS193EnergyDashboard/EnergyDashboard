@@ -1,20 +1,23 @@
 
 <!-- New way -->
+
 <table st-table="$ctrl.rooms" class="table table-striped">
     <thead>
     <tr>
-        <th> Room </th>
+        <th>Room</th>
         <th ng-repeat="value in $ctrl.valueNames"> {{value.Name}} </th>
+    </tr>
+
+    <tr>
+        <th colspan="5"><input st-search="" class="form-control" placeholder="Search For Room..." type="text"/></th>
     </tr>
     </thead>
 
     <tbody>
-
     <tr ng-repeat="room in $ctrl.rooms">
         <td>{{room.Room}}</td>
         <td ng-repeat="value in room.Values">{{value.Value}}{{value.UnitsAbbreviation}} </td> 
     </tr> 
-
     </tbody>
 </table>
 

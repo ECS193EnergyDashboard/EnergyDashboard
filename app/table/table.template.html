@@ -1,15 +1,17 @@
 
 <!-- New way -->
 
-<table st-table="$ctrl.rooms" class="table table-striped">
+<table st-table="$ctrl.rooms" class="table table-striped" st-safe-src="rowCollection">
     <thead>
     <tr>
-        <th>Room</th>
-        <th ng-repeat="value in $ctrl.valueNames"> {{value.Name}} </th>
+        <th st-sort="room">Room</th>
+        <th st-sort='test' ng-repeat="value in $ctrl.valueNames"> {{value.Name}} </th>
     </tr>
 
     <tr>
-        <th colspan="5"><input st-search="" class="form-control" placeholder="Search For Room..." type="text"/></th>
+    <th colspan="4">
+        <input st-search="room" placeholder="search for room..." class="input-sm form-control" type="search"/>
+    </th>
     </tr>
     </thead>
 

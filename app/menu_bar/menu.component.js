@@ -5,13 +5,10 @@ angular.module('menuBarModule').component('menuBar',{
   controller: function MenuBarController($scope) {
     $scope.menu = [{
       name: "Home",
-      component: "home"
+      component: ""
     }, {
       name: "About",
       component: "about"
-    }, {
-      name: "Contact",
-      component: "contact"
     }];
   }
 });

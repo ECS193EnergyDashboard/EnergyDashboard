@@ -1,16 +1,17 @@
 
 angular.module('tableModule').component('roomTable',{
 	templateUrl: 'table/table.template.html',
-	controller: ['$http', '$filter', function TableController($http){
+	controller: ['$http', '$filter', 'sensor', function TableController($http, $filter, sensor){
 		var self = this;	
 		var rooms = [];
 		var valueNames = [];
 
-		$http.get('json/use.json').then(function(response){
-			self.rooms = response.data;
+		sensor.query().then(function(data){
+			self.rooms = data.Rooms;
 			self.valueNames = self.rooms[0].Values;
+  			console.log(data);
+		});
 
-		})
 	}]
 });
 

@@ -1,4 +1,3 @@
-<!-- New way -->
 
 <table st-table="$ctrl.rooms" class="table table-striped" st-safe-src="rowCollection">
     <thead>
@@ -16,7 +15,7 @@
 
     <tbody>
     <tr ng-repeat="room in $ctrl.rooms">
-        <td>{{room.Room}}</td>
+        <td>{{room.Name}}</td>
         <td ng-repeat="value in room.Values">{{value.Value}}{{value.UnitsAbbreviation}} </td> 
     </tr> 
     </tbody>
@@ -24,25 +23,3 @@
 
 
 
-
-
-<!-- ORGINAL WAY I DID IT -->
-
-<!-- <table st-table="$ctrl.rooms" class="table table-striped">
-    <thead>
-    <tr ng-repeat="room in $ctrl.rooms|limitTo:1">
-        <th>Room</th>
-        <th>{{room.Values[0].Name}}</th>
-        <th>{{room.Values[1].Name}}</th>
-        <th>{{room.Values[2].Name}}</th>
-    </tr>
-    </thead>
-    <tbody>
-		<tr ng-repeat="room in $ctrl.rooms">
-        <td>{{room.Room}}</td>
-        <td>{{room.Values[0].Value}}</td>
-        <td>{{room.Values[1].Value}}</td>
-        <td>{{room.Values[2].Value}}</td>
-    </tr> 
-    </tbody>
-</table> -->

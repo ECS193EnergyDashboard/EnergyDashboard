@@ -5,3 +5,5 @@ angular.module('energyDashboardModule', [
     'smart-table',
     'sideNavModule'
 ]);
+
+

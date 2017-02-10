@@ -2,7 +2,7 @@
 <html ng-app="energyDashboardModule">
 <meta charset="UTF-8">
     <head>
-        <!-- jquery required for bootstrap -->
+		<!-- jquery required for bootstrap -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
         <!-- Latest compiled and minified CSS -->
@@ -44,11 +44,35 @@
         <script src="side-nav/side.component.js"></script>
 
 
+	<!-- SideBar CSS -->
+    	<link href="side-nav/side.component.css" rel="stylesheet">
 
     </head>
     <body>
-        <menu-bar></menu-bar>
-   	<room-table></room-table>
-	<side-bar></side-bar>
-    </body>
+		<!-- /#wrapper -->
+		<div id="wrapper"> 
+			<!-- SideBar module -->
+			<side-bar></side-bar>
+			
+			<!-- Page Content -->
+			<div id="page-content-wrapper">
+				<!-- MenuBar module -->
+				<menu-bar></menu-bar>
+				<a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Menu</a>
+				<!-- RoomTable module -->
+				<room-table></room-table>
+			</div>
+			<!-- /#page-content-wrapper -->
+
+   		</div>
+   		<!-- /#wrapper -->
+	</body>
+
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
 </html>

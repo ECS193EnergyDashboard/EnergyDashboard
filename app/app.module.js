@@ -1,4 +1,5 @@
 angular.module('energyDashboard', [
     'menuBar',
-    'table'
+    'table',
+    'sideBar'
 ]);

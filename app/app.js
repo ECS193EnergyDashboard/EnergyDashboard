@@ -4,6 +4,6 @@
 angular.module('appModule', [
 'menuBarModule',
 'tableModule',
-'smart-table'
-
+'smart-table',
+'sideNavModule'
 ]);

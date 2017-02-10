@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="appModule">
+<html ng-app="energyDashboardModule">
 <meta charset="UTF-8">
     <head>
         <!-- jquery required for bootstrap -->
@@ -18,11 +18,19 @@
 
         <script src="bower_components/angular/angular.js"></script>
         <!--Main App js -->
-        <script src="app.js"></script>
+        <script src="app.module.js"></script>
 
         <!-- Angular Smart Table -->
         <script type="text/javascript" src="bower_components/angular-smart-table/dist/smart-table.min.js"></script>
 
+
+        <!-- Core Modules -->
+        <script src="core/core.module.js"></script>
+        <script src="core/sensor/sensor.module.js"></script>
+        <script src="core/sensor/sensor.service.js"></script>
+
+        <!-- Angular Smart Table -->
+        <script type="text/javascript" src="bower_components/angular-smart-table/dist/smart-table.min.js"></script>
 
         <!-- Menu Bar js -->
         <script src="menu_bar/menu.module.js"></script>
@@ -31,6 +39,7 @@
         <!-- Table JS -->
         <script src="table/table.module.js"></script>
         <script src="table/table.component.js"></script>
+<<<<<<< HEAD
         <!-- SideNav JS -->
         <script src="side-nav/side.module.js"></script>
         <script src="side-nav/side.component.js"></script>
@@ -40,10 +49,17 @@
     </head>
     <body>
         <menu-bar></menu-bar>
-hello	
-<side-bar></side-bar>
-hi     
-   <room-table></room-table>
+	<side-bar></side-bar>
+   	<room-table></room-table>
 
+=======
+
+        <link rel="stylesheet" href="app.css"></link>
+    </head>
+    <body>
+        <menu-bar></menu-bar>
+
+        <room-table></room-table>
+>>>>>>> 58c19ff2f1a062a43f018c9dc2d611ef817b3a9d
     </body>
 </html>

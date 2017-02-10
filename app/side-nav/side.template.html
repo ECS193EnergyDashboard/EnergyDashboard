@@ -1,45 +1,38 @@
 
-<link rel="stylesheet" type="text/css" href="side-nav/side.component.css">
 
-<div id="sideNav" class="sidenav">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <a href="#" onclick="openGhausiNav()">Ghausi</a>
-  <a href="#">Ghausi2</a>
-  <a href="#">Ghausi3</a>
-  <a href="#">Ghausi4</a>
-</div>
-
-<div id="ghausinav" class="sidenav">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeGhausiNav()">&times;</a>
-  <a href="#" onclick="openGhausiNav()">Ghausi</a>
-  <a href="#">Ghausi-Room1</a>
-  <a href="#">Ghausi-Room2</a>
-  <a href="#">Ghausi-Room3</a>
-</div>
-
-
-<!-- Use any element to open the sidenav -->
-<span onclick="openNav()">Open SideBar Demo</span>
-
-<script>
-/* Set the width of the side navigation to 250px */
-function openNav() {
-    document.getElementById("sideNav").style.width = "250px";
-}
-/* Set the width of the side navigation to 250px */
-function openGhausiNav() {
-    document.getElementById("ghausinav").style.width = "250px";
-}
-
-/* Set the width of the side navigation to 0 */
-function closeGhausiNav() {
-    document.getElementById("ghausinav").style.width = "0";
-}
-/* Set the width of the side navigation to 0 */
-function closeNav() {
-    document.getElementById("sideNav").style.width = "0";
-}
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Start Bootstrap
+                    </a>
+                </li>
+                <li>
+                    <a href="#">Dashboard</a>
+                </li>
+                <li>
+                    <a href="#">Shortcuts</a>
+                </li>
+                <li>
+                    <a href="#">Overview</a>
+                </li>
+                <li>
+                    <a href="#">Events</a>
+                </li>
+                <li>
+                    <a href="#">About</a>
+                </li>
+                <li>
+                    <a href="#">Services</a>
+                </li>
+                <li>
+                    <a href="#">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
 
 
 
-</script>
+

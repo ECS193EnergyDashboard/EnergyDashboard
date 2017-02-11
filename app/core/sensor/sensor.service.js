@@ -11,28 +11,28 @@ angular.
                     return {};
                 });
                 */
-                var data = { Rooms: [] };
+                var data = { elements: [] };
                 var base = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/'
                 var url = base + 'elements/E0bgZy4oKQ9kiBiZJTW7eugwLaXd-Olm5RGZEkhRt5d2AAVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdTXEdIQVVTSVxTVUJTWVNURU1cQUhVXEFIVTAx/elements?selectedFields=Items.Name;Items.WebId';
                 return $http.get(url).then(function(response) {
-                    var rooms = response.data.Items;
+                    var elements = response.data.Items;
                     var promises = [];
-                    for (var i = 0; i < rooms.length; i++) {
-                        data.Rooms[i] = { Name: rooms[i].Name, Values: [] };
-                        url = base + 'streamsets/' + rooms[i].WebId + '/value?selectedFields=Items.Name;Items.Value.Value;Items.Value.UnitsAbbreviation;Items.Value.Good'
+                    for (var i = 0; i < elements.length; i++) {
+                        data.elements[i] = { name: elements[i].Name, values: [] };
+                        url = base + 'streamsets/' + elements[i].WebId + '/value?selectedFields=Items.Name;Items.Value.Value;Items.Value.UnitsAbbreviation;Items.Value.Good'
                         promises.push($http.get(url));
                     }
                     return $q.all(promises).then(function(responses) {
                         for (var i = 0; i < responses.length; i++) {
                             var values = responses[i].data.Items;
                             for (value of values) {
-                                // TODO: set defaults
-                                var v = value.Value;
-                                if (v.Value.Value !== undefined) { // Handle nested value objects
-                                    v.Value = v.Value.Value;
+                                // TODO: add default values
+                                var v = { value: value.Value.Value, unitsAbbreviation: value.Value.UnitsAbbreviation, good: value.Value.Good };
+                                if (v.value.Value !== undefined) { // Handle nested value objects
+                                    v.value = v.value.Value;
                                 }
-                                v.Name = value.Name;
-                                data.Rooms[i].Values.push(v);
+                                v.name = value.Name;
+                                data.elements[i].values.push(v);
                             }
                         }
                         return data;

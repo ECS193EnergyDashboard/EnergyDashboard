@@ -1,1 +1,1 @@
-angular.module('core', ['core.sensor', 'core.pi' ]);
+angular.module('core', [ 'core.pi' ]);

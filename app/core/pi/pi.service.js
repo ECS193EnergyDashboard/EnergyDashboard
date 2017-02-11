@@ -4,13 +4,17 @@ angular.
         function($http, $q) {
             var pi = { };
 
-            // TODO: error handling for all http requests
-
             pi.getElement = function(webId) {
                 var result = [];
-                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/elements/' + webId + '?selectedFields=Name;WebId;HasChildren'
-                return $http.get(url).then(function(response) {
-                    return{ name: response.data.Name, webId: response.data.WebId, hadChildren: response.data.HasChildren };
+                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/elements/' + webId + '?selectedFields=Name;WebId;HasChildren';
+                return $http.get(url).then(response => {
+                    return { 
+                        name: response.data.Name || '', 
+                        webId: response.data.WebId || '', 
+                        hadChildren: response.data.HasChildren || false 
+                    };
+                }, response => {
+                    console.log('Error: getElement(): ' + response.status + ' - ' + response.statusText);
                 });
             }
 
@@ -20,8 +24,11 @@ angular.
                 return $http.get(url).then(function(response) {
                     var values = response.data.Items;
                     for (value of values) {
-                        // TODO: add default values
-                        var v = { value: value.Value.Value, unitsAbbreviation: value.Value.UnitsAbbreviation, good: value.Value.Good };
+                        var v = { 
+                            value: value.Value.Value || 0, 
+                            unitsAbbreviation: value.Value.UnitsAbbreviation || '', 
+                            good: value.Value.Good || false
+                        };
                         if (v.value.Value !== undefined) { // Handle nested value objects
                             v.value = v.value.Value;
                         }
@@ -29,6 +36,8 @@ angular.
                         result.push(v);
                     }
                     return result;
+                }, response => {
+                    console.log('Error: getValuesOfElement(): ' + response.status + ' - ' + response.statusText);
                 });
             };
 
@@ -38,11 +47,15 @@ angular.
                 return $http.get(url).then(function(response) {
                     var children = response.data.Items;
                     for (child of children) {
-                        // TODO: add default values
-                        var c = { name: child.Name, webId: child.WebId, hasChildren: child.HasChildren };
+                        var c = { 
+                            name: child.Name || '', 
+                            webId: child.WebId || '', 
+                            hasChildren: child.HasChildren || false };
                         result.push(c);
                     }
                     return result;
+                }, response => {
+                    console.log('Error: getChildrenOfElement(): ' + response.status + ' - ' + response.statusText);
                 });
             };
 

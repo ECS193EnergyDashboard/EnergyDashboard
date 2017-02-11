@@ -4,6 +4,16 @@ angular.
         function($http, $q) {
             var pi = { };
 
+            // TODO: error handling for all http requests
+
+            pi.getElement = function(webId) {
+                var result = [];
+                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/elements/' + webId + '?selectedFields=Name;WebId;HasChildren'
+                return $http.get(url).then(function(response) {
+                    return{ name: response.data.Name, webId: response.data.WebId, hadChildren: response.data.HasChildren };
+                });
+            }
+
             pi.getValuesOfElement = function(webId) {
                 var result = [];
                 var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/streamsets/' + webId + '/value?selectedFields=Items.Name;Items.Value.Value;Items.Value.UnitsAbbreviation;Items.Value.Good'
@@ -35,8 +45,6 @@ angular.
                     return result;
                 });
             };
-
-            // TODO: error handling for all http requests
 
             pi.getValuesOfChildren = function(parentWebId) {
                 var result = { elements: [] };

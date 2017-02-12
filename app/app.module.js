@@ -3,5 +3,6 @@ angular.module('energyDashboardModule', [
     'menuBarModule',
     'core',
     'smart-table',
-    'sideNavModule'
+    'sideNavModule',
+    'lrDragNDrop',
 ]);

@@ -3,7 +3,7 @@
     <thead>
     <tr>
         <th st-sort="Name">Room</th>
-        <th ng-repeat="value in $ctrl.displayedRooms[0].Values" st-sort="Values[$index].Value"> {{value.Name}} </th>
+        <th lr-drag-src="headers" lr-drop-target="headers" ng-repeat="value in $ctrl.displayedRooms[0].Values" st-sort="Values[$index].Value"> {{value.Name}} </th>
     </tr>
 
     <tr>

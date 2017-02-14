@@ -26,8 +26,8 @@
 
         <!-- Core Modules -->
         <script src="core/core.module.js"></script>
-        <script src="core/sensor/sensor.module.js"></script>
-        <script src="core/sensor/sensor.service.js"></script>
+        <script src="core/pi/pi.module.js"></script>
+        <script src="core/pi/pi.service.js"></script>
 
         <!-- Angular Smart Table -->
         <script type="text/javascript" src="bower_components/angular-smart-table/dist/smart-table.min.js"></script>
@@ -42,7 +42,7 @@
         <!-- SideNav JS -->
         <script src="side-nav/side.module.js"></script>
         <script src="side-nav/side.component.js"></script>
-
+        <link rel="stylesheet" href="app.css">
 
 	<!-- SideBar CSS -->
     	<link href="side-nav/side.component.css" rel="stylesheet">
@@ -50,10 +50,10 @@
     </head>
     <body>
 		<!-- /#wrapper -->
-		<div id="wrapper"> 
+		<div id="wrapper">
 			<!-- SideBar module -->
 			<side-bar></side-bar>
-			
+
 			<!-- Page Content -->
 			<div id="page-content-wrapper">
 				<!-- MenuBar module -->
@@ -75,4 +75,5 @@
         $("#wrapper").toggleClass("toggled");
     });
     </script>
+
 </html>

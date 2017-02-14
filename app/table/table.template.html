@@ -40,7 +40,7 @@
 
     <tbody>
     <tr ng-repeat="room in rowCollection">
-        <td>{{room.Name}}</td>
+        <td>{{room["name"]}}</td>
         <td ng-repeat="value in columns" ng-class="value.Good ? 'goodValue' : 'badValue'">
             {{room[value.Name]}} 
         </td> 
@@ -50,25 +50,4 @@
 
 
 
-
-<!--       <table st-table="rowCollection" class="table table-striped">
-    <thead>
-    <tr>
-        <th lr-drag-src="headers" lr-drop-target="headers" ng-repeat="col in columns" st-sort="{{col}}">{{col.Name}}</th>
-    </tr>
-    <tr>
-        <th>
-            <input st-search="firstName" placeholder="search for firstname" class="input-sm form-control" type="search"/>
-        </th>
-        <th colspan="4">
-            <input st-search placeholder="global search" class="input-sm form-control" type="search"/>
-        </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="row in rowCollection">
-        <td ng-repeat="col in columns">{{row[col.Name]}}</td>
-    </tr>
-    </tbody>
-</table> -->
 

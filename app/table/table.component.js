@@ -52,6 +52,7 @@ angular.module('tableModule').component('roomTable',{
 	        function parseJSON(room) {
 	                var values = {}
 
+	                values["name"] = self.rooms[room].Name;
 	                for(var i=0;i<$scope.columns.length;i++){
 	                	values[$scope.columns[i].Name] = self.rooms[room].Values[i].Value;
 	                }

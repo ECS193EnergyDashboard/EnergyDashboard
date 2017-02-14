@@ -10,6 +10,13 @@ angular.module('sideNavModule').component('sideBar',{
   			console.log("buildings: ", $scope.buildings);
 		});
 
+        $scope.clickElem = function(element){
+            pi.getValuesOfChildren(element.webId).then(function(data){
+    			element.elements = data.elements;
+      			console.log("clicked: " + element.name);
+                console.log(element.name +" data", data.elements);
+    		});
+        }
 
 	}]
 });

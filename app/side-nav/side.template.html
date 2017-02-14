@@ -3,8 +3,15 @@
     <div class="just-padding">
 
         <div class="list-group list-group-root well">
+            <div ng-repeat="element in buildings">
+                <a  ng-click="clickElem(element)"  class="list-group-item">{{element.name}}</a>
+                <div class="list-group"
+                                        ng-include="'side-nav/side-nav-heirarchy-template.html'">
 
-            <a ng-repeat="building in buildings" href="#" class="list-group-item">{{building.name}}</a>
+                </div>
+            </div>
+
+
             <!--<a href="#" class="list-group-item">Item 1</a>
             <div class="list-group">
 

@@ -1,0 +1,8 @@
+.goodValue {
+    text-align: center;
+}
+
+.badValue {
+    text-align: center;
+    background-color: red;
+}

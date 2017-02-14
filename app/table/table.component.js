@@ -43,52 +43,26 @@ angular.module('tableModule').component('roomTable',{
 
 		sensor.query().then(function(data){
 			self.rooms = data.Rooms;
-  			// console.log(data);
 
-  			$scope.columns=data.Rooms[0].Values;
-  			//console.log($scope.columns);
+  			$scope.columns = data.Rooms[0].Values;
 
-
-        var nameList = ['Pierre', 'Pol', 'Jacques', 'Robert', 'Elisa'];
-        var familyName = ['Dupont', 'Germain', 'Delcourt', 'bjip', 'Menez'];
-
-        $scope.isLoading = false;
-        $scope.rowCollection = [];
+	        $scope.rowCollection = [];
 
 
-        function parseJSON(room) {
-            var
-                firstName = nameList[Math.floor(Math.random() * 4)],
-                lastName = familyName[Math.floor(Math.random() * 4)],
-                age = Math.floor(Math.random() * 100),
-                email = firstName + lastName + '@whatever.com',
-                balance = Math.random() * 3000;
+	        function parseJSON(room) {
+	                var values = {}
 
-                var values = {}
+	                for(var i=0;i<$scope.columns.length;i++){
+	                	values[$scope.columns[i].Name] = self.rooms[room].Values[i].Value;
+	                }
+	                return values;
 
-                for(var i=0;i<$scope.columns.length;i++){
-                	values[$scope.columns[i].Name] = self.rooms[room].Values[i].Value;
-                }
-                return values;
+	        }
+	        
 
-            // return {
-            //     String($scope.columns[0].Name): self.rooms[room].Values[0].Value,
-            //     // $scope.columns[1].Name: self.rooms[room].Values[1].Value,
-            //     // $scope.columns[1].Name: self.rooms[room].Values[1].Value
-            // };
-        }
-        
-        // $scope.columns=['firstName', 'lastName','age','email','balance'];
-        
-        for(var i=0;i<self.rooms.length;i++){
-          $scope.rowCollection.push(parseJSON(i));
-        }
-
-        console.log($scope.rowCollection);
-
-
-
-
+	        for(var i=0;i<self.rooms.length;i++){
+	          $scope.rowCollection.push(parseJSON(i));
+	        }
 
 
 		});

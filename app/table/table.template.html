@@ -1,9 +1,9 @@
-
+<!-- 
 <table st-table="$ctrl.displayedRooms" st-safe-src="$ctrl.rooms" class="table table-striped">
     <thead>
     <tr>
         <th st-sort="Name">Room</th>
-        <th lr-drag-src="headers" lr-drop-target="headers" ng-repeat="value in $ctrl.displayedRooms[0].Values" st-sort="Values[$index].Value"> {{value.Name}} </th>
+        <th ng-repeat="value in $ctrl.displayedRooms[0].Values" st-sort="Values[$index].Value" lr-drag-src="$ctrl.displayedRooms[0].Values" lr-drop-target="$ctrl.displayedRooms[0].Values"> {{value.Name}} </th>
     </tr>
 
     <tr>
@@ -22,6 +22,27 @@
     </tr> 
     </tbody>
 </table>
+ -->
 
 
+      <table st-table="rowCollection" class="table table-striped">
+    <thead>
+    <tr>
+        <th lr-drag-src="headers" lr-drop-target="headers" ng-repeat="col in columns" st-sort="{{col}}">{{col.Name}}</th>
+    </tr>
+    <tr>
+        <th>
+            <input st-search="firstName" placeholder="search for firstname" class="input-sm form-control" type="search"/>
+        </th>
+        <th colspan="4">
+            <input st-search placeholder="global search" class="input-sm form-control" type="search"/>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="row in rowCollection">
+        <td ng-repeat="col in columns">{{row[col.Name]}}</td>
+    </tr>
+    </tbody>
+</table>
 

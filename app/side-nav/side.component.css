@@ -6,7 +6,7 @@
  */
 
  body {
-    overflow-x: hidden;
+    /*overflow-x: hidden;*/
  }
 
 /* Toggle Styles */
@@ -31,7 +31,7 @@
     height: 100%;
     margin-left: -250px;
     overflow-y: auto;
-    background: #000;
+    background: white;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
@@ -127,15 +127,21 @@
         position: relative;
         margin-right: 0;
     }
-
-
-/*-----------For heirarchy-----------*/
-.just-padding {
-  padding: 15px;
 }
 
+/*-----------For hierarchy----------*/
+.just-padding {
+  padding: 0px;
+}
+
+.list-group .list-group{
+    padding-left: 20px;
+    margin-bottom: 20px;
+}
+
+
 .list-group.list-group-root {
-  padding: 0;
+  padding: 1px;
   overflow: hidden;
 }
 

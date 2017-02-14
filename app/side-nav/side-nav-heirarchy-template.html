@@ -1,9 +1,9 @@
-<div ng-repeat="element in element.elements">
-    <p> I'm from the template</p>
-    <a  ng-click="clickBuild(element)"  class="list-group-item">{{element.name}}</a>
-    <div class="list-group" ng-if="element.elements"
+<div  ng-repeat="e in element.elements">
+    <!-- <p> I'm from the template</p> -->
+    <a  ng-click="clickElem(e)" class="list-group-item">{{e.name}}</a>
+    <div class="list-group" ng-if="e.elements"
                             ng-include="'side-nav/side-nav-heirarchy-template.html'"
-                            ng-init="element=buildings">
+                            ng-init="element=e">
 
     </div>
 </div>

@@ -19,10 +19,11 @@
         <script src="bower_components/angular/angular.js"></script>
         <!--Main App js -->
         <script src="app.module.js"></script>
+        <!--Main App css -->
+        <link rel="stylesheet" href="app.css">
 
         <!-- Angular Smart Table -->
         <script type="text/javascript" src="bower_components/angular-smart-table/dist/smart-table.min.js"></script>
-
 
         <!-- Core Modules -->
         <script src="core/core.module.js"></script>
@@ -39,36 +40,36 @@
         <!-- Table JS -->
         <script src="table/table.module.js"></script>
         <script src="table/table.component.js"></script>
+
         <!-- SideNav JS -->
         <script src="side-nav/side.module.js"></script>
         <script src="side-nav/side.component.js"></script>
-        <link rel="stylesheet" href="app.css">
 
-	<!-- SideBar CSS -->
+	    <!-- SideBar CSS -->
     	<link href="side-nav/side.component.css" rel="stylesheet">
 
     </head>
     <body>
-		<!-- /#wrapper -->
-		<div id="wrapper">
-			<!-- SideBar module -->
-			<side-bar></side-bar>
+        <!-- MenuBar module -->
+        <menu-bar></menu-bar>
+        <!-- /#wrapper -->
+        <div id="wrapper">
+            <!-- SideBar module -->
+            <side-bar></side-bar>
 
-			<!-- Page Content -->
-			<div id="page-content-wrapper">
-				<!-- MenuBar module -->
-				<menu-bar></menu-bar>
-				<a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Menu</a>
-				<!-- RoomTable module -->
-				<room-table></room-table>
-			</div>
-			<!-- /#page-content-wrapper -->
+            <!-- Page Content -->
+            <div id="page-content-wrapper">
+                <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Menu</a>
+                <!-- RoomTable module -->
+                <room-table></room-table>
+            </div>
+            <!-- /#page-content-wrapper -->
 
-   		</div>
-   		<!-- /#wrapper -->
-	</body>
+        </div>
+        <!-- /#wrapper -->
+    </body>
 
-    <!-- Menu Toggle Script -->
+<!-- Menu Toggle Script -->
     <script>
     $("#menu-toggle").click(function(e) {
         e.preventDefault();

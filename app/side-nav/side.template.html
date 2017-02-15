@@ -4,65 +4,14 @@
 
         <div class="list-group list-group-root well">
             <div ng-repeat="element in buildings">
-                <a  ng-click="clickElem(element)"  class="list-group-item">{{element.name}}</a>
+                <a  ng-click="clickElem(element)"  class="list-group-item">
+                    <span class="glyphicon glyphicon-plus"></span>{{element.name}}</a>
                 <div class="list-group"
-                                        ng-include="'side-nav/side-nav-heirarchy-template.html'">
+                                        ng-include="'side-nav/side-nav-heirarchy-template.html'"
+                                        ng-if="element.show">
 
                 </div>
             </div>
-
-
-            <!--<a href="#" class="list-group-item">Item 1</a>
-            <div class="list-group">
-
-                <a href="#" class="list-group-item">Item 1.1</a>
-                <div class="list-group">
-                    <a href="#" class="list-group-item">Item 1.1.1</a>
-                    <a href="#" class="list-group-item">Item 1.1.2</a>
-                    <a href="#" class="list-group-item">Item 1.1.3</a>
-                </div>
-
-                <a href="#" class="list-group-item">Item 1.2</a>
-                <div class="list-group">
-                    <a href="#" class="list-group-item">Item 1.2.1</a>
-                    <a href="#" class="list-group-item">Item 1.2.2</a>
-                    <a href="#" class="list-group-item">Item 1.2.3</a>
-                </div>
-
-                <a href="#" class="list-group-item">Item 1.3</a>
-                <div class="list-group">
-                    <a href="#" class="list-group-item">Item 1.3.1</a>
-                    <a href="#" class="list-group-item">Item 1.3.2</a>
-                    <a href="#" class="list-group-item">Item 1.3.3</a>
-                </div>
-
-            </div>
-
-            <a href="#" class="list-group-item">Item 2</a>
-            <div class="list-group">
-
-                <a href="#" class="list-group-item">Item 2.1</a>
-                <div class="list-group">
-                    <a href="#" class="list-group-item">Item 2.1.1</a>
-                    <a href="#" class="list-group-item">Item 2.1.2</a>
-                    <a href="#" class="list-group-item">Item 2.1.3</a>
-                </div>
-
-                <a href="#" class="list-group-item">Item 2.2</a>
-                <div class="list-group">
-                    <a href="#" class="list-group-item">Item 2.2.1</a>
-                    <a href="#" class="list-group-item">Item 2.2.2</a>
-                    <a href="#" class="list-group-item">Item 2.2.3</a>
-                </div>
-
-                <a href="#" class="list-group-item">Item 2.3</a>
-                <div class="list-group">
-                    <a href="#" class="list-group-item">Item 2.3.1</a>
-                    <a href="#" class="list-group-item">Item 2.3.2</a>
-                    <a href="#" class="list-group-item">Item 2.3.3</a>
-                </div>
-
-            </div>-->
 
         </div>
 

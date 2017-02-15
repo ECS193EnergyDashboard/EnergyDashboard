@@ -1,7 +1,7 @@
 <div  ng-repeat="e in element.elements">
-    <!-- <p> I'm from the template</p> -->
-    <a  ng-click="clickElem(e)" class="list-group-item">{{e.name}}</a>
-    <div class="list-group" ng-if="e.elements"
+    <a  ng-click="clickElem(e)" class="list-group-item">
+        <span class="glyphicon glyphicon-plus"></span>{{e.name}}</a>
+    <div class="list-group" ng-if="e.elements && e.show"
                             ng-include="'side-nav/side-nav-heirarchy-template.html'"
                             ng-init="element=e">
 

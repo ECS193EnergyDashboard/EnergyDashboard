@@ -1,34 +1,10 @@
-<!-- 
-<table st-table="$ctrl.displayedRooms" st-safe-src="$ctrl.rooms" class="table table-striped">
+
+
+ <table st-table="$ctrl.displayed" st-safe-src="$ctrl.rooms" class="table table-striped">
     <thead>
     <tr>
         <th st-sort="Name">Room</th>
-        <th ng-repeat="value in $ctrl.displayedRooms[0].Values" st-sort="Values[$index].Value" lr-drag-src="$ctrl.displayedRooms[0].Values" lr-drop-target="$ctrl.displayedRooms[0].Values"> {{value.Name}} </th>
-    </tr>
-
-    <tr>
-    <th colspan="4">
-        <input st-search="Name" placeholder="search for room..." class="input-sm form-control" type="search"/>
-    </th>
-    </tr>
-    </thead>
-
-    <tbody>
-    <tr ng-repeat="room in $ctrl.displayedRooms">
-        <td>{{room.Name}}</td>
-        <td ng-repeat="value in room.Values" ng-class="value.Good ? 'goodValue' : 'badValue'">
-            {{$ctrl.formatValue(value)}} 
-        </td>  
-    </tr> 
-    </tbody>
-</table> -->
-
-
- <table st-table="$ctrl.displayedRooms" st-safe-src="$ctrl.rooms" class="table table-striped">
-    <thead>
-    <tr>
-        <th st-sort="Name">Room</th>
-        <th ng-repeat="value in $ctrl.displayedRooms[0].Values" st-sort="Values[$index].Value" lr-drag-src="$ctrl.displayedRooms[0].Values" lr-drop-target="$ctrl.displayedRooms[0].Values"> {{value.Name}} </th>
+        <th ng-repeat="value in $ctrl.displayed[0].values" st-sort="$ctrl.getters.value.bind(null, $index)" lr-drag-src="$ctrl.displayed[0].values" lr-drop-target="$ctrl.displayed[0].values"> {{value.name}} </th>
     </tr>
 
     <tr>
@@ -42,8 +18,8 @@
         <!--For the object containing the values in rowCollection place the value indexed by value-->
     <tr ng-repeat="room in $ctrl.rowCollection">
         <td>{{room["RoomNumber"]}}</td>
-        <td ng-repeat="value in $ctrl.displayedRooms[0].Values" ng-class="value.Good ? 'goodValue' : 'badValue'">
-            {{room[value.Name]}} 
+        <td ng-repeat="value in $ctrl.displayed[0].values" ng-class="value.good ? 'goodValue' : 'badValue'">
+            {{room[value.name]}} 
         </td> 
     </tr> 
     </tbody>

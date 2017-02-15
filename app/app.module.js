@@ -6,3 +6,5 @@ angular.module('energyDashboardModule', [
     'sideNavModule',
     'lrDragNDrop',
 ]);
+
+

@@ -1,112 +1,109 @@
 /*
     Format of data:
-    - 'Rooms' = array of room objects
+    - 'elements' = array of elements
         - index 0
-            - 'Room' = room name 
-            - 'Value' = array of sensor value objects
-                - 'Name' = name of value
-                - 'Value' = value of sensor/calc
-                - 'UnitsAbbreviation': units of value
-                - 'Good': true if value is valid, otherwise false
+            - 'name' = element name
+            - 'value' = array of sensor value objects
+                - 'name' = name of value
+                - 'value' = value of sensor/calc
+                - 'unitsAbbreviation': units of value
+                - 'good': true if value is valid, otherwise false
         - index 1
         - ...
 
     Contract:
-        - Every room objects 'Values' array will have the same type of sensor readings
+        - Every element's 'values' array will have the same type of sensor readings
         - Every key in a value object will exist, no need to null check
-
-    Potential Service Ideas:
-        - Query service for different subsets of values 
-            - Ex: service.getAHU("AHU01", [ "Room Temperature", "Supply Fan Speed", "Supply Air Temperature" ])
-            - Ex: service.getAHU("AHU01", [ "Supply Fan Speed", "Supply Air Temperature" ])
 */
-[
-   {
-       "Room": "RM1105",
-       "Values": [
-               {   "Name": "Room Temperature",
-                   "Value": 74.1,
-                   "UnitsAbbreviation": "°F",
-                   "Good": true
-               },
-               {
-                   "Name": "Supply Fan Speed",
-                   "Value": 43.0,
-                   "UnitsAbbreviation": "%",
-                   "Good": true
-               },
-               {
-                   "Name": "Supply Air Temperature",
-                   "Value": -1234.5,
-                   "UnitsAbbreviation": "°F",
-                   "Good": false
-               }
-           ]
-   },
-   {
-       "Room": "RM1113",
-       "Values": [
-               {   "Name": "Room Temperature",
-                   "Value": 75.1,
-                   "UnitsAbbreviation": "°F",
-                   "Good": true
-               },
-               {
-                   "Name": "Supply Fan Speed",
-                   "Value": 43.0,
-                   "UnitsAbbreviation": "%",
-                   "Good": true
-               },
-               {
-                   "Name": "Supply Air Temperature",
-                   "Value": -1234.5,
-                   "UnitsAbbreviation": "°F",
-                   "Good": false
-               }
-           ]
-   },
-   {
-       "Room": "RM1114A",
-       "Values": [
-               {   "Name": "Room Temperature",
-                   "Value": 70.1,
-                   "UnitsAbbreviation": "°F",
-                   "Good": true
-               },
-               {
-                   "Name": "Supply Fan Speed",
-                   "Value": 43.0,
-                   "UnitsAbbreviation": "%",
-                   "Good": true
-               },
-               {
-                   "Name": "Supply Air Temperature",
-                   "Value": -1234.5,
-                   "UnitsAbbreviation": "°F",
-                   "Good": false
-               }
-           ]
-   },
-   {
-       "Room": "RM1114A",
-       "Values": [
-               {   "Name": "Room Temperature",
-                   "Value": 70.1,
-                   "UnitsAbbreviation": "°F",
-                   "Good": true
-               },
-               {
-                   "Name": "Supply Fan Speed",
-                   "Value": 43.0,
-                   "UnitsAbbreviation": "%",
-                   "Good": true
-               },
-               {
-                   "Name": "Supply Air Temperature",
-                   "Value": -1234.5,
-                   "UnitsAbbreviation": "°F",
-                   "Good": false
-               }
-           ]
-   }
-]
+{
+    "elements": [
+        {
+            "name": "RM1105",
+            "values": [
+                    {   "name": "Room Temperature",
+                        "value": 74.1,
+                        "unitsAbbreviation": "°F",
+                        "good": true
+                    },
+                    {
+                        "name": "Supply Fan Speed",
+                        "value": 43.0,
+                        "unitsAbbreviation": "%",
+                        "good": true
+                    },
+                    {
+                        "name": "Supply Air Temperature",
+                        "value": -1234.5,
+                        "unitsAbbreviation": "°F",
+                        "good": false
+                    }
+                ]
+        },
+        {
+            "name": "RM1113",
+            "values": [
+                    {   "name": "Room Temperature",
+                        "value": 75.1,
+                        "unitsAbbreviation": "°F",
+                        "good": true
+                    },
+                    {
+                        "name": "Supply Fan Speed",
+                        "value": 43.0,
+                        "unitsAbbreviation": "%",
+                        "good": true
+                    },
+                    {
+                        "name": "Supply Air Temperature",
+                        "value": -1234.5,
+                        "unitsAbbreviation": "°F",
+                        "good": false
+                    }
+                ]
+        },
+        {
+            "name": "RM1114A",
+            "values": [
+                    {   "name": "Room Temperature",
+                        "value": 70.1,
+                        "unitsAbbreviation": "°F",
+                        "good": true
+                    },
+                    {
+                        "name": "Supply Fan Speed",
+                        "value": 43.0,
+                        "unitsAbbreviation": "%",
+                        "good": true
+                    },
+                    {
+                        "name": "Supply Air Temperature",
+                        "value": -1234.5,
+                        "unitsAbbreviation": "°F",
+                        "good": false
+                    }
+                ]
+        },
+        {
+            "name": "RM1114A",
+            "values": [
+                    {   "name": "Room Temperature",
+                        "value": 70.1,
+                        "unitsAbbreviation": "°F",
+                        "good": true
+                    },
+                    {
+                        "name": "Supply Fan Speed",
+                        "value": 43.0,
+                        "unitsAbbreviation": "%",
+                        "good": true
+                    },
+                    {
+                        "name": "Supply Air Temperature",
+                        "value": -1234.5,
+                        "unitsAbbreviation": "°F",
+                        "good": false
+                    }
+                ]
+        }
+    ]
+}

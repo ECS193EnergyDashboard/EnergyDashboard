@@ -4,8 +4,10 @@
 
         <div class="list-group list-group-root well">
             <div ng-repeat="element in buildings">
-                <a  ng-click="clickElem(element)"  class="list-group-item">
-                    <span class="glyphicon glyphicon-plus"></span>{{element.name}}</a>
+                <a  ng-click="clickElem(element)"  class="list-group-item pointer">
+                    <span ng-hide="element.show" class="glyphicon glyphicon-plus"></span>
+                    <span ng-show="element.show" class="glyphicon glyphicon-minus"></span>
+                    {{element.name}}</a>
                 <div class="list-group"
                                         ng-include="'side-nav/side-nav-heirarchy-template.html'"
                                         ng-if="element.show">

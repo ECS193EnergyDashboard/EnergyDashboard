@@ -18,7 +18,7 @@
         <td>{{room.Name}}</td>
         <td ng-repeat="value in room.Values" ng-class="value.Good ? 'goodValue' : 'badValue'">
             {{$ctrl.formatValue(value)}} 
-        </td> 
+        </td>  
     </tr> 
     </tbody>
 </table> -->
@@ -39,9 +39,10 @@
     </thead>
 
     <tbody>
-    <tr ng-repeat="room in rowCollection">
-        <td>{{room["name"]}}</td>
-        <td ng-repeat="value in columns" ng-class="value.Good ? 'goodValue' : 'badValue'">
+        <!--For the object containing the values in rowCollection place the value indexed by value-->
+    <tr ng-repeat="room in $ctrl.rowCollection">
+        <td>{{room["RoomNumber"]}}</td>
+        <td ng-repeat="value in $ctrl.displayedRooms[0].Values" ng-class="value.Good ? 'goodValue' : 'badValue'">
             {{room[value.Name]}} 
         </td> 
     </tr> 

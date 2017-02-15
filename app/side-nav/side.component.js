@@ -1,15 +1,19 @@
 angular.module('sideNavModule').component('sideBar', {
     templateUrl: 'side-nav/side.template.html',
-    controller: ['$scope', 'pi', function TableController($scope, pi) {
+    bindings: {
+        onClick: '&'
+    },
+    controller: [ 'pi', function TableController(pi) {
+        var self = this;
 
         // webid for buildings list
         var webId = 'E0bgZy4oKQ9kiBiZJTW7eugwDBxX8Kms5BG77JiQlqSuWwVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdT';
         pi.getValuesOfChildren(webId).then(function(data) {
-            $scope.buildings = data.elements;
-            console.log("buildings: ", $scope.buildings);
+            self.buildings = data.elements;
+            console.log("buildings: ", self.buildings);
         });
 
-        $scope.clickElem = function(element) {
+        this.clickElem = function(element) {
             if (element.elements == null || element.elements === undefined) {
                 pi.getValuesOfChildren(element.webId).then(function(data) {
                     element.elements = data.elements;
@@ -24,7 +28,10 @@ angular.module('sideNavModule').component('sideBar', {
             } else {
                 element.show = !element.show;
             }
+        }
 
+        this.onSelectElem = function(element) {
+            self.onClick({ name: element.name, webId: element.webId })
         }
 
     }]

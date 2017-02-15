@@ -1,16 +1,10 @@
 
 angular.module('tableModule').component('roomTable',{
 	templateUrl: 'table/table.template.html',
-	controller: ['$http', '$filter', 'pi', function TableController($http, $filter, pi){
-		var self = this;	
-		this.data = [];
-
-		var webId = 'E0bgZy4oKQ9kiBiZJTW7eugwLaXd-Olm5RGZEkhRt5d2AAVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdTXEdIQVVTSVxTVUJTWVNURU1cQUhVXEFIVTAx';
-
-		pi.getValuesOfChildren(webId).then(function(data){
-			self.data = data.elements;
-  			console.log(self.data);
-		});
+	bindings: {
+		tableSrc: '<'
+	},
+	controller: [ '$filter', function TableController($filter){
 
 		this.formatValue = function(value, decimals) {
 			var decimals = decimals || 2;

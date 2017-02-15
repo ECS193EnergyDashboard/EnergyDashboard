@@ -1,9 +1,8 @@
 <div  ng-repeat="e in element.elements">
-    <a  ng-click="clickElem(e)" class="list-group-item">
-        <span class="glyphicon glyphicon-plus"></span>{{e.name}}</a>
-    <div class="list-group" ng-if="e.elements && e.show"
-                            ng-include="'side-nav/side-nav-heirarchy-template.html'"
-                            ng-init="element=e">
-
+    <div class="list-group-item">
+        <span ng-show="e.hasChildren" class="glyphicon glyphicon-plus" ng-click="$ctrl.clickElem(e)"></span>
+        <span ng-click="$ctrl.onSelectElem(e)">{{e.name}}</span>
     </div>
+
+    <div class="list-group" ng-if="e.elements && e.show" ng-include="'side-nav/side-nav-heirarchy-template.html'" ng-init="element=e"></div>
 </div>

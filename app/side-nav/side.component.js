@@ -8,15 +8,15 @@ angular.module('sideNavModule').component('sideBar', {
 
         // webid for buildings list
         var webId = 'E0bgZy4oKQ9kiBiZJTW7eugwDBxX8Kms5BG77JiQlqSuWwVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdT';
-        pi.getValuesOfChildren(webId).then(function(data) {
-            self.buildings = data.elements;
+        pi.getChildrenOfElement(webId).then(function(data) {
+            self.buildings = data;
             console.log("buildings: ", self.buildings);
         });
 
         this.clickElem = function(element) {
             if (element.elements == null || element.elements === undefined) {
-                pi.getValuesOfChildren(element.webId).then(function(data) {
-                    element.elements = data.elements;
+                pi.getChildrenOfElement(element.webId).then(function(data) {
+                    element.elements = data;
                     console.log("clicked: " + element.name);
                     //console.log(element.name +" data", data.elements);
                 });

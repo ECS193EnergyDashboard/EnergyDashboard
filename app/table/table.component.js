@@ -67,8 +67,7 @@ angular.module('tableModule').component('roomTable',{
 
 			self.rooms = data.elements;
 
-			// Columns variable used just in javascript
-			columns = self.rooms[0].values;
+			self.columns = self.rooms[0].values;
 
 
 	        self.rowCollection = [];
@@ -78,8 +77,8 @@ angular.module('tableModule').component('roomTable',{
 	            var values = {}
 
 	            values["RoomNumber"] = self.rooms[room].name;
-	            for(var i=0;i<columns.length;i++){
-	            	values[columns[i].name] = formatValue(self.rooms[room].values[i]);
+	            for(var i=0;i<self.columns.length;i++){
+	            	values[self.columns[i].name] = formatValue(self.rooms[room].values[i]);
 	            }
 	            return values;
 	        }

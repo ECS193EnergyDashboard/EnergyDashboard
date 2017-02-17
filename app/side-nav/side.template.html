@@ -3,9 +3,11 @@
     <div class="just-padding">
 
         <div class="list-group list-group-root well">
-            <div ng-repeat="element in buildings">
-                <a  ng-click="clickElem(element)"  class="list-group-item">
-                    <span class="glyphicon glyphicon-plus"></span>{{element.name}}</a>
+            <div ng-repeat="element in $ctrl.buildings">
+                <div class="list-group-item">
+                    <span ng-show="element.hasChildren" class="glyphicon glyphicon-plus" ng-click="$ctrl.clickElem(element)"></span>
+                    <span ng-click="$ctrl.onSelectElem(element)">{{element.name}}</span>
+                </div>
                 <div class="list-group"
                                         ng-include="'side-nav/side-nav-heirarchy-template.html'"
                                         ng-if="element.show">

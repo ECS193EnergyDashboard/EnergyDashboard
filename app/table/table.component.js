@@ -1,16 +1,19 @@
 angular.module('tableModule').component('roomTable',{
 	templateUrl: 'table/table.template.html',
+	bindings: {
+		tableSrc: '<'
+	},
 	controller: [ '$filter', 'pi', function TableController($filter, pi){
 		var self = this;	
 		this.data = [];
 		this.columnNames = [];
 
-		var webId = 'E0bgZy4oKQ9kiBiZJTW7eugwLaXd-Olm5RGZEkhRt5d2AAVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdTXEdIQVVTSVxTVUJTWVNURU1cQUhVXEFIVTAx';
-
 		this.formatValue = function(value, decimals) {
 			var decimals = decimals || 2;
 			var result = "";
-			if (value.good && typeof(value.value) === "number") {
+			if (value === undefined) {
+				return "N/A";
+			} else if (typeof(value.value) === "number") {
 				result += $filter('number')(value.value, decimals);
 				if (value.unitsAbbreviation) {
 					result += " " + value.unitsAbbreviation;
@@ -25,11 +28,16 @@ angular.module('tableModule').component('roomTable',{
 			value: function(key, element) {
 				return element[key].value;
 			}
-		}
+		};
 
-		pi.getValuesOfChildren(webId).then(function(data){
+		this.$onChanges = function() {
+			if (self.tableSrc.length == 0) {
+				return;
+			}
+			self.data = [];
+			self.columnNames = [];
 
-			self.columnNames = data.elements[0].values.map(value => { return value.name; });
+			self.columnNames = self.tableSrc[0].values.map(value => { return value.name; });
 
 	        function parseJSON(element) {
 	            var values = {};
@@ -41,10 +49,13 @@ angular.module('tableModule').component('roomTable',{
 	            return values;
 	        }
 
-			for (var element of data.elements) {
+			for (var element of self.tableSrc) {
 				self.data.push(parseJSON(element));
 			}
-		});
+
+			console.log("Table data: ", self.columnNames, self.data);
+		};
+
 	}]
 });
 

@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('tableModule', [ 'core.pi', 'lrDragNDrop' ]);
+angular.module('tableModule', [ 'core.pi', 'smart-table', 'lrDragNDrop' ]);

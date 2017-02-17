@@ -1,0 +1,18 @@
+.st-sort-ascent:before {
+    content: '\25B2';
+}
+
+.st-sort-descent:before {
+    content: '\25BC';
+}
+
+.lr-drop-target-before{
+  border-left: 2px solid orange;
+}
+
+.lr-drop-target-after{
+  border-right: 2px solid orange;
+}
+
+
+

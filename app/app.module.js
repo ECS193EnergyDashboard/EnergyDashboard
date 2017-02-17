@@ -1,7 +1,6 @@
 angular.module('energyDashboardModule', [
-    'menuBarModule',
     'core',
-    'smart-table',
+    'menuBarModule',
     'dashboardModule'
 ]);
 

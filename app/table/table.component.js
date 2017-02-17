@@ -1,49 +1,13 @@
-
-// angular.module('tableModule').component('roomTable',{
-// 	templateUrl: 'table/table.template.html',
-// 	controller: ['$http', '$filter', 'sensor', function TableController($http, $filter, sensor){
-// 		var self = this;	
-// 		this.rooms = [];
-
-// 		sensor.query().then(function(data){
-// 			self.rooms = data.Rooms;
-//   			console.log(data);
-// 		});
-
-// 		this.getters = {
-// 			value: function(room, index) {
-// 				return room.Values[index].Value;
-// 			}
-// 		}
-
-// 		this.formatValue = function(value, decimals) {
-// 			var decimals = decimals || 2;
-// 			var result = "";
-// 			if (value.Good && typeof(value.Value) === "number") {
-// 				result += $filter('number')(value.Value, decimals);
-// 				if (value.UnitsAbbreviation) {
-// 					result += " " + value.UnitsAbbreviation;
-// 				}
-// 			} else {
-// 				result += value.Value;
-// 			}
-// 			return result;
-// 		}
-
-// 	}]
-// });
-
-
 angular.module('tableModule').component('roomTable',{
 	templateUrl: 'table/table.template.html',
-	controller: ['$http', '$filter', 'pi', function TableController($http, $filter, pi){
+	controller: [ '$filter', 'pi', function TableController($filter, pi){
 		var self = this;	
-		this.rooms = [];
+		this.data = [];
+		this.columnNames = [];
 
 		var webId = 'E0bgZy4oKQ9kiBiZJTW7eugwLaXd-Olm5RGZEkhRt5d2AAVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdTXEdIQVVTSVxTVUJTWVNURU1cQUhVXEFIVTAx';
 
-
-		function formatValue(value, decimals) {
+		this.formatValue = function(value, decimals) {
 			var decimals = decimals || 2;
 			var result = "";
 			if (value.good && typeof(value.value) === "number") {
@@ -58,38 +22,29 @@ angular.module('tableModule').component('roomTable',{
 		};
 
 		this.getters = {
-			value: function(index, element) {
-				return element.values[index].value;
+			value: function(key, element) {
+				return element[key].value;
 			}
 		}
 
 		pi.getValuesOfChildren(webId).then(function(data){
 
-			self.rooms = data.elements;
+			self.columnNames = data.elements[0].values.map(value => { return value.name; });
 
-			self.columns = self.rooms[0].values;
+	        function parseJSON(element) {
+	            var values = {};
 
-
-	        self.rowCollection = [];
-
-
-	        function parseJSON(room) {
-	            var values = {}
-
-	            values["RoomNumber"] = self.rooms[room].name;
-	            for(var i=0;i<self.columns.length;i++){
-	            	values[self.columns[i].name] = formatValue(self.rooms[room].values[i]);
-	            }
+	            values.Name = element.name;
+				for (var value of element.values) {
+					values[value.name] = value;
+				}
 	            return values;
 	        }
-	        
-	        for(var i=0;i<self.rooms.length;i++){
-	          self.rowCollection.push(parseJSON(i));
-	        }
 
+			for (var element of data.elements) {
+				self.data.push(parseJSON(element));
+			}
 		});
-
-
 	}]
 });
 

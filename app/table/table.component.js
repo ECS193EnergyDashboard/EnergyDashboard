@@ -24,6 +24,16 @@ angular.module('tableModule').component('roomTable',{
 			return result;
 		};
 
+		this.valueStyle = function(value) {
+			if (value === undefined) {
+				return 'missingValue';
+			} else if (value.good) {
+				return 'goodValue';
+			} else {
+				return 'badValue';
+			}
+		}
+
 		this.getters = {
 			value: function(key, element) {
 				return element[key].value;
@@ -34,10 +44,17 @@ angular.module('tableModule').component('roomTable',{
 			if (self.tableSrc.length == 0) {
 				return;
 			}
-			self.data = [];
-			self.columnNames = [];
 
-			self.columnNames = self.tableSrc[0].values.map(value => { return value.name; });
+			var columnSet = {};
+
+			for (var element of self.tableSrc) {
+				for (var value of element.values) {
+					columnSet[value.name] = true;
+				}
+			}
+
+			self.data = [];
+			self.columnNames = Object.keys(columnSet);
 
 	        function parseJSON(element) {
 	            var values = {};

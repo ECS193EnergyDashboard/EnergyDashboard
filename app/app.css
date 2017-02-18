@@ -6,3 +6,7 @@
     text-align: center;
     background-color: red;
 }
+
+.missingValue {
+    background-color: #555555;
+}

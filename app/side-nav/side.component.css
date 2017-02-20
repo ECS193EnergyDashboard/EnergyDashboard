@@ -56,7 +56,7 @@
 /* Sidebar Styles */
 
 .sidebar-item {
-    /*background-color: ;*/
+    cursor: pointer;
 }
 
 .sidebar-item:hover {
@@ -147,6 +147,9 @@
     margin-bottom: 20px;
 }
 
+.selected {
+    background-color: #a94442;
+}
 
 .list-group.list-group-root {
   padding: 1px;
@@ -175,5 +178,5 @@
 }
 
 .pointer{
-    cursor: pointer;
+    cursor: default;
 }

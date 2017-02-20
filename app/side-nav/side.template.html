@@ -3,17 +3,14 @@
     <div class="just-padding">
 
         <div class="list-group list-group-root well">
-            <div ng-repeat="element in $ctrl.buildings">
-                <div ng-click="$ctrl.onSelectElem(element)"  class=" sidebar-item list-group-item" >
+            <div ng-repeat="element in $ctrl.buildings" >
+                <div ng-click="$ctrl.onSelectElem(element)"  class="sidebar-item list-group-item" ng-class="{selected: element.numId == $ctrl.hlIndex}" >
                     <span ng-show="!element.hasChildren" class="glyphicon glyphicon-folder-open"></span>
-                    <span ng-show="element.hasChildren && !element.show" class="glyphicon glyphicon-chevron-right pointer" ng-click="$ctrl.clickElem(element)"></span>
-                    <span ng-show="element.hasChildren && element.show" class="glyphicon glyphicon-chevron-down pointer" ng-click="$ctrl.clickElem(element)"></span>
+                    <span ng-show="element.hasChildren && !element.show" class="glyphicon glyphicon-chevron-right pointer" ng-click="$ctrl.clickElem(element);$event.stopPropagation()"></span>
+                    <span ng-show="element.hasChildren && element.show" class="glyphicon glyphicon-chevron-down pointer" ng-click="$ctrl.clickElem(element);$event.stopPropagation()"></span>
                     <span class="">{{element.name}}</span>
                 </div>
-                <div class="list-group"
-                                        ng-include="'side-nav/side-nav-heirarchy-template.html'"
-                                        ng-if="element.show">
-
+                <div class="list-group" ng-include="'side-nav/side-nav-heirarchy-template.html'" ng-if="element.show">
                 </div>
             </div>
 

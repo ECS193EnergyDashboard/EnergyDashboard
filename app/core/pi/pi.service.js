@@ -3,14 +3,16 @@ angular.
     factory('pi', ['$http', '$q',
         function($http, $q) {
             var pi = { };
+            //Count of elements created
+            var eCnt = 0;
 
             pi.getElement = function(webId) {
-                var result = [];
                 var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/elements/' + webId + '?selectedFields=Name;WebId;HasChildren';
                 return $http.get(url).then(response => {
                     return { 
                         name: response.data.Name || '', 
-                        webId: response.data.WebId || '', 
+                        webId: response.data.WebId || '',
+                        numId: eCnt++,
                         hadChildren: response.data.HasChildren || false 
                     };
                 }, response => {
@@ -48,11 +50,13 @@ angular.
                     var children = response.data.Items;
                     for (child of children) {
                         var c = { 
-                            name: child.Name || '', 
+                            name: child.Name || '',
+                            numId: eCnt++,
                             webId: child.WebId || '', 
                             hasChildren: child.HasChildren || false };
                         result.push(c);
                     }
+                    console.log(result);
                     return result;
                 }, response => {
                     console.log('Error: getChildrenOfElement(): ' + response.status + ' - ' + response.statusText);

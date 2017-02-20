@@ -5,12 +5,14 @@ angular.module('sideNavModule').component('sideBar', {
     },
     controller: [ 'pi', function TableController(pi) {
         var self = this;
+        // Highlighted Item Index
+        self.hlIndex = -1;
 
         // webid for buildings list
         var webId = 'E0bgZy4oKQ9kiBiZJTW7eugwDBxX8Kms5BG77JiQlqSuWwVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdT';
         pi.getChildrenOfElement(webId).then(function(data) {
             self.buildings = data;
-            console.log("buildings: ", self.buildings);
+            //console.log("buildings: ", self.buildings);
         });
 
         this.clickElem = function(element) {
@@ -28,11 +30,15 @@ angular.module('sideNavModule').component('sideBar', {
             } else {
                 element.show = !element.show;
             }
-        }
+        };
 
         this.onSelectElem = function(element) {
-            self.onClick({ name: element.name, webId: element.webId })
-        }
+            self.onClick({ name: element.name, webId: element.webId });
+            //Set highlighted item index to elements id
+            self.hlIndex = element.numId;
+        };
 
-    }]
+    }
+
+    ]
 });

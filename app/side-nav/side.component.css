@@ -165,3 +165,7 @@
 .list-group.list-group-root  .list-group > .list-group > .list-group-item {
   padding-left: 45px;
 }
+
+.pointer{
+    cursor: pointer;
+}

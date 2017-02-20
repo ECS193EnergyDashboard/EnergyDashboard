@@ -7,7 +7,7 @@
                 <div class="list-group-item">
                     <span ng-hide="element.hasChildren && element.show" class="glyphicon glyphicon-plus" ng-click="$ctrl.clickElem(element)"></span>
                     <span ng-show="element.hasChildren && element.show" class="glyphicon glyphicon-minus" ng-click="$ctrl.clickElem(element)"></span>
-                    <span ng-click="$ctrl.onSelectElem(element)" class="list-group-item pointer">{{element.name}}</span>
+                    <span ng-click="$ctrl.onSelectElem(element)" class="pointer">{{element.name}}</span>
                 </div>
                 <div class="list-group"
                                         ng-include="'side-nav/side-nav-heirarchy-template.html'"

@@ -4,10 +4,11 @@
 
         <div class="list-group list-group-root well">
             <div ng-repeat="element in $ctrl.buildings">
-                <div class="list-group-item">
-                    <span ng-hide="element.hasChildren && element.show" class="glyphicon glyphicon-plus" ng-click="$ctrl.clickElem(element)"></span>
-                    <span ng-show="element.hasChildren && element.show" class="glyphicon glyphicon-minus" ng-click="$ctrl.clickElem(element)"></span>
-                    <span ng-click="$ctrl.onSelectElem(element)" class="pointer">{{element.name}}</span>
+                <div ng-click="$ctrl.onSelectElem(element)"  class=" sidebar-item list-group-item" >
+                    <span ng-show="!element.hasChildren" class="glyphicon glyphicon-folder-open"></span>
+                    <span ng-show="element.hasChildren && !element.show" class="glyphicon glyphicon-chevron-right pointer" ng-click="$ctrl.clickElem(element)"></span>
+                    <span ng-show="element.hasChildren && element.show" class="glyphicon glyphicon-chevron-down pointer" ng-click="$ctrl.clickElem(element)"></span>
+                    <span class="">{{element.name}}</span>
                 </div>
                 <div class="list-group"
                                         ng-include="'side-nav/side-nav-heirarchy-template.html'"

@@ -55,6 +55,14 @@
 
 /* Sidebar Styles */
 
+.sidebar-item {
+    /*background-color: ;*/
+}
+
+.sidebar-item:hover {
+    background-color: #5bc0de;
+}
+
 .sidebar-nav {
     position: absolute;
     top: 0;
@@ -131,7 +139,7 @@
 
 /*-----------For hierarchy----------*/
 .just-padding {
-  padding: 0px;
+  padding: 0;
 }
 
 .list-group .list-group{

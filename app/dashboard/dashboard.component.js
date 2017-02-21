@@ -2,7 +2,8 @@
 angular.module('dashboardModule').component('dashboard',{
 	templateUrl: 'dashboard/dashboard.template.html',
 	controller: ['pi', function TableController(pi){
-		var self = this;	
+		var self = this;
+        this.showData = true; //show data tab
 		this.data = [];
 
         this.onNavigateTo = function(name, webId) {
@@ -13,4 +14,3 @@ angular.module('dashboardModule').component('dashboard',{
         }
 	}]
 });
-

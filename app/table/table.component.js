@@ -86,11 +86,36 @@ angular.module('tableModule').component('roomTable',{
 				}
 			}
 			self.data.push(sums);
-
 			console.log("Table data: ", self.columnNames, self.data);
 		};
 
 	}]
 });
+
+
+
+
+
+
+function ShowColumnList() {
+    document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close drop down if user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+
+
 
 

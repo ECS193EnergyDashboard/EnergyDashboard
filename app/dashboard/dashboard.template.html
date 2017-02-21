@@ -5,16 +5,17 @@
 
     <!-- Page Content -->
     <div id="page-content-wrapper">
-        <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle SB</a>
+
         <!--Tab buttons-->
         <div class="btn-group" role="group" aria-label="...">
+            <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle SB</a>
             <button ng-click="$ctrl.showData=true" type="button" class="btn btn-default">Data</button>
             <button ng-click="$ctrl.showData=false" type="button" class="btn btn-default">Analysis</button>
         </div>
 
         <!-- RoomTable module -->
-        <room-table ng-show="$ctrl.showData" table-src="$ctrl.data"></room-table>
-        <analysis></analysis> <!--Add ng-hide after figure out why not showing up-->
+        <room-table ng-show="$ctrl.showData" table-src="$ctrl.data">Room Table</room-table>
+        <analysis ng-show="!$ctrl.showData" table-src="">Analysis Table</analysis> <!--Add ng-hide after figure out why not showing up-->
     </div>
     <!-- /#page-content-wrapper -->
 

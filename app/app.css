@@ -1,3 +1,30 @@
+body {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+    height: 100%;
+}
+
+.container{height: 100%;}
+
+#menu-bar {
+    height: 0;
+    overflow: hidden;
+    flex: 1 1 7%;
+    /*border: 5px solid red;*/
+}
+
+#dashbboard {
+    height: 0;
+    flex: 1 1 93%;
+    /*border: 5px solid green;*/
+}
+
 .goodValue {
     text-align: center;
 }

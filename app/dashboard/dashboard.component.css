@@ -1,0 +1,11 @@
+#side-bar {
+    /*border: 5px dotted red;*/
+    width: 0;
+    flex: 1 1 auto;
+    transition: all .5s ease;
+}
+
+#wrapper.toggled #side-bar {
+    flex: 0 1 auto;
+    transition: all 0.5s ease;
+}

@@ -4,7 +4,6 @@
   <!-- This is not good -->
   <div class="dropdown" ng-if="$ctrl.columnNamesObjs.length != 0">
   <button ng-click="$ctrl.ShowColumnList($ctrl.columnNamesObjs)" class="dropbtn">Columns</button>
-  
     <div id="myDropdown" class="dropdown-content">
       <div class="dropdownelm" ng-repeat="column in $ctrl.columnNamesObjs"> {{column.name}}  <input ng-checked="column.isDefault" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">
       </div>

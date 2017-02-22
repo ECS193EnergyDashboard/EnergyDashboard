@@ -9,7 +9,23 @@ angular.module('tableModule').component('roomTable',{
 		this.columnNames = [];
 		this.columnNamesObjs = [];
 
-		var defaultValues = ["ACH", "Air Flow Differential"];
+		var defaultValues = [
+		// Start of AHU default values
+		"ACH", 
+		"Air Flow Differential",
+		"Air Flow Differential Setpoint",
+		"Calculated Occ Total Exhaust",
+		"Calculated Unocc Total Exhaust",
+		"Canopy Hood High Daily Duration",
+		"Canopy Hood High Monthly Duration",
+
+		//Start of SubSystem default values
+		"Coil Heating Energy BTU per Hr",
+		"Cooling Energy BTU per Hr",
+		"Heating Energy BTU per Hr",
+		"Reheating Energy BTU per Hr",
+		"Total Air Flow Avoided"
+		];
 
 		this.formatValue = function(value, decimals) {
 			var decimals = decimals || 2;

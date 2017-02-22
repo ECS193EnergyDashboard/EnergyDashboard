@@ -1,6 +1,7 @@
 angular.module('tableModule').component('roomTable',{
 	templateUrl: 'table/table.template.html',
 	bindings: {
+        loading: '<',
 		tableSrc: '<'
 	},
 	controller: [ '$filter', 'pi', function TableController($filter, pi){

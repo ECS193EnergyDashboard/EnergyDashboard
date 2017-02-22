@@ -1,6 +1,7 @@
 angular.module('sideNavModule').component('sideBar', {
     templateUrl: 'side-nav/side.template.html',
     bindings: {
+        loading: '<',
         onClick: '&'
     },
     controller: [ 'pi', function TableController(pi) {
@@ -16,7 +17,7 @@ angular.module('sideNavModule').component('sideBar', {
         });
 
         this.clickElem = function(element) {
-            if (element.elements == null || element.elements === undefined) {
+            if (element.elements === undefined || element.elements == null ) {
                 pi.getChildrenOfElement(element.webId).then(function(data) {
                     element.elements = data;
                     console.log("clicked: " + element.name);
@@ -34,11 +35,32 @@ angular.module('sideNavModule').component('sideBar', {
 
         this.onSelectElem = function(element) {
             self.onClick({ name: element.name, webId: element.webId });
+
             //Set highlighted item index to elements id
             self.hlIndex = element.numId;
+            console.log("Loading(in side.comp.js): "+self.$loading);
         };
 
-    }
+        // Functions to evaluate conditions for showing/hiding certain icons/classes
+        this.isSelectedElem= function(e) {
+            return (e.numId == self.hlIndex);
+        };
 
-    ]
+        this.isLoading = function(e) {
+            return ((e.numId == self.hlIndex) && self.loading);
+        };
+
+        this.showLeafNodeIcon = function(e) {
+            return (!e.hasChildren );
+        };
+
+        this.showClosedIcon = function(e) {
+            return (e.hasChildren && !e.show );
+        };
+
+        this.showOpenIcon = function(e) {
+            return (e.hasChildren && e.show );
+        };
+
+    }]
 });

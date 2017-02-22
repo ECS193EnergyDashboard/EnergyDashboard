@@ -174,9 +174,50 @@
     margin-bottom: 20px;
 }
 
-.selected {
-    background-color: #a94442;
+/* Applies when item is selected and not loading */
+.sidebar-item.selected:not(.loading) {
+    cursor: auto;
+    background-color: #994942;
+    transition: background-color 0.5s linear;
 }
+
+/* Applies when item is selected and loading */
+.sidebar-item.selected.loading {
+    cursor: progress;
+    background-color: #fdff00;
+    transition: background-color 0.5s linear;
+}
+
+
+#loadingIcon {
+    opacity: 0;
+    display: none;
+}
+
+/* Cause loading icon to animate in and out */
+.loading #loadingIcon{
+    opacity: 100;
+    display: inline-block;
+    animation: fadeInFromNone 3s ease-out;
+}
+/* Keyframes for animation of icon */
+@keyframes fadeInFromNone {
+    0% {
+        display: none;
+        opacity: 0;
+    }
+
+    1% {
+        display: inline-block;
+        opacity: 0;
+    }
+
+    100% {
+        display: inline-block;
+        opacity: 1;
+    }
+}
+
 
 .list-group.list-group-root {
   padding: 1px;

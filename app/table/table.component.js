@@ -7,6 +7,9 @@ angular.module('tableModule').component('roomTable',{
 		var self = this;	
 		this.data = [];
 		this.columnNames = [];
+		this.columnNamesObjs = [];
+
+		var defaultValues = ["ACH", "Air Flow Differential"];
 
 		this.formatValue = function(value, decimals) {
 			var decimals = decimals || 2;
@@ -53,8 +56,29 @@ angular.module('tableModule').component('roomTable',{
 				}
 			}
 
+
 			self.data = [];
+			self.columnNamesObjs = [];
+
+			// the following sets an array of objects for column names 
+			// Because we already have the columnNames as a array we just use that to set the name
+			// of the object
 			self.columnNames = Object.keys(columnSet);
+			for(var element of self.columnNames){
+				var column = {};
+				column.name = element;
+				// check if the string element is in the defaultValues array
+				if(defaultValues.includes(element)){
+					column.isDefault = true;
+					column.isChecked = true;
+				}
+				else{
+					column.isDefault = false;
+					column.isChecked = false;		
+				}
+				self.columnNamesObjs.push(column);
+			}
+
 
 	        function parseJSON(element) {
 	            var values = {};
@@ -89,32 +113,16 @@ angular.module('tableModule').component('roomTable',{
 			console.log("Table data: ", self.columnNames, self.data);
 		};
 
+		// When click the columns button open or close the tab
+		this.ShowColumnList = function(columnsNames){
+			// just a check to make sure the button can not be clicked when there is nothing to show
+			if(columnsNames.length != 0){
+				document.getElementById("myDropdown").classList.toggle("show");
+			}
+		};
+
 	}]
 });
-
-
-
-
-
-
-function ShowColumnList() {
-    document.getElementById("myDropdown").classList.toggle("show");
-}
-
-// Close drop down if user clicks outside of it
-window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
-
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-    }
-  }
-}
 
 
 

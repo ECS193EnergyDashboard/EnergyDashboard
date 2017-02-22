@@ -1,9 +1,13 @@
 
 
-  <div class="dropdown" ng-if="$ctrl.columnNames">
-  <button onclick="ShowColumnList()" class="dropbtn">Columns</button>
+  <!--NOTE: for this we use the  columnNamesObjs however in the actual table we use columnNames -->
+  <!-- This is not good -->
+  <div class="dropdown" ng-if="$ctrl.columnNamesObjs.length != 0">
+  <button ng-click="$ctrl.ShowColumnList($ctrl.columnNamesObjs)" class="dropbtn">Columns</button>
+  
     <div id="myDropdown" class="dropdown-content">
-      <a ng-repeat="column in $ctrl.columnNames"> {{column}} </a>
+      <div class="dropdownelm" ng-repeat="column in $ctrl.columnNamesObjs"> {{column.name}}  <input ng-checked="column.isDefault" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">
+      </div>
     </div>
   </div>
 
@@ -12,7 +16,7 @@
     <thead>
     <tr>
         <th st-sort="Name">Name</th>
-        <th ng-repeat="column in $ctrl.columnNames" st-sort="$ctrl.getters.value.bind(null, column)" lr-drag-src="header" lr-drop-target="header"> {{column}} </th>
+        <th ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" st-sort="$ctrl.getters.value.bind(null, column.name)" lr-drag-src="header" lr-drop-target="header"> {{column.name}} </th>
     </tr>
 
     <tr>
@@ -25,8 +29,8 @@
     <tbody>
     <tr ng-repeat="element in $ctrl.displayed">
         <td>{{element.Name}}</td>
-        <td ng-repeat="column in $ctrl.columnNames" ng-class="$ctrl.valueStyle(element[column])">
-            {{$ctrl.formatValue(element[column])}} 
+        <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" ng-class="$ctrl.valueStyle(element[column.name])">
+            {{$ctrl.formatValue(element[column.name])}} 
         </td> 
     </tr> 
 

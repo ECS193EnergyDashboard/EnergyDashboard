@@ -1,5 +1,5 @@
 angular.module('tableModule').component('roomTable', {
-    templateUrl: 'table/table.template.html',
+    templateUrl: 'table/table.table.template.html',
     bindings: {
         tableSrc: '<'
     },

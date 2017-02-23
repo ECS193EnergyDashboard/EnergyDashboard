@@ -5,7 +5,9 @@ angular.module('dashboardModule').component('dashboard', {
         this.showData = true; //show data tab
         this.data = [];
         this.analysisData = [];
+        // this.analysisWebID = [];
 
+        // this happens on a click of the sidebar to get the data
         this.onNavigateTo = function(name, webId) {
             pi.getValuesOfChildren(webId).then(function(data) {
                 self.data = data.elements;
@@ -13,9 +15,21 @@ angular.module('dashboardModule').component('dashboard', {
             });
         }
 
-        this.analyze = function() {
+        this.showAnalyzeTab = function() {
             this.analysisData = self.data;
-            this.showData=false;
+            this.analysisWebID = webId;
+            this.showData = false;
+            // console.log(this.analysisWebID);
+            
+        }
+
+        this.showDataTab = function(){
+            this.showData = true;
+        }
+
+
+        this.toggleMenu = function(){
+            $("#wrapper").toggleClass("toggled");
         }
     }]
 });

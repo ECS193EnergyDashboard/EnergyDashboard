@@ -40,3 +40,10 @@ angular.module('analysisModule').component('analysis', {
 
     }]
 });
+
+    // <tr ng-repeat="element in $ctrl.displayed">
+    //     <td>{{element.Name}}</td>
+    //     <td ng-repeat="column in $ctrl.columnNames" ng-class="$ctrl.valueStyle(element[column])">
+    //         {{$ctrl.formatValue(element[column])}}
+    //     </td>
+    // </tr>

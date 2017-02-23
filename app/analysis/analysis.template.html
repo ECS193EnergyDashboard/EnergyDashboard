@@ -1,2 +1,13 @@
 <h2>I am analysis tab</h2>
+
+<div class="dropdown">
+    <button ng-click="$ctrl.startAnalysis()" class="dropbtn">Start Analysis</button>
+    <div class="dropdown-content">
+        <div class="dropdownelm" ng-repeat="column in $ctrl.columnNamesObjs">
+            <input ng-checked="column.isDefault" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">
+            {{column.name}}
+        </div>
+    </div>
+</div>
+
 <span ng-include="'table/smart-table-template.html'"></span>

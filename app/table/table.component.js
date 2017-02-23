@@ -7,6 +7,25 @@ angular.module('tableModule').component('roomTable',{
 		var self = this;	
 		this.data = [];
 		this.columnNames = [];
+		this.columnNamesObjs = [];
+
+		var defaultValues = [
+		// Start of AHU default values
+		"ACH", 
+		"Air Flow Differential",
+		"Air Flow Differential Setpoint",
+		"Calculated Occ Total Exhaust",
+		"Calculated Unocc Total Exhaust",
+		"Canopy Hood High Daily Duration",
+		"Canopy Hood High Monthly Duration",
+
+		//Start of SubSystem default values
+		"Coil Heating Energy BTU per Hr",
+		"Cooling Energy BTU per Hr",
+		"Heating Energy BTU per Hr",
+		"Reheating Energy BTU per Hr",
+		"Total Air Flow Avoided"
+		];
 
 		this.formatValue = function(value, decimals) {
 			var decimals = decimals || 2;
@@ -53,8 +72,29 @@ angular.module('tableModule').component('roomTable',{
 				}
 			}
 
+
 			self.data = [];
+			self.columnNamesObjs = [];
+
+			// the following sets an array of objects for column names 
+			// Because we already have the columnNames as a array we just use that to set the name
+			// of the object
 			self.columnNames = Object.keys(columnSet);
+			for(var element of self.columnNames){
+				var column = {};
+				column.name = element;
+				// check if the string element is in the defaultValues array
+				if(defaultValues.includes(element)){
+					column.isDefault = true;
+					column.isChecked = true;
+				}
+				else{
+					column.isDefault = false;
+					column.isChecked = false;		
+				}
+				self.columnNamesObjs.push(column);
+			}
+
 
 	        function parseJSON(element) {
 	            var values = {};
@@ -86,11 +126,20 @@ angular.module('tableModule').component('roomTable',{
 				}
 			}
 			self.data.push(sums);
-
 			console.log("Table data: ", self.columnNames, self.data);
+		};
+
+		// When click the columns button open or close the tab
+		this.ShowColumnList = function(columnsNames){
+			// just a check to make sure the button can not be clicked when there is nothing to show
+			if(columnsNames.length != 0){
+				document.getElementById("myDropdown").classList.toggle("show");
+			}
 		};
 
 	}]
 });
+
+
 
 

@@ -184,7 +184,7 @@
 /* Applies when item is selected and loading */
 .sidebar-item.selected.loading {
     cursor: progress;
-    background-color: #fdff00;
+    background-color: #946b67;
     transition: background-color 0.5s linear;
 }
 

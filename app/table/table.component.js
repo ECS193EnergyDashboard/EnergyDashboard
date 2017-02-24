@@ -77,7 +77,6 @@ angular.module('tableModule').component('roomTable', {
 
             self.data = [];
             self.columnNamesObjs = [];
-            self.templates = [];
 
             // the following sets an array of objects for column names
             // Because we already have the columnNames as a array we just use that to set the name
@@ -147,7 +146,7 @@ angular.module('tableModule').component('roomTable', {
         // save template/profile for cols
         this.SaveColumnList = function(columnObjs) {
             columnObjs.templateName = this.currTemplateName;
-            self.templates.push(columnObjs);
+            this.templates.push(columnObjs);
             console.log("templates: ", self.templates);
         };
 

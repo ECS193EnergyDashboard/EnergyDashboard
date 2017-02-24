@@ -145,8 +145,9 @@ angular.module('tableModule').component('roomTable', {
 
         // save template/profile for cols
         this.SaveColumnList = function(columnObjs) {
-            columnObjs.templateName = this.currTemplateName;
-            this.templates.push(columnObjs);
+            var colObjToAdd = columnObjs.slice();
+            colObjToAdd.templateName = this.currTemplateName;
+            this.templates.push(colObjToAdd);
             console.log("templates: ", self.templates);
         };
 

@@ -1,1 +1,1 @@
-angular.module('dashboardModule', [ 'tableModule', 'analysisModule' , 'sideNavModule']);
+angular.module('dashboardModule', [ 'dataTableModule', 'analysisModule' , 'sideNavModule']);

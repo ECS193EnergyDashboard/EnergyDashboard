@@ -1,7 +1,9 @@
-angular.module('tableModule').component('roomTable', {
+angular.module('dataTableModule').component('datatable', {
     templateUrl: 'data-table/data-table.template.html',
     bindings: {
-        tableSrc: '<'
+        tableSrc: '<',
+        searchEnabled: '<',
+        reorderEnabled: '<'
     },
     controller: ['$filter', function TableController($filter) {
         var self = this;
@@ -41,6 +43,12 @@ angular.module('tableModule').component('roomTable', {
         };
 
         this.$onChanges = function() {
+            if (self.searchEnabled === undefined) {
+                self.searchEnabled = false;
+            }
+            if (self.reorderEnabled === undefined) {
+                self.reorderEnabled = false;
+            }
             if (self.tableSrc.length == 0) {
                 return;
             }
@@ -48,27 +56,15 @@ angular.module('tableModule').component('roomTable', {
             var columnSet = {};
 
             for (var element of self.tableSrc) {
-                for (var value of element.values) {
-                    columnSet[value.name] = true;
+                for (var key in element) {
+                    if (key !== "Name") {
+                        columnSet[key] = true;
+                    }
                 }
             }
 
-            self.data = [];
             self.columnNames = Object.keys(columnSet);
-
-            function parseJSON(element) {
-                var values = {};
-
-                values.Name = element.name;
-                for (var value of element.values) {
-                    values[value.name] = value;
-                }
-                return values;
-            }
-
-            for (var element of self.tableSrc) {
-                self.data.push(parseJSON(element));
-            }
+            self.data = self.tableSrc;
 
             var sums = {
                 Name: 'Total'
@@ -90,6 +86,7 @@ angular.module('tableModule').component('roomTable', {
                     }
                 }
             }
+
             self.data.push(sums);
 
             console.log("Table data: ", self.columnNames, self.data);

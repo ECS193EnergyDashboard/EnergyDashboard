@@ -14,8 +14,8 @@
         </div>
 
         <!-- Table modules -->
-        <room-table ng-show="$ctrl.showData" table-src="$ctrl.data">Room Table</room-table>
-        <analysis ng-show="!$ctrl.showData" table-src="$ctrl.analysisData">Analysis Table</analysis>
+        <datatable ng-show="$ctrl.showData" table-src="$ctrl.data" search-enabled="true" reorder-enabled="true"></datatable>
+        <analysis ng-show="!$ctrl.showData" table-src="$ctrl.analysisData"></analysis>
 
     </div>
     <!-- /#page-content-wrapper -->

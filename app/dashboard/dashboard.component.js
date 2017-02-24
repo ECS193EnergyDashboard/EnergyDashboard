@@ -10,7 +10,10 @@ angular.module('dashboardModule').component('dashboard', {
         // this happens on a click of the sidebar to get the data
         this.onNavigateTo = function(name, webId) {
             pi.getValuesOfChildren(webId).then(function(data) {
-                self.data = data.elements;
+                self.data = [];
+                for (var element of data.elements) {
+                    self.data.push(pi.tabulateValues(element));
+                }
                 console.log("Dashboard data: ", self.data);
             });
         }

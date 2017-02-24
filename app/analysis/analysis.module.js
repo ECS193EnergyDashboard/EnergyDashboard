@@ -1,1 +1,1 @@
-angular.module('analysisModule', [ 'tableModule' ])
+angular.module('analysisModule', [ 'dataTableModule' ])

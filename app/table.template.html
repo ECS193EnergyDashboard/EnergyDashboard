@@ -1,5 +1,5 @@
 
-<table st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped"
+<table st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped">
     <thead>
     <tr>
         <th colspan="4">
@@ -16,13 +16,8 @@
     <tr ng-repeat="element in $ctrl.displayed">
         <td>{{element.Name}}</td>
         <td ng-repeat="column in $ctrl.columnNames" ng-class="$ctrl.valueStyle(element[column])">
-            {{$ctrl.formatValue(element[column])}} 
-        </td> 
-    </tr> 
-
+            {{$ctrl.formatValue(element[column])}}
+        </td>
+    </tr>
     </tbody>
 </table>
-
-
-
-

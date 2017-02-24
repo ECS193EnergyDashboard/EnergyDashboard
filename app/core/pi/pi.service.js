@@ -80,6 +80,16 @@ angular.
                 });
             };
 
+            pi.tabulateValues = function(element) {
+                var values = {};
+
+                values.Name = element.name;
+                for (var value of element.values) {
+                    values[value.name] = value;
+                }
+                return values;
+            }
+
             return pi;
         }
     ]);

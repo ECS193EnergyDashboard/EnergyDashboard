@@ -3,7 +3,8 @@ angular.module('dataTableModule').component('datatable', {
     bindings: {
         tableSrc: '<',
         searchEnabled: '<',
-        reorderEnabled: '<'
+        reorderEnabled: '<',
+        loading: '<'
     },
     controller: ['$filter', function TableController($filter) {
         var self = this;

@@ -6,62 +6,64 @@ angular.module('dataTableModule').component('datatable', {
         reorderEnabled: '<',
         loading: '<'
     },
-    controller: ['$filter', function TableController($filter) {
-var self = this;	
-		this.data = [];
-		this.columnNames = [];
-		this.columnNamesObjs = [];
+    controller: ['$filter', '$http', function TableController($filter, $http) {
+        var self = this;
+        this.data = [];
+        this.columnNames = [];
+        this.columnNamesObjs = [];
+        this.templates = [];
+        this.showTemplates = false;
 
-		var defaultValues = [
-		// Start of AHU default values
-		"ACH", 
-		"Air Flow Differential",
-		"Air Flow Differential Setpoint",
-		"Calculated Occ Total Exhaust",
-		"Calculated Unocc Total Exhaust",
-		"Canopy Hood High Daily Duration",
-		"Canopy Hood High Monthly Duration",
-        'Cooling Driving Lab',
+        var defaultValues = [
+            // Start of AHU default values
+            "ACH",
+            "Air Flow Differential",
+            "Air Flow Differential Setpoint",
+            "Calculated Occ Total Exhaust",
+            "Calculated Unocc Total Exhaust",
+            "Canopy Hood High Daily Duration",
+            "Canopy Hood High Monthly Duration",
+            'Cooling Driving Lab',
 
-		//Start of SubSystem default values
-		"Coil Heating Energy BTU per Hr",
-		"Cooling Energy BTU per Hr",
-		"Heating Energy BTU per Hr",
-		"Reheating Energy BTU per Hr",
-		"Total Air Flow Avoided"
-		];
+            //Start of SubSystem default values
+            "Coil Heating Energy BTU per Hr",
+            "Cooling Energy BTU per Hr",
+            "Heating Energy BTU per Hr",
+            "Reheating Energy BTU per Hr",
+            "Total Air Flow Avoided"
+        ];
 
-		this.formatValue = function(value, decimals) {
-			var decimals = decimals || 2;
-			var result = "";
-			if (value === undefined) {
-				return "N/A";
-			} else if (typeof(value.value) === "number") {
-				result += $filter('number')(value.value, decimals);
-				if (value.unitsAbbreviation) {
-					result += " " + value.unitsAbbreviation;
-				}
-			} else {
-				result += value.value;
-			}
-			return result;
-		};
+        this.formatValue = function(value, decimals) {
+            var decimals = decimals || 2;
+            var result = "";
+            if (value === undefined) {
+                return "N/A";
+            } else if (typeof(value.value) === "number") {
+                result += $filter('number')(value.value, decimals);
+                if (value.unitsAbbreviation) {
+                    result += " " + value.unitsAbbreviation;
+                }
+            } else {
+                result += value.value;
+            }
+            return result;
+        };
 
-		this.valueStyle = function(value) {
-			if (value === undefined) {
-				return 'missingValue';
-			} else if (value.good) {
-				return 'goodValue';
-			} else {
-				return 'badValue';
-			}
-		}
+        this.valueStyle = function(value) {
+            if (value === undefined) {
+                return 'missingValue';
+            } else if (value.good) {
+                return 'goodValue';
+            } else {
+                return 'badValue';
+            }
+        }
 
-		this.getters = {
-			value: function(key, element) {
-				return element[key].value;
-			}
-		};
+        this.getters = {
+            value: function(key, element) {
+                return element[key].value;
+            }
+        };
 
         this.$onChanges = function() {
             if (self.searchEnabled === undefined) {
@@ -89,18 +91,18 @@ var self = this;
             self.columnNames = Object.keys(columnSet);
 
             var firstValues = 0;
-			for(var element of self.columnNames){
-				var column = {};
-				column.name = element;
-				// check if the string element is in the defaultValues array
-				if(defaultValues.includes(element) || firstValues < 10){
-					column.isChecked = true;
-				} else {
-					column.isChecked = false;		
-				}
-				self.columnNamesObjs.push(column);
+            for (var element of self.columnNames) {
+                var column = {};
+                column.name = element;
+                // check if the string element is in the defaultValues array
+                if (defaultValues.includes(element) || firstValues < 10) {
+                    column.isChecked = true;
+                } else {
+                    column.isChecked = false;
+                }
+                self.columnNamesObjs.push(column);
                 firstValues++;
-			}
+            }
 
             self.data = self.tableSrc;
 
@@ -130,12 +132,32 @@ var self = this;
             console.log("Table data: ", self.columnNames, self.data);
         };
 
-        this.ShowColumnList = function(columnsNames){
-			// just a check to make sure the button can not be clicked when there is nothing to show
-			if(columnsNames.length != 0){
-				document.getElementById("myDropdown").classList.toggle("show");
-			}
-		};
+        this.ShowColumnList = function(columnsNames) {
+            // just a check to make sure the button can not be clicked when there is nothing to show
+            if (columnsNames.length != 0) {
+                document.getElementById("myDropdown").classList.toggle("show");
+            }
+        };
+
+        // save template/profile for cols
+        this.SaveColumnList = function(columnObjs) {
+            var colObjToAdd = columnObjs.slice();
+            colObjToAdd.templateName = this.currTemplateName;
+            this.templates.push(colObjToAdd);
+            console.log("templates: ", self.templates);
+            // POST template to server
+            $http({
+                method: 'POST',
+                url: '127.0.0.1/templates',
+                data: this.templates
+            }).then(function successCallback(response) {
+                // this callback will be called asynchronously
+                // when the response is available
+            }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+            });
+        };
 
     }]
 });

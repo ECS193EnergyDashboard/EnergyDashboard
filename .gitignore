@@ -5,3 +5,4 @@ app/out.txt
 node_modules/
 out.txt
 tags
+*.swp

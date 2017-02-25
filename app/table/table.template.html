@@ -10,21 +10,20 @@
         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             My Templates <span class="caret"></span>
         </button>
-        <ul class="dropdown-menu">
-            <li ng-repeat="template in $ctrl.templates">
-                <a href="#">{{template.templateName}}</a>
-            </li>
+    <ul class="dropdown-menu">
+        <li ng-repeat="template in $ctrl.templates">
+            <a href="#">{{template.templateName}}</a>
+        </li>
 
-        </ul>
+    </ul>
+</div>
+
+
+<div id="myDropdown" class="dropdown-content">
+    <div class="dropdownelm" ng-repeat="column in $ctrl.columnNamesObjs | orderBy:'name'">
+        <input ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}"> {{column.name}}
     </div>
-
-
-    <div id="myDropdown" class="dropdown-content">
-        <div class="dropdownelm" ng-repeat="column in $ctrl.columnNamesObjs">
-            <input ng-checked="column.isDefault" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">
-            {{column.name}}
-        </div>
-    </div>
+</div>
 </div>
 
 

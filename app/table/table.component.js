@@ -11,6 +11,7 @@ angular.module('tableModule').component('roomTable', {
         this.templates = [];
         this.showTemplates = false;
 
+
         var defaultValues = [
             // Start of AHU default values
             "ACH",
@@ -20,6 +21,7 @@ angular.module('tableModule').component('roomTable', {
             "Calculated Unocc Total Exhaust",
             "Canopy Hood High Daily Duration",
             "Canopy Hood High Monthly Duration",
+            'Cooling Driving Lab',
 
             //Start of SubSystem default values
             "Coil Heating Energy BTU per Hr",
@@ -82,18 +84,20 @@ angular.module('tableModule').component('roomTable', {
             // Because we already have the columnNames as a array we just use that to set the name
             // of the object
             self.columnNames = Object.keys(columnSet);
+
+            var firstValues = 0;
             for (var element of self.columnNames) {
                 var column = {};
                 column.name = element;
                 // check if the string element is in the defaultValues array
-                if (defaultValues.includes(element)) {
-                    column.isDefault = true;
+
+                if (defaultValues.includes(element) || firstValues < 10) {
                     column.isChecked = true;
                 } else {
-                    column.isDefault = false;
                     column.isChecked = false;
                 }
                 self.columnNamesObjs.push(column);
+                firstValues++;
             }
 
 

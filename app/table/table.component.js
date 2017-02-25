@@ -3,7 +3,7 @@ angular.module('tableModule').component('roomTable', {
     bindings: {
         tableSrc: '<'
     },
-    controller: ['$filter', 'pi', function TableController($filter, pi) {
+    controller: ['$filter', 'pi', '$http', function TableController($filter, pi, $http) {
         var self = this;
         this.data = [];
         this.columnNames = [];
@@ -149,6 +149,18 @@ angular.module('tableModule').component('roomTable', {
             colObjToAdd.templateName = this.currTemplateName;
             this.templates.push(colObjToAdd);
             console.log("templates: ", self.templates);
+            // POST template to server
+            $http({
+                method: 'POST',
+                url: '127.0.0.1/templates',
+                data: this.templates
+            }).then(function successCallback(response) {
+                // this callback will be called asynchronously
+                // when the response is available
+            }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+            });
         };
 
     }]

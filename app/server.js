@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 
+var templates;
 // Allow access to this directory
 app.use(express.static('./'));
 
@@ -22,10 +23,12 @@ app.get('/', function (req, res) {
 })
 
 //This responds a POST request for the homepage
-// app.post('/', function (req, res) {
-//    console.log("Got a POST request for the homepage");
-//    res.send('Hello POST');
-// })
+app.post('/templates', function (req, res) {
+   console.log("Got a POST request for the templates");
+   templates = req.data;
+   console.log("templates: ", templates);
+   res.send('template saved on server');
+})
 
 // // This responds a DELETE request for the /del_user page.
 // app.delete('/del_user', function (req, res) {
@@ -45,7 +48,7 @@ app.get('/list_user', function (req, res) {
        }
     };
 
-   
+
    res.sendFile('index2.html', options);
 })
 

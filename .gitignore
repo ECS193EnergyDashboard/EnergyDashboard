@@ -1,8 +1,7 @@
 .idea
 bower_components/bootstrap/node_modules
 app/node_modules
-.gitignore
-node_modules/
 app/out.txt
+node_modules/
 out.txt
 tags

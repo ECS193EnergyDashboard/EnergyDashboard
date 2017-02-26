@@ -141,10 +141,13 @@ angular.module('dataTableModule').component('datatable', {
 
         // save template/profile for cols
         this.SaveColumnList = function(columnObjs) {
-            var colObjToAdd = columnObjs.slice();
+            var colObjToAdd = [];
+            for(var i=0; i<columnObjs.length; i++){
+                // console.log(i, columnObjs[i]);
+                colObjToAdd[i]  = jQuery.extend(true, {}, columnObjs[i]);
+            }
             colObjToAdd.templateName = this.currTemplateName;
             this.templates.push(colObjToAdd);
-            console.log("templates: ", self.templates);
             // POST template to server
             $http({
                 method: 'POST',
@@ -158,6 +161,11 @@ angular.module('dataTableModule').component('datatable', {
                 // or server returns response with an error status.
             });
         };
+
+        this.ApplyTemplate = function(template){
+            this.columnNamesObjs = template;
+        };
+
 
     }]
 });

@@ -1,0 +1,54 @@
+<!--NOTE: for this we use the  columnNamesObjs however in the actual table we use columnNames -->
+<!-- This is not good -->
+<div class="dropdown" ng-if="$ctrl.columnNamesObjs.length != 0">
+    <button ng-click="$ctrl.ShowColumnList($ctrl.columnNamesObjs)" class="dropbtn">Columns</button>
+    <input type="text" ng-init="$ctrl.currTemplateName='my template name'" ng-model="$ctrl.currTemplateName">
+    <button ng-click="$ctrl.SaveColumnList($ctrl.columnNamesObjs)" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false">Save Current Template</button
+
+    <!--Bootstrap dropdown for templates-->
+    <div class="btn-group">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            My Templates <span class="caret"></span>
+        </button>
+    <ul class="dropdown-menu">
+        <li ng-repeat="template in $ctrl.templates">
+            <a href="#">{{template.templateName}}</a>
+        </li>
+
+    </ul>
+</div>
+
+
+<div id="myDropdown" class="dropdown-content">
+    <div class="dropdownelm" ng-repeat="column in $ctrl.columnNamesObjs | orderBy:'name'">  
+    <input ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">
+    {{column.name}} 
+    </div>
+</div>
+</div>
+
+<table st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped">
+    <thead>
+    <tr>
+        <th st-sort="Name">Name</th>
+        <th ng-repeat="column in $ctrl.columnNamesObjs" ng-if="$ctrl.reorderEnabled && column.isChecked" st-sort="$ctrl.getters.value.bind(null, column.name)" lr-drag-src="header" lr-drop-target="header"> {{column.name}} </th>
+        <th ng-if="!$ctrl.reorderEnabled" ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" st-sort="$ctrl.getters.value.bind(null, column)"> {{column.name}} </th>
+    </tr>
+
+    <tr ng-if="$ctrl.searchEnabled">
+        <th colspan="4">
+            <input st-search="Name" placeholder="search for name..." class="input-sm form-control" type="search"/>
+        </th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr ng-repeat="element in $ctrl.displayed">
+        <td>{{element.Name}}</td>
+        <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" ng-class="$ctrl.valueStyle(element[column.name])">
+            {{$ctrl.formatValue(element[column.name])}}
+        </td>
+    </tr>
+
+    </tbody>
+</table>

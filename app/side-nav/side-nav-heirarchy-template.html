@@ -1,7 +1,10 @@
 <div  ng-repeat="e in element.elements">
-    <div class="list-group-item">
-        <span ng-show="e.hasChildren" class="glyphicon glyphicon-plus" ng-click="$ctrl.clickElem(e)"></span>
-        <span ng-click="$ctrl.onSelectElem(e)">{{e.name}}</span>
+    <div ng-click="$ctrl.onSelectElem(e)" class="sidebar-item list-group-item " ng-class="{selected: $ctrl.isSelectedElem(e), loading: $ctrl.isLoading(e)}">
+        <span ng-show="$ctrl.showLeafNodeIcon(e)" class="glyphicon glyphicon-folder-open"></span>
+        <span ng-show="$ctrl.showClosedIcon(e)" class="glyphicon glyphicon-chevron-right pointer" ng-click="$ctrl.clickElem(e);$event.stopPropagation()"></span>
+        <span ng-show="$ctrl.showOpenIcon(e)" class="glyphicon glyphicon-chevron-down pointer" ng-click="$ctrl.clickElem(e);$event.stopPropagation()"></span>
+        <span  class="" >{{e.name}}</span>
+        <span id="loadingIcon" class="glyphicon glyphicon-warning-sign"  ng-click="$event.stopPropagation()"></span>
     </div>
 
     <div class="list-group" ng-if="e.elements && e.show" ng-include="'side-nav/side-nav-heirarchy-template.html'" ng-init="element=e"></div>

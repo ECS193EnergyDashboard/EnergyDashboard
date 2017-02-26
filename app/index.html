@@ -42,31 +42,37 @@
         <!-- Menu Bar js -->
         <script src="menu_bar/menu.module.js"></script>
         <script src="menu_bar/menu.component.js"></script>
+        <!-- Menu Bar CSS -->
+        <link href="menu_bar/menu.component.css" rel="stylesheet">
+
 
         <!-- Table JS -->
-        <script src="table/table.module.js"></script>
-        <script src="table/table.component.js"></script>
+        <script src="data-table/data-table.module.js"></script>
+        <script src="data-table/data-table.component.js"></script>
 
         <!-- SideNav JS -->
         <script src="side-nav/side.module.js"></script>
         <script src="side-nav/side.component.js"></script>
-
-	    <!-- SideBar CSS -->
+	    <!-- SideNav CSS -->
     	<link href="side-nav/side.component.css" rel="stylesheet">
 
         <!-- Dashboard JS -->
         <script src="dashboard/dashboard.module.js"></script>
         <script src="dashboard/dashboard.component.js"></script>
+        <!-- Dashboard CSS -->
+        <link href="dashboard/dashboard.component.css" rel="stylesheet">
 
+        <!-- Analysis JS-->
+        <script src="analysis/analysis.module.js"></script>
+        <script src="analysis/analysis.component.js"></script>
 
         <!-- Table CSS -->
-        <link href="table/table.css" rel="stylesheet">
+        <link href="data-table/data-table.css" rel="stylesheet">
 
     </head>
     <body>
         <!-- MenuBar module -->
-        <menu-bar></menu-bar>
-        <dashboard></dashboard>
-
-
+        <menu-bar id="menu-bar"></menu-bar>
+        <dashboard id="dashbboard"></dashboard>
+    </body>
 </html>

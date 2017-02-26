@@ -12,48 +12,76 @@
 /* Toggle Styles */
 
 #wrapper {
-    padding-left: 0;
-    -webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
-    transition: all 0.5s ease;
+    /*padding-left: 0;*/
+    -webkit-transition: all 0.1s ease;
+    -moz-transition: all 0.1s ease;
+    -o-transition: all 0.1s ease;
+    transition: all 0.1s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    /*border: 4px solid rebeccapurple;*/
 }
 
 #wrapper.toggled {
-    padding-left: 250px;
+    /*padding-left: 250px;*/
 }
 
 #sidebar-wrapper {
     z-index: 1000;
-    position: fixed;
+    position: relative;
     left: 250px;
     width: 0;
     height: 100%;
     margin-left: -250px;
     overflow-y: auto;
     background: white;
+    /* Closing animation */
+    -webkit-transition: all 2s ease;
+    -moz-transition: all 2s ease;
+    -o-transition: all 2s ease;
+    transition: all 2s ease;
+}
+
+
+#wrapper.toggled #sidebar-wrapper {
+    width: 100%;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
 
-#wrapper.toggled #sidebar-wrapper {
-    width: 250px;
-}
-
 #page-content-wrapper {
-    width: 100%;
-    position: absolute;
-    padding: 15px;
+    /*position: absolute;*/
+    flex: 1 1 auto;
+    width: 0;
+    /*border: 5px dotted blue;*/
+    overflow: auto;
 }
 
 #wrapper.toggled #page-content-wrapper {
-    position: absolute;
+    /*position: absolute;
     margin-right: -250px;
+    flex: 1 1 auto;*/
+    width: 0;
+    /*border: 5px dotted blue;*/
+    overflow: auto;
+    -webkit-transition: all 2s ease;
+    -moz-transition: all 2s ease;
+    -o-transition: all 2s ease;
+    transition: all 2s ease;
 }
 
 /* Sidebar Styles */
+
+.sidebar-item {
+    cursor: pointer;
+}
+
+.sidebar-item:hover {
+    background-color: #5bc0de;
+}
 
 .sidebar-nav {
     position: absolute;
@@ -103,24 +131,31 @@
 
 @media(min-width:768px) {
     #wrapper {
-        padding-left: 250px;
+        /* padding-left: 250px;*/
     }
 
     #wrapper.toggled {
-        padding-left: 0;
+        /*padding-left: 0;*/
     }
 
     #sidebar-wrapper {
-        width: 250px;
+        width: 100%;
+        /* Opening Transision */
+        transition: all 0.1s ease;
     }
 
     #wrapper.toggled #sidebar-wrapper {
         width: 0;
+        /* Closing Transition */
+        transition: all 2s ease;
     }
 
     #page-content-wrapper {
-        padding: 20px;
-        position: relative;
+        /*position: relative;*/
+        flex: 5 1 auto;
+        width: 0;
+        /*border: 5px dotted blue;*/
+        overflow: auto;
     }
 
     #wrapper.toggled #page-content-wrapper {
@@ -131,12 +166,56 @@
 
 /*-----------For hierarchy----------*/
 .just-padding {
-  padding: 0px;
+  padding: 0;
 }
 
 .list-group .list-group{
     padding-left: 20px;
     margin-bottom: 20px;
+}
+
+/* Applies when item is selected and not loading */
+.sidebar-item.selected:not(.loading) {
+    cursor: auto;
+    background-color: #994942;
+    transition: background-color 0.5s linear;
+}
+
+/* Applies when item is selected and loading */
+.sidebar-item.selected.loading {
+    cursor: progress;
+    background-color: #946b67;
+    transition: background-color 0.5s linear;
+}
+
+
+#loadingIcon {
+    opacity: 0;
+    display: none;
+}
+
+/* Cause loading icon to animate in and out */
+.loading #loadingIcon{
+    opacity: 100;
+    display: inline-block;
+    animation: fadeInFromNone 3s ease-out;
+}
+/* Keyframes for animation of icon */
+@keyframes fadeInFromNone {
+    0% {
+        display: none;
+        opacity: 0;
+    }
+
+    1% {
+        display: inline-block;
+        opacity: 0;
+    }
+
+    100% {
+        display: inline-block;
+        opacity: 1;
+    }
 }
 
 
@@ -164,4 +243,8 @@
 
 .list-group.list-group-root  .list-group > .list-group > .list-group-item {
   padding-left: 45px;
+}
+
+.pointer{
+    cursor: default;
 }

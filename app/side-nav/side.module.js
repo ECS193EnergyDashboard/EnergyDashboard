@@ -1,4 +1,4 @@
 'use strict';
 
-// Define the `phonecatApp` module
+// Define the 'sideNavModule' module
 angular.module('sideNavModule', []);

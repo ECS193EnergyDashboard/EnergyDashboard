@@ -1,24 +1,29 @@
 <!-- /#wrapper -->
 <div id="wrapper">
     <!-- SideBar module -->
-    <side-bar on-click="$ctrl.onNavigateTo(name, webId)"></side-bar>
-
+    <side-bar id="side-bar" loading="$ctrl.loading" on-click="$ctrl.onNavigateTo(name, webId)"></side-bar>
     <!-- Page Content -->
     <div id="page-content-wrapper">
-        <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Menu</a>
-        <!-- RoomTable module -->
-        <room-table table-src="$ctrl.data"></room-table>
+
+        <!-- Loading Bar -->
+        <div ng-show="$ctrl.loading" class="progress" >
+            <div class="progress-bar progress-bar-striped active" role="progressbar"
+                 aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+                Loading...
+            </div>
+        </div>
+        <!--Tab buttons-->
+        <div class="btn-group" role="group" aria-label="...">
+            <a ng-click="$ctrl.toggleMenu()" class="btn btn-default" id="menu-toggle">Toggle SB</a>
+            <button ng-click="$ctrl.showDataTab()" type="button" class="btn btn-default">Data</button>
+            <button ng-click="$ctrl.showAnalyzeTab()" type="button" class="btn btn-default">Analysis</button>
+        </div>
+
+        <!-- Table modules -->
+        <datatable ng-show="$ctrl.showData" table-src="$ctrl.data" search-enabled="true" reorder-enabled="true" loading="$ctrl.loading"></datatable>
+        <analysis ng-show="!$ctrl.showData" table-src="$ctrl.analysisData"></analysis>
+
     </div>
     <!-- /#page-content-wrapper -->
-
-    <!-- Menu Toggle Script -->
-    <script>
-        $("#menu-toggle").click(function(e) {
-            e.preventDefault();
-            $("#wrapper").toggleClass("toggled");
-        });
-    </script>
-
 </div>
 <!-- /#wrapper -->
-

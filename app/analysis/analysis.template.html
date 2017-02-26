@@ -1,0 +1,11 @@
+<h2>I am analysis tab</h2>
+
+<div>
+    <button ng-click="$ctrl.startAnalysis()">Start Analysis</button>
+    <div>
+        <div ng-repeat="column in $ctrl.columnNamesObjs">
+            <input ng-checked="column.isDefault" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">
+            {{column.name}}
+        </div>
+    </div>
+</div>

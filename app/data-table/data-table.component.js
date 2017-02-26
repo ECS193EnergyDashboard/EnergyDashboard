@@ -1,13 +1,18 @@
-angular.module('tableModule').component('roomTable', {
-    templateUrl: 'table/table.template.html',
+angular.module('dataTableModule').component('datatable', {
+    templateUrl: 'data-table/data-table.template.html',
     bindings: {
-        tableSrc: '<'
+        tableSrc: '<',
+        searchEnabled: '<',
+        reorderEnabled: '<',
+        loading: '<'
     },
-    controller: ['$filter', 'pi', function TableController($filter, pi) {
+    controller: ['$filter', '$http', function TableController($filter, $http) {
         var self = this;
         this.data = [];
         this.columnNames = [];
         this.columnNamesObjs = [];
+        this.templates = [];
+        this.showTemplates = false;
 
         var defaultValues = [
             // Start of AHU default values
@@ -61,6 +66,12 @@ angular.module('tableModule').component('roomTable', {
         };
 
         this.$onChanges = function() {
+            if (self.searchEnabled === undefined) {
+                self.searchEnabled = false;
+            }
+            if (self.reorderEnabled === undefined) {
+                self.reorderEnabled = false;
+            }
             if (self.tableSrc.length == 0) {
                 return;
             }
@@ -68,19 +79,17 @@ angular.module('tableModule').component('roomTable', {
             var columnSet = {};
 
             for (var element of self.tableSrc) {
-                for (var value of element.values) {
-                    columnSet[value.name] = true;
+                for (var key in element) {
+                    if (key !== "Name") {
+                        columnSet[key] = true;
+                    }
                 }
             }
 
-
-            self.data = [];
             self.columnNamesObjs = [];
 
-            // the following sets an array of objects for column names
-            // Because we already have the columnNames as a array we just use that to set the name
-            // of the object
             self.columnNames = Object.keys(columnSet);
+
             var firstValues = 0;
             for (var element of self.columnNames) {
                 var column = {};
@@ -95,20 +104,7 @@ angular.module('tableModule').component('roomTable', {
                 firstValues++;
             }
 
-
-            function parseJSON(element) {
-                var values = {};
-
-                values.Name = element.name;
-                for (var value of element.values) {
-                    values[value.name] = value;
-                }
-                return values;
-            }
-
-            for (var element of self.tableSrc) {
-                self.data.push(parseJSON(element));
-            }
+            self.data = self.tableSrc;
 
             var sums = {
                 Name: 'Total'
@@ -130,16 +126,37 @@ angular.module('tableModule').component('roomTable', {
                     }
                 }
             }
+
             self.data.push(sums);
+
             console.log("Table data: ", self.columnNames, self.data);
         };
 
-        // When click the columns button open or close the tab
         this.ShowColumnList = function(columnsNames) {
             // just a check to make sure the button can not be clicked when there is nothing to show
             if (columnsNames.length != 0) {
                 document.getElementById("myDropdown").classList.toggle("show");
             }
+        };
+
+        // save template/profile for cols
+        this.SaveColumnList = function(columnObjs) {
+            var colObjToAdd = columnObjs.slice();
+            colObjToAdd.templateName = this.currTemplateName;
+            this.templates.push(colObjToAdd);
+            console.log("templates: ", self.templates);
+            // POST template to server
+            $http({
+                method: 'POST',
+                url: '127.0.0.1/templates',
+                data: this.templates
+            }).then(function successCallback(response) {
+                // this callback will be called asynchronously
+                // when the response is available
+            }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+            });
         };
 
     }]

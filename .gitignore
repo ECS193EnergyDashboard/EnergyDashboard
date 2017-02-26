@@ -1,4 +1,8 @@
 .idea
 bower_components/bootstrap/node_modules
 app/node_modules
-.gitignore
+app/out.txt
+node_modules/
+out.txt
+tags
+*.swp

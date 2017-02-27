@@ -1,21 +1,22 @@
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser'); // to handle POST body
 
 var templates;
 // Allow access to this directory
 app.use(express.static('./'));
 
-//This responds with "Hello World" on the homepage
-app.get('/', function (req, res) {
-   console.log("Got a GET request for the homepage -- here");
+//This responds on the homepage
+app.get('/', function(req, res) {
+    console.log("Got a GET request for the homepage -- here");
 
     var options = {
-       root: __dirname,
-       dotfiles: 'allow',
-       headers: {
-           'x-timestamp': Date.now(),
-           'x-sent': true
-       }
+        root: __dirname,
+        dotfiles: 'allow',
+        headers: {
+            'x-timestamp': Date.now(),
+            'x-sent': true
+        }
     };
     //res.send('Hello POST');
     //res.sendFile('index.html', options);
@@ -23,11 +24,13 @@ app.get('/', function (req, res) {
 })
 
 //This responds a POST request for the homepage
-app.post('/templates', function (req, res) {
-   console.log("Got a POST request for the templates");
-   templates = req.data;
-   console.log("templates: ", templates);
-   res.send('template saved on server');
+app.post('/templates', function(req, res) {
+    console.log("Got a POST request for the templates");
+    // I CANT EXTRACT THE DATA. why????
+    console.log("req: ", req);
+    templates = req.data;
+    console.log("templates: ", templates);
+    res.send('template saved on server');
 })
 
 // // This responds a DELETE request for the /del_user page.
@@ -37,19 +40,18 @@ app.post('/templates', function (req, res) {
 // })
 
 // This responds a GET request for the /list_user page.
-app.get('/list_user', function (req, res) {
-   console.log("Got a GET request for /list_user");
+app.get('/list_user', function(req, res) {
+    console.log("Got a GET request for /list_user");
     var options = {
-       root: __dirname,
-       dotfiles: 'allow',
-       headers: {
-           'x-timestamp': Date.now(),
-           'x-sent': true
-       }
+        root: __dirname,
+        dotfiles: 'allow',
+        headers: {
+            'x-timestamp': Date.now(),
+            'x-sent': true
+        }
     };
 
-
-   res.sendFile('index2.html', options);
+    res.sendFile('index2.html', options);
 })
 
 // This responds a GET request for abcd, abxcd, ab123cd, and so on
@@ -58,16 +60,13 @@ app.get('/list_user', function (req, res) {
 //    res.send('Page Pattern Match');
 // })
 
-var server = app.listen(8081, "127.0.0.1",function () {
+var server = app.listen(8081, "127.0.0.1", function() {
 
-  var host = server.address().address
-  var port = server.address().port
-  console.log("host", host);
-  console.log("Example app listening at http://%s:%s", host, port)
+    var host = server.address().address
+    var port = server.address().port
+    console.log("host", host);
+    console.log("Example app listening at http://%s:%s", host, port)
 })
-
-
-
 
 /*
 To start the server: node server.js

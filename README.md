@@ -1,11 +1,11 @@
 # EnergyDashboard
 
-### Dependencies
+## Dependencies
 
 - angular
 - bootstrap 3.0
 
-#### Node Dependencies
+### Node Dependencies
+
 - express
-- pg-promise
-    -  Dependencies: manakin, pg-minify, spex, pg
+- body-parser

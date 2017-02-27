@@ -148,17 +148,17 @@ angular.module('dataTableModule').component('datatable', {
             }
             colObjToAdd.templateName = this.currTemplateName;
             this.templates.push(colObjToAdd);
+
             // POST template to server
             $http({
                 method: 'POST',
-                url: '127.0.0.1/templates',
-                data: this.templates
+                url: '/templates',
+                data: JSON.stringify(this.templates),
+                headers: {'Content-Type': 'application/json'}
             }).then(function successCallback(response) {
-                // this callback will be called asynchronously
-                // when the response is available
+                console.log("post templates success");
             }, function errorCallback(response) {
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
+                console.error("post failed ", response);
             });
         };
 

@@ -1,6 +1,8 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser'); // to handle POST body
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 var templates;
 // Allow access to this directory
@@ -26,9 +28,8 @@ app.get('/', function(req, res) {
 //This responds a POST request for the homepage
 app.post('/templates', function(req, res) {
     console.log("Got a POST request for the templates");
-    // I CANT EXTRACT THE DATA. why????
-    console.log("req: ", req);
-    templates = req.data;
+    //console.log("req.body: ", req.body);
+    templates = req.body;
     console.log("templates: ", templates);
     res.send('template saved on server');
 })

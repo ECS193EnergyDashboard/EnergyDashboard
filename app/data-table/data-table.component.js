@@ -96,7 +96,12 @@ angular.module('dataTableModule').component('datatable', {
                 var column = {};
                 column.name = element;
 
-                column.units = self.tableSrc[0][column.name].unitsAbbreviation;
+                try{
+                    column.units = self.tableSrc[0][column.name].unitsAbbreviation;
+                }
+                catch(e){
+                    column.units = "";
+                }
 
                 // check if the string element is in the defaultValues array
                 if (defaultValues.includes(element) || firstValues < 10) {

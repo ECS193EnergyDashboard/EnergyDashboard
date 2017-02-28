@@ -18,10 +18,11 @@
     </ul>
 </div>
 
+
 <!-- Drop down for checking and unchecking columns-->
 <div id="myDropdown" class="dropdown-content">
     <div class="dropdownelm" ng-repeat="column in $ctrl.columnNamesObjs | orderBy:'name'">  
-    <input ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">
+    <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">
     {{column.name}}
     </div>
 </div>

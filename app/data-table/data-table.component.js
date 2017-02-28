@@ -171,3 +171,25 @@ angular.module('dataTableModule').component('datatable', {
 
     }]
 });
+
+
+
+// Close dropdowns if there is a click outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+    if (!event.target.matches('.dropdownelm')) {
+        if (!event.target.matches('.dropDownCheckBox')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+              var openDropdown = dropdowns[i];
+              if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+              }
+            }
+          }
+        }
+    }
+}
+
+

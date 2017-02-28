@@ -2,7 +2,7 @@
 <!-- This is not good -->
 <div class="dropdown" ng-if="$ctrl.columnNamesObjs.length != 0">
     <button ng-click="$ctrl.ShowColumnList($ctrl.columnNamesObjs)" class="dropbtn">Columns</button>
-    <input type="text" ng-init="$ctrl.currTemplateName='my template name'" ng-model="$ctrl.currTemplateName">
+    <input id="templateInput" type="text" ng-init="$ctrl.currTemplateName='my template name'" ng-model="$ctrl.currTemplateName">
     <button ng-click="$ctrl.SaveColumnList($ctrl.columnNamesObjs)" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false">Save Current Template</button
 
     <!--Bootstrap dropdown for templates-->
@@ -18,20 +18,27 @@
     </ul>
 </div>
 
-
+<!-- Drop down for checking and unchecking columns-->
 <div id="myDropdown" class="dropdown-content">
     <div class="dropdownelm" ng-repeat="column in $ctrl.columnNamesObjs | orderBy:'name'">  
     <input ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">
-    {{column.name}} 
+    {{column.name}}
     </div>
 </div>
 </div>
+
+
 
 <table st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped">
     <thead>
     <tr>
         <th st-sort="Name">Name</th>
-        <th ng-repeat="column in $ctrl.columnNamesObjs" ng-if="$ctrl.reorderEnabled && column.isChecked" st-sort="$ctrl.getters.value.bind(null, column.name)" lr-drag-src="header" lr-drop-target="header"> {{column.name}} </th>
+
+        <th ng-repeat="column in $ctrl.columnNamesObjs" ng-if="$ctrl.reorderEnabled && column.isChecked" st-sort="$ctrl.getters.value.bind(null, column.name)" lr-drag-src="header" lr-drop-target="header"> 
+        {{column.name}} 
+        <span ng-if="column.units != ''">({{column.units}})</span>
+        </th>
+
         <th ng-if="!$ctrl.reorderEnabled" ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" st-sort="$ctrl.getters.value.bind(null, column)"> {{column.name}} </th>
     </tr>
 

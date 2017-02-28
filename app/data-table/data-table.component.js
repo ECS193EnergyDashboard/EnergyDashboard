@@ -78,6 +78,7 @@ angular.module('dataTableModule').component('datatable', {
 
             var columnSet = {};
 
+
             for (var element of self.tableSrc) {
                 for (var key in element) {
                     if (key !== "Name") {
@@ -94,6 +95,9 @@ angular.module('dataTableModule').component('datatable', {
             for (var element of self.columnNames) {
                 var column = {};
                 column.name = element;
+
+                column.units = self.tableSrc[0][column.name].unitsAbbreviation;
+
                 // check if the string element is in the defaultValues array
                 if (defaultValues.includes(element) || firstValues < 10) {
                     column.isChecked = true;
@@ -151,6 +155,7 @@ angular.module('dataTableModule').component('datatable', {
                 url: '127.0.0.1/templates',
                 data: this.templates
             }).then(function successCallback(response) {
+                document.getElementById("templateInput").value = "";
                 // this callback will be called asynchronously
                 // when the response is available
             }, function errorCallback(response) {

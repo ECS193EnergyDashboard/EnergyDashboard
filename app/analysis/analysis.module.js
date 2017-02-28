@@ -1,1 +1,1 @@
-angular.module('analysisModule', [ 'dataTableModule' ])
+angular.module('analysisModule', [ 'dataTableModule','daterangepicker' ])

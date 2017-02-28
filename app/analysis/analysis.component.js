@@ -4,6 +4,9 @@ angular.module('analysisModule').component('analysis', {
         tableSrc: '<'
     },
     controller: ['$filter', 'pi', function TableController($filter, pi) {
+        this.datePicker={};
+        this.datePicker.date = {startDate: null, endDate: null};
+
         this.columnNamesObjs = [{
                 name: "avg",
                 isDefault: true,

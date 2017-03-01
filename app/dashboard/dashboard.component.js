@@ -44,5 +44,8 @@ angular.module('dashboardModule').component('dashboard',{
         this.toggleMenu = function(){
             $("#wrapper").toggleClass("toggled");
         }
+        this.toggleSelectorMenu = function(){
+            $("#wrapper").toggleClass("toggledSelector");
+        }
     }]
 });

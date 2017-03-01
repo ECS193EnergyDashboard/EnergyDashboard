@@ -23,11 +23,11 @@
     /*border: 4px solid rebeccapurple;*/
 }
 
-#wrapper.toggled {
+#wrapper.toggledSelector {
     /*padding-left: 250px;*/
 }
 
-#sidebar-wrapper {
+#sidebar-selector-wrapper {
     z-index: 1000;
     position: relative;
     left: 250px;
@@ -43,14 +43,8 @@
     transition: all 2s ease;
 }
 
-#sidebar-wrapper .btn-group {
-    display: flex;
-}
-#sidebar-wrapper .btn-group .btn{
-    flex: 1;
-}
 
-#wrapper.toggled #sidebar-wrapper {
+#wrapper.toggledSelector #sidebar-selector-wrapper {
     width: 100%;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
@@ -66,7 +60,7 @@
     overflow: auto;
 }
 
-#wrapper.toggled #page-content-wrapper {
+#wrapper.toggledSelector #page-content-wrapper {
     /*position: absolute;
     margin-right: -250px;
     flex: 1 1 auto;*/
@@ -140,17 +134,17 @@
         /* padding-left: 250px;*/
     }
 
-    #wrapper.toggled {
+    #wrapper.toggledSelector {
         /*padding-left: 0;*/
     }
 
-    #sidebar-wrapper {
+    #sidebar-selector-wrapper {
         width: 100%;
         /* Opening Transision */
         transition: all 0.1s ease;
     }
 
-    #wrapper.toggled #sidebar-wrapper {
+    #wrapper.toggledSelector #sidebar-selector-wrapper {
         width: 0;
         /* Closing Transition */
         transition: all 2s ease;
@@ -164,7 +158,7 @@
         overflow: auto;
     }
 
-    #wrapper.toggled #page-content-wrapper {
+    #wrapper.toggledSelector #page-content-wrapper {
         position: relative;
         margin-right: 0;
     }

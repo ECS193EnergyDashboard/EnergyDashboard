@@ -2,13 +2,22 @@
 <div id="sidebar-wrapper">
     <div class="just-padding">
 
+        <!--Tab buttons-->
+        <div class="btn-group" role="group" aria-label="...">
+            <button ng-click="$ctrl.searchBuildings()" type="button" class="btn btn-default glyphicon glyphicon-home"></button>
+            <button ng-click="" type="button" class="btn btn-default glyphicon glyphicon-tag"></button>
+            <button ng-click="$ctrl.searchTemplates()" type="button" class="btn btn-default glyphicon glyphicon-book"></button>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" id="usr" placeholder="{{$ctrl.searchPlaceHolder}}" ng-model="$ctrl.search[$ctrl.filter]">
+        </div>
         <div class="list-group list-group-root well">
-            <div ng-repeat="element in $ctrl.buildings" >
+            <div ng-repeat="element in $ctrl.buildings | filter: $ctrl.search  " >
                 <div ng-click="$ctrl.onSelectElem(element)"  class="sidebar-item list-group-item" ng-class="{selected: $ctrl.isSelectedElem(element), loading: $ctrl.isLoading(element)}" >
                     <span ng-show="$ctrl.showClosedIcon(element)" class="glyphicon glyphicon-chevron-right pointer" ng-click="$ctrl.clickElem(element);$event.stopPropagation()"></span>
                     <span ng-show="$ctrl.showOpenIcon(element)" class="glyphicon glyphicon-chevron-down pointer" ng-click="$ctrl.clickElem(element);$event.stopPropagation()"></span>
-                    <span ng-show="$ctrl.showLeafNodeIcon(element)" class="glyphicon glyphicon-folder-open" ></span>
-                    <span class="">{{element.name}}</span>
+                    <span ng-show="$ctrl.showLeafNodeIcon(element)" class="glyphicon glyphicon-modal-window" ></span>
+                    <span class="">{{element.name}} </span>
                     <span id="loadingIcon" class="glyphicon glyphicon-warning-sign"  ng-click="$event.stopPropagation()"></span>
                 </div>
                 <div class="list-group" ng-include="'side-nav/side-nav-heirarchy-template.html'" ng-if="element.show">

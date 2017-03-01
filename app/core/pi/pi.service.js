@@ -2,16 +2,18 @@ angular.
     module('core.pi').
     factory('pi', ['$http', '$q',
         function($http, $q) {
-            var pi = { };
+            var pi = {};
             //Count of elements created
             var eCnt = 0;
 
             pi.getElement = function(webId) {
-                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/elements/' + webId + '?selectedFields=Name;WebId;HasChildren';
+                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/elements/' + webId + '?selectedFields=Name;WebId;TemplateName;HasChildren';
                 return $http.get(url).then(function(response) {
                     return { 
                         name: response.data.Name || '', 
                         webId: response.data.WebId || '',
+                        //tag: response.data.
+                        template: response.data.TemplateName || 'none',
                         numId: eCnt++,
                         hadChildren: response.data.HasChildren || false 
                     };
@@ -46,14 +48,15 @@ angular.
 
             pi.getChildrenOfElement = function(parentWebId) {
                 var result = [];
-                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/elements/' + parentWebId + '/elements?selectedFields=Items.Name;Items.WebId;Items.HasChildren'
+                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/elements/' + parentWebId + '/elements?selectedFields=Items.Name;Items.WebId;Items.TemplateName;Items.HasChildren'
                 return $http.get(url).then(function(response) {
                     var children = response.data.Items;
                     for (var child of children) {
                         var c = { 
                             name: child.Name || '',
                             numId: eCnt++,
-                            webId: child.WebId || '', 
+                            webId: child.WebId || '',
+                            template: child.TemplateName || 'none',
                             hasChildren: child.HasChildren || false };
                         result.push(c);
                     }

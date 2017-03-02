@@ -11,6 +11,34 @@
 
 /* Toggle Styles */
 
+#textHere {
+
+    border: 3px solid grey;
+    border-radius: 5px;
+    flex: 30;
+    text-align: center;
+    vertical-align:middle;
+}
+
+#headerHere{
+    flex: 1;
+    border: 0px solid grey;
+    border-radius: 0px;
+    text-align: center;
+}
+#selectionHolder{
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.disabled{
+    opacity: 0.5;
+    background-color: gainsboro;
+}
+
 #wrapper {
     /*padding-left: 0;*/
     -webkit-transition: all 0.1s ease;

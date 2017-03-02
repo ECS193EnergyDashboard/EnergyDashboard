@@ -113,19 +113,35 @@ angular.
                     console.log('Error: getSummaryOfElement(): ' + response.status + ' - ' + response.statusText);
                 });
                 */
-                var result = { elements: [] };
+                var result = { name: '', values: [] };
                 return pi.getValuesOfElement(webId).then(function(response) {
                     var promises = [];
+                    promises.push(pi.getElement(webId));
                     for (var element of response) {
-                        result.elements.push({ name: element.name });
+                        result.values.push({ name: element.name });
                         promises.push(pi.getSummaryOfAttribute(element.webId, startTime, endTime));
                     }
                     return $q.all(promises).then(function(responses) {
-                        for (var i = 0; i < responses.length; i++) {
-                            result.elements[i].values = responses[i];
+                        result.name = responses[0].name;
+                        for (var i = 1; i < responses.length; i++) {
+                            result.values[i - 1].values = responses[i];
                         }
                         return result;
                     });
+                });
+            }
+
+            pi.getSummaryOfElements = function(webIds, startTime, endTime) {
+                var result = [];
+                var promises = [];
+                for (var webId of webIds) {
+                    promises.push(pi.getSummaryOfElement(webId, startTime, endTime));
+                }
+                return $q.all(promises).then(function(responses) {
+                    for (var i = 0; i < responses.length; i++) {
+                        result[i] = responses[i];
+                    }
+                    return result;
                 });
             }
 
@@ -161,7 +177,7 @@ angular.
             pi.tabulateValues = function(element) {
                 var values = {};
 
-                values.Name = element.name;
+                values.name = element.name;
                 for (var value of element.values) {
                     values[value.name] = value;
                 }

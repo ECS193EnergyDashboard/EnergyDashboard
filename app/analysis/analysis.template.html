@@ -5,8 +5,8 @@
 <div>
     <button ng-click="$ctrl.startAnalysis()">Start Analysis</button>
     <div>
-        <div ng-repeat="column in $ctrl.columnNamesObjs">
-            <input ng-checked="column.isDefault" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">
+        <div ng-repeat="column in $ctrl.innerColumnNames">
+            <input ng-model="column.isChecked" type="checkbox">
             {{column.name}}
         </div>
     </div>
@@ -17,30 +17,38 @@
         <col>
         <colgroup ng-repeat="outerColumn in $ctrl.outerColumnNames" span="4"></colgroup>
         <tr>
-            <th>Name</th>
-            <th ng-repeat="outerColumn in $ctrl.outerColumnNames" colspan="4" scope="colgroup">
+            <th st-sort="name">Name</th>
+            <th ng-repeat="outerColumn in $ctrl.outerColumnNames" colspan="4" scope="colgroup" ng-if="outerColumn.isChecked" lr-drag-src="header" lr-drop-target="header">
                 {{outerColumn.name}}
             </th>
         </tr>
         <tr>
             <th></th>
-            <th ng-repeat-start="outerColumn in $ctrl.outerColumnNames" scope="col"
-                st-sort="$ctrl.getters.value.bind(null, $index, 'Average')">Average</th>
-            <th scope="col"
-                st-sort="$ctrl.getters.value.bind(null, $index, 'Minimum')">Minimum</th>
-            <th scope="col"
-                st-sort="$ctrl.getters.value.bind(null, $index, 'Maximum')">Maximum</th>
-            <th ng-repeat-end scope="col"
-                st-sort="$ctrl.getters.value.bind(null, $index, 'StdDev')">StdDev</th>
+            <th ng-repeat-start="outerColumn in $ctrl.outerColumnNames" scope="col" ng-if="outerColumn.isChecked"
+                st-sort="$ctrl.getters.value.bind(null, outerColumn.name, 'Average')">Average</th>
+            <th scope="col" ng-if="outerColumn.isChecked"
+                st-sort="$ctrl.getters.value.bind(null, outerColumn.name, 'Minimum')">Minimum</th>
+            <th scope="col" ng-if="outerColumn.isChecked"
+                st-sort="$ctrl.getters.value.bind(null, outerColumn.name, 'Maximum')">Maximum</th>
+            <th ng-repeat-end scope="col" ng-if="outerColumn.isChecked"
+                st-sort="$ctrl.getters.value.bind(null, outerColumn.name, 'StdDev')">StdDev</th>
         </tr>
     </thead>
     <tbody>
         <tr ng-repeat="element in $ctrl.displayed">
             <td scope="col">{{element.name}}</td>
-            <td ng-repeat-start="value in element.values" scope="col">{{value.Average.value}}</td>
-            <td scope="col">{{value.Minimum.value}}</td>
-            <td scope="col">{{value.Maximum.value}}</td>
-            <td ng-repeat-end scope="col">{{value.StdDev.value}}</td>
+            <td ng-repeat-start="outerColumn in $ctrl.outerColumnNames" scope="col" ng-if="outerColumn.isChecked">
+                {{element[outerColumn.name].Average.value}}
+            </td>
+            <td scope="col" ng-if="outerColumn.isChecked">
+                {{element[outerColumn.name].Minimum.value}}
+            </td>
+            <td scope="col" ng-if="outerColumn.isChecked">
+                {{element[outerColumn.name].Maximum.value}}
+            </td>
+            <td ng-repeat-end scope="col" ng-if="outerColumn.isChecked">
+                {{element[outerColumn.name].StdDev.value}}
+            </td>
         </tr>
     </tbody>
 </table>

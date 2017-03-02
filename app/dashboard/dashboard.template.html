@@ -21,7 +21,7 @@
 
         <!-- Table modules -->
         <datatable ng-show="$ctrl.showData" table-src="$ctrl.data" search-enabled="true" reorder-enabled="true" loading="$ctrl.loading"></datatable>
-        <analysis ng-show="!$ctrl.showData"></analysis>
+        <analysis ng-show="!$ctrl.showData" web-ids="$ctrl.webIds"></analysis>
 
     </div>
     <!-- /#page-content-wrapper -->

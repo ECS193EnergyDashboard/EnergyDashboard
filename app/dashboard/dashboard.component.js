@@ -29,7 +29,6 @@ angular.module('dashboardModule').component('dashboard',{
         }
 
         this.showAnalyzeTab = function() {
-            this.analysisData = self.data;
             // this.analysisWebID = webId;
             this.showData = false;
             // console.log(this.analysisWebID);

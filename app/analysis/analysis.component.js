@@ -1,52 +1,47 @@
 angular.module('analysisModule').component('analysis', {
     templateUrl: 'analysis/analysis.template.html',
-    bindings: {
-        tableSrc: '<'
-    },
-    controller: ['$filter', 'pi', function TableController($filter, pi) {
+    controller: ['$filter', 'pi', function AnalysisController($filter, pi) {
+        var self = this;
         this.datePicker={};
         this.datePicker.date = {startDate: null, endDate: null};
+        this.data = [];
 
-        this.columnNamesObjs = [{
-                name: "avg",
-                isDefault: true,
+        this.outerColumnNames = [];
+        this.innerColumnNames = [
+            {
+                name: "Average",
                 isChecked: true
             },
             {
-                name: "max",
-                isDefault: true,
+                name: "Maximum",
                 isChecked: true
             },
             {
-                name: "min",
-                isDefault: true,
+                name: "Mininum",
                 isChecked: true
             }, {
-                name: "std dev",
-                isDefault: true,
+                name: "StdDev",
                 isChecked: true
             }
         ];
-        this.columnNames = this.columnNamesObjs.map(function(a) {return a.name;});
 
         this.startAnalysis = function(){
-            // compute analysis
-            //update table
-        };
-
-        /*    for (var element of this.tableSrc) {
-                self.data.push(parseJSON(element));
-            }*/
-        this.$onChanges = function(){
-            console.log("analysis tableSrc: ", this.tableSrc); //not working
+            var webId = "E0bgZy4oKQ9kiBiZJTW7eugwHdna_ulm5RGZEkhRt5d2AAVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdTXEdIQVVTSVxTVUJTWVNURU1cQUhVXEFIVTAxXFJNMTEwNQ";
+            pi.getSummaryOfElement(webId).then(function(response) {
+                var data = [];
+                colNames = [];
+                for (var element of response.elements) {
+                    if (element.values) {
+                        data.push(pi.tabulateValues(element));
+                        colNames.push({ name: element.name, isChecked: true });
+                    }
+                }
+                self.data = data;
+                self.outerColumnNames = colNames;
+                console.log(self.outerColumnNames);
+                console.log(self.data);
+            });
         };
 
     }]
 });
-
-    // <tr ng-repeat="element in $ctrl.displayed">
-    //     <td>{{element.Name}}</td>
-    //     <td ng-repeat="column in $ctrl.columnNames" ng-class="$ctrl.valueStyle(element[column])">
-    //         {{$ctrl.formatValue(element[column])}}
-    //     </td>
-    // </tr>

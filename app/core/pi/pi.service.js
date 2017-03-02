@@ -132,10 +132,10 @@ angular.
             pi.getSummaryOfAttribute = function(webId, startTime, endTime) {
                 var result = [];
                 var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/streams/' + webId + '/summary?summaryType=Average&summaryType=Minimum&summaryType=Maximum&summaryType=StdDev'
-                if (typeof(startTime) === "string" && startTime !== "") {
-                    url += "&startTime=" + startTime;
+                if (startTime) {
+                    url += "&startTime=" + startTime;   
                 }
-                if (typeof(endTime) === "string" && endTime !== "") {
+                if (endTime) {
                     url += "&endTime=" + endTime;
                 }
                 return $http.get(url).then(function(response) {

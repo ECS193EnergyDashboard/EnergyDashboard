@@ -24,12 +24,24 @@
         </tr>
         <tr>
             <th></th>
-            <div ng-repeat="outerColumn in $ctrl.outerColumnNames">
-                <th ng-repeat="innerColumn in $ctrl.innerColumnNames" scope="col">
-                    {{innerColumn.name}}
-                </th>
-            </div>
+            <th ng-repeat-start="outerColumn in $ctrl.outerColumnNames" scope="col"
+                st-sort="$ctrl.getters.value.bind(null, $index, 'Average')">Average</th>
+            <th scope="col"
+                st-sort="$ctrl.getters.value.bind(null, $index, 'Minimum')">Minimum</th>
+            <th scope="col"
+                st-sort="$ctrl.getters.value.bind(null, $index, 'Maximum')">Maximum</th>
+            <th ng-repeat-end scope="col"
+                st-sort="$ctrl.getters.value.bind(null, $index, 'StdDev')">StdDev</th>
         </tr>
     </thead>
+    <tbody>
+        <tr ng-repeat="element in $ctrl.displayed">
+            <td scope="col">{{element.name}}</td>
+            <td ng-repeat-start="value in element.values" scope="col">{{value.Average.value}}</td>
+            <td scope="col">{{value.Minimum.value}}</td>
+            <td scope="col">{{value.Maximum.value}}</td>
+            <td ng-repeat-end scope="col">{{value.StdDev.value}}</td>
+        </tr>
+    </tbody>
 </table>
 

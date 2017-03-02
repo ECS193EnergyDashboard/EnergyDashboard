@@ -157,8 +157,11 @@ angular.module('dataTableModule').component('datatable', {
             // POST template to server
             $http({
                 method: 'POST',
-                url: '127.0.0.1/templates',
-                data: this.templates
+                url: '/templates',
+                data: this.templates,
+                headers: {
+                   'Content-Type': 'application/json'
+                 }
             }).then(function successCallback(response) {
                 document.getElementById("templateInput").value = "";
                 // this callback will be called asynchronously
@@ -191,5 +194,3 @@ window.onclick = function(event) {
         }
     }
 }
-
-

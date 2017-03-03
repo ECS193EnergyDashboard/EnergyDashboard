@@ -20,7 +20,7 @@ angular.module('analysisModule').component('analysis', {
                 isChecked: true
             },
             {
-                name: "Mininum",
+                name: "Minimum",
                 isChecked: true
             }, {
                 name: "StdDev",
@@ -95,6 +95,26 @@ angular.module('analysisModule').component('analysis', {
                 return element[outerName][innerName].value;
             }
         };
+
+        this.formatValue = function(value) {
+            if (value === undefined) {
+                return "N/A";
+            } else if (value.good && typeof(value.value) === "number") {
+                return $filter('number')(value.value, 2);
+            } else {
+                return "ERROR";
+            }
+        };
+
+        this.valueStyle = function(value) {
+            if (value === undefined) {
+                return 'missingValue';
+            } else if (value.good) {
+                return 'goodValue';
+            } else {
+                return 'badValue';
+            }
+        }
 
     }]
 });

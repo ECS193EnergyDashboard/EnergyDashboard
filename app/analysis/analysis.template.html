@@ -14,14 +14,17 @@
 
 <table st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped">
     <thead>
+        <!--
         <col>
         <colgroup ng-repeat="outerColumn in $ctrl.outerColumnNames" span="4"></colgroup>
+        -->
         <tr>
-            <th st-sort="name">Name</th>
-            <th ng-repeat="outerColumn in $ctrl.outerColumnNames" colspan="4" scope="colgroup" ng-if="outerColumn.isChecked" lr-drag-src="header" lr-drop-target="header">
+            <th></th>
+            <th ng-repeat="outerColumn in $ctrl.outerColumnNames" ng-if="outerColumn.isChecked" lr-drag-src="header" lr-drop-target="header">
                 {{outerColumn.name}}
             </th>
         </tr>
+        <!--
         <tr>
             <th></th>
             <th ng-repeat-start="outerColumn in $ctrl.outerColumnNames" scope="col" ng-if="outerColumn.isChecked"
@@ -33,8 +36,33 @@
             <th ng-repeat-end scope="col" ng-if="outerColumn.isChecked"
                 st-sort="$ctrl.getters.value.bind(null, outerColumn.name, 'StdDev')">StdDev</th>
         </tr>
+        -->
     </thead>
     <tbody>
+        <tr>
+            <td>
+                <table class="table table-striped">
+                    <th st-sort="name">Name</th>
+                    <tr ng-repeat="element in $ctrl.displayed">
+                        <td>{{element.name}}</td>
+                    </tr>
+                </table>
+            </td>
+            <td ng-repeat="outerColumn in $ctrl.outerColumnNames" ng-if="outerColumn.isChecked">
+                <table class="table table-striped">
+                    <th ng-repeat="innerColumn in $ctrl.innerColumnNames" ng-if="innerColumn.isChecked" st-sort="$ctrl.getters.value.bind(null, outerColumn.name, innerColumn.name)">
+                        {{innerColumn.name}}
+                    </th>
+                    <tr ng-repeat="element in $ctrl.displayed">
+                        <td ng-repeat="innerColumn in $ctrl.innerColumnNames" ng-if="innerColumn.isChecked" ng-class="$ctrl.valueStyle(element[outerColumn.name][innerColumn.name])">
+                            {{$ctrl.formatValue(element[outerColumn.name][innerColumn.name])}}
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <!--
         <tr ng-repeat="element in $ctrl.displayed">
             <td scope="col">{{element.name}}</td>
             <td ng-repeat-start="outerColumn in $ctrl.outerColumnNames" scope="col" ng-if="outerColumn.isChecked">
@@ -50,6 +78,7 @@
                 {{element[outerColumn.name].StdDev.value}}
             </td>
         </tr>
+        -->
     </tbody>
 </table>
 

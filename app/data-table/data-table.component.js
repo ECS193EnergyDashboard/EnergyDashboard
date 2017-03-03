@@ -129,8 +129,20 @@ angular.module('dataTableModule').component('datatable', {
 
             self.data.push(sums);
 
-            console.log("Table data: ", self.columnNames, self.data);
-        };
+            //console.log("Table data: ", self.columnNames, self.data);
+
+            // Get templates from server
+            $http({
+                method: 'GET',
+                url: '/getTemplates',
+            }).then(function successCallback(response) {
+                console.log("get templates success", response.data);
+                self.templates = response.data;
+            }, function errorCallback(response) {
+                console.error("get templates failed ", response);
+            });
+
+        }; //end $onChanges
 
         this.ShowColumnList = function(columnsNames) {
             // just a check to make sure the button can not be clicked when there is nothing to show
@@ -141,19 +153,17 @@ angular.module('dataTableModule').component('datatable', {
 
         // save template/profile for cols
         this.SaveColumnList = function(columnObjs) {
-            var colObjToAdd = [];
-            for(var i=0; i<columnObjs.length; i++){
-                // console.log(i, columnObjs[i]);
-                colObjToAdd[i]  = jQuery.extend(true, {}, columnObjs[i]);
-            }
-            colObjToAdd.templateName = this.currTemplateName;
-            this.templates.push(colObjToAdd);
+            var colObjToAdd = JSON.parse(angular.toJson(columnObjs));
+            var template = {"colObj": colObjToAdd,
+                            "templateName": this.currTemplateName};
+            this.templates.push(template);
+            console.log("added template ", this.templates);
 
             // POST template to server
             $http({
                 method: 'POST',
                 url: '/templates',
-                data: JSON.stringify(this.templates),
+                data: angular.toJson(template),
                 headers: {'Content-Type': 'application/json'}
             }).then(function successCallback(response) {
                 console.log("post templates success");

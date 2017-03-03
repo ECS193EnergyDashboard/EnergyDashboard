@@ -4,7 +4,7 @@ var bodyParser = require('body-parser'); // to handle POST body
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
-var templates;
+var templates=[];
 // Allow access to this directory
 app.use(express.static('./'));
 
@@ -29,9 +29,26 @@ app.get('/', function(req, res) {
 app.post('/templates', function(req, res) {
     console.log("Got a POST request for the templates");
     //console.log("req.body: ", req.body);
-    templates = req.body;
+    templates.push(req.body);
     console.log("templates: ", templates);
-    res.send('template saved on server');
+    res.status(200).send('template saved on server');
+})
+
+//This responds to getTemplates
+app.get('/getTemplates', function(req, res) {
+    console.log("Got a GET request for getTemplates");
+
+    var options = {
+        root: __dirname,
+        dotfiles: 'allow',
+        headers: {
+            'x-timestamp': Date.now(),
+            'x-sent': true,
+            'Content-Type': 'application/json'
+        }
+    };
+    res.status(200).send(templates);
+
 })
 
 // // This responds a DELETE request for the /del_user page.
@@ -41,19 +58,20 @@ app.post('/templates', function(req, res) {
 // })
 
 // This responds a GET request for the /list_user page.
-app.get('/list_user', function(req, res) {
+/*app.get('/list_user', function(req, res) {
     console.log("Got a GET request for /list_user");
     var options = {
         root: __dirname,
         dotfiles: 'allow',
         headers: {
             'x-timestamp': Date.now(),
-            'x-sent': true
+            'x-sent': true,
+            'Content-Type': 'application/json'
         }
     };
 
     res.sendFile('index2.html', options);
-})
+})*/
 
 // This responds a GET request for abcd, abxcd, ab123cd, and so on
 // app.get('/ab*cd', function(req, res) {

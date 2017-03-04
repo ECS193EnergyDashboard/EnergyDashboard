@@ -61,7 +61,7 @@ app.get('/list_user', function(req, res) {
 //    res.send('Page Pattern Match');
 // })
 
-var server = app.listen(8081, "127.0.0.1", function() {
+var server = app.listen(8081, function() {
 
     var host = server.address().address
     var port = server.address().port

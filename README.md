@@ -15,7 +15,7 @@
 ### Accessing the Server
 Navigate to the SSH directory on your computer:
 
-`cd ~.ssh`
+`cd ~/.ssh`
 
 Edit the file named `config` to contain the following:
 ```

@@ -3,7 +3,13 @@
     width: 0;
     flex: 0 1 auto;
     transition: all .5s ease;
+    border-right: 5px solid #eeeeee;
 }
+
+.form-group {
+    margin-bottom: 1px;
+}
+
 #side-bar-selector {
     /*border: 5px dotted red;*/
     width: 0;
@@ -41,6 +47,32 @@
     #wrapper.toggledSelector #side-bar-selector {
         flex: 0 1 auto;
         transition: all 0.5s ease;
+    }
+}
+
+.buttonLoad {
+    background-color: #fff4ce;
+}
+
+/* Animated loading icon on "Analysis" button */
+.buttonLoadIcon {
+    animation: rotateStop 3s linear infinite;
+    display: inline-block;
+}
+
+@keyframes rotateStop {
+    0% {
+        transform: rotate(0deg) scale(1);
+
+    }
+    40% {
+        transform: rotate(0deg) scale(1.1);
+    }
+    80% {
+        transform: rotate(0deg) scale(1);
+    }
+    100% {
+        transform: rotate(360deg) scale(1);
     }
 }
 

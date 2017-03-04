@@ -1,5 +1,5 @@
 angular.module('sideNavSelectorModule').component('sideBarSelector', {
-    templateUrl: 'side-nav-selector/side.template.html',
+    templateUrl: 'side-nav-selector/side-selector.template.html',
     bindings: {
         loading: '<',
         onClick: '&'

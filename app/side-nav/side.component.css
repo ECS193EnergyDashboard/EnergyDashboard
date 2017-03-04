@@ -11,6 +11,29 @@
 
 /* Toggle Styles */
 
+.disabled {
+    opacity: 0.5;
+    background-color: gainsboro;
+}
+
+.fixedButtons{
+
+}
+.fixedButtons .form-group{
+    overflow: hidden;
+}
+.fixedButtons .form-control{
+    padding: 0px;
+}
+.fixedButtons .btn-group {
+    display: flex;
+    overflow: hidden;
+}
+
+.fixedButtons .btn {
+    flex: 1;
+}
+
 #wrapper {
     /*padding-left: 0;*/
     -webkit-transition: all 0.1s ease;
@@ -176,7 +199,7 @@
 }
 
 .list-group .list-group{
-    padding-left: 20px;
+    padding-left: 19px;
     margin-bottom: 20px;
 }
 
@@ -200,7 +223,7 @@
     display: none;
 }
 
-/* Cause loading icon to animate in and out */
+/* -Unused now- Cause loading icon to animate in and out */
 .loading #loadingIcon{
     opacity: 100;
     display: inline-block;
@@ -224,7 +247,9 @@
     }
 }
 
-
+.list-group-item {
+    padding: 8px 5px;
+}
 .list-group.list-group-root {
   padding: 1px;
   overflow: hidden;

@@ -36,7 +36,7 @@ angular.module('dataTableModule').component('datatable', {
         ];
 
         this.formatValue = function(value) {
-            if (value === undefined) {
+            if (value === undefined || value.value === undefined) {
                 return "N/A";
             } else if (typeof(value.value) === "number") {
                 return $filter('number')(value.value, 2);
@@ -76,7 +76,7 @@ angular.module('dataTableModule').component('datatable', {
 
             for (var element of this.tableSrc) {
                 for (var key in element) {
-                    if (key !== "Name") {
+                    if (key !== "name") {
                         columnSet[key] = true;
                     }
                 }
@@ -89,10 +89,14 @@ angular.module('dataTableModule').component('datatable', {
             var firstValues = 0;
             for (var columnName of this.columnNames) {
                 var column = {};
+
                 column.name = columnName;
-                column.units = '';
-                if (this.tableSrc[0][columnName]) {
-                    column.units = this.tableSrc[0][columnName].unitsAbbreviation;
+
+                try{
+                    column.units = self.tableSrc[0][column.name].unitsAbbreviation;
+                }
+                catch(e){
+                    column.units = "";
                 }
                 // check if the string element is in the defaultValues array
                 if (defaultValues.includes(columnName) || firstValues < 10) {
@@ -126,9 +130,13 @@ angular.module('dataTableModule').component('datatable', {
             // POST template to server
             $http({
                 method: 'POST',
-                url: '127.0.0.1/templates',
-                data: this.templates
+                url: '/templates',
+                data: this.templates,
+                headers: {
+                   'Content-Type': 'application/json'
+                 }
             }).then(function successCallback(response) {
+                document.getElementById("templateInput").value = "";
                 // this callback will be called asynchronously
                 // when the response is available
             }, function errorCallback(response) {
@@ -181,3 +189,23 @@ angular.module('dataTableModule').component('datatable', {
 
     }]
 });
+
+
+
+// Close dropdowns if there is a click outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+    if (!event.target.matches('.dropdownelm')) {
+        if (!event.target.matches('.dropDownCheckBox')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+              var openDropdown = dropdowns[i];
+              if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+              }
+            }
+          }
+        }
+    }
+}

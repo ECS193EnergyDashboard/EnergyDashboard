@@ -6,9 +6,11 @@ angular.module('dataTableModule').component('datatable', {
         reorderEnabled: '<',
         loading: '<'
     },
-    controller: ['$filter', '$http', function TableController($filter, $http) {
+    controller: ['$filter', '$scope', function TableController($filter, $scope) {
         var self = this;
         this.data = [];
+        this.sums = {};
+        this.averages = {};
         this.columnNames = [];
         this.columnNamesObjs = [];
         this.templates = [];
@@ -33,20 +35,14 @@ angular.module('dataTableModule').component('datatable', {
             "Total Air Flow Avoided"
         ];
 
-        this.formatValue = function(value, decimals) {
-            var decimals = decimals || 2;
-            var result = "";
-            if (value === undefined) {
+        this.formatValue = function(value) {
+            if (value === undefined || value.value === undefined) {
                 return "N/A";
             } else if (typeof(value.value) === "number") {
-                result += $filter('number')(value.value, decimals);
-                if (value.unitsAbbreviation) {
-                    result += " " + value.unitsAbbreviation;
-                }
+                return $filter('number')(value.value, 2);
             } else {
-                result += value.value;
+                return value.value;
             }
-            return result;
         };
 
         this.valueStyle = function(value) {
@@ -66,20 +62,19 @@ angular.module('dataTableModule').component('datatable', {
         };
 
         this.$onChanges = function() {
-            if (self.searchEnabled === undefined) {
-                self.searchEnabled = false;
+            if (this.searchEnabled === undefined) {
+                this.searchEnabled = false;
             }
-            if (self.reorderEnabled === undefined) {
-                self.reorderEnabled = false;
+            if (this.reorderEnabled === undefined) {
+                this.reorderEnabled = false;
             }
-            if (self.tableSrc.length == 0) {
+            if (this.tableSrc.length == 0) {
                 return;
             }
 
             var columnSet = {};
 
-
-            for (var element of self.tableSrc) {
+            for (var element of this.tableSrc) {
                 for (var key in element) {
                     if (key !== "name") {
                         columnSet[key] = true;
@@ -87,14 +82,15 @@ angular.module('dataTableModule').component('datatable', {
                 }
             }
 
-            self.columnNamesObjs = [];
+            this.columnNamesObjs = [];
 
-            self.columnNames = Object.keys(columnSet);
+            this.columnNames = Object.keys(columnSet);
 
             var firstValues = 0;
-            for (var element of self.columnNames) {
+            for (var columnName of this.columnNames) {
                 var column = {};
-                column.name = element;
+
+                column.name = columnName;
 
                 try{
                     column.units = self.tableSrc[0][column.name].unitsAbbreviation;
@@ -102,43 +98,20 @@ angular.module('dataTableModule').component('datatable', {
                 catch(e){
                     column.units = "";
                 }
-
                 // check if the string element is in the defaultValues array
-                if (defaultValues.includes(element) || firstValues < 10) {
+                if (defaultValues.includes(columnName) || firstValues < 10) {
                     column.isChecked = true;
                 } else {
                     column.isChecked = false;
                 }
-                self.columnNamesObjs.push(column);
+                this.columnNamesObjs.push(column);
                 firstValues++;
             }
 
-            self.data = self.tableSrc;
+            this.data = this.tableSrc;
+            this.displayed = this.data;
 
-            var sums = {
-                name: 'Total'
-            };
-            for (var column of self.columnNames) {
-                sums[column] = {
-                    value: 0,
-                    good: false
-                };
-                for (var element of self.data) {
-                    var colVal = element[column];
-                    if (colVal && colVal.good) {
-                        var sumVal = sums[column];
-                        sumVal.value += colVal.value;
-                        if (!sumVal.good) {
-                            sumVal.good = true;
-                            sumVal.unitsAbbreviation = colVal.unitsAbbreviation;
-                        }
-                    }
-                }
-            }
-
-            self.data.push(sums);
-
-            console.log("Table data: ", self.columnNames, self.data);
+            console.log("Table data: ", this.columnNamesObjs, this.data);
         };
 
         this.ShowColumnList = function(columnsNames) {
@@ -153,7 +126,7 @@ angular.module('dataTableModule').component('datatable', {
             var colObjToAdd = columnObjs.slice();
             colObjToAdd.templateName = this.currTemplateName;
             this.templates.push(colObjToAdd);
-            console.log("templates: ", self.templates);
+            console.log("templates: ", this.templates);
             // POST template to server
             $http({
                 method: 'POST',
@@ -171,6 +144,48 @@ angular.module('dataTableModule').component('datatable', {
                 // or server returns response with an error status.
             });
         };
+
+        this.updateCalculations = function() {
+            this.sums = {};
+            this.averages = {};
+            for (var column of this.columnNamesObjs) {
+                this.sums[column.name] = this.sumColumn(column.name);
+                this.averages[column.name] = this.averageColumn(column.name);
+            }
+        }
+
+        this.sumColumn = function(columnName) {
+            var acc = this.reduceColumn(columnName, { sum: 0 }, function(val, acc) { acc.sum += val; });
+            return acc.sum;
+        };
+
+        this.averageColumn = function(columnName) {
+            var acc = this.reduceColumn(columnName, { sum: 0, len: 0 }, function(val, acc) { 
+                acc.sum += val;
+                acc.len++;
+            });
+            return acc.len > 0 ? acc.sum / acc.len : 0;
+        };
+
+        // For every currently displayed row in column 'columnName', applies the function 'opFunc' to the cell's value and the accumulator object 'accumulator'.
+        // Returns the accumulated value object.
+        this.reduceColumn = function(columnName, accumulator, opFunc) {
+            var a = accumulator;
+            for (var element of this.displayed) {
+                var colVal = element[columnName];
+                if (colVal && colVal.good && colVal.value) {
+                    opFunc(colVal.value, a);
+                }
+            }
+            return a;
+        }
+
+        // Whenever the displayed data is changed, recalculate sum and average of the shown rows only
+        $scope.$watch('$ctrl.displayed', function(newValue, oldValue) {
+            console.log("Recalculating...");
+
+            self.updateCalculations();
+        });
 
     }]
 });

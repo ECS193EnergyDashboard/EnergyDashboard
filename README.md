@@ -9,3 +9,6 @@
 
 - express
 - body-parser
+
+#### Bower Dependencies
+- angular-daterangepicker

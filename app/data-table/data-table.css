@@ -1,3 +1,27 @@
+#mainLogo {
+    height: 100%;
+    width: 100%;
+    mix-blend-mode: multiply;
+    animation: fadeInFromNone 3s ease-out;
+}
+@keyframes fadeInFromNone {
+    0% {
+        display: none;
+        opacity: 0;
+    }
+
+    1% {
+        display: inline-block;
+        opacity: 0;
+    }
+
+    100% {
+        display: inline-block;
+        opacity: 1;
+    }
+}
+}
+
 .dropbtn {
     background-color: #4CAF50;
     color: white;
@@ -33,3 +57,11 @@
 .dropdown a:hover {background-color: #f1f1f1}
 
 .show {display:block;}
+
+.bold {
+    font-weight: bold;
+}
+
+td {
+    white-space: nowrap;
+}

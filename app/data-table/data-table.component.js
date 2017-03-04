@@ -111,31 +111,6 @@ angular.module('dataTableModule').component('datatable', {
             self.data = self.tableSrc;
             this.displayed = this.data;
 
-            var sums = {
-                Name: 'Total'
-            };
-            for (var column of self.columnNames) {
-                sums[column] = {
-                    value: 0,
-                    good: false
-                };
-                for (var element of self.data) {
-                    var colVal = element[column];
-                    if (colVal && colVal.good) {
-                        var sumVal = sums[column];
-                        sumVal.value += colVal.value;
-                        if (!sumVal.good) {
-                            sumVal.good = true;
-                            sumVal.unitsAbbreviation = colVal.unitsAbbreviation;
-                        }
-                    }
-                }
-            }
-
-            self.data.push(sums);
-
-            //console.log("Table data: ", self.columnNames, self.data);
-
             // Get templates from server
             $http({
                 method: 'GET',

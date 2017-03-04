@@ -81,7 +81,7 @@ angular.module('dataTableModule').component('datatable', {
 
             for (var element of self.tableSrc) {
                 for (var key in element) {
-                    if (key !== "Name") {
+                    if (key !== "name") {
                         columnSet[key] = true;
                     }
                 }
@@ -116,7 +116,7 @@ angular.module('dataTableModule').component('datatable', {
             self.data = self.tableSrc;
 
             var sums = {
-                Name: 'Total'
+                name: 'Total'
             };
             for (var column of self.columnNames) {
                 sums[column] = {

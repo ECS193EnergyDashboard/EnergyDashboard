@@ -6,8 +6,7 @@ angular.module('dashboardModule').component('dashboard',{
         this.showData = true; //show data tab
 		this.data = [];
 		this.loading = 0;
-        this.analysisData = [];
-        // this.analysisWebID = [];
+        this.webIds = [];
 
         // Function to cause binding up update
         bindLoading = (val) =>{
@@ -19,8 +18,11 @@ angular.module('dashboardModule').component('dashboard',{
             bindLoading(1);
             pi.getValuesOfChildren(webId).then(function(data) {
                 self.data = [];
+                self.webIds = [];
+                console.log(data);
                 for (var element of data.elements) {
                     self.data.push(pi.tabulateValues(element));
+                    self.webIds.push(element.webId);
                 }
                 console.log("Dashboard data: ", self.data);
                 // Call function Asynchronously to force bind to update
@@ -29,11 +31,7 @@ angular.module('dashboardModule').component('dashboard',{
         }
 
         this.showAnalyzeTab = function() {
-            this.analysisData = self.data;
-            // this.analysisWebID = webId;
             this.showData = false;
-            // console.log(this.analysisWebID);
-
         }
 
         this.showDataTab = function(){

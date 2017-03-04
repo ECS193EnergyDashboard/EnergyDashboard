@@ -34,7 +34,7 @@
     <img ng-if="!$ctrl.displayed" id="mainLogo" src="../img/ecoMainLogo.png">
     <thead>
     <tr>
-        <th st-sort="Name">Name</th>
+        <th st-sort="name">Name</th>
 
         <th ng-repeat="column in $ctrl.columnNamesObjs" ng-if="$ctrl.reorderEnabled && column.isChecked" st-sort="$ctrl.getters.value.bind(null, column.name)" lr-drag-src="header" lr-drop-target="header"> 
         {{column.name}} 
@@ -46,14 +46,14 @@
 
     <tr ng-if="$ctrl.searchEnabled">
         <th colspan="4">
-            <input st-search="Name" placeholder="search for name..." class="input-sm form-control" type="search"/>
+            <input st-search="name" placeholder="search for name..." class="input-sm form-control" type="search"/>
         </th>
     </tr>
     </thead>
 
     <tbody>
     <tr ng-repeat="element in $ctrl.displayed">
-        <td>{{element.Name}}</td>
+        <td>{{element.name}}</td>
         <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" ng-class="$ctrl.valueStyle(element[column.name])">
             {{$ctrl.formatValue(element[column.name])}}
         </td>

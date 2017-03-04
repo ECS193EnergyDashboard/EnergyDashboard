@@ -53,8 +53,8 @@
 
     <tbody>
     <tr ng-repeat="element in $ctrl.displayed">
-        <td class="bold">{{element.name}}</td>
         <td class="bold">{{element.building}}</td>
+        <td class="bold">{{element.name}}</td>
         <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" ng-class="$ctrl.valueStyle(element[column.name])">
             {{$ctrl.formatValue(element[column.name])}}
         </td>

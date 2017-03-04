@@ -12,19 +12,20 @@
 /* Toggle Styles */
 
 #textHere {
-
-    border: 3px solid grey;
+    border: 3px solid #dddddd;
     border-radius: 5px;
     flex: 30;
     text-align: center;
     vertical-align:middle;
+    overflow: hidden;
 }
 
+
 #headerHere{
-    flex: 1;
     border: 0px solid grey;
     border-radius: 0px;
     text-align: center;
+    overflow: hidden;
 }
 #selectionHolder{
     display: flex;

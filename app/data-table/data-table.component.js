@@ -4,7 +4,7 @@ angular.module('dataTableModule').component('datatable', {
         tableSrc: '<',
         searchEnabled: '<',
         reorderEnabled: '<',
-        loading: '<'
+        isLoading: '<',
     },
     controller: ['$filter', '$scope', function TableController($filter, $scope) {
         var self = this;

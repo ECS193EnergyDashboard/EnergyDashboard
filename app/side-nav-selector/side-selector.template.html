@@ -3,11 +3,11 @@
     <div class="just-padding">
 
         <div id="selectionHolder">
-        <div id="headerHere">
+        <div id="headerHere" class="fixedButtons">
             <div class="btn-group" role="group" aria-label="...">
-                <button ng-click="" type="button" class="btn btn-default glyphicon glyphicon-home"></button>
-                <button ng-click="" type="button" class="btn btn-default  glyphicon glyphicon-tag disabled"></button>
-                <button ng-click="" type="button" class="btn btn-default glyphicon glyphicon-book"></button>
+                <button ng-click="" type="button" class="disabled btn btn-default glyphicon glyphicon-home"></button>
+                <button ng-click="" type="button" class="disabled btn btn-default  glyphicon glyphicon-tag"></button>
+                <button ng-click="" type="button" class="disabled btn btn-default glyphicon glyphicon-book"></button>
             </div>
         </div>
         <div id="textHere" class="list-group" > Drop Items Here</div>
@@ -25,7 +25,7 @@
                     <span class="">{{element.name}}</span>
                     <span id="loadingIcon" class="glyphicon glyphicon-warning-sign"  ng-click="$event.stopPropagation()"></span>
                 </div>
-                <div class="list-group" ng-include="'side-nav-selector/side-nav-heirarchy-template.html'" ng-if="element.show">
+                <div class="list-group" ng-include="'side-nav-selector/side-selector-heirarchy-template.html'" ng-if="element.show">
                 </div>
             </div>
 

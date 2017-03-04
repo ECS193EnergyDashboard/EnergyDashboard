@@ -105,7 +105,8 @@ angular.
             pi.tabulateValues = function(element) {
                 var values = {};
 
-                values.Name = element.name;
+                values.name = element.name;
+                values.building = element.building;
                 for (var value of element.values) {
                     values[value.name] = value;
                 }

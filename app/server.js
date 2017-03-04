@@ -51,6 +51,10 @@ app.get('/getTemplates', function(req, res) {
 
 })
 
+app.get('/test', function(req, res) {
+    res.status(200).send("This is a test");
+})
+
 // // This responds a DELETE request for the /del_user page.
 // app.delete('/del_user', function (req, res) {
 //    console.log("Got a DELETE request for /del_user");
@@ -86,6 +90,18 @@ var server = app.listen(8081, function() {
     console.log("host", host);
     console.log("Example app listening at http://%s:%s", host, port)
 })
+
+function shutdown() {
+    console.log("Shutting down server...")
+    // Handle any cleanup here, closing DB connections etc
+
+
+    server.close(function() {
+        process.exit(0);
+    })
+}
+
+process.on('SIGTERM', shutdown);
 
 /*
 To start the server: node server.js

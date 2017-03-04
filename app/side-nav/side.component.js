@@ -1,7 +1,7 @@
 angular.module('sideNavModule').component('sideBar', {
     templateUrl: 'side-nav/side.template.html',
     bindings: {
-        loading: '<',
+        isLoading: '<',
         onClick: '&'
     },
     controller: [ 'pi', function TableController(pi) {
@@ -11,6 +11,11 @@ angular.module('sideNavModule').component('sideBar', {
         self.searchPlaceHolder = "Building name...";
         self.filter= "name";
         self.search = {name:'', template:''};
+
+        // Controller constructor called after bindings initialized
+        self.$onInit = function() {
+
+        };
 
         // webid for buildings list
         var webId = 'E0bgZy4oKQ9kiBiZJTW7eugwDBxX8Kms5BG77JiQlqSuWwVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdT';
@@ -49,8 +54,8 @@ angular.module('sideNavModule').component('sideBar', {
             return (e.numId == self.hlIndex);
         };
 
-        this.isLoading = function(e) {
-            return ((e.numId == self.hlIndex) && self.loading);
+        this.elemIsLoading = function(e) {
+            return ((e.numId == self.hlIndex) && self.isLoading['data']);
         };
 
         this.showLeafNodeIcon = function(e) {

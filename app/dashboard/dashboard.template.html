@@ -2,18 +2,19 @@
 <div id="wrapper" class="toggledSelector">
     <!-- SideBar module -->
 
-    <side-bar id="side-bar" loading="$ctrl.loading" on-click="$ctrl.onNavigateTo(name, webId)"></side-bar>
+    <side-bar id="side-bar" is-loading="$ctrl.isLoading" on-click="$ctrl.onNavigateTo(name, webId)"></side-bar>
     <side-bar-selector id="side-bar-selector" loading="$ctrl.loading" on-click="$ctrl.onNavigateTo(name, webId)"></side-bar-selector>
     <!-- Page Content -->
     <div id="page-content-wrapper">
 
-        <!-- Loading Bar -->
-        <div ng-show="$ctrl.loading" class="progress" >
+        <!-- Loading Bar
+        <div ng-show="$ctrl.isLoading['data']" class="progress" >
             <div class="progress-bar progress-bar-striped active" role="progressbar"
                  aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
                 Loading...
             </div>
         </div>
+        -->
         <!--Tab buttons-->
         <div class="btn-group" role="group" aria-label="...">
             <a ng-click="$ctrl.toggleMenu()" class="btn btn-default " id="menu-toggle">
@@ -22,13 +23,17 @@
             <a ng-click="$ctrl.toggleSelectorMenu()" class="btn btn-default" id="menu-selector-toggle">
                 <span class="glyphicon glyphicon-inbox"></span>
             </a>
-            <button ng-click="$ctrl.showDataTab()" type="button" class="btn btn-default">Data</button>
-            <button ng-click="$ctrl.showAnalyzeTab()" type="button" class="btn btn-default">Analysis</button>
+            <button ng-click="$ctrl.showDataTab()" type="button" class="btn btn-default" ng-class="{buttonLoad: $ctrl.isLoading['data']}">Data
+                <span  ng-show="$ctrl.isLoading['data']" class="buttonLoadIcon glyphicon glyphicon-hourglass" ></span>
+            </button>
+            <button ng-click="$ctrl.showAnalyzeTab()" type="button" class="btn btn-default" ng-class="{buttonLoad: $ctrl.isLoading['analysis']}">Analysis
+                <span ng-show="$ctrl.isLoading['analysis']" class="buttonLoadIcon glyphicon glyphicon-hourglass" ></span>
+            </button>
         </div>
 
         <!-- Table modules -->
-        <datatable ng-show="$ctrl.showData" table-src="$ctrl.data" search-enabled="true" reorder-enabled="true" loading="$ctrl.loading"></datatable>
-        <analysis ng-show="!$ctrl.showData" web-ids="$ctrl.webIds"></analysis>
+        <datatable ng-show="$ctrl.showData" is-loading="$ctrl.isLoading" table-src="$ctrl.data" search-enabled="true" reorder-enabled="true" ></datatable>
+        <analysis ng-show="!$ctrl.showData" is-loading="$ctrl.isLoading" web-ids="$ctrl.webIds" ></analysis>
 
     </div>
     <!-- /#page-content-wrapper -->

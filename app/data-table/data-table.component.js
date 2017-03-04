@@ -173,7 +173,7 @@ angular.module('dataTableModule').component('datatable', {
         };
 
         this.ApplyTemplate = function(template){
-            this.columnNamesObjs = template;
+            this.columnNamesObjs = template.colObj;
         };
 
 

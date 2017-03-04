@@ -7,5 +7,6 @@
 
 #### Node Dependencies
 - express
-- pg-promise
-    -  Dependencies: manakin, pg-minify, spex, pg
+
+#### Bower Dependencies
+- angular-daterangepicker

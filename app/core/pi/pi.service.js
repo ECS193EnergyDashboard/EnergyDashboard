@@ -2,7 +2,7 @@ angular.
     module('core.pi').
     factory('pi', ['$http', '$q',
         function($http, $q) {
-            var pi = { };
+            var pi = {};
             //Count of elements created
             var eCnt = 0;
 
@@ -25,46 +25,49 @@ angular.
             }
 
             pi.getElement = function(webId) {
-                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/elements/' + webId + '?selectedFields=Name;WebId;HasChildren;Path';
-                return $http.get(url).then(response => {
+                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/elements/' + webId + '?selectedFields=Name;WebId;TemplateName;HasChildren;Path';
+                return $http.get(url).then(function(response) {
                     return { 
                         name: response.data.Name || '', 
                         webId: response.data.WebId || '',
+                        //tag: response.data.
+                        template: response.data.TemplateName || 'none',
                         numId: eCnt++,
                         hasChildren: response.data.HasChildren || false,
                         building: pi.buildingNameFromPath(response.data.Path)
                     };
-                }, response => {
+                }, function(response) {
                     console.log('Error: getElement(): ' + response.status + ' - ' + response.statusText);
                 });
             }
 
             pi.getValuesOfElement = function(webId) {
                 var result = [];
-                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/streamsets/' + webId + '/value?selectedFields=Items.Name;Items.Value.Value;Items.Value.UnitsAbbreviation;Items.Value.Good'
+                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/streamsets/' + webId + '/value?selectedFields=Items.Name;Items.WebId;Items.Value.Value;Items.Value.UnitsAbbreviation;Items.Value.Good'
                 return $http.get(url).then(function(response) {
                     var values = response.data.Items;
                     for (var value of values) {
-                        var v = { 
+                        var v = {
+                            name: value.Name,
                             value: value.Value.Value || 0, 
                             unitsAbbreviation: value.Value.UnitsAbbreviation || '', 
-                            good: value.Value.Good || false
+                            good: value.Value.Good || false,
+                            webId: value.WebId
                         };
                         if (v.value.Value !== undefined) { // Handle nested value objects
                             v.value = v.value.Value;
                         }
-                        v.name = value.Name;
                         result.push(v);
                     }
                     return result;
-                }, response => {
+                }, function(response) {
                     console.log('Error: getValuesOfElement(): ' + response.status + ' - ' + response.statusText);
                 });
             };
 
             pi.getChildrenOfElement = function(parentWebId) {
                 var result = [];
-                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/elements/' + parentWebId + '/elements?selectedFields=Items.Name;Items.WebId;Items.HasChildren;Items.Path'
+                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/elements/' + parentWebId + '/elements?selectedFields=Items.Name;Items.WebId;Items.TemplateName;Items.HasChildren;Items.Path'
                 return $http.get(url).then(function(response) {
                     var children = response.data.Items;
                     var building = children.length > 0 ? pi.buildingNameFromPath(children[0].Path) : '';
@@ -72,15 +75,15 @@ angular.
                         var c = { 
                             name: child.Name || '',
                             numId: eCnt++,
+                            template: child.TemplateName || 'none',
                             webId: child.WebId || '', 
                             hasChildren: child.HasChildren || false,
                             building: building
                         };
                         result.push(c);
                     }
-                    console.log(result);
                     return result;
-                }, response => {
+                }, function(response) {
                     console.log('Error: getChildrenOfElement(): ' + response.status + ' - ' + response.statusText);
                 });
             };
@@ -101,6 +104,101 @@ angular.
                     });
                 });
             };
+
+            pi.getSummaryOfElement = function(webId, startTime, endTime) {
+                /*
+                var result = { elements: [] };
+                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/streamsets/' + webId + '/summary?summaryType=Average&summaryType=Minimum&summaryType=Maximum&summaryType=StdDev'
+                if (typeof(startTime) === "string" && startTime !== "") {
+                    url += "&startTime=" + startTime;
+                }
+                if (typeof(endTime) === "string" && endTime !== "") {
+                    url += "&endTime=" + endTime;
+                }
+                return $http.get(url).then(function(response) {
+                    var items = response.data.Items;
+                    for (var item of items) {
+                        var element = { name: item.Name, values: [] };
+                        for (var calc of item.Items) {
+                            var v = { 
+                                value: calc.Value.Value || 0, 
+                                unitsAbbreviation: calc.Value.UnitsAbbreviation || '', 
+                                good: calc.Value.Good || false
+                            };
+                            if (v.value.Value !== undefined) { // Handle nested value objects
+                                v.value = v.value.Value;
+                            }
+                            v.name = calc.Type;
+                            element.values.push(v);
+                        }
+                        result.elements.push(element);
+                    }
+                    return result;
+                }, function(response) {
+                    console.log('Error: getSummaryOfElement(): ' + response.status + ' - ' + response.statusText);
+                });
+                */
+                var result = { name: '', building: '', values: [] };
+                return pi.getValuesOfElement(webId).then(function(response) {
+                    var promises = [];
+                    promises.push(pi.getElement(webId));
+                    for (var element of response) {
+                        result.values.push({ name: element.name });
+                        promises.push(pi.getSummaryOfAttribute(element.webId, startTime, endTime));
+                    }
+                    return $q.all(promises).then(function(responses) {
+                        result.name = responses[0].name;
+                        result.building = responses[0].building;
+                        for (var i = 1; i < responses.length; i++) {
+                            result.values[i - 1].values = responses[i];
+                        }
+                        return result;
+                    });
+                });
+            }
+
+            pi.getSummaryOfElements = function(webIds, startTime, endTime) {
+                var result = [];
+                var promises = [];
+                for (var webId of webIds) {
+                    promises.push(pi.getSummaryOfElement(webId, startTime, endTime));
+                }
+                return $q.all(promises).then(function(responses) {
+                    for (var i = 0; i < responses.length; i++) {
+                        result[i] = responses[i];
+                    }
+                    return result;
+                });
+            }
+
+            pi.getSummaryOfAttribute = function(webId, startTime, endTime) {
+                var result = [];
+                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/streams/' + webId + '/summary?summaryType=Average&summaryType=Minimum&summaryType=Maximum&summaryType=StdDev'
+                if (startTime) {
+                    url += "&startTime=" + startTime;   
+                }
+                if (endTime) {
+                    url += "&endTime=" + endTime;
+                }
+                return $http.get(url).then(function(response) {
+                    var items = response.data.Items;
+                    for (var item of items) {
+                        var v = { 
+                            name: item.Type,
+                            value: item.Value.Value || 0, 
+                            unitsAbbreviation: item.Value.UnitsAbbreviation || '', 
+                            good: item.Value.Good || false
+                        };
+                        if (v.value.Value !== undefined) { // Handle nested value objects
+                            v.value = v.value.Value;
+                        }
+                        result.push(v);
+                    }
+                    return result;
+                }, function(response) {
+                    console.log('Error: getSummaryOfAttribute(): ' + response.status + ' - ' + response.statusText);
+                });
+            }
 
             pi.tabulateValues = function(element) {
                 var values = {};

@@ -43,6 +43,12 @@
     transition: all 2s ease;
 }
 
+#sidebar-wrapper .btn-group {
+    display: flex;
+}
+#sidebar-wrapper .btn-group .btn{
+    flex: 1;
+}
 
 #wrapper.toggled #sidebar-wrapper {
     width: 100%;

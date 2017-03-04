@@ -8,6 +8,9 @@ angular.module('sideNavModule').component('sideBar', {
         var self = this;
         // Highlighted Item Index
         self.hlIndex = -1;
+        self.searchPlaceHolder = "Building name...";
+        self.filter= "name";
+        self.search = {name:'', template:''};
 
         // webid for buildings list
         var webId = 'E0bgZy4oKQ9kiBiZJTW7eugwDBxX8Kms5BG77JiQlqSuWwVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdT';
@@ -60,6 +63,22 @@ angular.module('sideNavModule').component('sideBar', {
 
         this.showOpenIcon = function(e) {
             return (e.hasChildren && e.show );
+        };
+        this.searchBuildings = function(){
+            self.filter = "name";
+            self.searchPlaceHolder = "Search Buildings...";
+        };
+        /*
+        this.searchTags = function(){
+            console.log(self.search.name);
+            self.filter = "tag";
+            self.searchPlaceHolder = "Search Tags...";
+        };
+        */
+        this.searchTemplates = function(){
+            self.filter = "template";
+            self.searchPlaceHolder = "Search Templates...";
+
         };
 
     }]

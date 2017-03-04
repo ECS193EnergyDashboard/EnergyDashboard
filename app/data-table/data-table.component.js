@@ -76,7 +76,7 @@ angular.module('dataTableModule').component('datatable', {
 
             for (var element of this.tableSrc) {
                 for (var key in element) {
-                    if (key !== "name") {
+                    if (key !== "name" && key !== "building") {
                         columnSet[key] = true;
                     }
                 }
@@ -107,10 +107,10 @@ angular.module('dataTableModule').component('datatable', {
                 this.columnNamesObjs.push(column);
                 firstValues++;
             }
-
+            
             this.data = this.tableSrc;
             this.displayed = this.data;
-
+            
             console.log("Table data: ", this.columnNamesObjs, this.data);
         };
 

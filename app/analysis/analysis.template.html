@@ -43,8 +43,10 @@
             <td>
                 <table class="table table-striped">
                     <th st-sort="name">Name</th>
+                    <th st-sort="building">Building</th>
                     <tr ng-repeat="element in $ctrl.displayed">
                         <td>{{element.name}}</td>
+                        <td>{{element.building}}</td>
                     </tr>
                 </table>
             </td>

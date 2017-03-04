@@ -6,8 +6,26 @@ angular.
             //Count of elements created
             var eCnt = 0;
 
+            var buildingNamePrefix = 'Buildings\\\\';
+            pi.buildingNameFromPath = function(path) {
+                var splitPath = path.split('\\');
+                var foundIndex = -1, index = 0;
+
+                for (var pathName of splitPath) {
+                    if (pathName === 'Buildings') {
+                        foundIndex = index + 1;
+                        break;
+                    }
+                    index++;
+                }
+                if (foundIndex === -1) {
+                    return '';
+                } 
+                return splitPath[foundIndex];
+            }
+
             pi.getElement = function(webId) {
-                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/elements/' + webId + '?selectedFields=Name;WebId;TemplateName;HasChildren';
+                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/elements/' + webId + '?selectedFields=Name;WebId;TemplateName;HasChildren;Path';
                 return $http.get(url).then(function(response) {
                     return { 
                         name: response.data.Name || '', 
@@ -15,7 +33,8 @@ angular.
                         //tag: response.data.
                         template: response.data.TemplateName || 'none',
                         numId: eCnt++,
-                        hadChildren: response.data.HasChildren || false 
+                        hasChildren: response.data.HasChildren || false,
+                        building: pi.buildingNameFromPath(response.data.Path)
                     };
                 }, function(response) {
                     console.log('Error: getElement(): ' + response.status + ' - ' + response.statusText);
@@ -48,16 +67,19 @@ angular.
 
             pi.getChildrenOfElement = function(parentWebId) {
                 var result = [];
-                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/elements/' + parentWebId + '/elements?selectedFields=Items.Name;Items.WebId;Items.TemplateName;Items.HasChildren'
+                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/elements/' + parentWebId + '/elements?selectedFields=Items.Name;Items.WebId;Items.TemplateName;Items.HasChildren;Items.Path'
                 return $http.get(url).then(function(response) {
                     var children = response.data.Items;
+                    var building = children.length > 0 ? pi.buildingNameFromPath(children[0].Path) : '';
                     for (var child of children) {
                         var c = { 
                             name: child.Name || '',
                             numId: eCnt++,
-                            webId: child.WebId || '',
                             template: child.TemplateName || 'none',
-                            hasChildren: child.HasChildren || false };
+                            webId: child.WebId || '', 
+                            hasChildren: child.HasChildren || false,
+                            building: building
+                        };
                         result.push(c);
                     }
                     return result;
@@ -116,7 +138,7 @@ angular.
                     console.log('Error: getSummaryOfElement(): ' + response.status + ' - ' + response.statusText);
                 });
                 */
-                var result = { name: '', values: [] };
+                var result = { name: '', building: '', values: [] };
                 return pi.getValuesOfElement(webId).then(function(response) {
                     var promises = [];
                     promises.push(pi.getElement(webId));
@@ -126,6 +148,7 @@ angular.
                     }
                     return $q.all(promises).then(function(responses) {
                         result.name = responses[0].name;
+                        result.building = responses[0].building;
                         for (var i = 1; i < responses.length; i++) {
                             result.values[i - 1].values = responses[i];
                         }
@@ -181,12 +204,53 @@ angular.
                 var values = {};
 
                 values.name = element.name;
+                values.building = element.building;
                 for (var value of element.values) {
                     values[value.name] = value;
                 }
                 return values;
             }
 
+            pi.getTemplates = function() {
+                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/assetdatabases/D0bgZy4oKQ9kiBiZJTW7eugw57M0LxpH1kyB4TSsSWDrYgVVRJTC1BRlxBQ0U/elementtemplates?selectedFields=Items.Name';
+                var result = [];
+                return $http.get(url).then(function(response) {
+                    for (var element of response.data.Items) {
+                        result.push(element.Name);  
+                    }
+                    return result;
+                }, function(response) {
+                    console.log('Error: getTemplates(): ' + response.status + ' - ' + response.statusText);  
+                })
+            }
+
+            pi.getElementsWithTemplate = function(templateName) {
+                rootWebId = 'E0bgZy4oKQ9kiBiZJTW7eugwDBxX8Kms5BG77JiQlqSuWwVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdT';
+                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/elements/' + rootWebId + '/elements?templateName=' + templateName + '&searchFullHierarchy=true&selectedFields=Items.Name;Items.WebId;Items.HasChildren;Items.Path';
+                var result = [];
+                return $http.get(url).then(function(response) {
+                    for (var element of response.data.Items) {
+                        var e = { 
+                            name: element.Name || '',
+                            numId: eCnt++,
+                            webId: element.WebId || '', 
+                            hasChildren: element.HasChildren || false, 
+                            building: pi.buildingNameFromPath(element.Path)
+                        };
+                        result.push(e);
+                    }
+
+                    return result;
+                }, function(response) {
+                    console.log('Error: getElementsWithTemplate(): ' + response.status + ' - ' + response.statusText);  
+                })
+            }
+
             return pi;
         }
     ]);
+
+    getPiDebug = function() {
+        return angular.element(document.body).injector().get('pi');
+    }
+    

@@ -1,12 +1,14 @@
 # EnergyDashboard
 
-### Dependencies
+## Dependencies
 
 - angular
 - bootstrap 3.0
 
-#### Node Dependencies
+### Node Dependencies
+
 - express
+- body-parser
 
 #### Bower Dependencies
 - angular-daterangepicker

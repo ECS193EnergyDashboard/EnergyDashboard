@@ -12,7 +12,7 @@
         </button>
     <ul class="dropdown-menu">
         <li ng-repeat="template in $ctrl.templates">
-            <a href="#">{{template.templateName}}</a>
+            <a ng-click="$ctrl.ApplyTemplate(template)">{{template.templateName}}</a>
         </li>
 
     </ul>

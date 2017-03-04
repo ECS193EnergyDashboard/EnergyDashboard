@@ -1,0 +1,23 @@
+{
+  "name": "energy-dashboard",
+  "description": "Design of an Interactive Building Energy Optimization Dashboard with the UC Davis Energy Conservation Office.",
+  "main": "app.module.js",
+  "license": "ISC",
+  "homepage": "https://github.com/ECS193EnergyDashboard/EnergyDashboard",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "lrDragNDrop": "^1.0.2",
+    "angular-smart-table": "^2.1.8",
+    "jquery": "^3.1.1",
+    "bootstrap-daterangepicker": "^2.1.25",
+    "bootstrap": "^3.3.7",
+    "angular-daterangepicker": "^0.2.2"
+  }
+}

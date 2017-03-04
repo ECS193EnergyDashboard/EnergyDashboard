@@ -6,7 +6,7 @@ angular.module('dataTableModule').component('datatable', {
         reorderEnabled: '<',
         isLoading: '<',
     },
-    controller: ['$filter', '$scope', function TableController($filter, $scope) {
+    controller: ['$filter', '$scope', '$http', function TableController($filter, $scope, $http) {
         var self = this;
         this.data = [];
         this.sums = {};
@@ -107,12 +107,47 @@ angular.module('dataTableModule').component('datatable', {
                 this.columnNamesObjs.push(column);
                 firstValues++;
             }
-            
-            this.data = this.tableSrc;
+
+            self.data = self.tableSrc;
             this.displayed = this.data;
-            
-            console.log("Table data: ", this.columnNamesObjs, this.data);
-        };
+
+            var sums = {
+                Name: 'Total'
+            };
+            for (var column of self.columnNames) {
+                sums[column] = {
+                    value: 0,
+                    good: false
+                };
+                for (var element of self.data) {
+                    var colVal = element[column];
+                    if (colVal && colVal.good) {
+                        var sumVal = sums[column];
+                        sumVal.value += colVal.value;
+                        if (!sumVal.good) {
+                            sumVal.good = true;
+                            sumVal.unitsAbbreviation = colVal.unitsAbbreviation;
+                        }
+                    }
+                }
+            }
+
+            self.data.push(sums);
+
+            //console.log("Table data: ", self.columnNames, self.data);
+
+            // Get templates from server
+            $http({
+                method: 'GET',
+                url: '/getTemplates',
+            }).then(function successCallback(response) {
+                console.log("get templates success", response.data);
+                self.templates = response.data;
+            }, function errorCallback(response) {
+                console.error("get templates failed ", response);
+            });
+
+        }; //end $onChanges
 
         this.ShowColumnList = function(columnsNames) {
             // just a check to make sure the button can not be clicked when there is nothing to show
@@ -123,26 +158,28 @@ angular.module('dataTableModule').component('datatable', {
 
         // save template/profile for cols
         this.SaveColumnList = function(columnObjs) {
-            var colObjToAdd = columnObjs.slice();
-            colObjToAdd.templateName = this.currTemplateName;
-            this.templates.push(colObjToAdd);
-            console.log("templates: ", this.templates);
-            // POST template to server
+            var colObjToAdd = JSON.parse(angular.toJson(columnObjs));
+            var template = {"colObj": colObjToAdd,
+                            "templateName": this.currTemplateName};
+            this.templates.push(template);
+            console.log("added template ", this.templates);
+
+            // POST template/profile to server
             $http({
                 method: 'POST',
                 url: '/templates',
-                data: this.templates,
-                headers: {
-                   'Content-Type': 'application/json'
-                 }
+                data: angular.toJson(template),
+                headers: {'Content-Type': 'application/json'}
             }).then(function successCallback(response) {
+                console.log("POST Templates Success");
                 document.getElementById("templateInput").value = "";
-                // this callback will be called asynchronously
-                // when the response is available
             }, function errorCallback(response) {
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
+                console.error("POST Failed ", response);
             });
+        };
+
+        this.ApplyTemplate = function(template){
+            this.columnNamesObjs = template.colObj;
         };
 
         this.updateCalculations = function() {
@@ -160,7 +197,7 @@ angular.module('dataTableModule').component('datatable', {
         };
 
         this.averageColumn = function(columnName) {
-            var acc = this.reduceColumn(columnName, { sum: 0, len: 0 }, function(val, acc) { 
+            var acc = this.reduceColumn(columnName, { sum: 0, len: 0 }, function(val, acc) {
                 acc.sum += val;
                 acc.len++;
             });

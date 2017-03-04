@@ -54,7 +54,7 @@ angular.module('analysisModule').component('analysis', {
 
                 for (var element of self.data) {
                     for (var key in element) {
-                        if (key !== "name") {
+                        if (key !== "name" && key !== "building") {
                             columnSet[key] = true;
                         }
                     }

@@ -14,7 +14,8 @@ angular.module('analysisModule').component('analysis', {
             this.DRPOptions = {
                 "showDropdowns": true,
                 "timePicker": true,
-                "timePickerIncrement": 60,
+                "timePickerIncrement": 15,
+                "autoApply": true,
                 "ranges": {
                     "Today": [
                         moment().startOf('day'), moment()

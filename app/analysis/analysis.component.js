@@ -2,74 +2,98 @@ angular.module('analysisModule').component('analysis', {
     templateUrl: 'analysis/analysis.template.html',
     bindings: {
         webIds: '<',
-        isLoading: '=',
+        isLoading: '='
     },
     controller: ['$filter', 'pi', function AnalysisController($filter, pi) {
-        var self = this;
-        this.datePicker={};
-        this.datePicker.date = {startDate: moment().startOf('day'), endDate: moment() };
-        this.data = [];
-
-        this.outerColumnNames = [];
-        this.innerColumnNames = [
-            {
-                name: "Average",
-                isChecked: true
-            },
-            {
-                name: "Maximum",
-                isChecked: true
-            },
-            {
-                name: "Minimum",
-                isChecked: true
-            }, {
-                name: "StdDev",
-                isChecked: true
+            var self = this;
+            this.datePicker = {};
+            this.datePicker.date = {
+                startDate: moment().startOf('day'),
+                endDate: moment()
+            };
+            this.DRPOptions = {
+                "showDropdowns": true,
+                "timePicker": true,
+                "timePickerIncrement": 60,
+                "ranges": {
+                    "Today": [
+                        "2017-03-05T23:21:20.283Z", "2017-03-05T23:21:20.283Z"
+                    ],
+                    "Yesterday": [
+                        "2017-03-04T23:21:20.283Z", "2017-03-04T23:21:20.284Z"
+                    ],
+                    "Last 7 Days": [
+                        "2017-02-27T23:21:20.284Z", "2017-03-05T23:21:20.284Z"
+                    ],
+                    "Last 30 Days": [
+                        "2017-02-04T23:21:20.284Z", "2017-03-05T23:21:20.284Z"
+                    ],
+                    "This Month": [
+                        "2017-03-01T08:00:00.000Z", "2017-04-01T06:59:59.999Z"
+                    ],
+                    "Last Month": ["2017-02-01T08:00:00.000Z", "2017-03-01T07:59:59.999Z"]
+                }
             }
-        ];
+            this.data = [];
 
-        this.startAnalysis = function() {
-            var startDate = self.datePicker.date.startDate.format();
-            var endDate = self.datePicker.date.endDate.format();
-            self.isLoading['analysis'] = 1;        //Set analysis loading flag
-            pi.getSummaryOfElements(this.webIds, startDate, endDate).then(function(response) {
-                var data = [];
+            this.outerColumnNames = [];
+            this.innerColumnNames = [
+                {
+                    name: "Average",
+                    isChecked: true
+                }, {
+                    name: "Maximum",
+                    isChecked: true
+                }, {
+                    name: "Minimum",
+                    isChecked: true
+                }, {
+                    name: "StdDev",
+                    isChecked: true
+                }
+            ];
 
-                for (var element of response) {
-                    var values = [];
-                    for (var value of element.values) {
-                        if (value.values) {
-                            values.push(pi.tabulateValues(value));
+            this.startAnalysis = function() {
+                var startDate = self.datePicker.date.startDate.format();
+                var endDate = self.datePicker.date.endDate.format();
+                self.isLoading['analysis'] = 1; //Set analysis loading flag
+                pi.getSummaryOfElements(this.webIds, startDate, endDate).then(function(response) {
+                    var data = [];
+
+                    for (var element of response) {
+                        var values = [];
+                        for (var value of element.values) {
+                            if (value.values) {
+                                values.push(pi.tabulateValues(value));
+                            }
+                        }
+                        element.values = values;
+                        data.push(pi.tabulateValues(element));
+                    }
+
+                    self.data = data;
+
+                    console.log(self.data);
+
+                    var colNames = [];
+                    var columnSet = {};
+
+                    for (var element of self.data) {
+                        for (var key in element) {
+                            if (key !== "name" && key !== "building") {
+                                columnSet[key] = true;
+                            }
                         }
                     }
-                    element.values = values;
-                    data.push(pi.tabulateValues(element));
-                }
 
-                self.data = data;
+                    self.columnNamesObjs = [];
 
-                console.log(self.data);
+                    var firstValues = 0;
+                    for (var element of Object.keys(columnSet)) {
+                        var column = {};
+                        column.name = element;
 
-                var colNames = [];
-                var columnSet = {};
-
-                for (var element of self.data) {
-                    for (var key in element) {
-                        if (key !== "name" && key !== "building") {
-                            columnSet[key] = true;
-                        }
-                    }
-                }
-
-                self.columnNamesObjs = [];
-
-                var firstValues = 0;
-                for (var element of Object.keys(columnSet)) {
-                    var column = {};
-                    column.name = element;
-
-                    /*
+                        /*
                     try {
                         column.units = this.data[0][column.name].unitsAbbreviation;
                     } catch(e) {
@@ -77,78 +101,97 @@ angular.module('analysisModule').component('analysis', {
                     }
                     */
 
-                    if (firstValues < 10) {
-                        column.isChecked = true;
-                    } else {
-                        column.isChecked = false;
+                        if (firstValues < 10) {
+                            column.isChecked = true;
+                        } else {
+                            column.isChecked = false;
+                        }
+                        colNames.push(column);
+                        firstValues++;
                     }
-                    colNames.push(column);
-                    firstValues++;
+
+                    self.outerColumnNames = colNames;
+                    self.isLoading['analysis'] = 0; //Clear analysis loading flag
+                    console.log(self.outerColumnNames);
+                });
+            };
+
+            this.getters = {
+                value: function(outerName, innerName, element) {
+                    return element[outerName][innerName].value;
                 }
+            };
 
-                self.outerColumnNames = colNames;
-                self.isLoading['analysis'] = 0;        //Clear analysis loading flag
-                console.log(self.outerColumnNames);
-            });
-        };
+            this.formatValue = function(value) {
+                if (value === undefined) {
+                    return "N/A";
+                } else if (value.good && typeof(value.value) === "number") {
+                    return $filter('number')(value.value, 2);
+                } else {
+                    return "ERROR";
+                }
+            };
 
-        this.getters =  {
-            value: function(outerName, innerName, element) {
-                return element[outerName][innerName].value;
+            this.valueStyle = function(value) {
+                if (value === undefined) {
+                    return 'missingValue';
+                } else if (value.good) {
+                    return 'goodValue';
+                } else {
+                    return 'badValue';
+                }
             }
-        };
 
-        this.formatValue = function(value) {
-            if (value === undefined) {
-                return "N/A";
-            } else if (value.good && typeof(value.value) === "number") {
-                return $filter('number')(value.value, 2);
-            } else {
-                return "ERROR";
+            this.SetDatePicker = function(selection) {
+                if (selection == 'hour') {
+                    this.datePicker.date = {
+                        startDate: moment().subtract(1, 'hours'),
+                        endDate: moment()
+                    };
+                    // console.log("hour");
+                }
+                if (selection == 'day') {
+                    this.datePicker.date = {
+                        startDate: moment().subtract(1, 'days'),
+                        endDate: moment()
+                    };
+                    // console.log("day");
+                }
+                if (selection == 'week') {
+                    this.datePicker.date = {
+                        startDate: moment().subtract(7, 'days'),
+                        endDate: moment()
+                    };
+                    // console.log("week");
+                }
+                if (selection == 'month') {
+                    this.datePicker.date = {
+                        startDate: moment().subtract(1, 'months'),
+                        endDate: moment()
+                    };
+                    // console.log("month");
+                }
+                if (selection == 'month') {
+                    this.datePicker.date = {
+                        startDate: moment().subtract(1, 'months'),
+                        endDate: moment()
+                    };
+                    // console.log("month");
+                }
+                if (selection == 'year') {
+                    this.datePicker.date = {
+                        startDate: moment().subtract(1, 'years'),
+                        endDate: moment()
+                    };
+                    // console.log("year");
+                }
             }
-        };
 
-        this.valueStyle = function(value) {
-            if (value === undefined) {
-                return 'missingValue';
-            } else if (value.good) {
-                return 'goodValue';
-            } else {
-                return 'badValue';
-            }
+            // this.ShowEasyPicker = function myFunction() {
+            //     console.log("HEHHE");
+            //     document.getElementById("myDropdown").classList.toggle("show");
+            // }
+
         }
-
-        this.SetDatePicker = function(selection){
-            if(selection =='hour'){
-                this.datePicker.date = {startDate: moment().subtract(1, 'hours'), endDate: moment()};
-                // console.log("hour");
-            }
-            if(selection =='day'){
-                this.datePicker.date = {startDate: moment().subtract(1, 'days'), endDate: moment()};
-                // console.log("day");
-            }
-            if(selection =='week'){
-                this.datePicker.date = {startDate: moment().subtract(7, 'days'), endDate: moment()};
-                // console.log("week");
-            }
-            if(selection =='month'){
-                this.datePicker.date = {startDate: moment().subtract(1, 'months'), endDate: moment()};
-                // console.log("month");
-            }
-            if(selection =='month'){
-                this.datePicker.date = {startDate: moment().subtract(1, 'months'), endDate: moment()};
-                // console.log("month");
-            }
-            if(selection =='year'){
-                this.datePicker.date = {startDate: moment().subtract(1, 'years'), endDate: moment()};
-                // console.log("year");
-            }
-        }
-
-        // this.ShowEasyPicker = function myFunction() {
-        //     console.log("HEHHE");
-        //     document.getElementById("myDropdown").classList.toggle("show");
-        // }
-
-    }]
+    ]
 });

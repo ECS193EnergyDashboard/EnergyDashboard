@@ -1,5 +1,5 @@
 <h2>I am analysis tab</h2>
-<input date-range-picker class="form-control date-picker" type="text" ng-model="$ctrl.datePicker.date" />
+<input date-range-picker class="form-control date-picker" type="text" ng-model="$ctrl.datePicker.date" options = "$ctrl.DRPOptions" />
 <p>The date range is {{$ctrl.datePicker.date}}</p>
 
 
@@ -28,7 +28,7 @@
         Columns <span class="caret"></span>
       </button>
       <ul class="dropdown-menu dropdown-content">
-        <li class="dropdownelm" ng-repeat="column in $ctrl.outerColumnNames | orderBy:'name'">  
+        <li class="dropdownelm" ng-repeat="column in $ctrl.outerColumnNames | orderBy:'name'">
             <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">
             {{column.name}}
         </li>
@@ -37,7 +37,7 @@
 
 
 <!-- <div id="myDropdown" class="dropdown-content">
-    <div class="dropdownelm" ng-repeat="column in $ctrl.columnNamesObjs | orderBy:'name'">  
+    <div class="dropdownelm" ng-repeat="column in $ctrl.columnNamesObjs | orderBy:'name'">
     <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">
     {{column.name}}
     </div>
@@ -129,4 +129,3 @@
         -->
     </tbody>
 </table>
-

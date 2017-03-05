@@ -121,27 +121,27 @@ angular.module('analysisModule').component('analysis', {
         this.SetDatePicker = function(selection){
             if(selection =='hour'){
                 this.datePicker.date = {startDate: moment().subtract(1, 'hours'), endDate: moment()};
-                console.log("hour");
+                // console.log("hour");
             }
             if(selection =='day'){
                 this.datePicker.date = {startDate: moment().subtract(1, 'days'), endDate: moment()};
-                console.log("day");
+                // console.log("day");
             }
             if(selection =='week'){
                 this.datePicker.date = {startDate: moment().subtract(7, 'days'), endDate: moment()};
-                console.log("week");
+                // console.log("week");
             }
             if(selection =='month'){
                 this.datePicker.date = {startDate: moment().subtract(1, 'months'), endDate: moment()};
-                console.log("month");
+                // console.log("month");
             }
             if(selection =='month'){
                 this.datePicker.date = {startDate: moment().subtract(1, 'months'), endDate: moment()};
-                console.log("month");
+                // console.log("month");
             }
             if(selection =='year'){
                 this.datePicker.date = {startDate: moment().subtract(1, 'years'), endDate: moment()};
-                console.log("year");
+                // console.log("year");
             }
         }
 

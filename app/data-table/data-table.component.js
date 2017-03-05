@@ -204,20 +204,23 @@ angular.module('dataTableModule').component('datatable', {
 
 
 
+
+// this function was for the old dropdown (non-bootstrap) just thought I would leave it just in case
+
 // Close dropdowns if there is a click outside of it
-window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
-    if (!event.target.matches('.dropdownelm')) {
-        if (!event.target.matches('.dropDownCheckBox')) {
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-              var openDropdown = dropdowns[i];
-              if (openDropdown.classList.contains('show')) {
-                openDropdown.classList.remove('show');
-              }
-            }
-          }
-        }
-    }
-}
+// window.onclick = function(event) {
+//   if (!event.target.matches('.dropbtn')) {
+//     if (!event.target.matches('.dropdownelm')) {
+//         if (!event.target.matches('.dropDownCheckBox')) {
+//             var dropdowns = document.getElementsByClassName("dropdown-content");
+//             var i;
+//             for (i = 0; i < dropdowns.length; i++) {
+//               var openDropdown = dropdowns[i];
+//               if (openDropdown.classList.contains('show')) {
+//                 openDropdown.classList.remove('show');
+//               }
+//             }
+//           }
+//         }
+//     }
+// }

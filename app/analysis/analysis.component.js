@@ -135,6 +135,14 @@ angular.module('analysisModule').component('analysis', {
                 this.datePicker.date = {startDate: moment().subtract(1, 'months'), endDate: moment()};
                 console.log("month");
             }
+            if(selection =='month'){
+                this.datePicker.date = {startDate: moment().subtract(1, 'months'), endDate: moment()};
+                console.log("month");
+            }
+            if(selection =='year'){
+                this.datePicker.date = {startDate: moment().subtract(1, 'years'), endDate: moment()};
+                console.log("year");
+            }
         }
 
         // this.ShowEasyPicker = function myFunction() {

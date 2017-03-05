@@ -17,24 +17,22 @@ angular.module('analysisModule').component('analysis', {
                 "timePickerIncrement": 60,
                 "ranges": {
                     "Today": [
-                        "2017-03-05T23:21:20.283Z", "2017-03-05T23:21:20.283Z"
+                        moment().startOf('day'), moment()
                     ],
-                    "Yesterday": [
-                        "2017-03-04T23:21:20.283Z", "2017-03-04T23:21:20.284Z"
+                    "Past 24 Hours": [
+                        moment().subtract(1, 'days'), moment()
                     ],
                     "Last 7 Days": [
-                        "2017-02-27T23:21:20.284Z", "2017-03-05T23:21:20.284Z"
+                        moment().subtract(7, 'days'), moment()
                     ],
-                    "Last 30 Days": [
-                        "2017-02-04T23:21:20.284Z", "2017-03-05T23:21:20.284Z"
+                    "Past Month": [
+                        moment().subtract(1, 'months'),  moment()
                     ],
-                    "This Month": [
-                        "2017-03-01T08:00:00.000Z", "2017-04-01T06:59:59.999Z"
-                    ],
-                    "Last Month": ["2017-02-01T08:00:00.000Z", "2017-03-01T07:59:59.999Z"]
+                    "Past Year": [moment().subtract(1, 'years'), moment()]
                 }
             }
             this.data = [];
+
 
             this.outerColumnNames = [];
             this.innerColumnNames = [

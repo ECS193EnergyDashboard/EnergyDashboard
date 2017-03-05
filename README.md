@@ -48,6 +48,6 @@ Navigate to the project directory on your local machine, and add a new `remote` 
 
 `git remote add deploy dash-server:/home/ec2-user/EnergyDashboard.git`
 
-Now anytime you want to push master to the server, use:
+Now anytime you want to push the Release branch to the server, use:
 
-`git push deploy master`
+`git push deploy Release`

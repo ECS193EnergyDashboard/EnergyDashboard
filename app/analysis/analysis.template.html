@@ -23,21 +23,27 @@
 
 
 <!-- <div class="dropdown" ng-if="$ctrl.columnNamesObjs.length != 0"> -->
-<div class="dropdown" >
-    <div class="btn-group">
+<div class="dropdown" ng-if="$ctrl.outerColumnNames.length != 0" >
       <button type="button" class="btn btn-default dropdown-toggle dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Columns <span class="caret"></span>
       </button>
-      <ul class="dropdown-menu">
-<!-- 
-        <li><a ng-click="$ctrl.SetDatePicker('hour')">Past Hour</a></li>
-        <li><a ng-click="$ctrl.SetDatePicker('day')">Past Day</a></li>
-        <li><a ng-click="$ctrl.SetDatePicker('week')">Past Week </a></li>
-        <li><a ng-click="$ctrl.SetDatePicker('month')">Past Month </a></li>
-        <li><a ng-click="$ctrl.SetDatePicker('year')">Past Year </a></li> -->
-      </ul>
+      <div class="dropdown-menu dropdown-content">
+        <div class="dropdownelm" ng-repeat="column in $ctrl.outerColumnNames | orderBy:'name'">  
+            <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">
+            {{column.name}}
+        </div>
+      </div>
+</div>
+
+
+<!-- <div id="myDropdown" class="dropdown-content">
+    <div class="dropdownelm" ng-repeat="column in $ctrl.columnNamesObjs | orderBy:'name'">  
+    <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">
+    {{column.name}}
     </div>
 </div>
+</div> -->
+
 
 
 

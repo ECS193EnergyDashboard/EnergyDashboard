@@ -20,13 +20,26 @@
 
 
 <!-- Drop down for checking and unchecking columns-->
-<div id="myDropdown" class="dropdown-content">
+<!-- <div id="myDropdown" class="dropdown-content">
     <div class="dropdownelm" ng-repeat="column in $ctrl.columnNamesObjs | orderBy:'name'">  
     <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">
     {{column.name}}
     </div>
 </div>
+</div> -->
+
+<div class="dropdown" >
+      <button type="button" class="btn btn-default dropdown-toggle dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Columns <span class="caret"></span>
+      </button>
+      <div class="dropdown-menu dropdown-content">
+        <div class="dropdownelm" ng-repeat="column in $ctrl.columnNamesObjs | orderBy:'name'">  
+            <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">
+            {{column.name}}
+        </div>
+      </div>
 </div>
+
 
 
 

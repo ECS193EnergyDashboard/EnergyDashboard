@@ -4,18 +4,21 @@
 
 
 
-<div class="dropdown">
-    <button ng-click="$ctrl.ShowEasyPicker()" class="dropbtn">Columns</button>
 
-    <!-- Drop down for checking and unchecking columns-->
-    <div id="myDropdown" class="dropdown-content">
-        <div class="dropdownelm" >  
-            qwdqdq
-    </div>
+
+<!-- Single button -->
+<div class="btn-group">
+  <button type="button" class="btn btn-default dropdown-toggle dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Easy Date Picker <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+
+    <li><a ng-click="$ctrl.SetDatePicker()">Past Hour</a></li>
+    <li><a ng-click="$ctrl.SetDatePicker()">Past Day</a></li>
+    <li><a ng-click="$ctrl.SetDatePicker()">Past Week </a></li>
+    <li><a ng-click="$ctrl.SetDatePicker()">Past Month </a></li>
+  </ul>
 </div>
-
-</div>
-
 
 
 

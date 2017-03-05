@@ -118,10 +118,15 @@ angular.module('analysisModule').component('analysis', {
             }
         }
 
-        this.ShowEasyPicker = function myFunction() {
-            console.log("HEHHE");
-            document.getElementById("myDropdown").classList.toggle("show");
+        this.SetDatePicker = function(){
+
+            console.log("EFHHEF");
         }
+
+        // this.ShowEasyPicker = function myFunction() {
+        //     console.log("HEHHE");
+        //     document.getElementById("myDropdown").classList.toggle("show");
+        // }
 
     }]
 });

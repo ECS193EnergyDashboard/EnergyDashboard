@@ -1,7 +1,6 @@
 <!--NOTE: for this we use the  columnNamesObjs however in the actual table we use columnNames -->
 <!-- This is not good -->
 <div class="dropdown" ng-if="$ctrl.columnNamesObjs.length != 0">
-    <button ng-click="$ctrl.ShowColumnList($ctrl.columnNamesObjs)" class="dropbtn">Columns</button>
     <input id="templateInput" type="text" ng-init="$ctrl.currTemplateName='my template name'" ng-model="$ctrl.currTemplateName">
     <button ng-click="$ctrl.SaveColumnList($ctrl.columnNamesObjs)" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false">Save Current Template</button
 
@@ -17,6 +16,7 @@
 
     </ul>
 </div>
+</div>
 
 
 <!-- Drop down for checking and unchecking columns-->
@@ -28,7 +28,7 @@
 </div>
 </div> -->
 
-<div class="dropdown" >
+<div class="dropdown" ng-if="$ctrl.columnNamesObjs.length != 0">
       <button type="button" class="btn btn-default dropdown-toggle dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Columns <span class="caret"></span>
       </button>

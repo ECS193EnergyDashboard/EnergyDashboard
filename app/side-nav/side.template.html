@@ -2,7 +2,7 @@
 
 <div class="fixedButtons">
     <div class="btn-group" role="group" aria-label="...">
-        <button ng-click="$ctrl.searchBuildings()" type="button" class="btn btn-default glyphicon glyphicon-home"></button>
+        <button ng-click="$ctrl.searchNames()" type="button" class="btn btn-default glyphicon glyphicon-home"></button>
         <button ng-click="" type="button" class="disabled btn btn-default glyphicon glyphicon-tag"></button>
         <button ng-click="$ctrl.searchTemplates()" type="button" class="btn btn-default glyphicon glyphicon-book"></button>
     </div>
@@ -17,16 +17,17 @@
         <!--Tab buttons-->
 
         <div class="list-group list-group-root well">
-            <div ng-repeat="element in $ctrl.buildings | filter: $ctrl.search  " >
+            <div ng-repeat="element in blds = ($ctrl.buildings | treeFilter:$ctrl.search:$ctrl.search.name.length) " >
                 <div ng-click="$ctrl.onSelectElem(element)"  class="sidebar-item list-group-item" ng-class="{selected: $ctrl.isSelectedElem(element), loading: $ctrl.elemIsLoading(element)}" >
                     <span ng-show="$ctrl.showClosedIcon(element)" class="glyphicon glyphicon-chevron-right pointer" ng-click="$ctrl.clickElem(element);$event.stopPropagation()"></span>
                     <span ng-show="$ctrl.showOpenIcon(element)" class="glyphicon glyphicon-chevron-down pointer" ng-click="$ctrl.clickElem(element);$event.stopPropagation()"></span>
                     <span ng-show="$ctrl.showLeafNodeIcon(element)" class="glyphicon glyphicon-modal-window" ></span>
                     <span class="">{{element.name}} </span>
                 </div>
-                <div class="list-group" ng-include="'side-nav/side-nav-heirarchy-template.html'" ng-if="element.show">
+                <div class="list-group" ng-include="'side-nav/side-heirarchy-template.html'" ng-if="element.show">
                 </div>
             </div>
+            <p ng-hide="blds.length">Nothing here!</p>
 
         </div>
 

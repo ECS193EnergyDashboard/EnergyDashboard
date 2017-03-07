@@ -8,23 +8,51 @@ angular.module('sideNavModule').component('sideBar', {
         var self = this;
         // Highlighted Item Index
         self.hlIndex = -1;
-        self.searchPlaceHolder = "Building name...";
+        self.searchPlaceHolder = "Search names...";
         self.filter= "name";
         self.search = {name:'', template:''};
+        self.buildings = [];
+        self.elemList = [];
+        // webid for buildings list
+        var webId = 'E0bgZy4oKQ9kiBiZJTW7eugwDBxX8Kms5BG77JiQlqSuWwVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdT';
+
 
         // Controller constructor called after bindings initialized
         self.$onInit = function() {
+            //Populates building names
+            pi.getChildrenOfElement(webId).then(function(data) {
+                self.buildings = data;
+
+                console.log("buildings: ", self.buildings);
+                //Loop through each building
+                self.buildings.forEach( function(elem) {
+                    self.elemList.push(elem);
+                    //Recursively explore buildings directory
+                    self.exploreElem(elem);
+                });
+            });
 
         };
 
-        // webid for buildings list
-        var webId = 'E0bgZy4oKQ9kiBiZJTW7eugwDBxX8Kms5BG77JiQlqSuWwVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdT';
-        pi.getChildrenOfElement(webId).then(function(data) {
-            self.buildings = data;
-            //console.log("buildings: ", self.buildings);
-        });
+        //Recursively visits all of an elents childrens
+        this.exploreElem = function(element) {
+            if (element.hasChildren && (element.elements === undefined || element.elements == null )) {
+                pi.getChildrenOfElement(element.webId).then(function(data) {
+                    element.elements = data;
+
+                    console.log("clicked: " + element.name);
+
+                    element.elements.forEach( function(elem) {
+                        self.elemList.push(element);
+                        self.exploreElem(elem);
+                    });
+                    //console.log(element.name +" data", data.elements);
+                });
+            }
+        };
 
         this.clickElem = function(element) {
+            /*
             if (element.elements === undefined || element.elements == null ) {
                 pi.getChildrenOfElement(element.webId).then(function(data) {
                     element.elements = data;
@@ -32,6 +60,7 @@ angular.module('sideNavModule').component('sideBar', {
                     //console.log(element.name +" data", data.elements);
                 });
             }
+            */
 
             // element does not have show property yet
             if (element.show == null || element.show === undefined) {
@@ -41,12 +70,13 @@ angular.module('sideNavModule').component('sideBar', {
             }
         };
 
+
+
         this.onSelectElem = function(element) {
             self.onClick({ name: element.name, webId: element.webId });
 
             //Set highlighted item index to elements id
             self.hlIndex = element.numId;
-            console.log("Loading(in side.comp.js): "+self.$loading);
         };
 
         // Functions to evaluate conditions for showing/hiding certain icons/classes
@@ -69,9 +99,9 @@ angular.module('sideNavModule').component('sideBar', {
         this.showOpenIcon = function(e) {
             return (e.hasChildren && e.show );
         };
-        this.searchBuildings = function(){
+        this.searchNames = function(){
             self.filter = "name";
-            self.searchPlaceHolder = "Search Buildings...";
+            self.searchPlaceHolder = "Search names...";
         };
         /*
         this.searchTags = function(){

@@ -7,6 +7,7 @@ angular.module('dashboardModule').component('dashboard',{
 		this.data = [];
 		this.isLoading = {sidebar: 0, data: 0, analysis: 0};
         this.webIds = [];
+        this.selected = [];
 
         // Function to cause binding up update
         bindIsLoading = (name, val) =>{
@@ -16,6 +17,8 @@ angular.module('dashboardModule').component('dashboard',{
         // this happens on a click of the sidebar to get the data
         this.onNavigateTo = function(name, webId) {
             bindIsLoading("data", 1);
+            //Clearing selected array
+            self.selected.length = 0;
             pi.getValuesOfChildren(webId).then(function(data) {
                 self.data = [];
                 self.webIds = [];
@@ -23,6 +26,8 @@ angular.module('dashboardModule').component('dashboard',{
                 for (var element of data.elements) {
                     self.data.push(pi.tabulateValues(element));
                     self.webIds.push(element.webId);
+                    //Adding elements to selected array
+                    self.selected.push(element);
                 }
                 console.log("Dashboard data: ", self.data);
                 // Call function Asynchronously to force bind to update

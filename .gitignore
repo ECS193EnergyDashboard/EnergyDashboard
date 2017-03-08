@@ -1,6 +1,7 @@
 .idea
-bower_components/bootstrap/node_modules
+bower_components/
 app/node_modules
+app/bower_components
 app/out.txt
 node_modules/
 out.txt

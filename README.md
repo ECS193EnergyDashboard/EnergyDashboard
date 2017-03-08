@@ -15,7 +15,7 @@
 
 ## Install Dependencies
 - Navigate to app directory
-- run `npm install` then `bower install`
+- run `sudo npm install` then `sudo bower install`
 
 
 ### Accessing the Server

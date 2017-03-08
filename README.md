@@ -13,6 +13,10 @@
 #### Bower Dependencies
 - angular-daterangepicker
 
+## Install Dependencies
+- Navigate to app directory
+- run `sudo npm install` then `sudo bower install`
+
 
 ### Accessing the Server
 Navigate to the SSH directory on your computer:
@@ -35,7 +39,7 @@ Confirm the configuration works by SSHing into the server:
 ### Running the Server
 The repo is located in the `~/www/` directory.
 
-By default, the `node` server should run on startup. You can control the `node` server with these commands: 
+By default, the `node` server should run on startup. You can control the `node` server with these commands:
 
 - `sudo service dash-server start`
 - `sudo service dash-server stop`

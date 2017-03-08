@@ -1,1 +1,3 @@
-angular.module('analysisModule', [ 'daterangepicker' ])
+angular.module('analysisModule', [ 
+	'daterangepicker',
+	'columnTemplateDropdownModule'])

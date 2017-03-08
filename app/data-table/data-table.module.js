@@ -1,3 +1,6 @@
 'use strict';
 
-angular.module('dataTableModule', [ 'smart-table', 'lrDragNDrop' ]);
+angular.module('dataTableModule', 
+	[ 'smart-table', 
+	'lrDragNDrop', 
+	'columnTemplateDropdownModule' ]);

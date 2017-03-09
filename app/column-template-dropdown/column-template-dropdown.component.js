@@ -2,7 +2,8 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
     templateUrl: 'column-template-dropdown/column-template-dropdown.template.html',
     bindings: {
         columns: '<',
-        templateSets: '<'
+        templateSets: '<',
+        updateColObj: '&'
     },
     controller: [ '$http', function colTemplateController($http) {
             var self = this;
@@ -51,6 +52,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
 
             this.ApplyTemplate = function(template){
                 this.columns = template.colObj;
+                this.updateColObj({cols: template.colObj});  //output binding
             };
 
         } //end controller

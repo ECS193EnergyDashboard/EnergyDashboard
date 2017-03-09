@@ -161,6 +161,10 @@ angular.module('dataTableModule').component('datatable', {
             return a;
         }
 
+        this.updateCol = function(cols){
+            this.columnNamesObjs = cols;
+        }
+
         // Whenever the displayed data is changed, recalculate sum and average of the shown rows only
         $scope.$watch('$ctrl.displayed', function(newValue, oldValue) {
             console.log("Recalculating...");
@@ -170,26 +174,3 @@ angular.module('dataTableModule').component('datatable', {
 
     }]
 });
-
-
-
-
-// this function was for the old dropdown (non-bootstrap) just thought I would leave it just in case
-
-// Close dropdowns if there is a click outside of it
-// window.onclick = function(event) {
-//   if (!event.target.matches('.dropbtn')) {
-//     if (!event.target.matches('.dropdownelm')) {
-//         if (!event.target.matches('.dropDownCheckBox')) {
-//             var dropdowns = document.getElementsByClassName("dropdown-content");
-//             var i;
-//             for (i = 0; i < dropdowns.length; i++) {
-//               var openDropdown = dropdowns[i];
-//               if (openDropdown.classList.contains('show')) {
-//                 openDropdown.classList.remove('show');
-//               }
-//             }
-//           }
-//         }
-//     }
-// }

@@ -1,17 +1,18 @@
 angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown', {
     templateUrl: 'column-template-dropdown/column-template-dropdown.template.html',
     bindings: {
-        columns: '<',
+        columns: '=',
         templateSets: '<'
     },
     controller: [ '$http', function colTemplateController($http) {
             var self = this;
-            self.columnNamesObjs = []
+            //self.columnNamesObjs = []
             this.templates = [];
             this.showTemplates = false;
 
             this.$onChanges = function() {
-                self.columnNamesObjs = this.columns;
+                //self.columnNamesObjs = this.columns;
+                console.log("columnTemplateDropdown cols : ", columns);
 
                 // Get templates from server
                 $http({method: 'GET', url: '/getTemplates'}).then(function successCallback(response) {
@@ -49,7 +50,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             };
 
             this.ApplyTemplate = function(template){
-                this.columnNamesObjs = template.colObj;
+                this.columns = template.colObj;
             };
 
         } //end controller

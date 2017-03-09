@@ -1,11 +1,4 @@
 <!--NOTE: for this we use the  columnNamesObjs however in the actual table we use columnNames -->
-<!-- This is not good -->
-<div class="dropdown" ng-if="$ctrl.columnNamesObjs.length != 0">
-    <input id="templateInput" type="text" ng-init="$ctrl.currTemplateName='my template name'" ng-model="$ctrl.currTemplateName">
-    <button ng-click="$ctrl.SaveColumnList($ctrl.columnNamesObjs)" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false">Save Current Template</button
-</div>
-
-
 
 <column-template-dropdown columns="$ctrl.columnNamesObjs"></column-template-dropdown>
 

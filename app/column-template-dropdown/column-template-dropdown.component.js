@@ -1,7 +1,7 @@
 angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown', {
     templateUrl: 'column-template-dropdown/column-template-dropdown.template.html',
     bindings: {
-        columns: '=',
+        columns: '<',
         templateSets: '<'
     },
     controller: [ '$http', function colTemplateController($http) {
@@ -12,7 +12,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
 
             this.$onChanges = function() {
                 //self.columnNamesObjs = this.columns;
-                console.log("columnTemplateDropdown cols : ", columns);
+                console.log("columnTemplateDropdown cols : ", this.columns);
 
                 // Get templates from server
                 $http({method: 'GET', url: '/getTemplates'}).then(function successCallback(response) {

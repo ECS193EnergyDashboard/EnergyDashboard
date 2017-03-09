@@ -12,8 +12,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             this.showTemplates = false;
 
             this.$onChanges = function() {
-                //self.columnNamesObjs = this.columns;
-                console.log("columnTemplateDropdown cols : ", this.columns);
+                //console.log("columnTemplateDropdown cols : ", this.columns);
 
                 // Get templates from server
                 $http({method: 'GET', url: '/getTemplates'}).then(function successCallback(response) {
@@ -28,8 +27,8 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             this.SaveColumnList = function(columnObjs) {
                 var colObjToAdd = JSON.parse(angular.toJson(columnObjs));
                 var template = {
-                    "colObj": colObjToAdd,
                     "templateName": this.currTemplateName
+                    "colObj": colObjToAdd,
                 };
                 this.templates.push(template);
                 console.log("added template ", this.templates);

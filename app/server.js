@@ -3,10 +3,20 @@ var app = express();
 var bodyParser = require('body-parser'); // to handle POST body
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+var jsonfile = require('jsonfile'); //read and write to json file
 
-var templates=[];
+
 // Allow access to this directory
 app.use(express.static('./'));
+
+var templates=[];
+var templatesLocation = './templates.json'
+// load templates from templates.json
+jsonfile.readFile(templatesLocation, function(err, obj) {
+    if(!(obj=== undefined || obj == null))
+        templates = obj;
+    console.dir(templates);
+});
 
 //This responds on the homepage
 app.get('/', function(req, res) {
@@ -25,13 +35,17 @@ app.get('/', function(req, res) {
 
 })
 
-//This responds a POST request for the homepage
+//This responds a POST request to /templates
 app.post('/templates', function(req, res) {
     console.log("Got a POST request for the templates");
     //console.log("req.body: ", req.body);
     templates.push(req.body);
-    console.log("templates: ", templates);
+    console.dir("templates: ", templates);
     res.status(200).send('template saved on server');
+    // save to file
+    jsonfile.writeFile(templatesLocation, templates, function (err) {
+      console.error(err)
+  });
 })
 
 //This responds to getTemplates

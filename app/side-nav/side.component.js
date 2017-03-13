@@ -21,17 +21,17 @@ angular.module('sideNavModule').component('sideBar', {
         self.$onInit = function() {
             //Populates building names
             pi.getChildrenOfElement(webId).then(function(data) {
-                self.buildings = data;
+                //@TODO REMOVE DEBUGGING ONLY SLICE
+                self.buildings = data.slice(0,10);
 
-                console.log("buildings: ", self.buildings);
                 //Loop through each building
                 self.buildings.forEach( function(elem) {
                     self.elemList.push(elem);
                     //Recursively explore buildings directory
                     self.exploreElem(elem);
                 });
+                console.log("buildings: ", self.buildings);
             });
-
         };
 
         //Recursively visits all of an elents childrens
@@ -40,7 +40,7 @@ angular.module('sideNavModule').component('sideBar', {
                 pi.getChildrenOfElement(element.webId).then(function(data) {
                     element.elements = data;
 
-                    console.log("clicked: " + element.name);
+                    //console.log("clicked: " + element.name);
 
                     element.elements.forEach( function(elem) {
                         self.elemList.push(element);

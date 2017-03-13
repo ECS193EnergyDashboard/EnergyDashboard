@@ -7,7 +7,13 @@ angular.module('dashboardModule').component('dashboard',{
 		this.data = [];
 		this.isLoading = {sidebar: 0, data: 0, analysis: 0};
         this.webIds = [];
-        this.selected = [];
+        //Populate with dummy item to get lrDragNDrop to work
+        this.selected = [{building: "DummyBuilding",
+                        hasChildren: false,
+                        name:"DUMMY_ITEM",
+                        numId:"9999999",
+                        template:"DUMMY_TEMPLATE",
+                        webId:"E0bgZy4oKQ9kiBiZJTW7eugwvCuLHcGs5BG77JiQlqSuWwVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdTXEFUSVJD"}];
 
         // Function to cause binding up update
         bindIsLoading = (name, val) =>{

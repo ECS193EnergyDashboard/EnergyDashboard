@@ -16,7 +16,7 @@
 ## Install Dependencies
 - Navigate to app directory
 - run `sudo npm install` 
-- `sudo npm install bower -g'`
+- `sudo npm install bower -g`
 - `bower install`
 
 

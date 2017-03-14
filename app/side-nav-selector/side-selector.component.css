@@ -20,6 +20,9 @@
     overflow: hidden;
 }
 
+.hiddenListItem {
+    opacity: 0;
+}
 
 #headerHere{
     border: 0px solid grey;
@@ -29,7 +32,7 @@
 }
 #selectionHolder{
     display: flex;
-    position: absolute;
+    /*position: absolute;*/
     flex-direction: column;
     height: 100%;
     width: 100%;

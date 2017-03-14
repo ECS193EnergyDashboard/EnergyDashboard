@@ -11,14 +11,14 @@ angular.module('dashboardModule').component('dashboard',{
         this.selected = [{building: "DummyBuilding",
                         hasChildren: false,
                         name:"DUMMY_ITEM",
-                        numId:"9999999",
+                        numId:"-1",
                         template:"DUMMY_TEMPLATE",
                         webId:"E0bgZy4oKQ9kiBiZJTW7eugwvCuLHcGs5BG77JiQlqSuWwVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdTXEFUSVJD"}];
 
         // Function to cause binding up update
         bindIsLoading = (name, val) =>{
             this.isLoading[name] = val;
-        }
+        };
 
         // this happens on a click of the sidebar to get the data
         this.onNavigateTo = function(name, webId) {
@@ -39,22 +39,22 @@ angular.module('dashboardModule').component('dashboard',{
                 // Call function Asynchronously to force bind to update
                 bindIsLoading("data", 0);
 		    });
-        }
+        };
 
         this.showAnalyzeTab = function() {
             this.showData = false;
-        }
+        };
 
         this.showDataTab = function(){
             this.showData = true;
-        }
+        };
 
 
         this.toggleMenu = function(){
             $("#wrapper").toggleClass("toggled");
-        }
+        };
         this.toggleSelectorMenu = function(){
             $("#wrapper").toggleClass("toggledSelector");
-        }
+        };
     }]
 });

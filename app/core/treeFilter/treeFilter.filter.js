@@ -2,13 +2,13 @@ angular.module('core.treeFilter').filter('treeFilter', function() {
     return function (input, optional1, optional2) {
         //Check if filter is disabled
         if(optional1.name.length == 0 || optional2 == 0){
-            console.log("treeFilter: disabled input: ");
-            console.log(input);
+            //console.log("treeFilter: disabled input: ");
+            //console.log(input);
             return input;
         }
 
-        console.log("Filter enabled looking for:"+optional1.name+": in: ");
-        console.log(input);
+        //console.log("Filter enabled looking for:"+optional1.name+": in: ");
+        //console.log(input);
         //Var to hold search results
         var out = [];
         //Clone input array into queue

@@ -16,6 +16,35 @@ angular.module('sideNavSelectorModule').component('sideBarSelector', {
             //console.log("buildings: ", self.buildings);
         });
 
+        this.printSelected = function() {
+            console.log("SideSelector: Items in selected list");
+            console.log(this.selected);
+            console.log("\n")
+        };
+
+        /**
+         * Removes element from the selected array
+         * @param e Element to be removed
+         */
+        this.removeElem = function (e)   {
+            this.selected.splice(this.selected.indexOf(e), 1);
+        };
+
+        this.clearSelected = function() {
+            this.selected.length = 0;
+            this.selected.push({building: "DummyBuilding",
+                hasChildren: false,
+                name:"DUMMY_ITEM",
+                numId:"-1",
+                template:"DUMMY_TEMPLATE",
+                webId:"E0bgZy4oKQ9kiBiZJTW7eugwvCuLHcGs5BG77JiQlqSuWwVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdTXEFUSVJD"
+            });
+        };
+
+        this.isDummyItem = function(e) {
+            return -1 == e.numId;
+        };
+
         this.clickElem = function(element) {
             if (element.elements === undefined || element.elements == null ) {
                 pi.getChildrenOfElement(element.webId).then(function(data) {

@@ -7,14 +7,17 @@
             <div class="btn-group" role="group" aria-label="...">
                 <button ng-click="" type="button" class="disabled btn btn-default glyphicon glyphicon-home"></button>
                 <button ng-click="" type="button" class="disabled btn btn-default  glyphicon glyphicon-tag"></button>
-                <button ng-click="" type="button" class="disabled btn btn-default glyphicon glyphicon-book"></button>
+                <button ng-click="$ctrl.clearSelected()" type="button" class="btn btn-default glyphicon glyphicon-trash pointer"></button>
             </div>
         </div>
 
         <!-- <div id="textHere"> Drop Items Here</div>-->
         <div class="list-group list-group-root well">
-            <div ng-repeat="element in $ctrl.selected" lr-drop-target="">
-                <span class="sidebar-item list-group-item">{{element.name}}</span>
+            <div ng-repeat="element in $ctrl.selected track by element.numId" lr-drop-target="" ng-click="$ctrl.printSelected()" ng-class="{hiddenListItem: $ctrl.isDummyItem(element)}">
+                <span class="sidebar-item list-group-item">{{element.building}}>
+                    <p style="margin-left: 20px">{{element.name}}</p>
+                    <span ng-show="element.numId != -1" class="glyphicon glyphicon-remove pointer" ng-click="$ctrl.removeElem(element);$event.stopPropagation()" ></span>
+                </span>
             </div>
         </div>
         </div>

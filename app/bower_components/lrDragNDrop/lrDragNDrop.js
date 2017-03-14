@@ -141,6 +141,7 @@
                         collection = th.parseRepeater(scope, attr);
                         console.log("lrDragSrcDir: Dragged item is");
                         console.log(collection[scope.index]);
+                        console.log("\n")
 
                         //console.log(safe);
                         //Stops drag event from dragging parent elems
@@ -222,7 +223,19 @@
                     var
                         collectionCopy = ng.copy(collection),           //Copy of items in dragged list
                         item = store.get(key),                          //Retrieves dragged item
+                        dup = false,
                         dropIndex, i, l;
+                    console.log("lrDropTarget: Drop: Item:");
+                    console.log(item);
+                    console.log("\n");
+                    //Check is item is duplicate
+                    if(-1 < collection.indexOf(item) ){
+                        //Item is duplicate
+                        dup = true;
+                        console.log("lrDropTarget: Is duplicate")
+                    }
+
+
                     if (item !== null) {
                         //Sets index to index of item that cursor is dropping on
                         dropIndex = scope.$index;
@@ -239,15 +252,23 @@
                                 }
                             }
                         }
-                        scope.$apply(function () {
-                            //Adds item to collection at index dropIndex
-                            collection.splice(dropIndex, 0, item);
-                            var fn = $parse(attr.lrDropSuccess) || ng.noop;
-                            fn(scope, {e: evt, item: item, collection: collection});
-                        });
-                        evt.preventDefault();
-                        resetStyle();
-                        store.clean();
+                        if(!dup) {
+                            scope.$apply(function () {
+                                //Adds item to collection at index dropIndex
+                                collection.splice(dropIndex, 0, item);
+                                var fn = $parse(attr.lrDropSuccess) || ng.noop;
+                                fn(scope, {e: evt, item: item, collection: collection});
+                            });
+                            evt.preventDefault();
+                            resetStyle();
+                            store.clean();
+                        }
+                        else{
+                            console.log("lrDropTarget: Alert: Is duplicate");
+                            evt.preventDefault();
+                            resetStyle();
+                            store.clean();
+                        }
                     }
                 });
 

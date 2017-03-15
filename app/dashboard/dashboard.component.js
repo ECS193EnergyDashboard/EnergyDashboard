@@ -7,13 +7,18 @@ angular.module('dashboardModule').component('dashboard',{
 		this.data = [];
 		this.isLoading = {sidebar: 0, data: 0, analysis: 0};
         this.webIds = [];
-        //Populate with dummy item to get lrDragNDrop to work
-        this.selected = [{building: "DummyBuilding",
-                        hasChildren: false,
-                        name:"DUMMY_ITEM",
-                        numId:"-1",
-                        template:"DUMMY_TEMPLATE",
-                        webId:"E0bgZy4oKQ9kiBiZJTW7eugwvCuLHcGs5BG77JiQlqSuWwVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdTXEFUSVJD"}];
+        this.dummyItem = {building: "ZZZDummyBuilding",
+            hasChildren: false,
+            name:"DUMMY_ITEM",
+            numId:"-1",
+            template:"DUMMY_TEMPLATE",
+            webId:"E0bgZy4oKQ9kiBiZJTW7eugwvCuLHcGs5BG77JiQlqSuWwVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdTXEFUSVJD"}
+        this.selected = [];
+
+
+        this.$onInit = function() {
+            this.selected.push(this.dummyItem);
+        };
 
         // Function to cause binding up update
         bindIsLoading = (name, val) =>{
@@ -24,7 +29,7 @@ angular.module('dashboardModule').component('dashboard',{
         this.onNavigateTo = function(name, webId) {
             bindIsLoading("data", 1);
             //Clearing selected array
-            self.selected.length = 0;
+            //self.selected.length = 0;
             pi.getValuesOfChildren(webId).then(function(data) {
                 self.data = [];
                 self.webIds = [];

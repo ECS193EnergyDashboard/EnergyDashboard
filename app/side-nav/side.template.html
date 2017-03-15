@@ -3,12 +3,13 @@
 <div class="fixedButtons">
     <div class="btn-group" role="group" aria-label="...">
         <button ng-click="$ctrl.searchNames()" type="button" class="btn btn-default glyphicon glyphicon-home"></button>
-        <button ng-click="" type="button" class="disabled btn btn-default glyphicon glyphicon-tag"></button>
         <button ng-click="$ctrl.searchTemplates()" type="button" class="btn btn-default glyphicon glyphicon-book"></button>
+        <button ng-click="$ctrl.applyFilter()" type="button" class="btn btn-default glyphicon glyphicon-filter"></button>
     </div>
-    <div class="form-group">
-        <input type="text" class="form-control" id="usr" placeholder="{{$ctrl.searchPlaceHolder}}" ng-model="$ctrl.search[$ctrl.filter]">
-    </div>
+    <form class="form-wrapper">
+        <input type="text" class="form-control" id="usr" placeholder="{{$ctrl.searchPlaceHolder}}" ng-model="$ctrl.searchInput[$ctrl.filter]">
+        <button id="clearFilterButton" ng-click="$ctrl.clearFilter()" type="button" class="btn btn-default glyphicon glyphicon-trash"></button>
+    </form>
 </div>
 <div id="sidebar-wrapper">
 
@@ -17,7 +18,7 @@
         <!--Tab buttons-->
 
         <div class="list-group list-group-root well">
-            <div dummy="$ctrl.search.name.length" index="$index" lr-drag-src-safe="" ng-repeat="element in blds = ($ctrl.buildings | treeFilter:$ctrl.search:$ctrl.search.name.length) " >
+            <div dummy="$ctrl.search.name.length" index="$index" lr-drag-src-safe="" ng-repeat="element in $ctrl.filteredItems" >
                 <div ng-click="$ctrl.onSelectElem(element)"  class="sidebar-item list-group-item" ng-class="{selected: $ctrl.isSelectedElem(element), loading: $ctrl.elemIsLoading(element)}" >
                     <span ng-show="$ctrl.showClosedIcon(element)" class="glyphicon glyphicon-chevron-right pointer" ng-click="$ctrl.clickElem(element);$event.stopPropagation()"></span>
                     <span ng-show="$ctrl.showOpenIcon(element)" class="glyphicon glyphicon-chevron-down pointer" ng-click="$ctrl.clickElem(element);$event.stopPropagation()"></span>

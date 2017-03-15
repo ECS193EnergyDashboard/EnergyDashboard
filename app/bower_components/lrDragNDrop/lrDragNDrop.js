@@ -92,8 +92,8 @@
                 throw Error("Expected ngRepeat in form of '_item_ in _collection_' but got '" +
                     repeatExpression + "'.");
             }
-            console.log("lrDragHelper: "+JSON.stringify(JSON.stringify(attr.class))+" "+JSON.stringify(match)+" "+JSON.stringify(match[2]));
-            console.log(scope.$parent.$eval(match[2]+"\n"));
+            //console.log("lrDragHelper: "+JSON.stringify(JSON.stringify(attr.class))+" "+JSON.stringify(match)+" "+JSON.stringify(match[2]));
+            ////console.log(scope.$parent.$eval(match[2]+"\n"));
             //Returns collection object specified in ng-repeat
             return scope.$parent.$eval(match[2]);
         };
@@ -113,37 +113,37 @@
                         collection,
                         key = (safe === true ? attr.lrDragSrcSafe : attr.lrDragSrc ) || 'temp';
 
-                    console.log("lrDragSrcDir: Length:{"+scope.dummy+"} index: {"+scope.index+"}");
+                    //console.log("lrDragSrcDir: Length:{"+scope.dummy+"} index: {"+scope.index+"}");
                     if(attr.lrDragData) {
                         scope.$watch(attr.lrDragData, function (newValue) {
                             collection = newValue;
                         });
                     } else {
                         //Fills collection with collection object from ng-repeat
-                        console.log("lrDragSrcDir: DragSrcCalling parser");
+                        //console.log("lrDragSrcDir: DragSrcCalling parser");
                         collection = th.parseRepeater(scope, attr);
-                        //console.log(collection);
+                        ////console.log(collection);
                     }
                     //Updates collection list when list changes on side-bar
                     scope.$watch('dummy', function(oldVal, newVal){
-                        console.log("lrDragSrcDir: changed \'"+key+"\' Length: {"+scope.dummy+"} index: {"+scope.index+"}");
+                        //console.log("lrDragSrcDir: changed \'"+key+"\' Length: {"+scope.dummy+"} index: {"+scope.index+"}");
 
 
                         //collection = th.parseRepeater(scope, attr);
-                        //console.log(collection);
-                        //console.log(safe);
+                        ////console.log(collection);
+                        ////console.log(safe);
                     });
 
                     //Binds start-of-drag event of element to this function
                     element.bind('dragstart', function (evt) {
-                        console.log("lrDragSrcDir: Dragstart w/ key: {"+key+"} Length: {"+scope.dummy+"} index: {"+scope.index+"}");
+                        //console.log("lrDragSrcDir: Dragstart w/ key: {"+key+"} Length: {"+scope.dummy+"} index: {"+scope.index+"}");
                         //Reparses collection
                         collection = th.parseRepeater(scope, attr);
-                        console.log("lrDragSrcDir: Dragged item is");
-                        console.log(collection[scope.index]);
-                        console.log("\n")
+                        //console.log("lrDragSrcDir: Dragged item is");
+                        //console.log(collection[scope.index]);
+                        //console.log("\n")
 
-                        //console.log(safe);
+                        ////console.log(safe);
                         //Stops drag event from dragging parent elems
                         evt.stopPropagation();
                         //Stores dragged item in lrDragStore service's array
@@ -213,7 +213,7 @@
                         collection = newValue;
                     });
                 } else {
-                    console.log("LrDropTarger calling parser");
+                    //console.log("LrDropTarger calling parser");
                     //Fills collection with collection object from ng-repeat
                     collection = dragHelper.parseRepeater(scope, attr);
                 }
@@ -225,14 +225,14 @@
                         item = store.get(key),                          //Retrieves dragged item
                         dup = false,
                         dropIndex, i, l;
-                    console.log("lrDropTarget: Drop: Item:");
-                    console.log(item);
-                    console.log("\n");
+                    //console.log("lrDropTarget: Drop: Item:");
+                    //console.log(item);
+                    //console.log("\n");
                     //Check is item is duplicate
                     if(-1 < collection.indexOf(item) ){
                         //Item is duplicate
                         dup = true;
-                        console.log("lrDropTarget: Is duplicate")
+                        //console.log("lrDropTarget: Is duplicate")
                     }
 
 
@@ -264,7 +264,7 @@
                             store.clean();
                         }
                         else{
-                            console.log("lrDropTarget: Alert: Is duplicate");
+                            //console.log("lrDropTarget: Alert: Is duplicate");
                             evt.preventDefault();
                             resetStyle();
                             store.clean();

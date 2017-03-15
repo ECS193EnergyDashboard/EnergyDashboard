@@ -4,15 +4,20 @@ angular.module('sideNavModule').component('sideBar', {
         isLoading: '<',
         onClick: '&'
     },
-    controller: [ 'pi', function TableController(pi) {
+    controller: ['pi','treeFilterFilter', function TableController(pi, treeFilterFilter) {
         var self = this;
         // Highlighted Item Index
         self.hlIndex = -1;
         self.searchPlaceHolder = "Search names...";
         self.filter= "name";
         self.search = {name:'', template:''};
+        self.searchInput = {name:'', template:''};
+        self.filteredItems = {};
         self.buildings = [];
         self.elemList = [];
+        self.filteredItems = self.buildings;
+        self.templateList = [];
+
         // webid for buildings list
         var webId = 'E0bgZy4oKQ9kiBiZJTW7eugwDBxX8Kms5BG77JiQlqSuWwVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdT';
 
@@ -32,11 +37,26 @@ angular.module('sideNavModule').component('sideBar', {
                     self.exploreElem(elem);
                 });
                 console.log("buildings: ", self.buildings);
+                self.filteredItems = self.buildings;
             });
+        };
+
+
+        this.clearFilter = function() {
+               this.searchInput[this.filter] = "";
+               this.applyFilter();
+        };
+
+        this.applyFilter = function() {
+            console.log("Copying search");
+            //this.search.name = this.searchInput.name;
+            //this.search.template = this.searchInput.template;
+            self.filteredItems = treeFilterFilter(self.buildings, self.searchInput, self.filter);
         };
 
         //Recursively visits all of an elents childrens
         this.exploreElem = function(element) {
+            self.templateList.push(element.template);
             if (element.hasChildren && (element.elements === undefined || element.elements == null )) {
                 pi.getChildrenOfElement(element.webId).then(function(data) {
                     element.elements = data;
@@ -114,6 +134,7 @@ angular.module('sideNavModule').component('sideBar', {
         this.searchTemplates = function(){
             self.filter = "template";
             self.searchPlaceHolder = "Search Templates...";
+            console.log(Array.from(new set(self.templateList)));
 
         };
 

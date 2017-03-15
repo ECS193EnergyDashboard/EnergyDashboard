@@ -22,7 +22,8 @@ angular.module('sideNavModule').component('sideBar', {
             //Populates building names
             pi.getChildrenOfElement(webId).then(function(data) {
                 //@TODO REMOVE DEBUGGING ONLY SLICE
-                self.buildings = data.slice(0,10);
+                //self.buildings = data.slice(0,10);
+                self.buildings = data;
 
                 //Loop through each building
                 self.buildings.forEach( function(elem) {

@@ -24,11 +24,19 @@
     opacity: 0;
 }
 
+.fixedButtons .btn-group {
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+}
+
 #headerHere{
     border: 0px solid grey;
     border-radius: 0px;
     text-align: center;
     overflow: hidden;
+    display: flex;
+    flex-direction: row;
 }
 #selectionHolder{
     display: flex;
@@ -198,12 +206,23 @@
 
 /*-----------For hierarchy----------*/
 .just-padding {
-  padding: 0;
+    padding: 0;
+    height: 100%;
 }
 
 .list-group .list-group{
     padding-left: 20px;
     margin-bottom: 20px;
+}
+
+.sidebar-item .list-group-item{
+    display: flex;
+}
+
+.selectorItem {
+    padding-top: 0;
+    padding-bottom: 0;
+    cursor: default;
 }
 
 /* Applies when item is selected and not loading */
@@ -252,8 +271,10 @@
 
 
 .list-group.list-group-root {
-  padding: 1px;
-  overflow: hidden;
+    padding: 1px;
+    overflow: hidden;
+    flex: 1 1;
+    margin-bottom: 0;
 }
 
 .list-group.list-group-root .list-group {
@@ -278,5 +299,27 @@
 }
 
 .pointer{
-    cursor: default;
+    display: inline-block;
+    cursor: pointer;
+    vertical-align: top;
+}
+
+#buildingName {
+    margin-bottom: 0;
+    margin-top: 0;
+    display: inline-block;
+    font-size: x-small;
+    color: #b9b9b9; /*Gray*/
+}
+
+#itemBtn{
+    display: inline-block;
+    position: absolute;
+    right: 2%;
+    font-size: small;
+}
+
+#itemText{
+    display: inline-block;
+    flex: 1 1;
 }

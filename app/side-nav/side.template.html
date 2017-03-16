@@ -2,9 +2,16 @@
 
 <div class="fixedButtons">
     <div class="btn-group" role="group" aria-label="...">
-        <button ng-click="$ctrl.searchBuildings()" type="button" class="btn btn-default glyphicon glyphicon-home"></button>
-        <button ng-click="" type="button" class="disabled btn btn-default glyphicon glyphicon-tag"></button>
-        <button ng-click="$ctrl.searchTemplates()" type="button" class="btn btn-default glyphicon glyphicon-book"></button>
+        <button ng-click="$ctrl.searchBuildings()" type="button" class="btn btn-default glyphicon glyphicon-home"
+        ng-mouseover="$ctrl.showToolTip('searchBuildings')" data-toggle="tooltip" title="Search By Building">
+        </button>
+
+
+        <button ng-click="" type="button" class="disabled btn btn-default glyphicon glyphicon-tag"
+        data-toggle="tooltip" title="Search By Templates"></button>
+        <button ng-click="$ctrl.searchTemplates()" type="button" class="btn btn-default glyphicon glyphicon-book"
+        data-toggle="tooltip" title="Search By Filter"></button>
+
     </div>
     <div class="form-group">
         <input type="text" class="form-control" id="usr" placeholder="{{$ctrl.searchPlaceHolder}}" ng-model="$ctrl.search[$ctrl.filter]">

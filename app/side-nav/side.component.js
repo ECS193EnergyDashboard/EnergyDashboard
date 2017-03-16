@@ -86,5 +86,17 @@ angular.module('sideNavModule').component('sideBar', {
 
         };
 
+        this.showToolTip = function(icon){
+            if(icon == "searchBuildings"){
+                console.log("EFEF");
+                // document.getElementById("searchBuildingsToolTip").show();
+            }
+        };
+
     }]
+});
+
+
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
 });

@@ -27,7 +27,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             this.SaveColumnList = function(columnObjs) {
                 var colObjToAdd = JSON.parse(angular.toJson(columnObjs));
                 var template = {
-                    "templateName": this.currTemplateName
+                    "templateName": this.currTemplateName,
                     "colObj": colObjToAdd,
                 };
                 this.templates.push(template);

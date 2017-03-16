@@ -47,3 +47,8 @@ angular.module('dashboardModule').component('dashboard',{
         }
     }]
 });
+
+
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+});

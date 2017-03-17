@@ -65,6 +65,24 @@ angular.
                 });
             };
 
+            pi.getValuesOfElements = function(webIds) {
+                var result = [];
+                var promises = [];
+                for (var webId of webIds) {
+                    promises.push(pi.getElement(webId));
+                    promises.push(pi.getValuesOfElement(webId));
+                }
+                return $q.all(promises).then(function(responses) {
+                    for (var i = 0; i < responses.length; i += 2) {
+                        var element = responses[i];
+                        element.values = responses[i + 1];
+                        result.push(element);
+                    }
+                    return result;
+                });
+            }
+
+
             pi.getChildrenOfElement = function(parentWebId) {
                 var result = [];
                 var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/elements/' + parentWebId + '/elements?selectedFields=Items.Name;Items.WebId;Items.TemplateName;Items.HasChildren;Items.Path'

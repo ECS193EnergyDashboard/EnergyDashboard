@@ -49,15 +49,12 @@
     <tr>
         <th st-sort="name">Name</th>
         <th>Building</th>
-        <th ng-repeat="column in $ctrl.columnNamesObjs" ng-if="$ctrl.reorderEnabled && column.isChecked" st-sort="$ctrl.getters.value.bind(null, column.name)" lr-drag-src="header" lr-drop-target="header"> 
-            {{column.units === "" ? column.name : column.name + " (" + column.units + ")"}} 
-        </th>
-        <th ng-if="!$ctrl.reorderEnabled" ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" st-sort="$ctrl.getters.value.bind(null, column)">
+        <th ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" st-sort="$ctrl.getters.value.bind(null, column.name)" lr-drag-src="header" lr-drop-target="header"> 
             {{column.units === "" ? column.name : column.name + " (" + column.units + ")"}} 
         </th>
     </tr>
 
-    <tr ng-if="$ctrl.searchEnabled">
+    <tr>
         <th colspan="4">
             <input st-search="name" placeholder="search for name..." class="input-sm form-control" type="search"/>
         </th>

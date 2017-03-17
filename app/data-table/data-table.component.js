@@ -2,9 +2,6 @@ angular.module('dataTableModule').component('datatable', {
     templateUrl: 'data-table/data-table.template.html',
     bindings: {
         tableSrc: '<',
-        searchEnabled: '<',
-        reorderEnabled: '<',
-        isLoading: '<',
     },
     controller: ['$filter', '$scope', '$http', function TableController($filter, $scope, $http) {
         var self = this;
@@ -62,12 +59,6 @@ angular.module('dataTableModule').component('datatable', {
         };
 
         this.$onChanges = function() {
-            if (this.searchEnabled === undefined) {
-                this.searchEnabled = false;
-            }
-            if (this.reorderEnabled === undefined) {
-                this.reorderEnabled = false;
-            }
             if (this.tableSrc.length == 0) {
                 return;
             }
@@ -184,9 +175,11 @@ angular.module('dataTableModule').component('datatable', {
         this.reduceColumn = function(columnName, accumulator, opFunc) {
             var a = accumulator;
             for (var element of this.displayed) {
-                var colVal = element[columnName];
-                if (colVal && colVal.good && colVal.value) {
-                    opFunc(colVal.value, a);
+                if (element) {
+                    var colVal = element[columnName];
+                    if (colVal && colVal.good && colVal.value) {
+                        opFunc(colVal.value, a);
+                    }
                 }
             }
             return a;
@@ -201,26 +194,3 @@ angular.module('dataTableModule').component('datatable', {
 
     }]
 });
-
-
-
-
-// this function was for the old dropdown (non-bootstrap) just thought I would leave it just in case
-
-// Close dropdowns if there is a click outside of it
-// window.onclick = function(event) {
-//   if (!event.target.matches('.dropbtn')) {
-//     if (!event.target.matches('.dropdownelm')) {
-//         if (!event.target.matches('.dropDownCheckBox')) {
-//             var dropdowns = document.getElementsByClassName("dropdown-content");
-//             var i;
-//             for (i = 0; i < dropdowns.length; i++) {
-//               var openDropdown = dropdowns[i];
-//               if (openDropdown.classList.contains('show')) {
-//                 openDropdown.classList.remove('show');
-//               }
-//             }
-//           }
-//         }
-//     }
-// }

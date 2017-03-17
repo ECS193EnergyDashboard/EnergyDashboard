@@ -94,7 +94,7 @@ angular.module('sideNavModule').component('sideBar', {
 
 
         this.onSelectElem = function(element) {
-            self.onClick({ name: element.name, webId: element.webId });
+            self.onClick({ element: element });
 
             //Set highlighted item index to elements id
             self.hlIndex = element.numId;

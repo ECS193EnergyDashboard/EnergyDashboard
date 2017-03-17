@@ -15,28 +15,40 @@
 
 ## Install Dependencies
 - Navigate to app directory
-- run `sudo npm install` 
-- `sudo npm install bower -g'`
+- run `sudo npm install`
+- `sudo npm install bower -g`
 - `bower install`
 
 
 ### Accessing the Server
-Navigate to the SSH directory on your computer:
+1. **UNIX based system**
 
-`cd ~/.ssh`
+    * Navigate to the SSH directory on your computer:
 
-Edit the file named `config` to contain the following:
-```
-Host dash-server
-Hostname ec2-52-53-118-90.us-west-1.compute.amazonaws.com
-User ec2-user
-IdentityFile ~/.ssh/EnergyDashboard.pem
-```
-Then place the `EnergyDashboard.pem` private key file in the `~.ssh/` directory.
+    `cd ~/.ssh`
 
-Confirm the configuration works by SSHing into the server:
+    * Edit the file named `config` to contain the following:
+    ```
+    Host dash-server
+    Hostname ec2-52-53-118-90.us-west-1.compute.amazonaws.com
+    User ec2-user
+    IdentityFile ~/.ssh/EnergyDashboard.pem
+    ```
+    * Then place the `EnergyDashboard.pem` private key file in the `~.ssh/` directory.
 
-`ssh dash-server`
+    * Confirm the configuration works by SSHing into the server:
+
+    `ssh dash-server`
+
+2. **Windows**
+
+    * Download putty at this link [here](http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
+    * Download putty key generator (puttygen.exe) from above link
+    * Open key generator, load the .pem file, then generate private key (ppk)
+    * Run putty, in host name enter: `ec2-52-53-118-90.us-west-1.compute.amazonaws.com`
+    * On Auth in "Private key file for authentication" field enter the path of the ppk file.
+    * On Data in "Auto-login username" field enter `ec2-user`
+    * Save and Open the connection
 
 ### Running the Server
 The repo is located in the `~/www/` directory.

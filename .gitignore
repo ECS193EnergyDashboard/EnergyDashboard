@@ -7,3 +7,5 @@ node_modules/
 out.txt
 tags
 *.swp
+app/npm-debug.log
+npm-debug.log

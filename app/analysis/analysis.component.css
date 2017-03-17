@@ -1,0 +1,23 @@
+.inner-cols{
+    display: -webkit-flex;
+    display: inline-flex;
+    width: 500px;
+    height: 50px;
+    justify-content: center;
+
+}
+.inner-cols .inner-c{
+    margin: auto;
+    flex: 1 1 auto;
+}
+.inner-cols .btn{
+    margin-right: 10px;
+}
+table thead th{
+    text-align: center;
+}
+table tbody tr td table{
+    /*top border is overridden in tr*/
+    border-left: 1px solid #98d819;
+    border-right: 1px solid #98d819;
+}

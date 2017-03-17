@@ -41,7 +41,7 @@ angular.module('dashboardModule').component('dashboard',{
             this.asyncData.push({ });
 
             pi.getValuesOfElements([ element.webId ]).then(function(data) {
-                if (!this.cancelAysnc) {
+                if (!self.cancelAysnc) {
                     self.asyncData[index] = pi.tabulateValues(data[0]);
                 }
 

@@ -141,6 +141,11 @@ angular.module('analysisModule').component('analysis', {
                 }
             }
 
+            // Callback for column-template-dropdown component
+            this.updateCol = function(cols){
+                this.outerColumnNames = cols;
+            }
+
         }
     ]
 });

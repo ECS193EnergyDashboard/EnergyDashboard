@@ -1,0 +1,34 @@
+<div class="dropdown" ng-if="$ctrl.columns.length != 0">
+    <!--save a template-->
+    <div class="dropdown" ng-if="$ctrl.columns.length != 0">
+        <input id="templateInput" type="text" ng-init="$ctrl.currTemplateName='my template name'" ng-model="$ctrl.currTemplateName">
+        <button ng-click="$ctrl.SaveColumnList($ctrl.columns)" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false">Save Current Template</button
+    </div>
+    <!--Bootstrap dropdown for templates-->
+    <div class="btn-group">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                My Templates <span class="caret"></span>
+            </button>
+        <ul class="dropdown-menu">
+            <li ng-repeat="template in $ctrl.templates">
+                <a ng-click="$ctrl.ApplyTemplate(template)">{{template.templateName}}</a>
+            </li>
+
+        </ul>
+    </div>
+</div>
+
+
+
+
+
+<div class="dropdown" ng-if="$ctrl.columns.length != 0">
+    <button type="button" class="btn btn-default dropdown-toggle dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Columns <span class="caret"></span>
+      </button>
+    <div class="dropdown-menu dropdown-content">
+        <div class="dropdownelm" ng-repeat="column in $ctrl.columns | orderBy:'name'">
+            <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}"> {{column.name}}
+        </div>
+    </div>
+</div>

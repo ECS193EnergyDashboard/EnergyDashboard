@@ -1,14 +1,21 @@
-<h2>I am analysis tab</h2>
-<input date-range-picker class="form-control date-picker" type="text" ng-model="$ctrl.datePicker.date" />
+<h2>I am analysis the tab, hear me Roar</h2>
+<input date-range-picker class="form-control date-picker" type="text" ng-model="$ctrl.datePicker.date" options = "$ctrl.DRPOptions" />
 <p>The date range is {{$ctrl.datePicker.date}}</p>
+
+
+
+
+<column-template-dropdown columns="$ctrl.outerColumnNames" update-col-obj= "$ctrl.updateCol(cols)" ></column-template-dropdown> 
+
+
 
 <div>
     <button ng-click="$ctrl.startAnalysis()">Start Analysis</button>
     <div>
-        <div ng-repeat="column in $ctrl.innerColumnNames">
+        <span ng-repeat="column in $ctrl.innerColumnNames">
             <input ng-model="column.isChecked" type="checkbox">
             {{column.name}}
-        </div>
+        </span>
     </div>
 </div>
 
@@ -83,4 +90,3 @@
         -->
     </tbody>
 </table>
-

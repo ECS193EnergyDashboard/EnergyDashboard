@@ -1,44 +1,21 @@
-<h2>I am analysis tab</h2>
+<h2>I am analysis the tab, hear me Roar</h2>
 <input date-range-picker class="form-control date-picker" type="text" ng-model="$ctrl.datePicker.date" options = "$ctrl.DRPOptions" />
 <p>The date range is {{$ctrl.datePicker.date}}</p>
 
 
 
 
-
-<!-- <div class="dropdown" ng-if="$ctrl.columnNamesObjs.length != 0"> -->
-<div class="dropdown" ng-if="$ctrl.outerColumnNames.length != 0" >
-      <button type="button" class="btn btn-default dropdown-toggle dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Columns <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu dropdown-content">
-        <li class="dropdownelm" ng-repeat="column in $ctrl.outerColumnNames | orderBy:'name'">
-            <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">
-            {{column.name}}
-        </li>
-      </ul>
-</div>
-
-
-<!-- <div id="myDropdown" class="dropdown-content">
-    <div class="dropdownelm" ng-repeat="column in $ctrl.columnNamesObjs | orderBy:'name'">
-    <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">
-    {{column.name}}
-    </div>
-</div>
-</div> -->
-
-
+<column-template-dropdown columns="$ctrl.outerColumnNames" update-col-obj= "$ctrl.updateCol(cols)" ></column-template-dropdown> 
 
 
 
 <div>
     <button ng-click="$ctrl.startAnalysis()">Start Analysis</button>
     <div>
-        <div ng-repeat="column in $ctrl.innerColumnNames">
+        <span ng-repeat="column in $ctrl.innerColumnNames">
             <input ng-model="column.isChecked" type="checkbox">
             {{column.name}}
-        </div>
+        </span>
     </div>
 </div>
 

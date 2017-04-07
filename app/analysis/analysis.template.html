@@ -1,11 +1,16 @@
-<h2>I am analysis the tab, hear me Roar</h2>
-<input date-range-picker class="form-control date-picker" type="text" ng-model="$ctrl.datePicker.date" options = "$ctrl.DRPOptions" />
+<!--Date Range Picker-->
+<div class = "drp-contain">
+    <div> <!--This div for border-->
+        <span class="glyphicon glyphicon-calendar"></span>
+        <input date-range-picker class="form-control date-picker" type="text" ng-model="$ctrl.datePicker.date" options = "$ctrl.DRPOptions" />
+    </div>
+
+</div>
 <p>The date range is {{$ctrl.datePicker.date}}</p>
 
 
-
-
-<column-template-dropdown columns="$ctrl.outerColumnNames" update-col-obj= "$ctrl.updateCol(cols)" ></column-template-dropdown> 
+<!--Column select-->
+<column-template-dropdown columns="$ctrl.outerColumnNames" update-col-obj= "$ctrl.updateCol(cols)" ></column-template-dropdown>
 
 
 

@@ -20,8 +20,6 @@
 
 
 
-
-
 <div class="dropdown" ng-if="$ctrl.columns.length != 0">
     <button type="button" class="btn btn-default dropdown-toggle dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Columns <span class="caret"></span>
@@ -32,3 +30,19 @@
         </div>
     </div>
 </div>
+
+
+<div class="" ng-if="$ctrl.columns.length != 0">
+   <!--  <button ng-click= "$ctrl.DownloadCSV()" type="button"> Download CSV </button> -->
+
+    <button type="button" ng-csv="$ctrl.GetArray()" csv-header="$ctrl.GetHeader()" filename="test.csv">
+        Download CSV
+    </button>
+</div>
+
+
+
+
+
+
+

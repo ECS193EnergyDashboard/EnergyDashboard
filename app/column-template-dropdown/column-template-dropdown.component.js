@@ -2,6 +2,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
     templateUrl: 'column-template-dropdown/column-template-dropdown.template.html',
     bindings: {
         columns: '<',
+        rowData: '<',
         templateSets: '<',
         updateColObj: '&'
     },
@@ -21,7 +22,39 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                 }, function errorCallback(response) {
                     console.error("get templates failed ", response);
                 });
+
+
+                console.log("rowdata ", this.rowData);
             };
+
+            this.GetHeader = function() {
+                columnNames = [];
+                columnNames.push("Name");
+                columnNames.push("Building");
+                for (var element of this.columns){
+                    if(element.isChecked)
+                        columnNames.push(element.name);
+                }
+                return columnNames;
+            };
+
+
+            // ASK JUSTIN: Should this display units? on column name or in rows?
+            this.GetArray = function() {
+                var CSVData = [];
+                for(var element of this.rowData){
+                    var obj = {};
+                    obj.name = element.name;
+                    obj.building = element.building;
+                    for(var col of this.columns){
+                        if(col.isChecked){
+                            obj[col.name] = element[col.name].value;
+                        }
+                    }
+                    CSVData.push(obj);
+                }
+                return CSVData;
+            }
 
             // save template/profile for cols
             this.SaveColumnList = function(columnObjs) {
@@ -52,6 +85,11 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             this.ApplyTemplate = function(template){
                 this.columns = template.colObj;
                 this.updateColObj({cols: template.colObj});  //output binding
+            };
+
+
+            this.DownloadCSV = function(){
+                console.log('DOwnloading CSV');
             };
 
         } //end controller

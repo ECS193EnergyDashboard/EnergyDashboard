@@ -1,6 +1,7 @@
 <!--NOTE: for this we use the  columnNamesObjs however in the actual table we use columnNames -->
 
-<column-template-dropdown columns="$ctrl.columnNamesObjs" update-col-obj= "$ctrl.updateCol(cols)" ></column-template-dropdown>
+<column-template-dropdown columns="$ctrl.columnNamesObjs" update-col-obj= "$ctrl.updateCol(cols)" 
+row-data="$ctrl.data" ></column-template-dropdown>
 
 
 <table st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped">

@@ -13,6 +13,7 @@
         <!--Download CSV button -->
         <button ng-if="$ctrl.isAnalysis=='true'" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#fileNameModalAnalysis">
             Download As CSV
+            <span class="glyphicon glyphicon-save-file"></span>
         </button>
 
 
@@ -24,6 +25,7 @@
         <!--Download CSV button -->
         <button ng-if="$ctrl.isAnalysis=='false'" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#fileNameModalData">
             Download As CSV
+            <span class="glyphicon glyphicon-save-file"></span>
         </button>
 
 
@@ -37,7 +39,7 @@
             </button>
         <ul class="dropdown-menu">
             <li ng-repeat="template in $ctrl.templates">
-                <a ng-click="$ctrl.ApplyTemplate(template)">{{template.templateName}}</a>
+                <a href="" ng-click="$ctrl.ApplyTemplate(template)">{{template.templateName}}</a>
             </li>
 
         </ul>
@@ -76,8 +78,9 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-        <button type="button" class="btn btn-default" ng-csv="$ctrl.GetArray()" csv-header="$ctrl.GetHeader()"filename="{{ $ctrl.fileName }}.csv" data-dismiss="modal">
+        <button class="btn btn-default" type="button" ng-csv="$ctrl.GetArray()" csv-header="$ctrl.GetHeader()" filename="test.csv">
             Download CSV
+            <span class="glyphicon glyphicon-save-file"></span>
         </button>
     </div>`
     </div>
@@ -119,7 +122,7 @@
             <h4 class="modal-title">Please Enter Template Data Name</h4>
         </div>
     <div class="modal-body">
-        
+
         <input autofocus="autofocus" id="templateInput" class="form-control" type="text" ng-init="$ctrl.currTemplateName" ng-model="$ctrl.currTemplateName" placeholder="My Template Name...">
 
     </div>
@@ -133,6 +136,7 @@
 
     </div>
 </div>
+
 
 <!-- Template name Modal for data tab -->
 <div ng-if="$ctrl.isAnalysis=='true'" class="modal fade" id="templateNameModalAnalysis" role="dialog">
@@ -144,7 +148,7 @@
             <h4 class="modal-title">Please Enter Template Analaysis Name</h4>
         </div>
     <div class="modal-body">
-        
+
         <input autofocus="autofocus" id="templateInput" class="form-control" type="text" ng-init="$ctrl.currTemplateName" ng-model="$ctrl.currTemplateName" placeholder="My Template Name...">
 
     </div>
@@ -158,10 +162,6 @@
 
     </div>
 </div>
-
-
-
-
 
 
 

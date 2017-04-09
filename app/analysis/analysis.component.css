@@ -1,0 +1,26 @@
+.drp-contain {
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: row;
+    -webkit-flex-direction: row;
+    justify-content: flex-start;
+    width:50%;
+    padding-top: 1%
+}
+.drp-contain div{
+    border: 1px solid #4099FF;
+    border-radius: 5px;
+    display: inline-flex;
+}
+.drp-contain div input, .drp-contain div p {
+    margin-top: 1%;
+}
+.drp-contain div input{
+    border: none;
+    cursor: pointer;
+}
+.drp-contain div span{
+    font-size: 150%;
+    top: 20%;
+    padding-left: 2%;
+}

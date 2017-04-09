@@ -5,17 +5,19 @@
 
 
 
-<column-template-dropdown columns="$ctrl.outerColumnNames" update-col-obj= "$ctrl.updateCol(cols)" row-data="$ctrl.data"></column-template-dropdown> 
+<column-template-dropdown columns="$ctrl.outerColumnNames" update-col-obj= "$ctrl.updateCol(cols)" row-data="$ctrl.data" is-analysis="'true'"></column-template-dropdown> 
 
 
 
 <div>
-    <button ng-click="$ctrl.startAnalysis()">Start Analysis</button>
+    <button  class="btn btn-primary" ng-click="$ctrl.startAnalysis()">Start Analysis</button>
     <div>
-        <span ng-repeat="column in $ctrl.innerColumnNames">
-            <input ng-model="column.isChecked" type="checkbox">
-            {{column.name}}
-        </span>
+        <h3>
+            <span ng-repeat="column in $ctrl.innerColumnNames">
+                <input ng-model="column.isChecked" type="checkbox">
+                {{column.name}}
+            </span>
+        </h3>
     </div>
 </div>
 

@@ -3,6 +3,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
     bindings: {
         columns: '<',
         rowData: '<',
+        isAnalysis: '<',
         templateSets: '<',
         updateColObj: '&'
     },
@@ -11,6 +12,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             //self.columnNamesObjs = []
             this.templates = [];
             this.showTemplates = false;
+
 
             this.$onChanges = function() {
                 //console.log("columnTemplateDropdown cols : ", this.columns);
@@ -23,9 +25,11 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                     console.error("get templates failed ", response);
                 });
 
+                console.log("is analysis", this.isAnalysis);
 
-                console.log("rowdata ", this.rowData);
             };
+
+
 
             this.GetHeader = function() {
                 columnNames = [];

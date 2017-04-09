@@ -11,7 +11,7 @@
             </button>
         <ul class="dropdown-menu">
             <li ng-repeat="template in $ctrl.templates">
-                <a ng-click="$ctrl.ApplyTemplate(template)">{{template.templateName}}</a>
+                <a href="" ng-click="$ctrl.ApplyTemplate(template)">{{template.templateName}}</a>
             </li>
 
         </ul>
@@ -32,17 +32,9 @@
 </div>
 
 
-<div class="" ng-if="$ctrl.columns.length != 0">
-   <!--  <button ng-click= "$ctrl.DownloadCSV()" type="button"> Download CSV </button> -->
-
-    <button type="button" ng-csv="$ctrl.GetArray()" csv-header="$ctrl.GetHeader()" filename="test.csv">
+<div ng-if="$ctrl.columns.length != 0">
+    <button class="btn btn-default" type="button" ng-csv="$ctrl.GetArray()" csv-header="$ctrl.GetHeader()" filename="test.csv">
         Download CSV
+        <span class="glyphicon glyphicon-save-file"></span>
     </button>
 </div>
-
-
-
-
-
-
-

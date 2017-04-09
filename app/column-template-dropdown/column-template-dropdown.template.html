@@ -78,7 +78,7 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-        <button class="btn btn-default" type="button" csv-header="$ctrl.GetHeader()" 
+        <button class="btn btn-default" type="button" csv-header="$ctrl.GetHeaderData()" 
         ng-csv="$ctrl.GetArrayData()" filename="{{ $ctrl.fileName }}" data-dismiss="modal">
             Download CSV
             <span class="glyphicon glyphicon-save-file"></span>
@@ -103,7 +103,7 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-        <button type="button" class="btn btn-default" ng-csv="$ctrl.GetArrayAnalysis()" csv-header="$ctrl.GetHeader()" filename="{{ $ctrl.fileName }}" data-dismiss="modal">
+        <button type="button" class="btn btn-default" csv-header="$ctrl.GetHeaderAnalysis()" filename="{{ $ctrl.fileName }}" ng-csv="$ctrl.GetArrayAnalysis()" data-dismiss="modal">
             Download CSV
             <span class="glyphicon glyphicon-save-file"></span>
         </button>

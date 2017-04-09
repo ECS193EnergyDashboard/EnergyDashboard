@@ -44,7 +44,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
 
 
             // ASK JUSTIN: Should this display units? on column name or in rows?
-            this.GetArray = function() {
+            this.GetArrayData = function() {
                 var CSVData = [];
                 for(var element of this.rowData){
                     var obj = {};
@@ -57,6 +57,25 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                     }
                     CSVData.push(obj);
                 }
+                return CSVData;
+            }
+
+
+            // ASK JUSTIN: Should this display units? on column name or in rows?
+            this.GetArrayAnalysis = function() {
+                var CSVData = [];
+                console.log(this.rowData);
+                // for(var element of this.rowData){
+                //     var obj = {};
+                //     obj.name = element.name;
+                //     obj.building = element.building;
+                //     for(var col of this.columns){
+                //         if(col.isChecked){
+                //             obj[col.name] = element[col.name].value;
+                //         }
+                //     }
+                //     CSVData.push(obj);
+                // }
                 return CSVData;
             }
 

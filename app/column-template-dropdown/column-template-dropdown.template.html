@@ -70,7 +70,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Please Enter File Name</h4>
+            <h4 class="modal-title">Data: Please Enter File Name</h4>
         </div>
     <div class="modal-body">
         <input autofocus="autofocus" type="text" class="form-control" ng-model="$ctrl.fileName" />
@@ -78,7 +78,8 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-        <button class="btn btn-default" type="button" ng-csv="$ctrl.GetArray()" csv-header="$ctrl.GetHeader()" filename="test.csv">
+        <button class="btn btn-default" type="button" csv-header="$ctrl.GetHeader()" 
+        ng-csv="$ctrl.GetArrayData()" filename="{{ $ctrl.fileName }}" data-dismiss="modal">
             Download CSV
             <span class="glyphicon glyphicon-save-file"></span>
         </button>
@@ -94,7 +95,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Please Enter File Name</h4>
+            <h4 class="modal-title">Analysis: Please Enter File Name</h4>
         </div>
     <div class="modal-body">
         <input autofocus="autofocus" type="text" class="form-control" ng-model="$ctrl.fileName" />
@@ -102,8 +103,9 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-        <button type="button" class="btn btn-default" ng-csv="$ctrl.GetArray()" csv-header="$ctrl.GetHeader()"filename="{{ $ctrl.fileName }}.csv" data-dismiss="modal">
+        <button type="button" class="btn btn-default" ng-csv="$ctrl.GetArrayAnalysis()" csv-header="$ctrl.GetHeader()" filename="{{ $ctrl.fileName }}" data-dismiss="modal">
             Download CSV
+            <span class="glyphicon glyphicon-save-file"></span>
         </button>
     </div>`
     </div>

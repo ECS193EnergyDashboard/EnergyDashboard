@@ -1,9 +1,16 @@
 <div class="dropdown" ng-if="$ctrl.columns.length != 0">
     <!--save a template-->
     <div class="dropdown" ng-if="$ctrl.columns.length != 0">
-        <input id="templateInput" type="text" ng-init="$ctrl.currTemplateName='my template name'" ng-model="$ctrl.currTemplateName">
-        <button ng-click="$ctrl.SaveColumnList($ctrl.columns)" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false">Save Current Template</button
+        <!--Save template button -->
+        <button data-toggle="modal" data-target="#templateNameModal" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false">Save Current Template
+        </button>
+
+        <!--Download CSV button -->
+        <button type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#fileNameModal">
+            Download As CSV
+        </button>
     </div>
+
     <!--Bootstrap dropdown for templates-->
     <div class="btn-group">
             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -21,7 +28,7 @@
 
 
 <div class="dropdown" ng-if="$ctrl.columns.length != 0">
-    <button type="button" class="btn btn-default dropdown-toggle dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button type="button" class="btn btn-primary dropdown-toggle dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Columns <span class="caret"></span>
       </button>
     <div class="dropdown-menu dropdown-content">
@@ -32,14 +39,88 @@
 </div>
 
 
-<div class="" ng-if="$ctrl.columns.length != 0">
-   <!--  <button ng-click= "$ctrl.DownloadCSV()" type="button"> Download CSV </button> -->
 
-    <button type="button" ng-csv="$ctrl.GetArray()" csv-header="$ctrl.GetHeader()" filename="test.csv">
-        Download CSV
-    </button>
+
+<!-- CSV File Name Modal -->
+<div class="modal fade" id="fileNameModal" role="dialog">
+    <div class="modal-dialog">
+
+<!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Please Enter File Name</h4>
+        </div>
+    <div class="modal-body">
+        <input autofocus="autofocus" type="text" class="form-control" ng-model="$ctrl.fileName" />
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+        <button type="button" class="btn btn-default" ng-csv="$ctrl.GetArray()" csv-header="$ctrl.GetHeader()"filename="{{ $ctrl.fileName }}.csv" data-dismiss="modal">
+            Download CSV
+        </button>
+    </div>
+    </div>
+
+    </div>
 </div>
 
+
+<!-- Template name Modal -->
+<div class="modal fade" id="templateNameModal" role="dialog">
+    <div class="modal-dialog">
+
+<!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Please Enter Template Name</h4>
+        </div>
+    <div class="modal-body">
+        
+        <input autofocus="autofocus" id="templateInput" class="form-control" type="text" ng-init="$ctrl.currTemplateName" ng-model="$ctrl.currTemplateName" placeholder="My Template Name...">
+
+    </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+            <button ng-click="$ctrl.SaveColumnList($ctrl.columns)" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false" data-dismiss="modal">Save Current Template
+            </button>
+        </div>
+    </div>
+
+    </div>
+</div>
+
+
+        <button data-toggle="modal" data-target="#test" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false">PRESS ME
+        </button>
+  
+<div class="modal fade" id="test" role="dialog">
+    <div class="modal-dialog">
+
+<!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">TEST</h4>
+        </div>
+    <div class="modal-body">
+        
+        <input autofocus="autofocus" id="templateInput" class="form-control" type="text" ng-init="$ctrl.currTemplateName" ng-model="$ctrl.currTemplateName" placeholder="My Template Name...">
+
+    </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+            <button ng-click="$ctrl.SaveColumnList($ctrl.columns)" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false" data-dismiss="modal">Save Current Template
+            </button>
+        </div>
+    </div>
+
+    </div>
+</div>
 
 
 

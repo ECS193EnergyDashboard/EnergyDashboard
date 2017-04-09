@@ -82,6 +82,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                 });
             };
 
+
             this.ApplyTemplate = function(template){
                 this.columns = template.colObj;
                 this.updateColObj({cols: template.colObj});  //output binding
@@ -91,6 +92,13 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             this.DownloadCSV = function(){
                 console.log('DOwnloading CSV');
             };
+
+
+            this.fileName = "Data.csv";
+
+
+
+
 
         } //end controller
     ]

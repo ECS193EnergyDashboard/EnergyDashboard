@@ -7,8 +7,8 @@
     <img ng-if="!$ctrl.displayed" id="mainLogo" src="../img/ecoMainLogo.png">
     <thead>
     <tr>
+        <th st-sort="building">Building</th>
         <th st-sort="name">Name</th>
-        <th>Building</th>
         <th ng-repeat="column in $ctrl.columnNamesObjs" ng-if="$ctrl.reorderEnabled && column.isChecked" st-sort="$ctrl.getters.value.bind(null, column.name)" lr-drag-src="header" lr-drop-target="header">
             {{column.units === "" ? column.name : column.name + " (" + column.units + ")"}}
         </th>
@@ -26,8 +26,8 @@
 
     <tbody>
     <tr ng-repeat="element in $ctrl.displayed">
-        <td class="bold">{{element.name}}</td>
         <td class="bold">{{element.building}}</td>
+        <td class="bold">{{element.name}}</td>
         <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" ng-class="$ctrl.valueStyle(element[column.name])">
             {{$ctrl.formatValue(element[column.name])}}
         </td>
@@ -36,12 +36,14 @@
 
     <tbody ng-if="$ctrl.displayed.length > 0">
     <tr>
+        <td></td>
         <td class="bold">Total</td>
         <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" class="bold goodValue">
             {{$ctrl.sums[column.name] | number:2}}
         </td>
     </tr>
     <tr>
+        <td></td>
         <td class="bold">Average</td>
         <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" class="bold goodValue">
             {{$ctrl.averages[column.name] | number:2}}

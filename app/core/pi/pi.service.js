@@ -200,6 +200,37 @@ angular.
                 });
             }
 
+            pi.getInterpolatedOfAttribute = function(webId, interval, startTime, endTime) {
+                var result = [];
+                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/streams/' + webId + '/interpolated?selectedFields=UnitsAbbreviation;Items.Timestamp;Items.Value;Items.Good';
+                if (startTime) {
+                    url += "&startTime=" + startTime;   
+                }
+                if (endTime) {
+                    url += "&endTime=" + endTime;
+                }
+                if (interval) {
+                    url += "&interval=" + interval;
+                }
+                return $http.get(url).then(function(response) {
+                    var items = response.data.Items;
+                    for (var item of items) {
+                        var v = { 
+                            timestamp: new Date(item.Timestamp),
+                            value: item.Value || 0, 
+                            good: item.Good || false
+                        };
+                        if (v.value.Value !== undefined) { // Handle nested value objects
+                            v.value = v.value.Value;
+                        }
+                        result.push(v);
+                    }
+                    return result;
+                }, function(response) {
+                    console.log('Error: getInterpolatedOfAttribute(): ' + response.status + ' - ' + response.statusText);
+                });            
+            }
+
             pi.tabulateValues = function(element) {
                 var values = {};
 

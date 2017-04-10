@@ -35,6 +35,7 @@ angular.module('analysisModule').component('analysis', {
             this.data = [];
 
 
+
             this.outerColumnNames = [];
             this.innerColumnNames = [
                 {

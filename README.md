@@ -69,3 +69,6 @@ Navigate to the project directory on your local machine, and add a new `remote` 
 Now anytime you want to push the Release branch to the server, use:
 
 `git push deploy Release`
+
+### Helpful Docs
+- [Angular Date Range Picker](https://github.com/fragaria/angular-daterangepicker)

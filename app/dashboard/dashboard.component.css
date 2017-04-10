@@ -6,6 +6,8 @@
     border-right: 5px solid #eeeeee;
 }
 
+
+
 .form-group {
     margin-bottom: 1px;
 }
@@ -74,6 +76,11 @@
     100% {
         transform: rotate(360deg) scale(1);
     }
+}
+
+/* remember to change this */
+.menuButtons{
+    position: fixed;
 }
 
 .progress {

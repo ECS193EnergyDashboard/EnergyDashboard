@@ -1,51 +1,58 @@
 <!--NOTE: for this we use the  columnNamesObjs however in the actual table we use columnNames -->
 
-<column-template-dropdown columns="$ctrl.columnNamesObjs" update-col-obj= "$ctrl.updateCol(cols)" row-data="$ctrl.data" is-analysis="'false'" ></column-template-dropdown>
+<div class="tableParent">
+    <div class="tableMenus">
+        <column-template-dropdown columns="$ctrl.columnNamesObjs" update-col-obj= "$ctrl.updateCol(cols)" 
+        row-data="$ctrl.data" is-analysis="'false'" >
+        </column-template-dropdown>
+    </div>
 
+    <span class="dataTitle"> DATA TAB </span>
 
-<table st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped">
-    <img ng-if="!$ctrl.displayed" id="mainLogo" src="../img/ecoMainLogo.png">
-    <thead>
-    <tr>
-        <th st-sort="name">Name</th>
-        <th>Building</th>
-        <th ng-repeat="column in $ctrl.columnNamesObjs" ng-if="$ctrl.reorderEnabled && column.isChecked" st-sort="$ctrl.getters.value.bind(null, column.name)" lr-drag-src="header" lr-drop-target="header">
-            {{column.units === "" ? column.name : column.name + " (" + column.units + ")"}}
-        </th>
-        <th ng-if="!$ctrl.reorderEnabled" ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" st-sort="$ctrl.getters.value.bind(null, column)">
-            {{column.units === "" ? column.name : column.name + " (" + column.units + ")"}}
-        </th>
-    </tr>
+    <table st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped">
+        <img ng-if="!$ctrl.displayed" id="mainLogo" src="../img/ecoMainLogo.png">
+        <thead>
+        <tr>
+            <th st-sort="name">Name</th>
+            <th>Building</th>
+            <th ng-repeat="column in $ctrl.columnNamesObjs" ng-if="$ctrl.reorderEnabled && column.isChecked" st-sort="$ctrl.getters.value.bind(null, column.name)" lr-drag-src="header" lr-drop-target="header">
+                {{column.units === "" ? column.name : column.name + " (" + column.units + ")"}}
+            </th>
+            <th ng-if="!$ctrl.reorderEnabled" ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" st-sort="$ctrl.getters.value.bind(null, column)">
+                {{column.units === "" ? column.name : column.name + " (" + column.units + ")"}}
+            </th>
+        </tr>
 
-    <tr ng-if="$ctrl.searchEnabled">
-        <th colspan="4">
-            <input st-search="name" placeholder="search for name..." class="input-sm form-control" type="search"/>
-        </th>
-    </tr>
-    </thead>
+        <tr ng-if="$ctrl.searchEnabled">
+            <th colspan="4">
+                <input st-search="name" placeholder="search for name..." class="input-sm form-control" type="search"/>
+            </th>
+        </tr>
+        </thead>
 
-    <tbody>
-    <tr ng-repeat="element in $ctrl.displayed">
-        <td class="bold">{{element.name}}</td>
-        <td class="bold">{{element.building}}</td>
-        <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" ng-class="$ctrl.valueStyle(element[column.name])">
-            {{$ctrl.formatValue(element[column.name])}}
-        </td>
-    </tr>
-    </tbody>
+        <tbody>
+        <tr ng-repeat="element in $ctrl.displayed">
+            <td class="bold">{{element.name}}</td>
+            <td class="bold">{{element.building}}</td>
+            <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" ng-class="$ctrl.valueStyle(element[column.name])">
+                {{$ctrl.formatValue(element[column.name])}}
+            </td>
+        </tr>
+        </tbody>
 
-    <tbody ng-if="$ctrl.displayed.length > 0">
-    <tr>
-        <td class="bold">Total</td>
-        <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" class="bold goodValue">
-            {{$ctrl.sums[column.name] | number:2}}
-        </td>
-    </tr>
-    <tr>
-        <td class="bold">Average</td>
-        <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" class="bold goodValue">
-            {{$ctrl.averages[column.name] | number:2}}
-        </td>
-    </tr>
-    </tbody>
-</table>
+        <tbody ng-if="$ctrl.displayed.length > 0">
+        <tr>
+            <td class="bold">Total</td>
+            <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" class="bold goodValue">
+                {{$ctrl.sums[column.name] | number:2}}
+            </td>
+        </tr>
+        <tr>
+            <td class="bold">Average</td>
+            <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" class="bold goodValue">
+                {{$ctrl.averages[column.name] | number:2}}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

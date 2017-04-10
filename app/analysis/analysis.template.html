@@ -1,3 +1,9 @@
+<column-template-dropdown columns="$ctrl.outerColumnNames" update-col-obj= "$ctrl.updateCol(cols)" row-data="$ctrl.data" is-analysis="'true'" inner-columns="$ctrl.innerColumnNames">
+</column-template-dropdown> 
+
+
+<h3>Data from {{$ctrl.datePicker.date.startDate}} until  {{$ctrl.datePicker.date.endDate}}</h3>
+
 <!--Date Range Picker-->
 <div class = "drp-contain">
     <div> <!--This div for border-->
@@ -6,12 +12,9 @@
     </div>
 
 </div>
-<p>The date range is {{$ctrl.datePicker.date}}</p>
 
 
 
-<column-template-dropdown columns="$ctrl.outerColumnNames" update-col-obj= "$ctrl.updateCol(cols)" row-data="$ctrl.data" is-analysis="'true'" inner-columns="$ctrl.innerColumnNames">
-</column-template-dropdown> 
 
 
 

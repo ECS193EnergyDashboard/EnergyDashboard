@@ -1,63 +1,56 @@
 <div class="dropdown" ng-if="$ctrl.columns.length != 0">
     <!--save a template-->
-    <div class="dropdown" ng-if="$ctrl.columns.length != 0">
+    <div class="tableSettingsButtons" ng-if="$ctrl.columns.length != 0">
         <!--Save template button -->
 
         <!--NOTE: Each tab needs own set of buttons in order for correct modal to show-->
 
-        <button ng-if="$ctrl.isAnalysis=='true'" data-toggle="modal" data-target="#templateNameModalAnalysis" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false">
+        <button ng-if="$ctrl.isAnalysis=='true'" data-toggle="modal" data-target="#templateNameModalAnalysis" type="button" class="btn btn-default" aria-haspopup="true" aria-expanded="false">
             Save Current Template
         </button>
 
 
         <!--Download CSV button -->
-        <button ng-if="$ctrl.isAnalysis=='true'" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#fileNameModalAnalysis">
+        <button ng-if="$ctrl.isAnalysis=='true'" type="button" class="btn btn-default" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#fileNameModalAnalysis">
             Download As CSV
             <span class="glyphicon glyphicon-save-file"></span>
         </button>
 
 
-        <button ng-if="$ctrl.isAnalysis=='false'" data-toggle="modal" data-target="#templateNameModalData" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false">
+        <button ng-if="$ctrl.isAnalysis=='false'" data-toggle="modal" data-target="#templateNameModalData" type="button" class="btn btn-default" aria-haspopup="true" aria-expanded="false">
             Save Current Template
         </button>
 
 
         <!--Download CSV button -->
-        <button ng-if="$ctrl.isAnalysis=='false'" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#fileNameModalData">
+        <button ng-if="$ctrl.isAnalysis=='false'" type="button" class="btn btn-default" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#fileNameModalData">
             Download As CSV
             <span class="glyphicon glyphicon-save-file"></span>
         </button>
 
 
-
-    </div>
-
-    <!--Bootstrap dropdown for templates-->
-    <div class="btn-group">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                My Templates <span class="caret"></span>
-            </button>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            My Templates <span class="caret"></span>
+        </button>
         <ul class="dropdown-menu">
             <li ng-repeat="template in $ctrl.templates">
                 <a href="" ng-click="$ctrl.ApplyTemplate(template)">{{template.templateName}}</a>
             </li>
 
         </ul>
-    </div>
-</div>
 
 
-
-<div class="dropdown" ng-if="$ctrl.columns.length != 0">
-    <button type="button" class="btn btn-primary dropdown-toggle dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Columns <span class="caret"></span>
-      </button>
-    <div class="dropdown-menu dropdown-content">
-        <div class="dropdownelm" ng-repeat="column in $ctrl.columns | orderBy:'name'">
-            <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}"> {{column.name}}
+        <button type="button" class="btn btn-default dropdown-toggle dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Columns <span class="caret"></span>
+        </button>
+        <div class="dropdown-menu dropdown-content">
+            <div class="dropdownelm" ng-repeat="column in $ctrl.columns | orderBy:'name'">
+                <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}"> {{column.name}}
+            </div>
         </div>
-    </div>
-</div>
+
+
+</div> <!--end tableSettingsButtons -->
 
 
 <!-- There needs to be a modal for each tab because they will both come down
@@ -131,7 +124,7 @@
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-            <button ng-click="$ctrl.SaveColumnList($ctrl.columns)" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false" data-dismiss="modal">Save Current Template
+            <button ng-click="$ctrl.SaveColumnList($ctrl.columns)" type="button" class="btn btn-default" aria-haspopup="true" aria-expanded="false" data-dismiss="modal">Save Current Template
             </button>
         </div>
     </div>
@@ -157,7 +150,7 @@
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-            <button ng-click="$ctrl.SaveColumnList($ctrl.columns)" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false" data-dismiss="modal">Save Current Template
+            <button ng-click="$ctrl.SaveColumnList($ctrl.columns)" type="button" class="btn btn-default" aria-haspopup="true" aria-expanded="false" data-dismiss="modal">Save Current Template
             </button>
         </div>
     </div>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app="chartAppModule">
+<meta charset="UTF-8">
+    <head>
+		<!-- jquery required for bootstrap -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+        <!-- Bootstrap Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+        <!-- Bootstrap Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+
+        <!-- Angular JS -->
+        <script src="node_modules/angular/angular.js"></script>
+
+        <!-- Angular D3 -->
+        <script src="bower_components/d3/d3.js"></script>
+        <script src="bower_components/nvd3/build/nv.d3.js"></script>
+        <script src="bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
+        <link rel="stylesheet" href="bower_components/nvd3/build/nv.d3.css">
+
+        <!--==== Dev Scripts ====-->
+
+        <!--Main App js -->
+        <script src="chart-app.module.js"></script>
+
+        <!-- Core Modules -->
+        <script src="core/core.module.js"></script>
+        <script src="core/pi/pi.module.js"></script>
+        <script src="core/pi/pi.service.js"></script>
+
+        <!-- Chart View JS -->
+        <script src="chart-view/chart-view.module.js"></script>
+        <script src="chart-view/chart-view.component.js"></script>
+
+        <!-- Chart View Popup JS -->
+        <script src="chart-view-popup/chart-view-popup.module.js"></script>
+        <script src="chart-view-popup/chart-view-popup.component.js"></script>
+
+    </head>
+    <body>
+        <chart-view-popup></chart-view-popup>
+    </body>
+</html>

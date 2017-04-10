@@ -3,10 +3,11 @@ angular.module('dashboardModule').component('dashboard',{
 	templateUrl: 'dashboard/dashboard.template.html',
 	controller: ['pi', function TableController(pi){
 		var self = this;
-        this.showData = true; //show data tab
+        this.show = 0;
 		this.data = [];
 		this.isLoading = {sidebar: 0, data: 0, analysis: 0};
         this.webIds = [];
+        this.selectedCellWebIds = [];
 
         // Function to cause binding up update
         bindIsLoading = (name, val) =>{
@@ -30,12 +31,28 @@ angular.module('dashboardModule').component('dashboard',{
 		    });
         }
 
-        this.showAnalyzeTab = function() {
-            this.showData = false;
+        this.showDataTab = function() {
+            this.show = 0;
         }
 
-        this.showDataTab = function(){
-            this.showData = true;
+        this.showAnalyzeTab = function() {
+            this.show = 1;
+        }
+
+        this.showGraphTab = function() {
+            this.show = 2;
+        }
+
+        this.isDataTabShown = function() {
+            return this.show === 0;
+        }
+
+        this.isAnalyzeTabShown = function() {
+            return this.show === 1;
+        }
+
+        this.isGraphTabShown = function() {
+            return this.show === 2;
         }
 
 
@@ -44,6 +61,14 @@ angular.module('dashboardModule').component('dashboard',{
         }
         this.toggleSelectorMenu = function(){
             $("#wrapper").toggleClass("toggledSelector");
+        }
+
+        this.addCell = function(cell) {
+            this.selectedCellWebIds.push(cell.webId);
+        }
+
+        this.removeCell = function(cell) {
+            this.selectedCellWebIds.splice(this.selectedCellWebIds.indexOf(cell.webId), 1);
         }
     }]
 });

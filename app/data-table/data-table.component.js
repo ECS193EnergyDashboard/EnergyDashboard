@@ -5,6 +5,8 @@ angular.module('dataTableModule').component('datatable', {
         searchEnabled: '<',
         reorderEnabled: '<',
         isLoading: '<',
+        onCellSelected: '&',
+        onCellDeselected: '&'
     },
     controller: ['$filter', '$scope', function TableController($filter, $scope) {
         var self = this;
@@ -46,13 +48,16 @@ angular.module('dataTableModule').component('datatable', {
         };
 
         this.valueStyle = function(value) {
+            var style = 'dataCell ';
             if (value === undefined) {
-                return 'missingValue';
-            } else if (value.good) {
-                return 'goodValue';
-            } else {
-                return 'badValue';
+                style += 'missing';
+            } else if (!value.good) {
+                style += 'bad ';
             }
+            if (value && value.isSelected) {
+                style += 'selected ';
+            }
+            return style;
         }
 
         this.getters = {
@@ -63,14 +68,16 @@ angular.module('dataTableModule').component('datatable', {
 
         this.$onChanges = function() {
             if (this.searchEnabled === undefined) {
-                this.searchEnabled = false;
+                this.searchEnabled = true;
             }
             if (this.reorderEnabled === undefined) {
-                this.reorderEnabled = false;
+                this.reorderEnabled = true;
             }
             if (this.tableSrc.length == 0) {
                 return;
             }
+
+            console.log(this.tableSrc);
 
             var columnSet = {};
 
@@ -163,6 +170,15 @@ angular.module('dataTableModule').component('datatable', {
 
         this.updateCol = function(cols){
             this.columnNamesObjs = cols;
+        }
+
+        this.toggleCellSelected = function(value) {
+            value.isSelected = !value.isSelected;
+            if (value.isSelected) {
+                this.onCellSelected({ cell: value });
+            } else {
+                this.onCellDeselected({ cell: value });
+            }
         }
 
         // Whenever the displayed data is changed, recalculate sum and average of the shown rows only

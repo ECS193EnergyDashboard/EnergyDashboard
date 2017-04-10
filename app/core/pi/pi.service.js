@@ -171,6 +171,29 @@ angular.
                 });
             }
 
+            pi.getAttributeName = function(webId) {
+                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/attributes/' + webId + '?selectedFields=Name';
+                return $http.get(url).then(function(response) {
+                    return response.data.Name || '';
+                }, function(response) {
+                    console.log('Error: getAttributeName(): ' + response.status + ' - ' + response.statusText);
+                });
+            }
+
+            pi.getAttributeParentElement = function(webId) {
+                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/attributes/' + webId + '?selectedFields=Links.Element';
+                return $http.get(url).then(function(response) {
+                    url =  response.data.Links.Element;
+                    var regex = /\s*elements\/(\S+)/g;
+                    var match = regex.exec(url);
+                    var parentWebId = match[1];
+                    console.log(match);
+                    return pi.getElement(parentWebId);      
+                }, function(response) {
+                    console.log('Error: getAttributesParentElement(): ' + response.status + ' - ' + response.statusText);
+                });                
+            }
+
             pi.getSummaryOfAttribute = function(webId, startTime, endTime) {
                 var result = [];
                 var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/streams/' + webId + '/summary?summaryType=Average&summaryType=Minimum&summaryType=Maximum&summaryType=StdDev'

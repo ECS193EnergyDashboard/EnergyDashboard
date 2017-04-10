@@ -102,7 +102,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                             secondCol.push("MIN"); // Blank space for Min
                         if(this.innerColumns[3].isChecked == true)
                             secondCol.push("S.D."); // Blank space for S.D.
-                    }                    
+                    }
                 }
                 CSVData.push(secondCol);
 
@@ -114,30 +114,42 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                     for(var col of this.columns){
                         if(col.isChecked){
 
-                            // Check Avg value is good
-                            if(element[col.name].Average.good)
-                                elmRow.push(element[col.name].Average.value);
-                                // [-11059] No Good Data For Calculation
-                            else
-                                elmRow.push("Bad Value");
+                            // If avg checked
+                            if(this.innerColumns[0].isChecked){
+                                // Check Avg value is good
+                                if(element[col.name].Average.good)
+                                    elmRow.push(element[col.name].Average.value);
+                                    // [-11059] No Good Data For Calculation
+                                else
+                                    elmRow.push("Bad Value");
+                            }
 
-                            // check Max value is good
-                            if(element[col.name].Maximum.good)
-                                elmRow.push(element[col.name].Maximum.value);
-                            else
-                                elmRow.push("Bad Value");
+                            // If max checked
+                            if(this.innerColumns[1].isChecked){
+                                // check Max value is good
+                                if(element[col.name].Maximum.good)
+                                    elmRow.push(element[col.name].Maximum.value);
+                                else
+                                    elmRow.push("Bad Value");
+                            }
 
-                            // Check min value is good
-                            if(element[col.name].Minimum.good)
-                                elmRow.push(element[col.name].Minimum.value);
-                            else
-                                elmRow.push("Bad Value");
+                            // If min checked
+                            if(this.innerColumns[2].isChecked){
+                                // Check min value is good
+                                if(element[col.name].Minimum.good)
+                                    elmRow.push(element[col.name].Minimum.value);
+                                else
+                                    elmRow.push("Bad Value");
+                            }
 
-                            // check StdDev value is good
-                            if(element[col.name].StdDev.good)
-                                elmRow.push(element[col.name].StdDev.value);
-                            else
-                                elmRow.push("Bad Value");
+                            // If S.D. checked
+                            if(this.innerColumns[3].isChecked){
+                                // check StdDev value is good
+                                if(element[col.name].StdDev.good)
+                                    elmRow.push(element[col.name].StdDev.value);
+                                else
+                                    elmRow.push("Bad Value");
+                            }
                         }
                     }
 

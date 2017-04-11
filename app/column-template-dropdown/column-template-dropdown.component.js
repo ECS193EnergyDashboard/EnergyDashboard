@@ -14,8 +14,11 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             this.templates = [];
             this.showTemplates = false;
 
-            this.defaultTemplate = {};
+            this.currentTemplate = {};
             this.currentTemplateName = "Default";
+
+            // Default file name for downloading to CSV
+            this.fileName = "Data.csv";
 
 
             this.$onChanges = function() {
@@ -175,10 +178,10 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
 
             // save template/profile for cols
             this.SaveColumnList = function(columnObjs) {
-                console.log("columnObjs ", columnObjs); 
+                // console.log("columnObjs ", columnObjs); 
                 var colObjToAdd = JSON.parse(angular.toJson(columnObjs));
                 var template = {
-                    "templateName": this.currTemplateName,
+                    "templateName": this.newTemplateName,
                     "colObj": colObjToAdd,
                 };
                 this.templates.push(template);
@@ -198,10 +201,13 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                 }, function errorCallback(response) {
                     console.error("POST Failed ", response);
                 });
+                this.currentTemplate = template;
+                this.currentTemplateName = this.newTemplateName;
             };
 
 
             this.ApplyTemplate = function(template){
+                this.currentTemplate = template;
                 this.columns = template.colObj;
                 this.updateColObj({cols: template.colObj});  //output binding
                 this.currentTemplateName = template.templateName;
@@ -217,19 +223,34 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                     }
                     firstValues++;
                 }
+                this.currentTemplate = {};
                 this.currentTemplateName = "Default";
             }
 
 
-            this.DeleteTemplate = function(template){
-                console.log(template);
-            }
-
-
-            // Default file name for downloading to CSV
-            this.fileName = "Data.csv";
-
-
+            this.DeleteTemplate = function(){
+                 // console.log("columnObjs ", columnObjs); 
+                var template = {
+                    "templateName": this.currentTemplateName,
+                };
+                var index = this.templates.indexOf(this.currentTemplate);
+                if (index > -1) {
+                    this.templates.splice(index, 1);
+                }
+                // this.templates.push(template);
+                // POST template/profile to server
+                $http({
+                    method: 'POST',
+                    url: '/templatesDelete',
+                    data: angular.toJson(template),
+                }).then(function successCallback(response) {
+                    console.log("POST Templates Success");
+                    document.getElementById("templateInput").value = "";
+                }, function errorCallback(response) {
+                    console.error("POST Failed ", response);
+                });
+                this.ApplyDefaultTemplate();
+            };
 
 
 

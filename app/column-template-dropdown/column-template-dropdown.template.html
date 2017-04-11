@@ -1,4 +1,5 @@
-<div class="columnTemplateParent" ng-if="$ctrl.columns.length != 0">
+<!-- <div class="columnTemplateParent" ng-if="$ctrl.columns.length != 0"> -->
+<div class="columnTemplateParent">
     <div class="tableSettingsButtons">
 
         <!-- Columns show/hide dropdown -->
@@ -132,7 +133,7 @@
         </div>
     <div class="modal-body">
 
-        <input autofocus="autofocus" id="templateInput" class="form-control" type="text" ng-init="$ctrl.currTemplateName" ng-model="$ctrl.currTemplateName" placeholder="My Template Name...">
+        <input autofocus="autofocus" id="templateInput" class="form-control" type="text" ng-init="$ctrl.newTemplateName" ng-model="$ctrl.newTemplateName" placeholder="My Template Name...">
 
     </div>
         <div class="modal-footer">
@@ -158,7 +159,7 @@
         </div>
     <div class="modal-body">
 
-        <input autofocus="autofocus" id="templateInput" class="form-control" type="text" ng-init="$ctrl.currTemplateName" ng-model="$ctrl.currTemplateName" placeholder="My Template Name...">
+        <input autofocus="autofocus" id="templateInput" class="form-control" type="text" ng-init="$ctrl.newTemplateName" ng-model="$ctrl.newTemplateName" placeholder="My Template Name...">
 
     </div>
         <div class="modal-footer">
@@ -185,7 +186,7 @@
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-            <button ng-click="$ctrl.DeleteTemplate($ctrl.currentTemplateName)" type="button" class="btn btn-default" aria-haspopup="true" aria-expanded="false" data-dismiss="modal">Delete Template
+            <button ng-click="$ctrl.DeleteTemplate()" type="button" class="btn btn-default" aria-haspopup="true" aria-expanded="false" data-dismiss="modal">Delete Template
             </button>
         </div>
     </div>

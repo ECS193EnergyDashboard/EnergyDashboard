@@ -15,27 +15,6 @@ angular.module('dataTableModule').component('datatable', {
         this.columnNamesObjs = [];
 
 
-
-
-        var defaultValues = [
-            // Start of AHU default values
-            "ACH",
-            "Air Flow Differential",
-            "Air Flow Differential Setpoint",
-            "Calculated Occ Total Exhaust",
-            "Calculated Unocc Total Exhaust",
-            "Canopy Hood High Daily Duration",
-            "Canopy Hood High Monthly Duration",
-            'Cooling Driving Lab',
-
-            //Start of SubSystem default values
-            "Coil Heating Energy BTU per Hr",
-            "Cooling Energy BTU per Hr",
-            "Heating Energy BTU per Hr",
-            "Reheating Energy BTU per Hr",
-            "Total Air Flow Avoided"
-        ];
-
         this.formatValue = function(value) {
             if (value === undefined || value.value === undefined) {
                 return "N/A";
@@ -99,8 +78,8 @@ angular.module('dataTableModule').component('datatable', {
                 catch(e){
                     column.units = "";
                 }
-                // check if the string element is in the defaultValues array
-                if (defaultValues.includes(columnName) || firstValues < 10) {
+                // Set the first 10 values as default
+                if (firstValues < 10) {
                     column.isChecked = true;
                 } else {
                     column.isChecked = false;
@@ -122,8 +101,6 @@ angular.module('dataTableModule').component('datatable', {
                 document.getElementById("myDropdown").classList.toggle("show");
             }
         };
-
-
 
 
 

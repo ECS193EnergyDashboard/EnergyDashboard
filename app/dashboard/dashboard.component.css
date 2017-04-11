@@ -78,10 +78,7 @@
     }
 }
 
-/* remember to change this */
-.menuButtons{
-    position: fixed;
-}
+
 
 .progress {
     position: absolute;

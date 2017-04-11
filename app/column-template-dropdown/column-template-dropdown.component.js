@@ -14,6 +14,9 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             this.templates = [];
             this.showTemplates = false;
 
+            this.defaultTemplate = {};
+            this.currentTemplateName = "Default";
+
 
             this.$onChanges = function() {
 
@@ -26,7 +29,6 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                 });
 
             };
-
 
 
             this.GetHeaderData = function() {
@@ -173,6 +175,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
 
             // save template/profile for cols
             this.SaveColumnList = function(columnObjs) {
+                console.log("columnObjs ", columnObjs); 
                 var colObjToAdd = JSON.parse(angular.toJson(columnObjs));
                 var template = {
                     "templateName": this.currTemplateName,
@@ -201,8 +204,26 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             this.ApplyTemplate = function(template){
                 this.columns = template.colObj;
                 this.updateColObj({cols: template.colObj});  //output binding
+                this.currentTemplateName = template.templateName;
             };
 
+            this.ApplyDefaultTemplate = function(){
+                var firstValues = 0;
+                for(var col of this.columns){
+                   if (firstValues < 10) {
+                        col.isChecked = true;
+                    } else {
+                        col.isChecked = false;
+                    }
+                    firstValues++;
+                }
+                this.currentTemplateName = "Default";
+            }
+
+
+            this.DeleteTemplate = function(template){
+                console.log(template);
+            }
 
 
             // Default file name for downloading to CSV

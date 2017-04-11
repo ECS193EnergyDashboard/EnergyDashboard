@@ -1,5 +1,5 @@
-<!-- <div class="columnTemplateParent" ng-if="$ctrl.columns.length != 0"> -->
-<div class="columnTemplateParent">
+<div class="columnTemplateParent" ng-if="$ctrl.columns.length != 0">
+<!-- <div class="columnTemplateParent"> -->
     <div class="tableSettingsButtons">
 
         <!-- Columns show/hide dropdown -->
@@ -42,8 +42,10 @@
             Save Template
         </button>
 
+<!-- disabled btn btn-default glyphicon glyphicon-tag" -->
+
         <!-- Delete Template button for Data Tab -->
-        <button ng-if="$ctrl.isAnalysis=='false' && $ctrl.currentTemplateName!='Default'" data-toggle="modal" data-target="#deleteTemplateModalData" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false">
+        <button ng-if="$ctrl.isAnalysis=='false'" ng-class="{'disabled': $ctrl.currentTemplateName=='Default'}" data-toggle="modal" data-target="#deleteTemplateModalData" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false">
             Delete Template
         </button>
 
@@ -174,7 +176,7 @@
 
 
 <!-- Delete template modal for data tab -->
-<div ng-if="$ctrl.isAnalysis=='false'" class="modal fade" id="deleteTemplateModalData" role="dialog">
+<div ng-if="$ctrl.isAnalysis=='false' && $ctrl.currentTemplateName!='Default'" class="modal fade" id="deleteTemplateModalData" role="dialog">
     <div class="modal-dialog">
 <!-- Modal content-->
     <div class="modal-content">

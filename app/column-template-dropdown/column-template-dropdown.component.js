@@ -177,8 +177,16 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             }
 
             // save template/profile for cols
+            // BILLY: START HERE FIX THIS
             this.SaveColumnList = function(columnObjs) {
-                // console.log("columnObjs ", columnObjs); 
+                // console.log("columnObjs ", columnObjs);
+                for(temp of this.templates){
+                    if(this.newTemplateName == temp.templateName || 
+                        this.templateName == "Default"){
+                        console.log("Cant have 2 templates of same name");
+                        return;
+                    }
+                }
                 var colObjToAdd = JSON.parse(angular.toJson(columnObjs));
                 var template = {
                     "templateName": this.newTemplateName,
@@ -229,16 +237,14 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
 
 
             this.DeleteTemplate = function(){
-                 // console.log("columnObjs ", columnObjs); 
                 var template = {
                     "templateName": this.currentTemplateName,
                 };
                 var index = this.templates.indexOf(this.currentTemplate);
+                console.log(index);
                 if (index > -1) {
                     this.templates.splice(index, 1);
                 }
-                // this.templates.push(template);
-                // POST template/profile to server
                 $http({
                     method: 'POST',
                     url: '/templatesDelete',

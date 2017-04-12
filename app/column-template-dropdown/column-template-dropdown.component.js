@@ -1,8 +1,8 @@
 angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown', {
     templateUrl: 'column-template-dropdown/column-template-dropdown.template.html',
     bindings: {
-        columns: '<',
-        rowData: '<',
+        columns: '<', //columnNamesObjs passed in (col order maintained)
+        rowData: '<', //row order not maintained
         isAnalysis: '<',
         templateSets: '<',
         innerColumns: '<', // Min, max, avg, st - this is needed for CSV
@@ -28,7 +28,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             };
 
 
-
+            // Get header for CSV
             this.GetHeaderData = function() {
                 columnNames = [];
                 columnNames.push("Name");
@@ -41,9 +41,22 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             };
 
 
-            // ASK JUSTIN: Should this display units? on column name or in rows?
+            // Get data for CSV for data tab
             this.GetArrayData = function() {
                 var CSVData = [];
+
+                // secondRow for the units
+                var secondRow = [];
+                secondRow.push(""); // Placeholder for name
+                secondRow.push(""); // Placeholder for building
+                for(var col of this.columns){
+                    if(col.isChecked){
+                        secondRow.push(col.units);
+                    }
+                }
+                CSVData.push(secondRow);
+
+                // Actual data
                 for(var element of this.rowData){
                     var obj = {};
                     obj.name = element.name;
@@ -58,6 +71,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                 return CSVData;
             }
 
+            // Get header for CSV for analysis tab
             var inner =0;
             this.GetHeaderAnalysis = function() {
                 var numInnerColumns = 0;
@@ -85,27 +99,41 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             };
 
 
-            // ASK JUSTIN: Should this display units? on column name or in rows?
+            // Get data for CSV for analysis tab
             this.GetArrayAnalysis = function() {
                 var CSVData = [];
+                // Create row for the units
+                var unitsRow = [];
+                unitsRow.push(""); // Placeholder for name
+                unitsRow.push(""); // Placeholder for building
+                for(var col of this.columns){
+                    if(col.isChecked){
+                        unitsRow.push(col.units);
+                        // Leave empty spaces for agfns
+                        for(var i=0; i<inner-1; i++){
+                            unitsRow.push("");
+                        }
+                    }
+                }
+                CSVData.push(unitsRow);
 
                 // create a second row which will have labels for min, max, et...
-                var secondCol = [];
-                secondCol.push("Name");
-                secondCol.push("Building");
+                var agFnsRow = [];
+                agFnsRow.push("Name");
+                agFnsRow.push("Building");
                 for(var col of this.columns){
                     if(col.isChecked){
                         if(this.innerColumns[0].isChecked == true)
-                            secondCol.push("AVG"); // Blank space for Avg
+                            agFnsRow.push("AVG"); // Blank space for Avg
                         if(this.innerColumns[1].isChecked == true)
-                            secondCol.push("MAX"); // Blank space for Max
+                            agFnsRow.push("MAX"); // Blank space for Max
                         if(this.innerColumns[2].isChecked == true)
-                            secondCol.push("MIN"); // Blank space for Min
+                            agFnsRow.push("MIN"); // Blank space for Min
                         if(this.innerColumns[3].isChecked == true)
-                            secondCol.push("S.D."); // Blank space for S.D.
+                            agFnsRow.push("S.D."); // Blank space for S.D.
                     }
                 }
-                CSVData.push(secondCol);
+                CSVData.push(agFnsRow);
 
                 // set the other rows of the CSV file
                 for(var element of this.rowData){

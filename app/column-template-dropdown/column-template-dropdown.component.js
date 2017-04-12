@@ -22,7 +22,6 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
 
 
             this.$onChanges = function() {
-
                 // Get templates from server
                 $http({method: 'GET', url: '/getTemplates'}).then(function successCallback(response) {
                     console.log("get templates success", response.data);
@@ -213,7 +212,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                 this.currentTemplateName = this.newTemplateName;
             };
 
-
+            // A function to apply a template to the data table
             this.ApplyTemplate = function(template){
                 this.currentTemplate = template;
                 this.columns = template.colObj;
@@ -221,6 +220,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                 this.currentTemplateName = template.templateName;
             };
 
+            // Resets the template to the first 10 cols
             this.ApplyDefaultTemplate = function(){
                 var firstValues = 0;
                 for(var col of this.columns){
@@ -256,9 +256,38 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                     console.error("POST Failed ", response);
                 });
                 this.ApplyDefaultTemplate();
+                // Hard remove backdrop - HOT FIX
+                $('.modal-backdrop').remove(); 
             };
 
+            //Start of modal code//
 
+            this.ShowDeleteModal = function(){
+                if(this.isAnalysis == "true"){
+                    $(".deleteModalAnalysis").modal();
+                }
+                else{
+                    $(".deleteModalData").modal();
+                }
+            }
+
+            this.ShowSaveModal = function(){
+                if(this.isAnalysis == "true"){
+                    $(".saveModalAnalysis").modal();
+                }
+                else{
+                    $(".saveModalData").modal();
+                }
+            }
+
+            this.ShowDownloadModal = function(){
+                if(this.isAnalysis == "true"){
+                    $(".downloadModalAnalysis").modal();
+                }
+                else{
+                    $(".downloadModalData").modal();
+                }               
+            }
 
         } //end controller
     ]

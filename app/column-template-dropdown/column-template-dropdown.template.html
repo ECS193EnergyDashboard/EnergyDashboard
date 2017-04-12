@@ -30,51 +30,33 @@
             </ul>
         </div>  
 
-        <!--NOTE FOR THE FOLLOWING BUTTONS: Each tab needs own set of buttons in order for correct modal to show-->
 
         <!--Save Template button for Data Tab-->
-        <button ng-if="$ctrl.isAnalysis=='false'" data-toggle="modal" data-target="#templateNameModalData" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false">
+        <button ng-click="$ctrl.ShowSaveModal()" data-toggle="modal" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false">
             Save Template
         </button>
 
-        <!--Save Template button for Analysis Tab-->
-        <button ng-if="$ctrl.isAnalysis=='true'" data-toggle="modal" data-target="#templateNameModalAnalysis" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false">
-            Save Template
-        </button>
-
-<!-- disabled btn btn-default glyphicon glyphicon-tag" -->
 
         <!-- Delete Template button for Data Tab -->
-        <button ng-if="$ctrl.isAnalysis=='false'" ng-class="{'disabled': $ctrl.currentTemplateName=='Default'}" data-toggle="modal" data-target="#deleteTemplateModalData" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false">
+        <button ng-click="$ctrl.ShowDeleteModal()" ng-class="{'disabled': $ctrl.currentTemplateName=='Default'}" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false">
             Delete Template
         </button>
 
-        <!-- Delete Template button for Analysis Tab -->
-        <button ng-if="$ctrl.isAnalysis=='true' && $ctrl.currentTemplateName!='Default'" data-toggle="modal" data-target="" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false">
-            Delete Template
-        </button>
 
         <!--Download CSV button for Data Tab-->
-        <button ng-if="$ctrl.isAnalysis=='false'" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#fileNameModalData">
+        <button ng-click="$ctrl.ShowDownloadModal()" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false" data-toggle="modal" >
             Download As CSV
             <span class="glyphicon glyphicon-save-file"></span>
         </button>
 
-
-        <!--Download CSV button for Analysis Tab-->
-        <button ng-if="$ctrl.isAnalysis=='true'" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#fileNameModalAnalysis">
-            Download As CSV
-            <span class="glyphicon glyphicon-save-file"></span>
-        </button>
 
     </div> <!--end tableSettingsButtons -->
 
 
-<!-- There needs to be a modal for each tab because they will both come down
-    and it will get stuck if there is only one modal for them to share -->
+<!-- START OF MODALS --> 
 
 <!-- CSV File Name Modal for Data Tab -->
-<div ng-if="$ctrl.isAnalysis=='false'" class="modal fade" id="fileNameModalData" role="dialog">
+<div ng-class="{'downloadModalData': $ctrl.isAnalysis=='false', 'downloadModalAnalysis': $ctrl.isAnalysis=='true'}" class="modal fade" id="fileNameModalData" role="dialog">
     <div class="modal-dialog">
 <!-- Modal content-->
     <div class="modal-content">
@@ -98,34 +80,10 @@
     </div>
 </div>
 
-<!-- CSV File Name Modal for analysis Tab -->
-<div ng-if="$ctrl.isAnalysis=='true'" class="modal fade" id="fileNameModalAnalysis" role="dialog">
-    <div class="modal-dialog">
-<!-- Modal content-->
-    <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Analysis: Please Enter File Name</h4>
-        </div>
-    <div class="modal-body">
-        <input autofocus="autofocus" type="text" class="form-control" ng-model="$ctrl.fileName" />
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-
-        <button type="button" class="btn btn-default" csv-header="$ctrl.GetHeaderAnalysis()" filename="{{ $ctrl.fileName }}" ng-csv="$ctrl.GetArrayAnalysis()" data-dismiss="modal">
-            Download CSV
-            <span class="glyphicon glyphicon-save-file"></span>
-        </button>
-    </div>`
-    </div>
-
-    </div>
-</div>
 
 
 <!-- Template name Modal for data tab -->
-<div ng-if="$ctrl.isAnalysis=='false'" class="modal fade" id="templateNameModalData" role="dialog">
+<div ng-class="{'saveModalData': $ctrl.isAnalysis=='false', 'saveModalAnalysis': $ctrl.isAnalysis=='true'}" class="modal fade" id="templateNameModalData" role="dialog">
     <div class="modal-dialog">
 <!-- Modal content-->
     <div class="modal-content">
@@ -150,33 +108,9 @@
 </div>
 
 
-<!-- Template name Modal for analysis tab -->
-<div ng-if="$ctrl.isAnalysis=='true'" class="modal fade" id="templateNameModalAnalysis" role="dialog">
-    <div class="modal-dialog">
-<!-- Modal content-->
-    <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Please Enter Template Name</h4>
-        </div>
-    <div class="modal-body">
 
-        <input autofocus="autofocus" id="templateInput" class="form-control" type="text" ng-init="$ctrl.newTemplateName" ng-model="$ctrl.newTemplateName" placeholder="My Template Name...">
-
-    </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-
-            <button ng-click="$ctrl.SaveColumnList($ctrl.columns)" type="button" class="btn btn-default" aria-haspopup="true" aria-expanded="false" data-dismiss="modal">Save Current Template
-            </button>
-        </div>
-    </div>
-    </div>
-</div>
-
-
-<!-- Delete template modal for data tab -->
-<div ng-if="$ctrl.isAnalysis=='false' && $ctrl.currentTemplateName!='Default'" class="modal fade" id="deleteTemplateModalData" role="dialog">
+<!-- Delete template modal -->
+<div ng-class="{'deleteModalData': $ctrl.isAnalysis=='false', 'deleteModalAnalysis': $ctrl.isAnalysis=='true'}" ng-if="$ctrl.currentTemplateName!='Default'" class="modal fade" role="dialog">
     <div class="modal-dialog">
 <!-- Modal content-->
     <div class="modal-content">
@@ -188,12 +122,13 @@
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-            <button ng-click="$ctrl.DeleteTemplate()" type="button" class="btn btn-default" aria-haspopup="true" aria-expanded="false" data-dismiss="modal">Delete Template
+            <button ng-click="$ctrl.DeleteTemplate()" type="button" class="btn btn-default" data-dismiss="modal">Delete Template
             </button>
         </div>
     </div>
 
     </div>
 </div>
+
 
 

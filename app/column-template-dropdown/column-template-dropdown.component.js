@@ -108,7 +108,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                 unitsRow.push(""); // Placeholder for building
                 for(var col of this.columns){
                     if(col.isChecked){
-                        unitsRow.push(col.units);
+                        unitsRow.push(this.rowData[0][col.name].Average.unitsAbbreviation);
                         // Leave empty spaces for agfns
                         for(var i=0; i<inner-1; i++){
                             unitsRow.push("");

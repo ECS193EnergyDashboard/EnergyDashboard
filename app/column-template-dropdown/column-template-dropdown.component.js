@@ -20,9 +20,17 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             // Default file name for downloading to CSV
             this.fileName = "Data.csv";
 
+            // an error message for the modal. Always set the error message before showing modal
+            this.errorMessage = "";
+
 
             this.$onChanges = function() {
                 // Get templates from server
+                this.getTemplates();
+
+            };
+
+            this.getTemplates = function(){
                 $http({method: 'GET', url: '/getTemplates'}).then(function successCallback(response) {
                     console.log("get templates success", response.data);
                     self.templates = response.data;
@@ -30,7 +38,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                     console.error("get templates failed ", response);
                 });
 
-            };
+            }
 
 
             this.GetHeaderData = function() {
@@ -176,16 +184,24 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             }
 
             // save template/profile for cols
-            // BILLY: START HERE FIX THIS
             this.SaveColumnList = function(columnObjs) {
-                // console.log("columnObjs ", columnObjs);
+                
+                // Check to make sure template is not named default or name is already taken
+                if(this.newTemplateName == "Default"){
+                    console.log("Cant have a template named Default");
+                    this.errorMessage = "We're sorry but you can not have a template named Default";
+                    this.ShowErrorModal();
+                    return;
+                }
                 for(temp of this.templates){
-                    if(this.newTemplateName == temp.templateName || 
-                        this.templateName == "Default"){
+                    if(this.newTemplateName == temp.templateName){
                         console.log("Cant have 2 templates of same name");
+                        this.errorMessage = "We're sorry but you already have a template named " + this.newTemplateName;
+                        this.ShowErrorModal();
                         return;
                     }
                 }
+                
                 var colObjToAdd = JSON.parse(angular.toJson(columnObjs));
                 var template = {
                     "templateName": this.newTemplateName,
@@ -240,11 +256,6 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                 var template = {
                     "templateName": this.currentTemplateName,
                 };
-                var index = this.templates.indexOf(this.currentTemplate);
-                console.log(index);
-                if (index > -1) {
-                    this.templates.splice(index, 1);
-                }
                 $http({
                     method: 'POST',
                     url: '/templatesDelete',
@@ -255,9 +266,9 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                 }, function errorCallback(response) {
                     console.error("POST Failed ", response);
                 });
+                this.getTemplates();
                 this.ApplyDefaultTemplate();
-                // Hard remove backdrop - HOT FIX
-                $('.modal-backdrop').remove(); 
+                $('.modal-backdrop').remove(); // Hard remove backdrop - HOT FIX 
             };
 
             //Start of modal code//
@@ -287,6 +298,15 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                 else{
                     $(".downloadModalData").modal();
                 }               
+            }
+
+            this.ShowErrorModal = function(){
+                if(this.isAnalysis == "true"){
+                    $(".errorModalAnalysis").modal();
+                }
+                else{
+                    $(".errorModalData").modal();
+                }                
             }
 
         } //end controller

@@ -70,12 +70,20 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-        <button class="btn btn-default" type="button" csv-header="$ctrl.GetHeaderData()" 
+        <!-- Download CSV with analysis structure --> 
+        <button ng-if="$ctrl.isAnalysis=='true' "class="btn btn-default" type="button" csv-header="$ctrl.GetHeaderAnalysis()" 
+        ng-csv="$ctrl.GetArrayAnalysis()" filename="{{ $ctrl.fileName }}" data-dismiss="modal">
+            Download CSV
+        <span class="glyphicon glyphicon-save-file"></span>
+        </button>
+
+        <!-- Download CSV with Data structure --> 
+        <button ng-if="$ctrl.isAnalysis=='false'" class="btn btn-default" type="button" csv-header="$ctrl.GetHeaderData()" 
         ng-csv="$ctrl.GetArrayData()" filename="{{ $ctrl.fileName }}" data-dismiss="modal">
             Download CSV
-            <span class="glyphicon glyphicon-save-file"></span>
+        <span class="glyphicon glyphicon-save-file"></span>
         </button>
-    </div>`
+    </div>
     </div>
     </div>
 </div>
@@ -131,4 +139,27 @@
 </div>
 
 
+<!-- Delete template modal -->
+<div ng-class="{'errorModalData': $ctrl.isAnalysis=='false', 'errorModalAnalysis': $ctrl.isAnalysis=='true'}" class="modal"  data-backdrop="static" role="dialog">
+    <div class="modal-dialog">
+<!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">ERROR</h4>
+        </div>
+        <div class="modal-body">
+            {{$ctrl.errorMessage}}
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+    </div>
+
+    </div>
+</div>
+
+
+<!-- data-backdrop="static" -->
 

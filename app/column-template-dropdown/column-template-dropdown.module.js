@@ -1,3 +1,6 @@
 'use strict';
 
-angular.module('columnTemplateDropdownModule', []);
+angular.module('columnTemplateDropdownModule', [
+	'ngSanitize', 
+    'ngCsv'
+]);

@@ -7,7 +7,7 @@ angular.module('dashboardModule').component('dashboard',{
 		this.data = [];
 		this.isLoading = {sidebar: 0, data: 0, analysis: 0};
         this.webIds = [];
-        this.selectedCellWebIds = [];
+        this.chartWebIds = [];
 
         // Function to cause binding up update
         bindIsLoading = (name, val) =>{
@@ -64,11 +64,11 @@ angular.module('dashboardModule').component('dashboard',{
         }
 
         this.addCell = function(cell) {
-            this.selectedCellWebIds.push(cell.webId);
+            this.chartWebIds.push(cell.webId);
         }
 
         this.removeCell = function(cell) {
-            this.selectedCellWebIds.splice(this.selectedCellWebIds.indexOf(cell.webId), 1);
+            this.chartWebIds.splice(this.chartWebIds.indexOf(cell.webId), 1);
         }
     }]
 });

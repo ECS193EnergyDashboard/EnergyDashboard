@@ -28,12 +28,31 @@ angular.module('chartOptionsModule').component('chartOptions', {
             this.interval = 1;
             this.intervalUnits = this.intervalOptions[1];
 
-            this.launchChart = function() {
-                var popup = $window.open('chart-popup.html');
-                popup.chartOptions = { };
-                popup.chartOptions.interval = this.interval + this.intervalUnits.value;
-                popup.chartOptions.webIds = this.webIds;
-            };
+            this.yAxisName = '';
+            this.title = '';
 
+            this.launchChart = function() {
+                var url = 'chart.html?';
+
+                if (this.interval) {
+                    url += 'interval='+ this.interval + this.intervalUnits.value + '&';
+                }
+
+                if (this.title) {
+                    url += 'title='+ this.title + '&';
+                }
+
+                if (this.yAxisName) {
+                    url += 'yAxis='+ this.yAxisName + '&';
+                }
+
+                if (this.webIds) {
+                    for (var webId of this.webIds) {
+                        url += 'webId=' + webId + '&';
+                    }
+                }
+
+                $window.open(url);
+            }
         }]
     });

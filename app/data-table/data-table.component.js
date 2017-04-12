@@ -172,12 +172,17 @@ angular.module('dataTableModule').component('datatable', {
             this.columnNamesObjs = cols;
         }
 
-        this.toggleCellSelected = function(value) {
+        this.toggleCellSelected = function(element, columnName) {
+            var value = element[columnName];
             value.isSelected = !value.isSelected;
+            
+            var cell = { parentName: element.name, buildingName: element.building };
+            Object.assign(cell, value);
+
             if (value.isSelected) {
-                this.onCellSelected({ cell: value });
+                this.onCellSelected({ cell: cell });
             } else {
-                this.onCellDeselected({ cell: value });
+                this.onCellDeselected({ cell: cell });
             }
         }
 

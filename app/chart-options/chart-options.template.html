@@ -1,9 +1,31 @@
-<div class="input-group">
-    <input type="text" class="form-control" placeholder="Interval" ng-model="$ctrl.interval">
-    <!-- This span needed to have select inline with input text -->
-    <span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
-    <select class="selectpicker form-control" ng-model="$ctrl.intervalUnits" ng-options="option.name for option in $ctrl.intervalOptions"></select>
-    <span class="input-group-btn">
+<h4>Settings</h4>
+<div class="form-inline">
+    <label for="interval">Sample every</label>
+    <div class="form-group">
+        <input type="text" class="form-control" name="interval" placeholder="Interval" ng-model="$ctrl.interval">
+        <select class="selectpicker form-control" ng-model="$ctrl.intervalUnits" ng-options="option.name for option in $ctrl.intervalOptions"></select>
         <button class="btn btn-primary" type="button" ng-click="$ctrl.launchChart()">Graph</button>
-    </span>
+    </div>
 </div>
+
+<div class="form-inline">
+    <label for="yaxis">Y-Axis Name</label>
+    <input type="text" class="form-control" name="yaxis" ng-model="$ctrl.yAxisName">
+</div>
+<div class="form-inline">
+    <label for="title">Graph Title</label>
+    <input type="text" class="form-control" name="title" ng-model="$ctrl.title">
+</div>
+
+<h4>Selected Attributes to Graph</h4>
+<ul class="list-group">
+    <!--
+    <li class="list-group-item" ng-repeat="attrib in $ctrl.attributes"> 
+        {{ attrib.buildingName + ": " + attrib.parentName + " | " + attrib.name }}
+    </li>
+    !-->
+
+    <li class="list-group-item" ng-repeat="webId in $ctrl.webIds"> 
+        {{ webId }}
+    </li>
+</ul>

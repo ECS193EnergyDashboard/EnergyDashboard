@@ -41,6 +41,25 @@ angular.
                 });
             }
 
+            pi.getAttribute = function(webId) {
+                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/attributes/' + webId + '?selectedFields=Name;WebId;Links.Element'; 
+                return $http.get(url).then(function(response) {
+                    var attrib = {
+                        name: response.data.Name || '',
+                        webId: response.data.WebId || ''
+                    }
+                    var regex = /elements\/(\S+)/g;
+                    var match = regex.exec(response.data.Links.Element);
+                    var elementWebId = match[1];
+                    return pi.getElement(elementWebId).then(function(response) {
+                        attrib.element = response;
+                        return attrib;
+                    });
+                }, function(response) {
+                    console.log('Error: getAttrib(): ' + response.status + ' - ' + response.statusText);
+                });      
+            }
+
             pi.getValuesOfElement = function(webId) {
                 var result = [];
                 var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/streamsets/' + webId + '/value?selectedFields=Items.Name;Items.WebId;Items.Value.Value;Items.Value.UnitsAbbreviation;Items.Value.Good'
@@ -169,29 +188,6 @@ angular.
                     }
                     return result;
                 });
-            }
-
-            pi.getAttributeName = function(webId) {
-                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/attributes/' + webId + '?selectedFields=Name';
-                return $http.get(url).then(function(response) {
-                    return response.data.Name || '';
-                }, function(response) {
-                    console.log('Error: getAttributeName(): ' + response.status + ' - ' + response.statusText);
-                });
-            }
-
-            pi.getAttributeParentElement = function(webId) {
-                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/attributes/' + webId + '?selectedFields=Links.Element';
-                return $http.get(url).then(function(response) {
-                    url =  response.data.Links.Element;
-                    var regex = /\s*elements\/(\S+)/g;
-                    var match = regex.exec(url);
-                    var parentWebId = match[1];
-                    console.log(match);
-                    return pi.getElement(parentWebId);      
-                }, function(response) {
-                    console.log('Error: getAttributesParentElement(): ' + response.status + ' - ' + response.statusText);
-                });                
             }
 
             pi.getSummaryOfAttribute = function(webId, startTime, endTime) {

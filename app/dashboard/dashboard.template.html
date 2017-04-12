@@ -37,7 +37,7 @@
         <!-- Table modules -->
         <datatable ng-show="$ctrl.isDataTabShown()" is-loading="$ctrl.isLoading" table-src="$ctrl.data" on-cell-selected="$ctrl.addCell(cell)" on-cell-deselected="$ctrl.removeCell(cell)"></datatable>
         <analysis ng-show="$ctrl.isAnalyzeTabShown()" is-loading="$ctrl.isLoading" web-ids="$ctrl.webIds" ></analysis>
-        <chart-options ng-show="$ctrl.isGraphTabShown()" web-ids="$ctrl.selectedCellWebIds"></chart-options>
+        <chart-options ng-show="$ctrl.isGraphTabShown()" web-ids="$ctrl.chartWebIds"></chart-options>
     </div>
     <!-- /#page-content-wrapper -->
 </div>

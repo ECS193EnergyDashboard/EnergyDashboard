@@ -1,18 +1,20 @@
 angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown', {
     templateUrl: 'column-template-dropdown/column-template-dropdown.template.html',
     bindings: {
-        columns: '<', //columnNamesObjs passed in (col order maintained)
-        rowData: '<', //row order not maintained
-        isAnalysis: '<',
-        templateSets: '<',
-        innerColumns: '<', // Min, max, avg, st - this is needed for CSV
-        updateColObj: '&'
+        columns:        '<', //columnNamesObjs passed in (col order maintained)
+        rowData:        '<', //row order not maintained, has units
+        isAnalysis:     '<',
+        templateSets:   '<',
+        innerColumns:   '<', // Min, max, avg, st - this is needed for CSV
+        updateColObj:   '&',
+        dateRange:      '<'  // The date range to print on the csv
     },
     controller: [ '$http', function colTemplateController($http) {
             var self = this;
             //self.columnNamesObjs = []
             this.templates = [];
             this.showTemplates = false;
+            this.includeDR = false;
 
 
             this.$onChanges = function() {
@@ -71,10 +73,26 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                 return CSVData;
             }
 
-            // Get header for CSV for analysis tab
-            var inner =0;
-            this.GetHeaderAnalysis = function() {
-                var numInnerColumns = 0;
+
+
+
+            var numInnerColumns =0;
+            // Get data for CSV for analysis tab
+            this.GetArrayAnalysis = function() {
+                var CSVData = [];
+
+                // Insert date range if selected to
+                if(this.includeDR == true){
+                    var dateRow = [];
+                    dateRow.push("Date Range:");
+                    dateRow.push(this.dateRange.startDate.format());
+                    dateRow.push("to");
+                    dateRow.push(this.dateRange.endDate.format());
+
+                    CSVData.push(dateRow);
+                }
+
+                // Insert header for CSV for analysis tab
                 if(this.innerColumns[0].isChecked == true)
                     numInnerColumns++; // Blank space for Avg
                 if(this.innerColumns[1].isChecked == true)
@@ -84,10 +102,9 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                 if(this.innerColumns[3].isChecked == true)
                     numInnerColumns++; // Blank space for S.D.
 
-                inner = numInnerColumns;
                 var columnNames = [];
-                columnNames.push(" "); // Blank space for Name
-                columnNames.push(" "); // Blank space for Building
+                columnNames.push(""); // Blank space for Name
+                columnNames.push(""); // Blank space for Building
                 for (var element of this.columns){
                     if(element.isChecked){
                         columnNames.push(element.name);
@@ -95,13 +112,9 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                             columnNames.push(" ");
                     }
                 }
-                return columnNames;
-            };
+                CSVData.push(columnNames);
 
 
-            // Get data for CSV for analysis tab
-            this.GetArrayAnalysis = function() {
-                var CSVData = [];
                 // Create row for the units
                 var unitsRow = [];
                 unitsRow.push(""); // Placeholder for name
@@ -110,7 +123,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                     if(col.isChecked){
                         unitsRow.push(this.rowData[0][col.name].Average.unitsAbbreviation);
                         // Leave empty spaces for agfns
-                        for(var i=0; i<inner-1; i++){
+                        for(var i=0; i<numInnerColumns-1; i++){
                             unitsRow.push("");
                         }
                     }
@@ -145,7 +158,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                         if(col.isChecked){
                             // Check if undefined
                             if(element[col.name] === undefined){
-                                for(i=0; i<inner; i++){
+                                for(i=0; i<numInnerColumns; i++){
                                     elmRow.push("NA");
                                 }
                             }

@@ -47,7 +47,7 @@
 </div>
 
 
-
+<!--Column Dropdown Checkbox List-->
 <div class="dropdown" ng-if="$ctrl.columns.length != 0">
     <button type="button" class="btn btn-primary dropdown-toggle dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Columns <span class="caret"></span>
@@ -78,7 +78,7 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-        <button class="btn btn-default" type="button" csv-header="$ctrl.GetHeaderData()" 
+        <button class="btn btn-default" type="button" csv-header="$ctrl.GetHeaderData()"
         ng-csv="$ctrl.GetArrayData()" filename="{{ $ctrl.fileName }}" data-dismiss="modal">
             Download CSV
             <span class="glyphicon glyphicon-save-file"></span>
@@ -89,6 +89,8 @@
     </div>
 </div>
 
+
+<!-- CSV File Name Modal for Analysis Tab -->
 <div ng-if="$ctrl.isAnalysis=='true'" class="modal fade" id="fileNameModalAnalysis" role="dialog">
     <div class="modal-dialog">
 <!-- Modal content-->
@@ -101,9 +103,11 @@
         <input autofocus="autofocus" type="text" class="form-control" ng-model="$ctrl.fileName" />
     </div>
     <div class="modal-footer">
+        <input ng-checked="$ctrl.includeDR" ng-model="$ctrl.includeDR" type="checkbox" value="">
+        <p>Include Date Range on CSV</p>
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-        <button type="button" class="btn btn-default" csv-header="$ctrl.GetHeaderAnalysis()" filename="{{ $ctrl.fileName }}" ng-csv="$ctrl.GetArrayAnalysis()" data-dismiss="modal">
+        <button type="button" class="btn btn-default" filename="{{ $ctrl.fileName }}" ng-csv="$ctrl.GetArrayAnalysis()" data-dismiss="modal">
             Download CSV
             <span class="glyphicon glyphicon-save-file"></span>
         </button>
@@ -164,6 +168,3 @@
 
     </div>
 </div>
-
-
-

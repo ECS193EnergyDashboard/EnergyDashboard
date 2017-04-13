@@ -1,14 +1,24 @@
 angular.module('chartViewModule').component('chartView', {
         templateUrl: 'chart-view/chart-view.template.html',
-        bindings: {
-            config: '<'
-        },
-        controller: [ 'pi', '$q', function(pi, $q) {
+        controller: [ 'pi', '$q', '$location', function(pi, $q, $location) {
             var self = this;
 
-            this.options = {
+            this.isLoading = false;
+            
+            var urlParams = $location.search();
+
+            this.config = {
+                webIds: (Array.isArray(urlParams.webId) ? urlParams.webId : [ urlParams.webId ]) || [],
+                yAxisName: urlParams.yAxis,
+                title: urlParams.title,
+                interval: urlParams.interval,
+                startTime: urlParams.start,
+                endTime: urlParams.end
+            };
+
+            this.d3options = {
                 chart: {
-                    type: 'lineChart',
+                    type: 'lineWithFocusChart',
                     height: 450,
                     margin : {
                         top: 20,
@@ -22,6 +32,11 @@ angular.module('chartViewModule').component('chartView', {
                     useInteractiveGuideline: true, // if false use tooltipContent
                     xAxis: {
                         axisLabel: 'Time',
+                        tickFormat: function(d) {
+                            return d3.time.format('%m/%d %H:%M')(new Date(d));
+                        }
+                    },
+                    x2Axis: {
                         tickFormat: function(d) {
                             return d3.time.format('%m/%d %H:%M')(new Date(d));
                         }
@@ -45,21 +60,101 @@ angular.module('chartViewModule').component('chartView', {
                 }
             };
 
+            this.datePicker = {};
+            this.datePicker.date = {
+                startDate: moment(this.config.startTime) || moment().subtract(1, 'days'),
+                endDate: moment(this.config.endTime) || moment()
+            };
+            this.DRPOptions = {
+                "showDropdowns": true,
+                "timePicker": true,
+                "timePickerIncrement": 15,
+                "autoApply": true,
+                "ranges": {
+                    "Past 24 Hours": [
+                        moment().subtract(1, 'days'), moment()
+                    ],
+                    "Last 7 Days": [
+                        moment().subtract(7, 'days'), moment()
+                    ],
+                    "Past Month": [
+                        moment().subtract(1, 'months'),  moment()
+                    ],
+                    "Past Year": [moment().subtract(1, 'years'), moment()]
+                }
+            }
+
+            this.intervalOptions = [
+                {
+                    name: 'minute(s)',
+                    value: 'm'
+                },
+                {
+                    name: 'hour(s)',
+                    value: 'h'
+                },
+                {
+                    name: 'day(s)',
+                    value: 'd'
+                },
+                {
+                    name: 'month(s)',
+                    value: 'mo'
+                }
+            ];
+
+            if (this.config.interval) {
+                var match = /([0-9]+)([a-z]+)/.exec(this.config.interval);
+                this.interval = match[1]
+                for (var option of this.intervalOptions) {
+                    if (option.value === match[2]) {
+                        this.intervalUnits = option;
+                        break;
+                    }
+                }     
+            } else {
+                this.interval = 1;
+                this.intervalUnits = this.intervalOptions[1];
+            }
+
+            // TODO: handle "bad values" (make them undefined? aka holes in chart)
+
             this.$onInit = function() {
                 if (this.config.yAxisName) {
-                    this.options.chart.yAxis.axisLabel = this.config.yAxisName;
+                    this.d3options.chart.yAxis.axisLabel = this.config.yAxisName;
                 }
                 if (this.config.title) {
-                    this.options.title.text = this.config.title;
+                    this.d3options.title.text = this.config.title;
                 } else if (this.config.yAxisName) {
-                    this.options.title.text = this.config.yAxisName + ' vs ' + this.options.chart.xAxis.axisLabel;
+                    this.d3options.title.text = this.config.yAxisName + ' vs ' + this.d3options.chart.xAxis.axisLabel;
                 }
                 this.generateChart();
             }
 
+            this.numRequests = 0;
+            this.numRequestsDone = 0;
+
+            this.getProgress = function() {
+                return (this.numRequestsDone / this.numRequests) * 100;
+            }
+
             this.generateChart = function() {
+                this.isLoading = true;
+                this.numRequests = this.config.webIds.length;
+                this.numRequestsDone = 0;
+
                 this.data = [];
                 var promises = [];
+                
+                var startTime = this.datePicker.date.startDate.format();
+                var endTime = this.datePicker.date.endDate.format();
+
+                var interval = this.interval + this.intervalUnits.value;
+
+                $location.search('interval', interval);
+                $location.search('start', startTime);
+                $location.search('end', endTime);
+
 
                 for (var i = 0; i < this.config.webIds.length; i++) {
                     this.data[i] = {
@@ -69,7 +164,12 @@ angular.module('chartViewModule').component('chartView', {
 
                     var webId = this.config.webIds[i];
                     promises.push(pi.getAttribute(webId));
-                    promises.push(pi.getInterpolatedOfAttribute(webId, this.config.interval));
+                    var promise = pi.getInterpolatedOfAttribute(webId, interval, startTime, endTime);
+                    promises.push(promise);
+
+                    promise.then(function(response) {
+                        self.numRequestsDone++;
+                    });
                 }
 
                 $q.all(promises).then(function(responses) {
@@ -79,6 +179,7 @@ angular.module('chartViewModule').component('chartView', {
                         self.data[i].values = responses[idx + 1];
                         self.data[i].key = attrib.element.building + ": " + attrib.element.name + " | " + attrib.name; 
                     }
+                    self.isLoading = false;
                 });
             };
         }]

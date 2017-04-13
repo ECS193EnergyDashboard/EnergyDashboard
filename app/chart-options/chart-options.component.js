@@ -6,28 +6,6 @@ angular.module('chartOptionsModule').component('chartOptions', {
         controller: [ '$window', function($window) {
             var self = this;
 
-            this.intervalOptions = [
-                {
-                    name: 'minute(s)',
-                    value: 'm'
-                },
-                {
-                    name: 'hour(s)',
-                    value: 'h'
-                },
-                {
-                    name: 'day(s)',
-                    value: 'd'
-                },
-                {
-                    name: 'month(s)',
-                    value: 'mo'
-                }
-            ];
-
-            this.interval = 1;
-            this.intervalUnits = this.intervalOptions[1];
-
             this.yAxisName = '';
             this.title = '';
 
@@ -41,10 +19,6 @@ angular.module('chartOptionsModule').component('chartOptions', {
             
             this.launchChart = function() {
                 var url = 'chart.html?';
-
-                if (this.interval) {
-                    url += 'interval='+ this.interval + this.intervalUnits.value + '&';
-                }
 
                 if (this.title) {
                     url += 'title='+ this.title + '&';

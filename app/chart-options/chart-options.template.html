@@ -1,12 +1,6 @@
 <h4>Settings</h4>
-<div class="form-inline">
-    <label for="interval">Sample every</label>
-    <div class="form-group">
-        <input type="text" class="form-control" name="interval" placeholder="Interval" ng-model="$ctrl.interval">
-        <select class="selectpicker form-control" ng-model="$ctrl.intervalUnits" ng-options="option.name for option in $ctrl.intervalOptions"></select>
-        <button class="btn btn-primary" type="button" ng-click="$ctrl.launchChart()">Graph</button>
-    </div>
-</div>
+
+<button class="btn btn-primary" type="button" ng-click="$ctrl.launchChart()">Graph</button>
 
 <div class="form-inline">
     <label for="yaxis">Y-Axis Name</label>

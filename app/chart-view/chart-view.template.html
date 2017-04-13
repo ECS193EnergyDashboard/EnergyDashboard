@@ -1,1 +1,23 @@
-<nvd3 options="$ctrl.options" data="$ctrl.data" api="$ctrl.api"><nvd3>
+<div class="form-inline">
+    <label for="date">Date Range</label>
+    <input date-range-picker class="form-control date-picker" type="text" name="date" ng-model="$ctrl.datePicker.date" options="$ctrl.DRPOptions"/>
+</div>
+
+<div class="form-inline">
+    <label for="interval">Sample every</label>
+    <div class="form-group">
+        <input type="text" class="form-control" name="interval" placeholder="Interval" ng-model="$ctrl.interval">
+        <select class="selectpicker form-control" ng-model="$ctrl.intervalUnits" ng-options="option.name for option in $ctrl.intervalOptions"></select>
+    </div>
+</div>
+
+<button class="btn btn-primary" type="button" ng-click="$ctrl.generateChart()">Graph</button>
+
+
+<div ng-show="$ctrl.isLoading" class="progress center-block" style="width: 75%">
+    <div class="progress-bar progress-bar-striped active" role="progressbar" ng-style="{ width: ($ctrl.getProgress() + '%') }">
+        <span>{{ $ctrl.getProgress() + '%' }}</span>
+    </div>
+</div>
+
+<nvd3 ng-hide="$ctrl.isLoading" options="$ctrl.d3options" data="$ctrl.data" api="$ctrl.api"><nvd3>

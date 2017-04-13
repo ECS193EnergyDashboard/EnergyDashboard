@@ -1,1 +1,1 @@
-angular.module('chartAppModule', [ 'chartViewPopupModule' ]);
+angular.module('chartAppModule', [ 'chartViewModule' ]);

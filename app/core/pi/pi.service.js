@@ -233,7 +233,6 @@ angular.
                 }
                 return $http.get(url).then(function(response) {
                     var items = response.data.Items;
-                    console.log(response.data);
                     for (var item of items) {
                         var v = { 
                             timestamp: new Date(item.Timestamp),

@@ -104,7 +104,7 @@
     </div>
     <div class="modal-footer">
         <input ng-checked="$ctrl.includeDR" ng-model="$ctrl.includeDR" type="checkbox" value="">
-        <p>Include Date Range on CSV</p>
+        <span>Include Date Range on CSV</span>
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
         <button type="button" class="btn btn-default" filename="{{ $ctrl.fileName }}" ng-csv="$ctrl.GetArrayAnalysis()" data-dismiss="modal">

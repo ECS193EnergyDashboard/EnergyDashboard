@@ -5,8 +5,7 @@ angular.module('dataTableModule').component('datatable', {
         searchEnabled: '<',
         reorderEnabled: '<',
         isLoading: '<',
-        onCellSelected: '&',
-        onCellDeselected: '&'
+        selection: '=',
     },
     controller: ['$filter', '$scope', function TableController($filter, $scope) {
         var self = this;
@@ -16,7 +15,31 @@ angular.module('dataTableModule').component('datatable', {
         this.columnNames = [];
         this.columnNamesObjs = [];
 
+        var selectionIndexOf = function(obj) {
+            for (var i = 0; i < self.selection.length; i++) {
+                if (self.selection[i].webId === obj.webId) {
+                    return i;
+                }
+            }
+            return -1;
+        }
 
+        var isSelected = function(obj) {
+            return selectionIndexOf(obj) !== -1;
+        }
+
+        var deselect = function(obj) {
+            var idx = selectionIndexOf(obj);
+            if (idx !== -1) {
+                self.selection.splice(idx, 1);
+            }
+        }
+
+        var select = function(obj) {
+            if (!isSelected(obj)) {
+                self.selection.push(obj);
+            }
+        }
 
         var defaultValues = [
             // Start of AHU default values
@@ -54,7 +77,7 @@ angular.module('dataTableModule').component('datatable', {
             } else if (!value.good) {
                 style += 'bad ';
             }
-            if (value && value.isSelected) {
+            if (value && isSelected(value)) {
                 style += 'selected ';
             }
             return style;
@@ -72,6 +95,9 @@ angular.module('dataTableModule').component('datatable', {
             }
             if (this.reorderEnabled === undefined) {
                 this.reorderEnabled = true;
+            }
+            if (this.selection === undefined) {
+                this.selection = [];
             }
             if (this.tableSrc.length == 0) {
                 return;
@@ -115,11 +141,13 @@ angular.module('dataTableModule').component('datatable', {
                 firstValues++;
             }
 
-            self.data = self.tableSrc;
-            this.displayed = this.data;
+            for (var element of this.tableSrc) {
+                for (var name in element) {
+                    Object.assign(element[name], { parentName: element.name, buildingName: element.building });
+                }
+            }
 
-
-
+            this.displayed = this.data = this.tableSrc;
         }; //end $onChanges
 
         this.ShowColumnList = function(columnsNames) {
@@ -172,17 +200,11 @@ angular.module('dataTableModule').component('datatable', {
             this.columnNamesObjs = cols;
         }
 
-        this.toggleCellSelected = function(element, columnName) {
-            var value = element[columnName];
-            value.isSelected = !value.isSelected;
-            
-            var cell = { parentName: element.name, buildingName: element.building };
-            Object.assign(cell, value);
-
-            if (value.isSelected) {
-                this.onCellSelected({ cell: cell });
+        this.toggleCellSelected = function(value) {
+            if (isSelected(value)) {
+                deselect(value);
             } else {
-                this.onCellDeselected({ cell: cell });
+                select(value);
             }
         }
 

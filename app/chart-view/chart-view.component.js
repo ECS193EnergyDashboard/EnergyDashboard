@@ -12,9 +12,9 @@ angular.module('chartViewModule').component('chartView', {
                     height: 450,
                     margin : {
                         top: 20,
-                        right: 20,
+                        right: 40,
                         bottom: 40,
-                        left: 55
+                        left: 80
                     },
                     x: function(d) { return d.timestamp; },
                     y: function(d) { return d.value; },
@@ -31,7 +31,7 @@ angular.module('chartViewModule').component('chartView', {
                         tickFormat: function(d){
                             return d3.format('.02f')(d);
                         },
-                        axisLabelDistance: -10
+                        axisLabelDistance: 10
                     },
                     tooltip: {
                         contentGenerator: function(e) {

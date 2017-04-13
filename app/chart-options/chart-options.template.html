@@ -18,14 +18,14 @@
 </div>
 
 <h4>Selected Attributes to Graph</h4>
+    <a class="btn btn-default" ng-click="$ctrl.clearAttributes()">
+        <span class="glyphicon glyphicon-trash"></span>
+    </a>
 <ul class="list-group">
-    <!--
     <li class="list-group-item" ng-repeat="attrib in $ctrl.attributes"> 
         {{ attrib.buildingName + ": " + attrib.parentName + " | " + attrib.name }}
-    </li>
-    !-->
-
-    <li class="list-group-item" ng-repeat="webId in $ctrl.webIds"> 
-        {{ webId }}
+        <a class="btn btn-default pull-right" ng-click="$ctrl.removeAttribute($index)">
+            <span class="glyphicon glyphicon-remove"></span>
+        </a>
     </li>
 </ul>

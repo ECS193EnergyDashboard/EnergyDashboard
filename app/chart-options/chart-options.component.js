@@ -1,7 +1,7 @@
 angular.module('chartOptionsModule').component('chartOptions', {
         templateUrl: 'chart-options/chart-options.template.html',
         bindings: {
-            webIds: '<'
+            attributes: '<'
         },
         controller: [ '$window', function($window) {
             var self = this;
@@ -31,6 +31,14 @@ angular.module('chartOptionsModule').component('chartOptions', {
             this.yAxisName = '';
             this.title = '';
 
+            this.removeAttribute = function(idx) {
+                self.attributes.splice(idx, 1);
+            }
+
+            this.clearAttributes = function() {
+                self.attributes.length = 0;
+            }
+            
             this.launchChart = function() {
                 var url = 'chart.html?';
 
@@ -46,9 +54,9 @@ angular.module('chartOptionsModule').component('chartOptions', {
                     url += 'yAxis='+ this.yAxisName + '&';
                 }
 
-                if (this.webIds) {
-                    for (var webId of this.webIds) {
-                        url += 'webId=' + webId + '&';
+                if (this.attributes) {
+                    for (var attrib of this.attributes) {
+                        url += 'webId=' + attrib.webId + '&';
                     }
                 }
 

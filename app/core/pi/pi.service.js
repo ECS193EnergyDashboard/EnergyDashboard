@@ -221,7 +221,7 @@ angular.
 
             pi.getInterpolatedOfAttribute = function(webId, interval, startTime, endTime) {
                 var result = [];
-                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/streams/' + webId + '/interpolated?selectedFields=UnitsAbbreviation;Items.Timestamp;Items.Value;Items.Good';
+                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/streams/' + webId + '/interpolated?selectedFields=Items.UnitsAbbreviation;Items.Timestamp;Items.Value;Items.Good';
                 if (startTime) {
                     url += "&startTime=" + startTime;   
                 }
@@ -233,6 +233,7 @@ angular.
                 }
                 return $http.get(url).then(function(response) {
                     var items = response.data.Items;
+                    console.log(response.data);
                     for (var item of items) {
                         var v = { 
                             timestamp: new Date(item.Timestamp),

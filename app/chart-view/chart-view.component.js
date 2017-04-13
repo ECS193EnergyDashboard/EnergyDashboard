@@ -48,10 +48,12 @@ angular.module('chartViewModule').component('chartView', {
                         },
                         axisLabelDistance: 10
                     },
-                    tooltip: {
-                        contentGenerator: function(e) {
-                            return "(" + e.point.x + " " + e.point.y + ")";
-                        }
+                    interactiveLayer: {
+                        tooltip: {
+                            valueFormatter: function(d) {
+                                return d === null ? 'Bad' : self.d3options.chart.yAxis.tickFormat(d);
+                            }
+                        },
                     }
                 },
                 title: {
@@ -61,10 +63,17 @@ angular.module('chartViewModule').component('chartView', {
             };
 
             this.datePicker = {};
-            this.datePicker.date = {
-                startDate: moment(this.config.startTime) || moment().subtract(1, 'days'),
-                endDate: moment(this.config.endTime) || moment()
-            };
+            if (this.config.startTime && this.config.endTime) {
+                this.datePicker.date = {
+                    startDate: moment(this.config.startTime),
+                    endDate: moment(this.config.endTime)
+                };
+            } else {
+                this.datePicker.date = {
+                    startDate: moment().subtract(1, 'days'),
+                    endDate: moment()
+                };
+            }
             this.DRPOptions = {
                 "showDropdowns": true,
                 "timePicker": true,
@@ -138,6 +147,15 @@ angular.module('chartViewModule').component('chartView', {
                 return (this.numRequestsDone / this.numRequests) * 100;
             }
 
+            var replaceBadValues = function(values) {
+                return values.map(function(v) {
+                    if (!v.good) {
+                        v.value = null;
+                    }
+                    return v;
+                });
+            }
+
             this.generateChart = function() {
                 this.isLoading = true;
                 this.numRequests = this.config.webIds.length;
@@ -154,7 +172,6 @@ angular.module('chartViewModule').component('chartView', {
                 $location.search('interval', interval);
                 $location.search('start', startTime);
                 $location.search('end', endTime);
-
 
                 for (var i = 0; i < this.config.webIds.length; i++) {
                     this.data[i] = {
@@ -176,7 +193,7 @@ angular.module('chartViewModule').component('chartView', {
                     for (var i = 0; i < self.data.length; i++) {
                         var idx = i * 2;
                         var attrib = responses[idx];
-                        self.data[i].values = responses[idx + 1];
+                        self.data[i].values = replaceBadValues(responses[idx + 1]);
                         self.data[i].key = attrib.element.building + ": " + attrib.element.name + " | " + attrib.name; 
                     }
                     self.isLoading = false;

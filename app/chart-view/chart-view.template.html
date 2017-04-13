@@ -16,7 +16,7 @@
 
 <div ng-show="$ctrl.isLoading" class="progress center-block" style="width: 75%">
     <div class="progress-bar progress-bar-striped active" role="progressbar" ng-style="{ width: ($ctrl.getProgress() + '%') }">
-        <span>{{ $ctrl.getProgress() + '%' }}</span>
+        <span>{{ ($ctrl.getProgress() | number:0) + '%' }}</span>
     </div>
 </div>
 

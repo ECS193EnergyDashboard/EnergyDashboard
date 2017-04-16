@@ -1,10 +1,11 @@
 angular.module('dataTableModule').component('datatable', {
     templateUrl: 'data-table/data-table.template.html',
     bindings: {
-        tableSrc: '<',
-        searchEnabled: '<',
+        tableSrc:       '<',
+        searchEnabled:  '<',
         reorderEnabled: '<',
-        isLoading: '<',
+        isLoading:      '<',
+        elemName:       '<'   // passed to columnTemplate component to determine template type
     },
     controller: ['$filter', '$scope', function TableController($filter, $scope) {
         var self = this;

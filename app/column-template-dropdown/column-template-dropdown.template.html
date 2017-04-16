@@ -78,7 +78,7 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-        <button class="btn btn-default" type="button" csv-header="$ctrl.GetHeaderData()" 
+        <button class="btn btn-default" type="button" csv-header="$ctrl.GetHeaderData()"
         ng-csv="$ctrl.GetArrayData()" filename="{{ $ctrl.fileName }}" data-dismiss="modal">
             Download CSV
             <span class="glyphicon glyphicon-save-file"></span>
@@ -140,7 +140,7 @@
 </div>
 
 
-<!-- Template name Modal for data tab -->
+<!-- Template name Modal for analysis tab -->
 <div ng-if="$ctrl.isAnalysis=='true'" class="modal fade" id="templateNameModalAnalysis" role="dialog">
     <div class="modal-dialog">
 <!-- Modal content-->
@@ -164,6 +164,3 @@
 
     </div>
 </div>
-
-
-

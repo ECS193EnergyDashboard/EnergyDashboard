@@ -15,6 +15,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             this.templates = [];
             this.showTemplates = false;
             this.includeDR = false;
+            var numInnerColumns =0;
 
 
             this.$onChanges = function() {
@@ -75,10 +76,9 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
 
 
 
-
-            var numInnerColumns =0;
-            // Get data for CSV for analysis tab
+            // Get data and headers for CSV for analysis tab
             this.GetArrayAnalysis = function() {
+                numInnerColumns = 0;
                 var CSVData = [];
 
                 // Insert date range if selected to

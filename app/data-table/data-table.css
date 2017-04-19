@@ -68,10 +68,10 @@ td {
     white-space: nowrap;
 }
 
-.dataTile{
+.dataTitle{
     text-align: center;
     position: relative;
-    font-size: 100px;
+    font-size: 25px;
 }
 
 .tableMenus{

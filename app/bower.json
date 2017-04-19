@@ -19,5 +19,8 @@
     "bootstrap-daterangepicker": "^2.1.25",
     "bootstrap": "^3.3.7",
     "angular-daterangepicker": "^0.2.2"
+  },
+  "resolutions": {
+    "angular": "~1.2.25"
   }
 }

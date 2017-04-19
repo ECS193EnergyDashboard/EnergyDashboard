@@ -36,6 +36,7 @@ angular.module('analysisModule').component('analysis', {
             this.data = [];
 
 
+
             this.outerColumnNames = [];
             this.innerColumnNames = [
                 {
@@ -142,6 +143,11 @@ angular.module('analysisModule').component('analysis', {
                 } else {
                     return 'badValue';
                 }
+            }
+
+            // Callback for column-template-dropdown component
+            this.updateCol = function(cols){
+                this.outerColumnNames = cols;
             }
 
         }

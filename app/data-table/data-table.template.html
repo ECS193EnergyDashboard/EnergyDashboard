@@ -1,46 +1,6 @@
 <!--NOTE: for this we use the  columnNamesObjs however in the actual table we use columnNames -->
-<!-- This is not good -->
-<div class="dropdown" ng-if="$ctrl.columnNamesObjs.length != 0">
-    <input id="templateInput" type="text" ng-init="$ctrl.currTemplateName='my template name'" ng-model="$ctrl.currTemplateName">
-    <button ng-click="$ctrl.SaveColumnList($ctrl.columnNamesObjs)" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false">Save Current Template</button
 
-    <!--Bootstrap dropdown for templates-->
-    <div class="btn-group">
-        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            My Templates <span class="caret"></span>
-        </button>
-    <ul class="dropdown-menu">
-        <li ng-repeat="template in $ctrl.templates">
-            <a ng-click="$ctrl.ApplyTemplate(template)">{{template.templateName}}</a>
-        </li>
-
-    </ul>
-</div>
-</div>
-
-
-<!-- Drop down for checking and unchecking columns-->
-<!-- <div id="myDropdown" class="dropdown-content">
-    <div class="dropdownelm" ng-repeat="column in $ctrl.columnNamesObjs | orderBy:'name'">  
-    <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">
-    {{column.name}}
-    </div>
-</div>
-</div> -->
-
-<div class="dropdown" ng-if="$ctrl.columnNamesObjs.length != 0">
-      <button type="button" class="btn btn-default dropdown-toggle dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Columns <span class="caret"></span>
-      </button>
-      <div class="dropdown-menu dropdown-content">
-        <div class="dropdownelm" ng-repeat="column in $ctrl.columnNamesObjs | orderBy:'name'">  
-            <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">
-            {{column.name}}
-        </div>
-      </div>
-</div>
-
-
+<column-template-dropdown columns="$ctrl.columnNamesObjs" update-col-obj= "$ctrl.updateCol(cols)" row-data="$ctrl.data" is-analysis="'false'" ></column-template-dropdown>
 
 
 <table st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped">
@@ -49,9 +9,13 @@
     <tr>
         <th st-sort="name">Name</th>
         <th>Building</th>
-        <th ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" st-sort="$ctrl.getters.value.bind(null, column.name)" lr-drag-src="header" lr-drop-target="header"> 
-            {{column.units === "" ? column.name : column.name + " (" + column.units + ")"}} 
+        <th ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" st-sort="$ctrl.getters.value.bind(null, column.name)" lr-drag-src="header" lr-drop-target="header">
+            {{column.units === "" ? column.name : column.name + " (" + column.units + ")"}}
+        <!-- From merge with SideBarSelectorRefactor, found in Master
+        <th ng-if="!$ctrl.reorderEnabled" ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" st-sort="$ctrl.getters.value.bind(null, column)">
+            {{column.units === "" ? column.name : column.name + " (" + column.units + ")"}}
         </th>
+        -->
     </tr>
 
     <tr>

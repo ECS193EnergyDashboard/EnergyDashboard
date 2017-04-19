@@ -10,20 +10,21 @@
 
         <!-- Optional theme -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-        <link rel="stylesheet" href="bower_components/lrDragNDrop/lrDragNDrop.css" />
 
         <!-- Bootstrap Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
 
         <!-- Angular JS -->
-        <script src="bower_components/angular/angular.js"></script>
+        <script src="node_modules/angular/angular.js"></script>
 
         <!-- Angular Smart Table -->
         <script type="text/javascript" src="bower_components/angular-smart-table/dist/smart-table.min.js"></script>
-        <!-- lrDragNDrop -->
-        <script type="text/javascript" src="bower_components/lrDragNDrop/lrDragNDrop.js"></script>
-        <!-- customDragNDrop -->
+
+        <!--lrDragNDrop CustomFiles-->
+        <script type="text/javascript" src="lrDragNDrop_CustomFiles/lrDragNDrop.js"></script>
+        <link rel="stylesheet" href="lrDragNDrop_CustomFiles/lrDragNDrop.css" />
+       <!-- customDragNDrop -->
         <script type="text/javascript" src="core/customDragNDrop/customDragNDrop.js"></script>
 
         <!-- Date Range Picker Depeendencies -->
@@ -41,6 +42,12 @@
 
         <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
         <link rel="stylesheet" href="bower_components/bootstrap-daterangepicker/daterangepicker.css"/>
+
+        <!-- ng-CSV -->
+        <script src="node_modules\angular-sanitize\angular-sanitize.min.js"></script>
+        <script src="node_modules\ng-csv\build\ng-csv.min.js"></script>
+
+
         <!--==== Dev Scripts ====-->
 
 
@@ -62,6 +69,14 @@
         <script src="menu_bar/menu.component.js"></script>
         <!-- Menu Bar CSS -->
         <link href="menu_bar/menu.component.css" rel="stylesheet">
+
+
+
+        <!--dropdown js -->
+        <script src="column-template-dropdown/column-template-dropdown.module.js"></script>
+        <script src="column-template-dropdown/column-template-dropdown.component.js"></script>
+
+
 
         <!-- Table JS -->
         <script src="data-table/data-table.module.js"></script>
@@ -87,6 +102,9 @@
         <!-- Analysis JS-->
         <script src="analysis/analysis.module.js"></script>
         <script src="analysis/analysis.component.js"></script>
+
+        <!--Analysis CSS-->
+        <link href="analysis/analysis.component.css" rel="stylesheet">
 
         <!-- Table CSS -->
         <link href="data-table/data-table.css" rel="stylesheet">

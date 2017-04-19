@@ -1,8 +1,9 @@
 <!--Date Range Picker-->
-<div class = "drp-contain">
-    <div> <!--This div for border-->
+<div class="drp-contain">
+    <div>
+        <!--This div for border-->
         <span class="glyphicon glyphicon-calendar"></span>
-        <input date-range-picker class="form-control date-picker" type="text" ng-model="$ctrl.datePicker.date" options = "$ctrl.DRPOptions" />
+        <input date-range-picker class="form-control date-picker" type="text" ng-model="$ctrl.datePicker.date" options="$ctrl.DRPOptions" />
     </div>
 
 </div>
@@ -10,14 +11,14 @@
 
 
 
-<column-template-dropdown columns="$ctrl.outerColumnNames" update-col-obj= "$ctrl.updateCol(cols)" row-data="$ctrl.data" is-analysis="'true'" inner-columns="$ctrl.innerColumnNames">
-</column-template-dropdown> 
+<column-template-dropdown columns="$ctrl.outerColumnNames" update-col-obj="$ctrl.updateCol(cols)" row-data="$ctrl.data" is-analysis="'true'" inner-columns="$ctrl.innerColumnNames" date-range="$ctrl.datePicker.date">
+</column-template-dropdown>
 
 
 
 
 <div>
-    <button  class="btn btn-primary" ng-click="$ctrl.startAnalysis()">Start Analysis</button>
+    <button class="btn btn-primary" ng-click="$ctrl.startAnalysis()">Start Analysis</button>
     <div>
         <h3>
             <span ng-repeat="column in $ctrl.innerColumnNames">

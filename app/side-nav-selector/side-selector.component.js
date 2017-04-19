@@ -2,7 +2,8 @@ angular.module('sideNavSelectorModule').component('sideBarSelector', {
     templateUrl: 'side-nav-selector/side-selector.template.html',
     bindings: {
         loading: '<',
-        onClick: '&'
+        onClick: '&',
+        selection: '<'
     },
     controller: [ 'pi', function TableController(pi) {
         var self = this;

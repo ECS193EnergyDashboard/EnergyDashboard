@@ -10,26 +10,22 @@
                 <button ng-click="" type="button" class="disabled btn btn-default glyphicon glyphicon-book"></button>
             </div>
         </div>
-        <div id="textHere" class="list-group" > Drop Items Here</div>
-        </div>
+
+
+            <div class="list-group list-group-root well">
+                <div ng-repeat="attrib in $ctrl.selection" >
+                <span class="sidebar-item list-group-item selectorItem">
+                    <div id="itemText">
+
+                        <h6 id="buildingName">{{attrib.buildingName}}</h6>
+                        {{  attrib.parentName + " | " + attrib.name }}
+                </span>
+                </div>
         <!--
         <div class="form-group">
             <input type="text" class="form-control" id="usr"  ng-model="search.name">
         </div>
-        <div class="list-group list-group-root well">
-            <div ng-repeat="element in $ctrl.buildings | filter:search.name " >
-                <div ng-click="$ctrl.onSelectElem(element)"  class="sidebar-item list-group-item" ng-class="{selected: $ctrl.isSelectedElem(element), loading: $ctrl.isLoading(element)}" >
-                    <span ng-show="$ctrl.showClosedIcon(element)" class="glyphicon glyphicon-chevron-right pointer" ng-click="$ctrl.clickElem(element);$event.stopPropagation()"></span>
-                    <span ng-show="$ctrl.showOpenIcon(element)" class="glyphicon glyphicon-chevron-down pointer" ng-click="$ctrl.clickElem(element);$event.stopPropagation()"></span>
-                    <span ng-show="$ctrl.showLeafNodeIcon(element)" class="glyphicon glyphicon-modal-window" ></span>
-                    <span class="">{{element.name}}</span>
-                    <span id="loadingIcon" class="glyphicon glyphicon-warning-sign"  ng-click="$event.stopPropagation()"></span>
-                </div>
-                <div class="list-group" ng-include="'side-nav-selector/side-selector-heirarchy-template.html'" ng-if="element.show">
-                </div>
-            </div>
 
-        </div>
          -->
     </div>
 </div>

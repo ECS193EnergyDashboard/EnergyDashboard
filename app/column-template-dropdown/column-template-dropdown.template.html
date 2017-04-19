@@ -1,9 +1,37 @@
 <div class="dropdown" ng-if="$ctrl.columns.length != 0">
     <!--save a template-->
     <div class="dropdown" ng-if="$ctrl.columns.length != 0">
-        <input id="templateInput" type="text" ng-init="$ctrl.currTemplateName='my template name'" ng-model="$ctrl.currTemplateName">
-        <button ng-click="$ctrl.SaveColumnList($ctrl.columns)" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false">Save Current Template</button
+        <!--Save template button -->
+
+        <!--NOTE: Each tab needs own set of buttons in order for correct modal to show-->
+
+        <button ng-if="$ctrl.isAnalysis=='true'" data-toggle="modal" data-target="#templateNameModalAnalysis" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false">
+            Save Current Template
+        </button>
+
+
+        <!--Download CSV button -->
+        <button ng-if="$ctrl.isAnalysis=='true'" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#fileNameModalAnalysis">
+            Download As CSV
+            <span class="glyphicon glyphicon-save-file"></span>
+        </button>
+
+
+        <button ng-if="$ctrl.isAnalysis=='false'" data-toggle="modal" data-target="#templateNameModalData" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false">
+            Save Current Template
+        </button>
+
+
+        <!--Download CSV button -->
+        <button ng-if="$ctrl.isAnalysis=='false'" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#fileNameModalData">
+            Download As CSV
+            <span class="glyphicon glyphicon-save-file"></span>
+        </button>
+
+
+
     </div>
+
     <!--Bootstrap dropdown for templates-->
     <div class="btn-group">
             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -11,7 +39,7 @@
             </button>
         <ul class="dropdown-menu">
             <li ng-repeat="template in $ctrl.templates">
-                <a ng-click="$ctrl.ApplyTemplate(template)">{{template.templateName}}</a>
+                <a href="" ng-click="$ctrl.ApplyTemplate(template)">{{template.templateName}}</a>
             </li>
 
         </ul>
@@ -19,16 +47,124 @@
 </div>
 
 
-
-
-
+<!--Column Dropdown Checkbox List-->
 <div class="dropdown" ng-if="$ctrl.columns.length != 0">
-    <button type="button" class="btn btn-default dropdown-toggle dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button type="button" class="btn btn-primary dropdown-toggle dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Columns <span class="caret"></span>
       </button>
     <div class="dropdown-menu dropdown-content">
         <div class="dropdownelm" ng-repeat="column in $ctrl.columns | orderBy:'name'">
             <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}"> {{column.name}}
         </div>
+    </div>
+</div>
+
+
+<!-- There needs to be a modal for each tab because they will both come down
+    and it will get stuck if there is only one modal for them to share -->
+
+<!-- CSV File Name Modal for Data Tab -->
+<div ng-if="$ctrl.isAnalysis=='false'" class="modal fade" id="fileNameModalData" role="dialog">
+    <div class="modal-dialog">
+<!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Data: Please Enter File Name</h4>
+        </div>
+    <div class="modal-body">
+        <input autofocus="autofocus" type="text" class="form-control" ng-model="$ctrl.fileName" />
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+        <button class="btn btn-default" type="button" csv-header="$ctrl.GetHeaderData()"
+        ng-csv="$ctrl.GetArrayData()" filename="{{ $ctrl.fileName }}" data-dismiss="modal">
+            Download CSV
+            <span class="glyphicon glyphicon-save-file"></span>
+        </button>
+    </div>`
+    </div>
+
+    </div>
+</div>
+
+
+<!-- CSV File Name Modal for Analysis Tab -->
+<div ng-if="$ctrl.isAnalysis=='true'" class="modal fade" id="fileNameModalAnalysis" role="dialog">
+    <div class="modal-dialog">
+<!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Analysis: Please Enter File Name</h4>
+        </div>
+    <div class="modal-body">
+        <input autofocus="autofocus" type="text" class="form-control" ng-model="$ctrl.fileName" />
+    </div>
+    <div class="modal-footer">
+        <input ng-checked="$ctrl.includeDR" ng-model="$ctrl.includeDR" type="checkbox" value="">
+        <span>Include Date Range on CSV</span>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+        <button type="button" class="btn btn-default" filename="{{ $ctrl.fileName }}" ng-csv="$ctrl.GetArrayAnalysis()" data-dismiss="modal">
+            Download CSV
+            <span class="glyphicon glyphicon-save-file"></span>
+        </button>
+    </div>`
+    </div>
+
+    </div>
+</div>
+
+
+<!-- Template name Modal for data tab -->
+<div ng-if="$ctrl.isAnalysis=='false'" class="modal fade" id="templateNameModalData" role="dialog">
+    <div class="modal-dialog">
+<!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Please Enter Template Data Name</h4>
+        </div>
+    <div class="modal-body">
+
+        <input autofocus="autofocus" id="templateInput" class="form-control" type="text" ng-init="$ctrl.currTemplateName" ng-model="$ctrl.currTemplateName" placeholder="My Template Name...">
+
+    </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+            <button ng-click="$ctrl.SaveColumnList($ctrl.columns)" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false" data-dismiss="modal">Save Current Template
+            </button>
+        </div>
+    </div>
+
+    </div>
+</div>
+
+
+<!-- Template name Modal for data tab -->
+<div ng-if="$ctrl.isAnalysis=='true'" class="modal fade" id="templateNameModalAnalysis" role="dialog">
+    <div class="modal-dialog">
+<!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Please Enter Template Analaysis Name</h4>
+        </div>
+    <div class="modal-body">
+
+        <input autofocus="autofocus" id="templateInput" class="form-control" type="text" ng-init="$ctrl.currTemplateName" ng-model="$ctrl.currTemplateName" placeholder="My Template Name...">
+
+    </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+            <button ng-click="$ctrl.SaveColumnList($ctrl.columns)" type="button" class="btn btn-primary" aria-haspopup="true" aria-expanded="false" data-dismiss="modal">Save Current Template
+            </button>
+        </div>
+    </div>
+
     </div>
 </div>

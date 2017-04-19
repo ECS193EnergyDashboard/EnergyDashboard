@@ -16,6 +16,7 @@ angular.module('dataTableModule').component('datatable', {
 
 
 
+
         var defaultValues = [
             // Start of AHU default values
             "ACH",

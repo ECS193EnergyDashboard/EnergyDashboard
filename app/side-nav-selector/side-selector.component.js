@@ -15,13 +15,13 @@ angular.module('sideNavSelectorModule').component('sideBarSelector', {
             numId: -1,
             template: '',
             webId: ''
-        }
+        };
         this.selected = [ dummyItem ];
 
         // Copies everything but the dummy. Used to shallow copy the list for callbacks.
         this.copySelected = function() {
             return this.selected.slice(0, this.selected.length - 1);
-        }
+        };
 
         this.removeElement = function (element)   {
             this.selected.splice(this.selected.indexOf(element), 1);
@@ -42,7 +42,7 @@ angular.module('sideNavSelectorModule').component('sideBarSelector', {
 
         this.onDropSuccess = function(element) {
             this.onSelect({ item: element });
-        }
+        };
 
         this.$onChanges = function(changes) {
             if (changes.itemsToAdd) {

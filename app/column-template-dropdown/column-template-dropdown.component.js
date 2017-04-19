@@ -1,18 +1,21 @@
 angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown', {
     templateUrl: 'column-template-dropdown/column-template-dropdown.template.html',
     bindings: {
-        columns: '<',
-        rowData: '<',
-        isAnalysis: '<',
-        templateSets: '<',
-        innerColumns: '<', // Min, max, avg, st - this is needed for CSV
-        updateColObj: '&'
+        columns:        '<', //columnNamesObjs passed in (col order maintained)
+        rowData:        '<', //row order not maintained, has units
+        isAnalysis:     '<',
+        templateSets:   '<',
+        innerColumns:   '<', // Min, max, avg, st - this is needed for CSV
+        updateColObj:   '&',
+        dateRange:      '<'  // The date range to print on the csv
     },
     controller: [ '$http', function colTemplateController($http) {
             var self = this;
             //self.columnNamesObjs = []
             this.templates = [];
             this.showTemplates = false;
+            this.includeDR = false;
+            var numInnerColumns =0;
 
             this.currentTemplate = {};
             this.currentTemplateName = "Default";
@@ -40,7 +43,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
 
             }
 
-
+            // Get header for CSV
             this.GetHeaderData = function() {
                 columnNames = [];
                 columnNames.push("Name");
@@ -53,9 +56,22 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             };
 
 
-            // ASK JUSTIN: Should this display units? on column name or in rows?
+            // Get data for CSV for data tab
             this.GetArrayData = function() {
                 var CSVData = [];
+
+                // secondRow for the units
+                var secondRow = [];
+                secondRow.push(""); // Placeholder for name
+                secondRow.push(""); // Placeholder for building
+                for(var col of this.columns){
+                    if(col.isChecked){
+                        secondRow.push(col.units);
+                    }
+                }
+                CSVData.push(secondRow);
+
+                // Actual data
                 for(var element of this.rowData){
                     var obj = {};
                     obj.name = element.name;
@@ -70,9 +86,25 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                 return CSVData;
             }
 
-            var inner =0;
-            this.GetHeaderAnalysis = function() {
-                var numInnerColumns = 0;
+
+
+            // Get data and headers for CSV for analysis tab
+            this.GetArrayAnalysis = function() {
+                numInnerColumns = 0;
+                var CSVData = [];
+
+                // Insert date range if selected to
+                if(this.includeDR == true){
+                    var dateRow = [];
+                    dateRow.push("Date Range:");
+                    dateRow.push(this.dateRange.startDate.format());
+                    dateRow.push("to");
+                    dateRow.push(this.dateRange.endDate.format());
+
+                    CSVData.push(dateRow);
+                }
+
+                // Insert header for CSV for analysis tab
                 if(this.innerColumns[0].isChecked == true)
                     numInnerColumns++; // Blank space for Avg
                 if(this.innerColumns[1].isChecked == true)
@@ -82,10 +114,9 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                 if(this.innerColumns[3].isChecked == true)
                     numInnerColumns++; // Blank space for S.D.
 
-                inner = numInnerColumns;
                 var columnNames = [];
-                columnNames.push(" "); // Blank space for Name
-                columnNames.push(" "); // Blank space for Building
+                columnNames.push(""); // Blank space for Name
+                columnNames.push(""); // Blank space for Building
                 for (var element of this.columns){
                     if(element.isChecked){
                         columnNames.push(element.name);
@@ -93,31 +124,41 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                             columnNames.push(" ");
                     }
                 }
-                return columnNames;
-            };
+                CSVData.push(columnNames);
 
 
-            // ASK JUSTIN: Should this display units? on column name or in rows?
-            this.GetArrayAnalysis = function() {
-                var CSVData = [];
+                // Create row for the units
+                var unitsRow = [];
+                unitsRow.push(""); // Placeholder for name
+                unitsRow.push(""); // Placeholder for building
+                for(var col of this.columns){
+                    if(col.isChecked){
+                        unitsRow.push(this.rowData[0][col.name].Average.unitsAbbreviation);
+                        // Leave empty spaces for agfns
+                        for(var i=0; i<numInnerColumns-1; i++){
+                            unitsRow.push("");
+                        }
+                    }
+                }
+                CSVData.push(unitsRow);
 
                 // create a second row which will have labels for min, max, et...
-                var secondCol = [];
-                secondCol.push("Name");
-                secondCol.push("Building");
+                var agFnsRow = [];
+                agFnsRow.push("Name");
+                agFnsRow.push("Building");
                 for(var col of this.columns){
                     if(col.isChecked){
                         if(this.innerColumns[0].isChecked == true)
-                            secondCol.push("AVG"); // Blank space for Avg
+                            agFnsRow.push("AVG"); // Blank space for Avg
                         if(this.innerColumns[1].isChecked == true)
-                            secondCol.push("MAX"); // Blank space for Max
+                            agFnsRow.push("MAX"); // Blank space for Max
                         if(this.innerColumns[2].isChecked == true)
-                            secondCol.push("MIN"); // Blank space for Min
+                            agFnsRow.push("MIN"); // Blank space for Min
                         if(this.innerColumns[3].isChecked == true)
-                            secondCol.push("S.D."); // Blank space for S.D.
+                            agFnsRow.push("S.D."); // Blank space for S.D.
                     }
                 }
-                CSVData.push(secondCol);
+                CSVData.push(agFnsRow);
 
                 // set the other rows of the CSV file
                 for(var element of this.rowData){
@@ -129,7 +170,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                         if(col.isChecked){
                             // Check if undefined
                             if(element[col.name] === undefined){
-                                for(i=0; i<inner; i++){
+                                for(i=0; i<numInnerColumns; i++){
                                     elmRow.push("NA");
                                 }
                             }

@@ -35,8 +35,8 @@
         </div>
 
         <!-- Table modules -->
-        <datatable ng-show="$ctrl.showData" table-src="$ctrl.data"></datatable>
-        <analysis ng-show="!$ctrl.showData" web-ids="$ctrl.webIds" on-start-load="$ctrl.loadingUp('analysis')" on-end-load="$ctrl.loadingDown('analysis')" selection="$ctrl.chartSelection"></analysis>
+        <datatable ng-show="$ctrl.isDataTabShown()" table-src="$ctrl.data"></datatable>
+        <analysis ng-show="$ctrl.isAnalyzeTabShown()" web-ids="$ctrl.webIds" on-start-load="$ctrl.loadingUp('analysis')" on-end-load="$ctrl.loadingDown('analysis')" selection="$ctrl.chartSelection"></analysis>
         <chart-options ng-show="$ctrl.isGraphTabShown()" attributes="$ctrl.chartSelection"></chart-options>
     </div>
     <!-- /#page-content-wrapper -->

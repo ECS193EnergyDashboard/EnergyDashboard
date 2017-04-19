@@ -29,12 +29,15 @@
             <button ng-click="$ctrl.showAnalyzeTab()" type="button" class="btn btn-default" ng-class="{buttonLoad: $ctrl.isLoading('analysis')}">Analysis
                 <span ng-show="$ctrl.isLoading('analysis')" class="buttonLoadIcon glyphicon glyphicon-hourglass" ></span>
             </button>
+            <button ng-click="$ctrl.showGraphTab()" type="button" class="btn btn-default">
+                Graph
+            </button>
         </div>
 
         <!-- Table modules -->
         <datatable ng-show="$ctrl.showData" table-src="$ctrl.data"></datatable>
-        <analysis ng-show="!$ctrl.showData" web-ids="$ctrl.webIds" on-start-load="$ctrl.loadingUp('analysis')" on-end-load="$ctrl.loadingDown('analysis')"></analysis>
-
+        <analysis ng-show="!$ctrl.showData" web-ids="$ctrl.webIds" on-start-load="$ctrl.loadingUp('analysis')" on-end-load="$ctrl.loadingDown('analysis')" selection="$ctrl.chartSelection"></analysis>
+        <chart-options ng-show="$ctrl.isGraphTabShown()" attributes="$ctrl.chartSelection"></chart-options>
     </div>
     <!-- /#page-content-wrapper -->
 </div>

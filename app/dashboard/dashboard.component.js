@@ -3,13 +3,14 @@ angular.module('dashboardModule').component('dashboard',{
 	templateUrl: 'dashboard/dashboard.template.html',
 	controller: ['pi', function TableController(pi){
 		var self = this;
-        this.showData = true; //show data tab
+        this.show = 0;
 		this.data = [];
         this.asyncData = [];
         this.cancelAysnc = false;
         this.webIds = [];
         this.itemsToAdd = [];
 		this.loading = { sidebar: 0, data: 0, analysis: 0 };
+        this.chartSelection = [];
 
         // Increments and decrements the loading binding, like a semaphore
         // Example: multiple async requests, each one UPs when sent, each one DOWNs when done, 0 signals loading is done
@@ -35,7 +36,7 @@ angular.module('dashboardModule').component('dashboard',{
             this.loadingUp('data');
 
             this.webIds.push(element.webId);
-            
+
             var loadedData = [];
             var index = this.asyncData.length;
             this.asyncData.push({ });
@@ -75,13 +76,29 @@ angular.module('dashboardModule').component('dashboard',{
             }
         }
 
-        this.showAnalyzeTab = function() {
-            this.showData = false;
-        };
+        this.showDataTab = function() {
+            this.show = 0;
+        }
 
-        this.showDataTab = function(){
-            this.showData = true;
-        };
+        this.showAnalyzeTab = function() {
+            this.show = 1;
+        }
+
+        this.showGraphTab = function() {
+            this.show = 2;
+        }
+
+        this.isDataTabShown = function() {
+            return this.show === 0;
+        }
+
+        this.isAnalyzeTabShown = function() {
+            return this.show === 1;
+        }
+
+        this.isGraphTabShown = function() {
+            return this.show === 2;
+        }
 
 
         this.toggleMenu = function(){

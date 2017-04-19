@@ -25,15 +25,29 @@ body {
     /*border: 5px solid green;*/
 }
 
-.goodValue {
+.table tbody tr > td.dataCell {
     text-align: center;
 }
 
-.badValue {
-    text-align: center;
+.table tbody tr > td.dataCell.bad {
     background-color: red;
 }
 
-.missingValue {
+.table tbody tr > td.dataCell.missing {
     background-color: #555555;
 }
+
+.table tbody tr > td.dataCell.selected {
+    background-color: green;
+}
+
+.progress {
+    position: relative;
+}
+
+.progress span {
+    position: absolute;
+    display: block;
+    width: 100%;
+    color: black;
+ }

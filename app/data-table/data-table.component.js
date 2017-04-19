@@ -2,6 +2,7 @@ angular.module('dataTableModule').component('datatable', {
     templateUrl: 'data-table/data-table.template.html',
     bindings: {
         tableSrc: '<',
+        selection: '=',
     },
     controller: ['$filter', '$scope', function TableController($filter, $scope) {
         var self = this;
@@ -11,7 +12,31 @@ angular.module('dataTableModule').component('datatable', {
         this.columnNames = [];
         this.columnNamesObjs = [];
 
+        var selectionIndexOf = function(obj) {
+            for (var i = 0; i < self.selection.length; i++) {
+                if (self.selection[i].webId === obj.webId) {
+                    return i;
+                }
+            }
+            return -1;
+        }
 
+        var isSelected = function(obj) {
+            return selectionIndexOf(obj) !== -1;
+        }
+
+        var deselect = function(obj) {
+            var idx = selectionIndexOf(obj);
+            if (idx !== -1) {
+                self.selection.splice(idx, 1);
+            }
+        }
+
+        var select = function(obj) {
+            if (!isSelected(obj)) {
+                self.selection.push(obj);
+            }
+        }
 
 
         var defaultValues = [
@@ -44,13 +69,16 @@ angular.module('dataTableModule').component('datatable', {
         };
 
         this.valueStyle = function(value) {
+            var style = 'dataCell ';
             if (value === undefined) {
-                return 'missingValue';
-            } else if (value.good) {
-                return 'goodValue';
-            } else {
-                return 'badValue';
+                style += 'missing';
+            } else if (!value.good) {
+                style += 'bad ';
             }
+            if (value && isSelected(value)) {
+                style += 'selected ';
+            }
+            return style;
         }
 
         this.getters = {
@@ -60,9 +88,20 @@ angular.module('dataTableModule').component('datatable', {
         };
 
         this.$onChanges = function() {
+            if (this.searchEnabled === undefined) {
+                this.searchEnabled = true;
+            }
+            if (this.reorderEnabled === undefined) {
+                this.reorderEnabled = true;
+            }
+            if (this.selection === undefined) {
+                this.selection = [];
+            }
             if (this.tableSrc.length == 0) {
                 return;
             }
+
+            console.log(this.tableSrc);
 
             var columnSet = {};
 
@@ -100,11 +139,13 @@ angular.module('dataTableModule').component('datatable', {
                 firstValues++;
             }
 
-            self.data = self.tableSrc;
-            this.displayed = this.data;
+            for (var element of this.tableSrc) {
+                for (var name in element) {
+                    Object.assign(element[name], { parentName: element.name, buildingName: element.building });
+                }
+            }
 
-
-
+            this.displayed = this.data = this.tableSrc;
         }; //end $onChanges
 
         this.ShowColumnList = function(columnsNames) {
@@ -155,6 +196,14 @@ angular.module('dataTableModule').component('datatable', {
 
         this.updateCol = function(cols){
             this.columnNamesObjs = cols;
+        }
+
+        this.toggleCellSelected = function(value) {
+            if (isSelected(value)) {
+                deselect(value);
+            } else {
+                select(value);
+            }
         }
 
         // Whenever the displayed data is changed, recalculate sum and average of the shown rows only

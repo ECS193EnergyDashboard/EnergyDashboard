@@ -9,7 +9,6 @@
     <tr>
         <th st-sort="building">Building</th>
         <th st-sort="name">Name</th>
-        <th>Building</th>
         <th ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" st-sort="$ctrl.getters.value.bind(null, column.name)" lr-drag-src="header" lr-drop-target="header">
             {{column.units === "" ? column.name : column.name + " (" + column.units + ")"}}
         <!-- From merge with SideBarSelectorRefactor, found in Master

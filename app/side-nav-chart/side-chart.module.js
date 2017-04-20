@@ -1,4 +1,4 @@
 'use strict';
 
 // Define the 'sideNavModule' module
-angular.module('sideNavChartModule', ['customDragNDrop']);
+angular.module('sideNavChartModule', []);

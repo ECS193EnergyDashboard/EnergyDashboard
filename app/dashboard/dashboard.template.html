@@ -1,10 +1,10 @@
 <!-- /#wrapper -->
-<div id="wrapper" class="toggledSelector">
+<div id="wrapper" class="toggledSelector toggledChart">
     <!-- SideBar module -->
 
     <side-bar id="side-bar" is-loading="$ctrl.isLoading" on-click="$ctrl.addChildElements(element)"></side-bar>
     <side-bar-selector id="side-bar-selector" on-select="$ctrl.addElement(item)"  on-deselect="$ctrl.removeElement(item)" on-clear="$ctrl.clearElements()" items-to-add="$ctrl.itemsToAdd"></side-bar-selector>
-    <side-bar-chart id="side-bar-chart" selection="$ctrl.chartSelection" on-select="$ctrl.addElement(item)"  on-deselect="$ctrl.removeElement(item)" on-clear="$ctrl.clearElements()" items-to-add="$ctrl.itemsToAdd"></side-bar-chart>
+    <side-bar-chart id="side-bar-chart" selection="$ctrl.chartSelection" ></side-bar-chart>
 
     <!-- Page Content -->
     <div id="page-content-wrapper">

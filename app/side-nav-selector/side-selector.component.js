@@ -4,9 +4,12 @@ angular.module('sideNavSelectorModule').component('sideBarSelector', {
         itemsToAdd: '<',
         onSelect: '&',
         onDeselect: '&',
-        onClear: '&'
+        onClear: '&',
+        loading: '<',
+        onClick: '&',
+        selection: '<'
     },
-    controller: [ function TableController() {
+    controller: [ 'pi', function TableController(pi) {
         var self = this;
         var dummyItem = {
             building: '',

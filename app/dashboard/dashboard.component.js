@@ -5,8 +5,9 @@ angular.module('dashboardModule').component('dashboard',{
 		var self = this;
         this.show = 0;
 		this.data = [];
-        this.asyncData = [];
-        this.cancelAysnc = false;
+		this.showData = true;
+		this.asyncData = [];
+		this.isLoading = {sidebar: 0, data: 0, analysis: 0};
         this.webIds = [];
         this.itemsToAdd = [];
 		this.loading = { sidebar: 0, data: 0, analysis: 0 };

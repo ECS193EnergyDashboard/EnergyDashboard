@@ -1,5 +1,5 @@
-angular.module('sideNavSelectorModule').component('sideBarSelector', {
-    templateUrl: 'side-nav-selector/side-selector.template.html',
+angular.module('sideNavChartModule').component('sideBarChart', {
+    templateUrl: 'side-nav-chart/side-chart.template.html',
     bindings: {
         itemsToAdd: '<',
         onSelect: '&',
@@ -56,10 +56,9 @@ angular.module('sideNavSelectorModule').component('sideBarSelector', {
                 }
                 
                 for (var item of this.itemsToAdd) {
-                    if (!set[item.numId]){
-                        this.selected.splice(this.selected.length - 1, 0, item);
-                        this.onDropSuccess(item);
-                    }
+                    if (!set[item.numId])
+                    this.selected.splice(this.selected.length - 1, 0, item);
+                    this.onDropSuccess(item);
                 }
             }
         }

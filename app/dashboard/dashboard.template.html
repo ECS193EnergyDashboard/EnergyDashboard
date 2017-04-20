@@ -4,6 +4,8 @@
 
     <side-bar id="side-bar" is-loading="$ctrl.isLoading" on-click="$ctrl.addChildElements(element)"></side-bar>
     <side-bar-selector id="side-bar-selector" on-select="$ctrl.addElement(item)"  on-deselect="$ctrl.removeElement(item)" on-clear="$ctrl.clearElements()" items-to-add="$ctrl.itemsToAdd"></side-bar-selector>
+    <side-bar-chart id="side-bar-chart" selection="$ctrl.chartSelection" on-select="$ctrl.addElement(item)"  on-deselect="$ctrl.removeElement(item)" on-clear="$ctrl.clearElements()" items-to-add="$ctrl.itemsToAdd"></side-bar-chart>
+
     <!-- Page Content -->
     <div id="page-content-wrapper">
 
@@ -22,6 +24,9 @@
             </a>
             <a ng-click="$ctrl.toggleSelectorMenu()" class="btn btn-default" id="menu-selector-toggle">
                 <span class="glyphicon glyphicon-inbox"></span>
+            </a>
+            <a ng-click="$ctrl.toggleChartMenu()" class="btn btn-default" id="menu-chart-toggle">
+                <span class="glyphicon glyphicon-stats"></span>
             </a>
             <button ng-click="$ctrl.showDataTab()" type="button" class="btn btn-default" ng-class="{buttonLoad: $ctrl.isLoading('data')}">Data
                 <span  ng-show="$ctrl.isLoading('data')" class="buttonLoadIcon glyphicon glyphicon-hourglass" ></span>

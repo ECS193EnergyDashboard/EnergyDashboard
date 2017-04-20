@@ -7,7 +7,7 @@ angular.module('dashboardModule').component('dashboard',{
 		this.data = [];
 		this.showData = true;
 		this.asyncData = [];
-		this.isLoading = {sidebar: 0, data: 0, analysis: 0};
+        this.cancelAysnc = false;
         this.webIds = [];
         this.itemsToAdd = [];
 		this.loading = { sidebar: 0, data: 0, analysis: 0 };
@@ -107,6 +107,9 @@ angular.module('dashboardModule').component('dashboard',{
         };
         this.toggleSelectorMenu = function(){
             $("#wrapper").toggleClass("toggledSelector");
+        };
+        this.toggleChartMenu = function(){
+            $("#wrapper").toggleClass("toggledChart");
         };
     }]
 });

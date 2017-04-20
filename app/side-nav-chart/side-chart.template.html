@@ -1,0 +1,31 @@
+<!-- Sidebar -->
+<div id="sidebar-chart-wrapper">
+    <div class="just-padding">
+
+        <div id="selectionHolder">
+        <div id="headerHere" class="fixedButtons">
+            <div class="btn-group" role="group" aria-label="...">
+                <button ng-click="" type="button" class="disabled btn btn-default glyphicon glyphicon-home"></button>
+                <button ng-click="" type="button" class="disabled btn btn-default  glyphicon glyphicon-tag"></button>
+                <button ng-click="$ctrl.clearSelected()" type="button" class="disabled btn btn-default glyphicon glyphicon-trash pointer"></button>
+            </div>
+        </div>
+
+        <!-- <div id="textHere"> Drop Items Here</div>-->
+        <div class="list-group list-group-root well">
+            <div ng-repeat="attrib in $ctrl.selection" >
+                <span class="sidebar-item list-group-item selectorItem">
+                    <div id="itemText">
+                        <h6 id="buildingName">{{attrib.buildingName}}</h6>
+                        <br>
+                        {{  attrib.parentName + " | " + attrib.name }}
+                    </div>
+
+
+                </span>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<!-- /#sidebar-wrapper -->

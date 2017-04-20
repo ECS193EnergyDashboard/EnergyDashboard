@@ -88,3 +88,8 @@ angular.module('sideNavModule').component('sideBar', {
 
     }]
 });
+
+
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+});

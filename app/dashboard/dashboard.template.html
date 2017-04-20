@@ -17,16 +17,19 @@
         -->
         <!--Tab buttons-->
         <div class="btn-group" role="group" aria-label="...">
-            <a ng-click="$ctrl.toggleMenu()" class="btn btn-default " id="menu-toggle">
-                <span class="glyphicon glyphicon-menu-hamburger"></span>
+            <a ng-click="$ctrl.toggleMenu()" class="btn btn-default " id="menu-toggle" data-toggle="tooltip" title="Show/Hide Menu">
+                <span class="glyphicon glyphicon-menu-hamburger">
+                </span>
             </a>
+
             <a ng-click="$ctrl.toggleSelectorMenu()" class="btn btn-default" id="menu-selector-toggle">
-                <span class="glyphicon glyphicon-inbox"></span>
+                <span class="glyphicon glyphicon-inbox" data-toggle="tooltip" title="Show/Hide Christians' second menu thingy that doesn't work. That he says works, but Anthony hasn't connected it yet, but also Temoc hasn't made a copy of the lr-dragnDrop javascript so there's that."></span>
             </a>
-            <button ng-click="$ctrl.showDataTab()" type="button" class="btn btn-default" ng-class="{buttonLoad: $ctrl.isLoading['data']}">Data
+
+            <button ng-click="$ctrl.showDataTab()" type="button" class="btn btn-default" ng-class="{buttonLoad: $ctrl.isLoading['data']}" data-toggle="tooltip" title="Data Tab" >Data
                 <span  ng-show="$ctrl.isLoading['data']" class="buttonLoadIcon glyphicon glyphicon-hourglass" ></span>
             </button>
-            <button ng-click="$ctrl.showAnalyzeTab()" type="button" class="btn btn-default" ng-class="{buttonLoad: $ctrl.isLoading['analysis']}">Analysis
+            <button ng-click="$ctrl.showAnalyzeTab()" type="button" class="btn btn-default" ng-class="{buttonLoad: $ctrl.isLoading['analysis']}" data-toggle="tooltip" title="Analysis Tab">Analysis
                 <span ng-show="$ctrl.isLoading['analysis']" class="buttonLoadIcon glyphicon glyphicon-hourglass" ></span>
             </button>
         </div>

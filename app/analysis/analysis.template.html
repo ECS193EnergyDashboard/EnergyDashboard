@@ -1,6 +1,5 @@
-<column-template-dropdown columns="$ctrl.outerColumnNames" update-col-obj= "$ctrl.updateCol(cols)" row-data="$ctrl.data" is-analysis="'true'" inner-columns="$ctrl.innerColumnNames">
-</column-template-dropdown> 
-
+<column-template-dropdown columns="$ctrl.outerColumnNames" update-col-obj="$ctrl.updateCol(cols)" row-data="$ctrl.data" is-analysis="'true'" inner-columns="$ctrl.innerColumnNames" elem-name="$ctrl.elemName" date-range="$ctrl.datePicker.date">
+</column-template-dropdown>
 
 <h3>Data from {{$ctrl.datePicker.date.startDate}} until  {{$ctrl.datePicker.date.endDate}}</h3>
 
@@ -17,7 +16,7 @@
 
 
 <div>
-    <button  class="btn btn-primary" ng-click="$ctrl.startAnalysis()">Start Analysis</button>
+    <button class="btn btn-primary" ng-click="$ctrl.startAnalysis()">Start Analysis</button>
     <div>
         <h3>
             <span ng-repeat="column in $ctrl.innerColumnNames">

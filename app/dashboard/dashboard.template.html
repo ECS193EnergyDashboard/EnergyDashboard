@@ -32,8 +32,8 @@
         </div>
 
         <!-- Table modules -->
-        <datatable ng-show="$ctrl.showData" is-loading="$ctrl.isLoading" table-src="$ctrl.data" search-enabled="true" reorder-enabled="true" ></datatable>
-        <analysis ng-show="!$ctrl.showData" is-loading="$ctrl.isLoading" web-ids="$ctrl.webIds" ></analysis>
+        <datatable ng-show="$ctrl.showData" is-loading="$ctrl.isLoading" table-src="$ctrl.data" search-enabled="true" reorder-enabled="true" elem-name="$ctrl.name"></datatable>
+        <analysis ng-show="!$ctrl.showData" is-loading="$ctrl.isLoading" web-ids="$ctrl.webIds" elem-name="$ctrl.name"></analysis>
 
     </div>
     <!-- /#page-content-wrapper -->

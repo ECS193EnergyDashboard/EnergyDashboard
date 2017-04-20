@@ -29,7 +29,7 @@
                     <a href="" ng-click="$ctrl.ApplyTemplate(template)">{{template.templateName}}</a>
                 </li>
             </ul>
-        </div>  
+        </div>
 
 
         <!--Save Template button for Data Tab-->
@@ -54,7 +54,7 @@
     </div> <!--end tableSettingsButtons -->
 
 
-<!-- START OF MODALS --> 
+<!-- START OF MODALS -->
 
 <!-- CSV File Name Modal for Data Tab -->
 <div ng-class="{'downloadModalData': $ctrl.isAnalysis=='false', 'downloadModalAnalysis': $ctrl.isAnalysis=='true'}" class="modal fade" id="fileNameModalData" role="dialog">
@@ -69,17 +69,29 @@
         <input autofocus="autofocus" type="text" class="form-control" ng-model="$ctrl.fileName" />
     </div>
     <div class="modal-footer">
+
+        <!-- Include Date Range if user wants -->
+        <span ng-if="$ctrl.isAnalysis=='true'">
+            <input ng-checked="$ctrl.includeDR" ng-model="$ctrl.includeDR" type="checkbox" value="">
+            <span>Include Date Range on CSV</span>
+        </span>
+
+        <!-- Cancel Button -->
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-        <!-- Download CSV with analysis structure --> 
-        <button ng-if="$ctrl.isAnalysis=='true' "class="btn btn-default" type="button" csv-header="$ctrl.GetHeaderAnalysis()" 
-        ng-csv="$ctrl.GetArrayAnalysis()" filename="{{ $ctrl.fileName }}" data-dismiss="modal">
-            Download CSV
-        <span class="glyphicon glyphicon-save-file"></span>
-        </button>
+        <!-- Download CSV with analysis structure -->
+            <button ng-if="$ctrl.isAnalysis=='true'" class="btn btn-default" type="button" csv-header="$ctrl.GetHeaderAnalysis()"
+            ng-csv="$ctrl.GetArrayAnalysis()" filename="{{ $ctrl.fileName }}" data-dismiss="modal">
+                Download CSV
+            <span class="glyphicon glyphicon-save-file"></span>
+            </button>
 
-        <!-- Download CSV with Data structure --> 
-        <button ng-if="$ctrl.isAnalysis=='false'" class="btn btn-default" type="button" csv-header="$ctrl.GetHeaderData()" 
+
+
+        <!-- Download CSV with Data structure -->
+
+        <!-- Download CSV Button -->
+        <button ng-if="$ctrl.isAnalysis=='false'" class="btn btn-default" type="button" csv-header="$ctrl.GetHeaderData()"
         ng-csv="$ctrl.GetArrayData()" filename="{{ $ctrl.fileName }}" data-dismiss="modal">
             Download CSV
         <span class="glyphicon glyphicon-save-file"></span>
@@ -160,7 +172,3 @@
 
     </div>
 </div>
-
-
-<!-- data-backdrop="static" -->
-

@@ -20,11 +20,6 @@
     overflow: hidden;
 }
 
-.hiddenListItem {
-    opacity: 0;
-    height: 100%;
-    border: 5px solid rebeccapurple;/*for debugging*/
-}
 
 .fixedButtons .btn-group {
     display: flex;

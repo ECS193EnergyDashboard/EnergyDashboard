@@ -20,10 +20,22 @@
     overflow: hidden;
 }
 
+.selectItem {
+   border-top: 2px solid ghostwhite;
+}
+
 .hiddenListItem {
+    z-index: 1;
+    position: absolute;
     opacity: 0;
+    top: 36px;
+    width: 86%;
     height: 100%;
     border: 5px solid rebeccapurple;/*for debugging*/
+}
+
+.hiddenListItem #selectorItem {
+    opacity: 0;
 }
 
 .fixedButtons .btn-group {
@@ -76,7 +88,7 @@
     width: 0;
     height: 100%;
     margin-left: -250px;
-    overflow-y: auto;
+    /* overflow-y: auto;*/
     background: white;
     /* Closing animation */
     -webkit-transition: all 2s ease;
@@ -119,6 +131,7 @@
 
 .sidebar-item {
     cursor: pointer;
+    z-index: 2;
 }
 
 .sidebar-nav {
@@ -222,6 +235,7 @@
     padding-bottom: 0;
     cursor: default;
 }
+
 
 .selectorItem:hover{
     background-color: white;

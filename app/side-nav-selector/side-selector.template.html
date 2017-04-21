@@ -13,7 +13,7 @@
 
         <!-- <div id="textHere"> Drop Items Here</div>-->
         <div class="list-group list-group-root well">
-            <div ng-repeat="element in $ctrl.selected" custom-drop-target="side-selector" custom-drop-success="$ctrl.onDropSuccess(item)" ng-class="{hiddenListItem: $ctrl.isDummyItem(element)}">
+            <div ng-repeat="element in $ctrl.selected" class="selectItem" custom-drop-target="side-selector" custom-drop-success="$ctrl.onDropSuccess(item)" ng-class="{hiddenListItem: $ctrl.isDummyItem(element)}">
                 <span class="sidebar-item list-group-item selectorItem">
                     <div id="itemText">
                         <h6 id="buildingName">{{element.building}}</h6>

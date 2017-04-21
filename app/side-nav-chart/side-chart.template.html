@@ -1,5 +1,5 @@
 <!-- Sidebar -->
-<div id="sidebar-selector-wrapper">
+<div id="sidebar-chart-wrapper">
     <div class="just-padding">
 
         <div id="selectionHolder">
@@ -7,22 +7,20 @@
             <div class="btn-group" role="group" aria-label="...">
                 <button ng-click="" type="button" class="disabled btn btn-default glyphicon glyphicon-home"></button>
                 <button ng-click="" type="button" class="disabled btn btn-default  glyphicon glyphicon-tag"></button>
-                <button ng-click="$ctrl.clearSelected()" type="button" class="btn btn-default glyphicon glyphicon-trash pointer"></button>
+                <button ng-click="$ctrl.clearSelected()" type="button" class="disabled btn btn-default glyphicon glyphicon-trash pointer"></button>
             </div>
         </div>
 
         <!-- <div id="textHere"> Drop Items Here</div>-->
         <div class="list-group list-group-root well">
-            <div ng-repeat="element in $ctrl.selected" custom-drop-target="side-selector" custom-drop-success="$ctrl.onDropSuccess(item)" ng-class="{hiddenListItem: $ctrl.isDummyItem(element)}">
+            <div ng-repeat="attrib in $ctrl.selection" >
                 <span class="sidebar-item list-group-item selectorItem">
                     <div id="itemText">
-                        <h6 id="buildingName">{{element.building}}</h6>
+                        <h6 id="buildingName">{{attrib.buildingName}}</h6>
                         <br>
-                        {{element.name}}
+                        {{  attrib.parentName + " | " + attrib.name }}
                     </div>
-                    <div id="itemBtn">
-                        <span ng-show="!$ctrl.isDummyItem(element)" class="glyphicon glyphicon-remove pointer" ng-click="$ctrl.removeElement(element);$event.stopPropagation()"></span>
-                    </div>
+
 
                 </span>
             </div>

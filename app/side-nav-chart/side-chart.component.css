@@ -11,32 +11,46 @@
 
 /* Toggle Styles */
 
-.clearFilterButton{
-    position: absolute;
-    right: 2%;
-}
-
-.disabled {
-    opacity: 0.5;
-    background-color: gainsboro;
-}
-
-.fixedButtons{
-
-}
-.fixedButtons .form-group{
+#textHere {
+    border: 3px solid #dddddd;
+    border-radius: 5px;
+    flex: 30;
+    text-align: center;
+    vertical-align:middle;
     overflow: hidden;
 }
-.fixedButtons .form-control{
-    padding: 0px;
+
+.hiddenListItem {
+    opacity: 0;
+    height: 100%;
+    border: 5px solid rebeccapurple;/*for debugging*/
 }
+
 .fixedButtons .btn-group {
     display: flex;
     overflow: hidden;
+    width: 100%;
 }
 
-.fixedButtons .btn {
-    flex: 1;
+#headerHere{
+    border: 0px solid grey;
+    border-radius: 0px;
+    text-align: center;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+}
+#selectionHolder{
+    display: flex;
+    /*position: absolute;*/
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.disabled{
+    opacity: 0.5;
+    background-color: gainsboro;
 }
 
 #wrapper {
@@ -51,11 +65,11 @@
     /*border: 4px solid rebeccapurple;*/
 }
 
-#wrapper.toggled {
+#wrapper.toggledSelector {
     /*padding-left: 250px;*/
 }
 
-#sidebar-wrapper {
+#sidebar-chart-wrapper {
     z-index: 1000;
     position: relative;
     left: 250px;
@@ -71,14 +85,8 @@
     transition: all 2s ease;
 }
 
-#sidebar-wrapper .btn-group {
-    display: flex;
-}
-#sidebar-wrapper .btn-group .btn{
-    flex: 1;
-}
 
-#wrapper.toggled #sidebar-wrapper {
+#wrapper.toggledChart #sidebar-chart-wrapper {
     width: 100%;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
@@ -94,7 +102,7 @@
     overflow: auto;
 }
 
-#wrapper.toggled #page-content-wrapper {
+#wrapper.toggledChart #page-content-wrapper {
     /*position: absolute;
     margin-right: -250px;
     flex: 1 1 auto;*/
@@ -111,10 +119,6 @@
 
 .sidebar-item {
     cursor: pointer;
-}
-
-.sidebar-item:hover {
-    background-color: #5bc0de;
 }
 
 .sidebar-nav {
@@ -168,17 +172,17 @@
         /* padding-left: 250px;*/
     }
 
-    #wrapper.toggled {
+    #wrapper.toggledSelector {
         /*padding-left: 0;*/
     }
 
-    #sidebar-wrapper {
+    #sidebar-chart-wrapper {
         width: 100%;
         /* Opening Transision */
         transition: all 0.1s ease;
     }
 
-    #wrapper.toggled #sidebar-wrapper {
+    #wrapper.toggledChart #sidebar-chart-wrapper {
         width: 0;
         /* Closing Transition */
         transition: all 2s ease;
@@ -192,7 +196,7 @@
         overflow: auto;
     }
 
-    #wrapper.toggled #page-content-wrapper {
+    #wrapper.toggledChart #page-content-wrapper {
         position: relative;
         margin-right: 0;
     }
@@ -200,64 +204,35 @@
 
 /*-----------For hierarchy----------*/
 .just-padding {
-  padding: 0;
+    padding: 0;
+    height: 100%;
 }
 
 .list-group .list-group{
-    padding-left: 19px;
+    padding-left: 20px;
     margin-bottom: 20px;
 }
 
-/* Applies when item is selected and not loading */
-.sidebar-item.selected:not(.loading) {
-    cursor: auto;
-    background-color: #994942;
-    transition: background-color 0.5s linear;
+.sidebar-item .list-group-item{
+    display: flex;
 }
 
-/* Applies when item is selected and loading */
-.sidebar-item.selected.loading {
-    cursor: progress;
-    background-color: #946b67;
-    transition: background-color 0.5s linear;
+.selectorItem {
+    padding-top: 0;
+    padding-bottom: 0;
+    cursor: default;
 }
 
-
-#loadingIcon {
-    opacity: 0;
-    display: none;
+.selectorItem:hover{
+    background-color: white;
 }
 
-/* -Unused now- Cause loading icon to animate in and out */
-.loading #loadingIcon{
-    opacity: 100;
-    display: inline-block;
-    animation: fadeInFromNone 3s ease-out;
-}
-/* Keyframes for animation of icon */
-@keyframes fadeInFromNone {
-    0% {
-        display: none;
-        opacity: 0;
-    }
-
-    1% {
-        display: inline-block;
-        opacity: 0;
-    }
-
-    100% {
-        display: inline-block;
-        opacity: 1;
-    }
-}
-
-.list-group-item {
-    padding: 8px 5px;
-}
 .list-group.list-group-root {
-  padding: 1px;
-  overflow: hidden;
+    padding: 1px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    flex: 1 1;
+    margin-bottom: 0;
 }
 
 .list-group.list-group-root .list-group {
@@ -282,19 +257,27 @@
 }
 
 .pointer{
-    cursor: default;
+    display: inline-block;
+    cursor: pointer;
+    vertical-align: top;
 }
 
-/* Form wrapper styling */
-.form-wrapper {
-    display: flex;
+#buildingName {
+    margin-bottom: 0;
+    margin-top: 0;
+    display: inline-block;
+    font-size: x-small;
+    color: #b9b9b9; /*Gray*/
 }
 
-/* Form text input */
-.form-wrapper input {
+#itemBtn{
+    display: inline-block;
+    position: absolute;
+    right: 2%;
+    font-size: small;
+}
+
+#itemText{
+    display: inline-block;
     flex: 1 1;
 }
-.form-wrapper button#clearFilterButton {
-    flex: initial;
-}
-

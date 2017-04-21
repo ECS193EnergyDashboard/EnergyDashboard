@@ -24,6 +24,8 @@
         <!--lrDragNDrop CustomFiles-->
         <script type="text/javascript" src="lrDragNDrop_CustomFiles/lrDragNDrop.js"></script>
         <link rel="stylesheet" href="lrDragNDrop_CustomFiles/lrDragNDrop.css" />
+       <!-- customDragNDrop -->
+        <script type="text/javascript" src="core/customDragNDrop/customDragNDrop.js"></script>
 
         <!-- Date Range Picker Depeendencies -->
         <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
@@ -46,6 +48,13 @@
         <script src="node_modules\ng-csv\build\ng-csv.min.js"></script>
 
 
+
+        <!-- Angular D3 -->
+        <script src="bower_components/d3/d3.js"></script>
+        <script src="bower_components/nvd3/build/nv.d3.js"></script>
+        <script src="bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
+        <link rel="stylesheet" href="bower_components/nvd3/build/nv.d3.css">
+
         <!--==== Dev Scripts ====-->
 
 
@@ -58,6 +67,9 @@
         <script src="core/core.module.js"></script>
         <script src="core/pi/pi.module.js"></script>
         <script src="core/pi/pi.service.js"></script>
+        <script src="core/treeFilter/treeFilter.module.js"></script>
+        <script src="core/treeFilter/treeFilter.filter.js"></script>
+
 
         <!-- Menu Bar js -->
         <script src="menu_bar/menu.module.js"></script>
@@ -71,8 +83,6 @@
         <script src="column-template-dropdown/column-template-dropdown.module.js"></script>
         <script src="column-template-dropdown/column-template-dropdown.component.js"></script>
 
-
-
         <!-- Table JS -->
         <script src="data-table/data-table.module.js"></script>
         <script src="data-table/data-table.component.js"></script>
@@ -82,11 +92,17 @@
         <script src="side-nav/side.component.js"></script>
 	    <!-- SideNav CSS -->
     	<link href="side-nav/side.component.css" rel="stylesheet">
-        <!-- SideNav JS -->
+        <!-- SideNavSelector JS -->
         <script src="side-nav-selector/side-selector.module.js"></script>
         <script src="side-nav-selector/side-selector.component.js"></script>
-        <!-- SideNav CSS -->
+        <!-- SideNavSelector CSS -->
         <link href="side-nav-selector/side-selector.component.css" rel="stylesheet">
+
+        <!-- SideNavSelector JS -->
+        <script src="side-nav-chart/side-chart.module.js"></script>
+        <script src="side-nav-chart/side-chart.component.js"></script>
+        <!-- SideNavSelector CSS -->
+        <link href="side-nav-chart/side-chart.component.css" rel="stylesheet">
 
         <!-- Dashboard JS -->
         <script src="dashboard/dashboard.module.js"></script>
@@ -103,6 +119,12 @@
 
         <!-- Table CSS -->
         <link href="data-table/data-table.css" rel="stylesheet">
+
+        <script src="test-chart/test-chart.js"></script>
+
+        <!-- Chart Options JS -->
+        <script src="chart-options/chart-options.module.js"></script>
+        <script src="chart-options/chart-options.component.js"></script>
 
     </head>
     <body>

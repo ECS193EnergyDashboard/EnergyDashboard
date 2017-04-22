@@ -10,6 +10,11 @@
     margin-bottom: 1px;
 }
 
+#dashboardBtns {
+    position: fixed;
+    z-index: 1;
+    top: 35px;
+}
 #side-bar-selector {
     /*border: 5px dotted red;*/
     width: 0;

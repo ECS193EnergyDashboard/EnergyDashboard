@@ -42,6 +42,28 @@
     
 }
 
+#dataTable {
+    position: absolute;
+    top: 165px;
+    margin: auto;
+    position: relative;
+    border: 2px solid #cccccc;
+    background-color: white;
+}
+
+#dataTableHead {
+    position: fixed;
+    top: 67px;
+    margin-left: 0px;
+    background-color: whitesmoke;
+}
+
+column-template-dropdown {
+    position: fixed;
+    right: 0px;
+    z-index: 1;
+    top: 32px;
+}
 .dropdown-content {
     display: none;
     position: absolute;
@@ -64,4 +86,17 @@
 
 td {
     white-space: nowrap;
+    min-width: 80px;
+    max-width: 80px;
+    text-align: center;
+}
+
+th {
+    min-width: 80px;
+    max-width: 80px;
+}
+
+.table {
+    width: auto;
+    max-width: none;
 }

@@ -92,6 +92,13 @@
     width: 0;
     /*border: 5px dotted blue;*/
     overflow: auto;
+
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fdfad9+0,fefbee+100&1+0,0+100 */
+    background: -moz-radial-gradient(center, ellipse cover,  rgba(253,250,217,1) 0%, rgba(254,251,238,0) 100%); /* FF3.6-15 */
+    background: -webkit-radial-gradient(center, ellipse cover,  rgba(253,250,217,1) 0%,rgba(254,251,238,0) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: radial-gradient(ellipse at center,  rgba(253,250,217,1) 0%,rgba(254,251,238,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfad9', endColorstr='#00fefbee',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+
 }
 
 #wrapper.toggled #page-content-wrapper {

@@ -6,7 +6,7 @@
         <button ng-click="$ctrl.searchTemplates()" type="button" class="disabled btn btn-default glyphicon glyphicon-book"></button>
         <button ng-click="$ctrl.applyFilter()" type="button" class="btn btn-default glyphicon glyphicon-filter"></button>
     </div>
-    <form class="form-wrapper">
+    <form ng-submit="$ctrl.applyFilter()" class="form-wrapper">
         <input type="text" class="form-control" id="usr" placeholder="{{$ctrl.searchPlaceHolder}}" ng-model="$ctrl.searchInput[$ctrl.filter]">
         <button id="clearFilterButton" ng-click="$ctrl.clearFilter()" type="button" class="btn btn-default glyphicon glyphicon-trash"></button>
     </form>

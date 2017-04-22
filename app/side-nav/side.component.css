@@ -22,7 +22,7 @@
 }
 
 .fixedButtons{
-
+   overflow: hidden;
 }
 .fixedButtons .form-group{
     overflow: hidden;

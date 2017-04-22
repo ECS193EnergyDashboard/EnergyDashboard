@@ -2,7 +2,8 @@ angular.module('analysisModule').component('analysis', {
     templateUrl: 'analysis/analysis.template.html',
     bindings: {
         webIds: '<',
-        isLoading: '='
+        onStartLoad: '&',
+        onEndLoad: '&'
     },
     controller: ['$filter', 'pi', function AnalysisController($filter, pi) {
             var self = this;
@@ -54,9 +55,10 @@ angular.module('analysisModule').component('analysis', {
             ];
 
             this.startAnalysis = function() {
+                this.onStartLoad();
+
                 var startDate = self.datePicker.date.startDate.format();
                 var endDate = self.datePicker.date.endDate.format();
-                self.isLoading['analysis'] = 1; //Set analysis loading flag
                 pi.getSummaryOfElements(this.webIds, startDate, endDate).then(function(response) {
                     var data = [];
 
@@ -111,8 +113,9 @@ angular.module('analysisModule').component('analysis', {
                     }
 
                     self.outerColumnNames = colNames;
-                    self.isLoading['analysis'] = 0; //Clear analysis loading flag
                     console.log(self.outerColumnNames);
+
+                    self.onEndLoad();
                 });
             };
 

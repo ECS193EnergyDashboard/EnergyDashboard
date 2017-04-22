@@ -1,5 +1,6 @@
 angular.module('dashboardModule', [ 'dataTableModule', 
 	'analysisModule' , 
 	'sideNavModule', 
-	'sideNavSelectorModule'
+	'sideNavSelectorModule',
+	'sideNavChartModule'
 	]);

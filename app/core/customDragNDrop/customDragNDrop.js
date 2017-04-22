@@ -1,21 +1,19 @@
 (function (ng) {
     'use strict';
-/* Billy got from examples from smart-table not lrDragNDrop*/
-/*    function isJqueryEventDataTransfer(){
-        return window.jQuery && (-1 == window.jQuery.event.props.indexOf('dataTransfer'));
-    }
 
-    if (isJqueryEventDataTransfer()) {
-        window.jQuery.event.props.push('dataTransfer');
-    }*/
+    // function isJqueryEventDataTransfer(){
+    //     return window.jQuery && (-1 == window.jQuery.event.props.indexOf('dataTransfer'));
+    // }
 
-    //Declare lrDragNDrop module
-    var module = ng.module('lrDragNDrop', []);
+    // if (isJqueryEventDataTransfer()) {
+    //     window.jQuery.event.props.push('dataTransfer');
+    // }
+
+    //Declare customDragNDrop module
+    var module = ng.module('customDragNDrop', []);
     //Stores a dragged item
-
-    module.service('lrDragStore', ['$document', function (document) {
+    module.service('customDragStore', ['$document', function (document) {
         //Array of stored items
-
         var store = {};
 
         /**
@@ -71,7 +69,7 @@
         document.bind('dragend', this.clean);
     }]);
 
-    module.service('lrDragHelper', function () {
+    module.service('customDragHelper', function () {
         var th = this;
 
         /**
@@ -94,37 +92,62 @@
                 throw Error("Expected ngRepeat in form of '_item_ in _collection_' but got '" +
                     repeatExpression + "'.");
             }
-
-            return scope.$eval(match[2]);
+            //console.log("customDragHelper: "+JSON.stringify(JSON.stringify(attr.class))+" "+JSON.stringify(match)+" "+JSON.stringify(match[2]));
+            ////console.log(scope.$parent.$eval(match[2]+"\n"));
+            //Returns collection object specified in ng-repeat
+            return scope.$parent.$eval(match[2]);
         };
 
         /**
          * Template for directives link function
-         * @param store the lrDragStore service
+         * @param store the customDragStore service
          * @param safe  Boolen for safe mode dragNDrop
          * @returns {compileFunc} Link function for directives
          */
-        th.lrDragSrcDirective = function(store, safe) {
+        th.customDragSrcDirective = function(store, safe) {
             return function compileFunc(el, iattr) {
                 //Sets 'draggable' attribute on element
                 iattr.$set('draggable', true);
                 return function linkFunc(scope, element, attr) {
                     var
                         collection,
-                        key = (safe === true ? attr.lrDragSrcSafe : attr.lrDragSrc ) || 'temp';
+                        key = (safe === true ? attr.customDragSrcSafe : attr.customDragSrc ) || 'temp';
 
-                    if(attr.lrDragData) {
-                        scope.$watch(attr.lrDragData, function (newValue) {
+                    //console.log("customDragSrcDir: Length:{"+scope.dummy+"} index: {"+scope.index+"}");
+                    if(attr.customDragData) {
+                        scope.$watch(attr.customDragData, function (newValue) {
                             collection = newValue;
                         });
                     } else {
                         //Fills collection with collection object from ng-repeat
+                        //console.log("customDragSrcDir: DragSrcCalling parser");
                         collection = th.parseRepeater(scope, attr);
+                        ////console.log(collection);
                     }
+                    //Updates collection list when list changes on side-bar
+                    scope.$watch('dummy', function(oldVal, newVal){
+                        //console.log("customDragSrcDir: changed \'"+key+"\' Length: {"+scope.dummy+"} index: {"+scope.index+"}");
+
+
+                        //collection = th.parseRepeater(scope, attr);
+                        ////console.log(collection);
+                        ////console.log(safe);
+                    });
 
                     //Binds start-of-drag event of element to this function
                     element.bind('dragstart', function (evt) {
-                        store.hold(key, collection[scope.$index], collection, safe);
+                        //console.log("customDragSrcDir: Dragstart w/ key: {"+key+"} Length: {"+scope.dummy+"} index: {"+scope.index+"}");
+                        //Reparses collection
+                        collection = th.parseRepeater(scope, attr);
+                        //console.log("customDragSrcDir: Dragged item is");
+                        //console.log(collection[scope.index]);
+                        //console.log("\n")
+
+                        ////console.log(safe);
+                        //Stops drag event from dragging parent elems
+                        evt.stopPropagation();
+                        //Stores dragged item in customDragStore service's array
+                        store.hold(key, collection[scope.index], collection, safe);
                         if(angular.isDefined(evt.dataTransfer)) {
                             evt.dataTransfer.setData('text/html', null); //FF/jQuery fix
                         }
@@ -134,27 +157,34 @@
         }
     });
 
-    module.directive('lrDragSrc', ['lrDragStore', 'lrDragHelper', function (store, dragHelper) {
+    module.directive('customDragSrc', ['customDragStore', 'customDragHelper', function (store, dragHelper) {
         return{
+            scope: {
+                dummy: '<',
+                index: '<'
+            },
             //Used to generate link function with only variation being safe mode boolean off
-            compile: dragHelper.lrDragSrcDirective(store)
+            compile: dragHelper.customDragSrcDirective(store)
         };
     }]);
 
-    module.directive('lrDragSrcSafe', ['lrDragStore', 'lrDragHelper', function (store, dragHelper) {
+    module.directive('customDragSrcSafe', ['customDragStore', 'customDragHelper', function (store, dragHelper) {
         return{
+            scope: {
+                dummy: '<',
+                index: '<'
+            },
             //Used to generate link function with only variation being safe mode boolean on
-            compile: dragHelper.lrDragSrcDirective(store, true)
+            compile: dragHelper.customDragSrcDirective(store, true)
         };
     }]);
 
-    module.directive('lrDropTarget', ['lrDragStore', 'lrDragHelper', '$parse', function (store, dragHelper, $parse) {
+    module.directive('customDropTarget', ['customDragStore', 'customDragHelper', '$parse', function (store, dragHelper, $parse) {
         return {
             link: function (scope, element, attr) {
-
                 var
                     collection,                                 //Stores items in dropped list
-                    key = attr.lrDropTarget || 'temp',          //Default namespace/key is 'temp'
+                    key = attr.customDropTarget || 'temp',          //Default namespace/key is 'temp'
                     classCache = null;
 
                 /**
@@ -178,11 +208,12 @@
                     }
                 }
 
-                if(attr.lrDragData) {
-                    scope.$watch(attr.lrDragData, function (newValue) {
+                if(attr.customDragData) {
+                    scope.$watch(attr.customDragData, function (newValue) {
                         collection = newValue;
                     });
                 } else {
+                    //console.log("customDropTarger calling parser");
                     //Fills collection with collection object from ng-repeat
                     collection = dragHelper.parseRepeater(scope, attr);
                 }
@@ -192,7 +223,19 @@
                     var
                         collectionCopy = ng.copy(collection),           //Copy of items in dragged list
                         item = store.get(key),                          //Retrieves dragged item
+                        dup = false,
                         dropIndex, i, l;
+                    //console.log("customDropTarget: Drop: Item:");
+                    //console.log(item);
+                    //console.log("\n");
+                    //Check is item is duplicate
+                    if(-1 < collection.indexOf(item) ){
+                        //Item is duplicate
+                        dup = true;
+                        //console.log("customDropTarget: Is duplicate")
+                    }
+
+
                     if (item !== null) {
                         //Sets index to index of item that cursor is dropping on
                         dropIndex = scope.$index;
@@ -209,25 +252,33 @@
                                 }
                             }
                         }
-                        scope.$apply(function () {
-                            collection.splice(dropIndex, 0, item);
-                            var fn = $parse(attr.lrDropSuccess) || ng.noop;
-                            fn(scope, {e: evt, item: item, collection: collection});
-                        });
-                        evt.preventDefault();
-                        resetStyle();
-                        store.clean();
+                        if(!dup) {
+                            scope.$apply(function () {
+                                //Adds item to collection at index dropIndex
+                                collection.splice(dropIndex, 0, item);
+                                var fn = $parse(attr.customDropSuccess) || ng.noop;
+                                fn(scope, {e: evt, item: item, collection: collection});
+                            });
+                            evt.preventDefault();
+                            resetStyle();
+                            store.clean();
+                        }
+                        else{
+                            //console.log("customDropTarget: Alert: Is duplicate");
+                            evt.preventDefault();
+                            resetStyle();
+                            store.clean();
+                        }
                     }
                 });
 
                 //Makes the drag leave event reset the css style
                 element.bind('dragleave', resetStyle);
                 //Makes drag over event change css
-
                 element.bind('dragover', function (evt) {
                     var className;
                     if (store.isHolding(key)) {
-                        className = isAfter(evt.offsetX, evt.offsetY) ? 'lr-drop-target-after' : 'lr-drop-target-before';
+                        className = isAfter(evt.offsetX, evt.offsetY) ? 'custom-drop-target-after' : 'custom-drop-target-before';
                         if (classCache !== className && classCache !== null) {
                             element.removeClass(classCache);
                         }

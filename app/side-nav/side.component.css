@@ -11,13 +11,18 @@
 
 /* Toggle Styles */
 
+.clearFilterButton{
+    position: absolute;
+    right: 2%;
+}
+
 .disabled {
     opacity: 0.5;
     background-color: gainsboro;
 }
 
 .fixedButtons{
-
+   overflow: hidden;
 }
 .fixedButtons .form-group{
     overflow: hidden;
@@ -279,3 +284,17 @@
 .pointer{
     cursor: default;
 }
+
+/* Form wrapper styling */
+.form-wrapper {
+    display: flex;
+}
+
+/* Form text input */
+.form-wrapper input {
+    flex: 1 1;
+}
+.form-wrapper button#clearFilterButton {
+    flex: initial;
+}
+

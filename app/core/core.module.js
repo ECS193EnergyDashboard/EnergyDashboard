@@ -1,1 +1,1 @@
-angular.module('core', [ 'core.pi' ]);
+angular.module('core', [ 'core.pi', 'core.treeFilter' ]);

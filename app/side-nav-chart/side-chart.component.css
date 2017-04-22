@@ -20,23 +20,6 @@
     overflow: hidden;
 }
 
-.selectItem {
-   border-top: 2px solid ghostwhite;
-}
-
-.hiddenListItem {
-    z-index: 1;
-    position: absolute;
-    opacity: 0;
-    top: 36px;
-    width: 86%;
-    height: 100%;
-    border: 5px solid rebeccapurple;/*for debugging*/
-}
-
-.hiddenListItem #selectorItem {
-    opacity: 0;
-}
 
 .fixedButtons .btn-group {
     display: flex;
@@ -81,14 +64,14 @@
     /*padding-left: 250px;*/
 }
 
-#sidebar-selector-wrapper {
+#sidebar-chart-wrapper {
     z-index: 1000;
     position: relative;
     left: 250px;
     width: 0;
     height: 100%;
     margin-left: -250px;
-    /* overflow-y: auto;*/
+    overflow-y: auto;
     background: white;
     /* Closing animation */
     -webkit-transition: all 2s ease;
@@ -98,7 +81,7 @@
 }
 
 
-#wrapper.toggledSelector #sidebar-selector-wrapper {
+#wrapper.toggledChart #sidebar-chart-wrapper {
     width: 100%;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
@@ -114,7 +97,7 @@
     overflow: auto;
 }
 
-#wrapper.toggledSelector #page-content-wrapper {
+#wrapper.toggledChart #page-content-wrapper {
     /*position: absolute;
     margin-right: -250px;
     flex: 1 1 auto;*/
@@ -131,7 +114,6 @@
 
 .sidebar-item {
     cursor: pointer;
-    z-index: 2;
 }
 
 .sidebar-nav {
@@ -189,13 +171,13 @@
         /*padding-left: 0;*/
     }
 
-    #sidebar-selector-wrapper {
+    #sidebar-chart-wrapper {
         width: 100%;
         /* Opening Transision */
         transition: all 0.1s ease;
     }
 
-    #wrapper.toggledSelector #sidebar-selector-wrapper {
+    #wrapper.toggledChart #sidebar-chart-wrapper {
         width: 0;
         /* Closing Transition */
         transition: all 2s ease;
@@ -209,7 +191,7 @@
         overflow: auto;
     }
 
-    #wrapper.toggledSelector #page-content-wrapper {
+    #wrapper.toggledChart #page-content-wrapper {
         position: relative;
         margin-right: 0;
     }
@@ -236,14 +218,14 @@
     cursor: default;
 }
 
-
 .selectorItem:hover{
     background-color: white;
 }
 
 .list-group.list-group-root {
     padding: 1px;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
     flex: 1 1;
     margin-bottom: 0;
 }
@@ -283,15 +265,3 @@
     color: #b9b9b9; /*Gray*/
 }
 
-#itemBtn{
-    display: inline-block;
-    position: absolute;
-    right: 2%;
-    top: 2%;
-    font-size: small;
-}
-
-#itemText{
-    display: inline-block;
-    flex: 1 1;
-}

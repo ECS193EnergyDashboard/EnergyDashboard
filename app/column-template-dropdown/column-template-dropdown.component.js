@@ -1,12 +1,12 @@
 angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown', {
     templateUrl: 'column-template-dropdown/column-template-dropdown.template.html',
     bindings: {
-        columns:        '<', //columnNamesObjs passed in (col order maintained)
+        columns:        '<', //columnNamesObjs passed in (col order maintained),  current set of cols
         rowData:        '<', //row order not maintained, has units
         isAnalysis:     '<',
         templateSets:   '<',
         innerColumns:   '<', // Min, max, avg, st - this is needed for CSV
-        updateColObj:   '&',
+        updateColObj:   '&', // Output binding to update the table
         dateRange:      '<', // The date range to print on the csv
         elemName:       '<'  // Element name to determine template type (from side-nav)
     },
@@ -20,7 +20,6 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             var numInnerColumns =0;
 
             this.currentTemplate = {};
-            this.currentTemplateName = "Default";
 
             // Default file name for downloading to CSV
             this.fileName = "Data.csv";
@@ -28,17 +27,82 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             // an error message for the modal. Always set the error message before showing modal
             this.errorMessage = "";
 
+            // Determine the type of current element
+            this.curType = "";
+
+            this.determineType = function(){
+                var regexpAHU = /ahu/gi;
+                var regexpRM = /ahu\d/gi;
+                if(this.elemName.match(regexpRM)){
+                    this.curType = "room";
+                    //alert("room");
+                }
+                else if (this.elemName.match(regexpAHU)) {
+                    this.curType = "ahu";
+                    //alert("ahu");
+                }
+            };
+
+
+            this.$onInit = function(){
+                this.determineType();
+
+            }
 
             this.$onChanges = function() {
+                this.determineType();
                 // Get templates from server
                 this.getTemplates();
 
             };
 
+            // Generate default, push it to templates, and post to server
+            this.generateDefault = function(){
+                var firstValues = 0;
+                for(var col of this.columns){
+                   if (firstValues < 10) {
+                        col.isChecked = true;
+                    } else {
+                        col.isChecked = false;
+                    }
+                    firstValues++;
+                }
+
+                var template = {
+                    "name": "Default",
+                    "colObj": this.columns,
+                    "type": this.curType,
+                    "isDefault": "true"
+                };
+                this.currentTemplate = template;
+                this.templates.push(template);
+
+                // Post the default
+                this.postTemplate(template);
+
+
+            }
+
+            this.isDefault = function(template){
+                if(template.name == "Default" || template.name == "default"){
+                    if(template.isDefault == true){
+                        return true;
+                    }
+                }
+                return false;
+            };
+
             this.getTemplates = function(){
+                // Get templates from server
                 $http({method: 'GET', url: '/getTemplates'}).then(function successCallback(response) {
-                    console.log("get templates success", response.data);
+                    //console.log("get templates success", response.data);
                     self.templates = response.data;
+
+                    // If default doesnt exists yet
+                    if(self.templates.find(self.isDefault) == undefined && self.columns != undefined){
+                        self.generateDefault();
+                    }
+
                 }, function errorCallback(response) {
                     console.error("get templates failed ", response);
                 });
@@ -239,7 +303,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                     return;
                 }
                 for(temp of this.templates){
-                    if(this.newTemplateName == temp.templateName){
+                    if(this.newTemplateName == temp.name){
                         console.log("Cant have 2 templates of same name");
                         this.errorMessage = "We're sorry but you already have a template named " + this.newTemplateName;
                         this.ShowErrorModal();
@@ -248,28 +312,24 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                 }
 
                 var colObjToAdd = JSON.parse(angular.toJson(columnObjs)); // Make clone
-                var type;
-                var regexpAHU = /ahu/gi;
-                var regexpRM = /ahu\d/gi;
-                if(this.elemName.match(regexpRM)){
-                    type = "room";
-                    //alert("room");
-                }
-                else if (this.elemName.match(regexpAHU)) {
-                    type = "ahu";
-                    //alert("ahu");
-                }
+
 
                 var template = {
-                    "templateName": this.newTemplateName,
+                    "name": this.newTemplateName,
                     "colObj": colObjToAdd,
-                    "type": type
-                    //"isDefault": "false"
+                    "type": this.curType,
+                    "isDefault": "false"
                 };
                 this.templates.push(template);
                 console.log("added template ", this.templates);
 
-                // POST template/profile to server
+                this.postTemplate(template);
+
+                this.currentTemplate = template;
+            };
+
+            // POST template/profile to server
+            this.postTemplate = function(template){
                 $http({
                     method: 'POST',
                     url: '/templates',
@@ -279,41 +339,24 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                     }
                 }).then(function successCallback(response) {
                     //console.log("POST Templates Success");
-                    document.getElementById("templateInput").value = "";
+                    //document.getElementById("templateInput").value = "";
                 }, function errorCallback(response) {
                     console.error("POST templates Failed ", response);
                 });
-                this.currentTemplate = template;
-                this.currentTemplateName = this.newTemplateName;
-            };
+            }
 
             // A function to apply a template to the data table
             this.ApplyTemplate = function(template){
                 this.currentTemplate = template;
                 this.columns = template.colObj;
                 this.updateColObj({cols: template.colObj});  //output binding
-                this.currentTemplateName = template.templateName;
             };
 
-            // Resets the template to the first 10 cols
-            this.ApplyDefaultTemplate = function(){
-                var firstValues = 0;
-                for(var col of this.columns){
-                   if (firstValues < 10) {
-                        col.isChecked = true;
-                    } else {
-                        col.isChecked = false;
-                    }
-                    firstValues++;
-                }
-                this.currentTemplate = {};
-                this.currentTemplateName = "Default";
-            }
 
 
             this.DeleteTemplate = function(){
                 var template = {
-                    "templateName": this.currentTemplateName,
+                    "name": this.currentTemplate.name,
                 };
                 $http({
                     method: 'POST',
@@ -330,7 +373,8 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                 $('.modal-backdrop').remove(); // Hard remove backdrop - HOT FIX
             };
 
-            //Start of modal code//
+
+            //========-- Start of modal code --=========//
 
             this.ShowDeleteModal = function(){
                 if(this.isAnalysis == "true"){

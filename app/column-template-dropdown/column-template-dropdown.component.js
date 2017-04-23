@@ -85,7 +85,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
 
             this.isDefault = function(template){
                 if(template.name == "Default" || template.name == "default"){
-                    if(template.isDefault == true){
+                    if(template.isDefault == true && template.type == this.curType){
                         return true;
                     }
                 }

@@ -19,12 +19,14 @@
         <!-- Templates dropdown -->
         <div class="menuDropdown">
             <button type="button" class="btn btn-default dropdown-toggle tableButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {{$ctrl.currentTemplateName}} <span class="caret"></span>
+                {{$ctrl.currentTemplate.name}} <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
+                <!-- Default Template -->
                 <li><a href="" ng-click="$ctrl.ApplyDefaultTemplate()">
                     Default
                 </a></li>
+                <!-- All other templates -->
                 <li ng-repeat="template in $ctrl.templates">
                     <a href="" ng-click="$ctrl.ApplyTemplate(template)">{{template.templateName}}</a>
                 </li>
@@ -39,7 +41,7 @@
 
 
         <!-- Delete Template button for Data Tab -->
-        <button ng-click="$ctrl.ShowDeleteModal()" ng-class="{'disabled': $ctrl.currentTemplateName=='Default'}" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false">
+        <button ng-click="$ctrl.ShowDeleteModal()" ng-class="{'disabled': $ctrl.currentTemplate.name=='Default'}" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false">
             Delete Template
         </button>
 
@@ -131,13 +133,13 @@
 
 
 <!-- Delete template modal -->
-<div ng-class="{'deleteModalData': $ctrl.isAnalysis=='false', 'deleteModalAnalysis': $ctrl.isAnalysis=='true'}" ng-if="$ctrl.currentTemplateName!='Default'" class="modal fade" role="dialog">
+<div ng-class="{'deleteModalData': $ctrl.isAnalysis=='false', 'deleteModalAnalysis': $ctrl.isAnalysis=='true'}" ng-if="$ctrl.currentTemplate.name!='Default'" class="modal fade" role="dialog">
     <div class="modal-dialog">
 <!-- Modal content-->
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Are You Sure You Would Like to Delete the Template "{{$ctrl.currentTemplateName}}"?</h4>
+            <h4 class="modal-title">Are You Sure You Would Like to Delete the Template "{{$ctrl.currentTemplate.name}}"?</h4>
         </div>
 
         <div class="modal-footer">

@@ -295,18 +295,18 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             // Called in html with $ctrl.columns
             this.SaveColumnList = function(columnObjs) {
 
+
                 // Check to make sure template is not named default or name is already taken
                 if(this.newTemplateName == "Default"){
-                    console.log("Cant have a template named Default");
+                    // console.log("Cant have a template named Default");
                     this.errorMessage = "We're sorry but you can not have a template named Default";
+                    $("#templateInput").val(''); // clear the inputbox
                     this.ShowErrorModal();
                     return;
                 }
                 for(temp of this.templates){
                     if(this.newTemplateName == temp.name){
-                        console.log("Cant have 2 templates of same name");
-                        this.errorMessage = "We're sorry but you already have a template named " + this.newTemplateName;
-                        this.ShowErrorModal();
+                        this.ShowSaveAsModal();
                         return;
                     }
                 }
@@ -324,6 +324,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                 console.log("added template ", this.templates);
 
                 this.postTemplate(template);
+                $("#templateInput").val(''); // clear the inputbox
 
                 this.currentTemplate = template;
             };
@@ -369,8 +370,43 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                     console.error("POST Failed ", response);
                 });
                 this.getTemplates();
-                this.ApplyDefaultTemplate();
                 $('.modal-backdrop').remove(); // Hard remove backdrop - HOT FIX
+            };
+
+            // A function to overwrite the template on the server
+            this.OverwriteTemplate = function(template, overWriteTemplateName){
+                var template = {
+                    "name": overWriteTemplateName,
+                };
+                $http({
+                    method: 'POST',
+                    url: '/templatesDelete',
+                    data: angular.toJson(template),
+                }).then(function successCallback(response) {
+                    console.log("POST Templates Success");
+                    document.getElementById("templateInput").value = "";
+                }, function errorCallback(response) {
+                    console.error("POST Failed ", response);
+                });
+                
+
+                var colObjToAdd = JSON.parse(angular.toJson(template)); // Make clone
+
+
+                var template = {
+                    "name": overWriteTemplateName,
+                    "colObj": colObjToAdd,
+                    "type": this.curType,
+                    "isDefault": "false"
+                };
+                this.templates.push(template);
+                console.log("added template ", this.templates);
+
+                this.postTemplate(template);
+                $("#templateInput").val(''); // clear the inputbox
+
+                this.currentTemplate = template;
+
             };
 
 
@@ -411,6 +447,16 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                     $(".errorModalData").modal();
                 }
             }
+
+            this.ShowSaveAsModal = function(){
+                if(this.isAnalysis == "true"){
+                    $(".saveAsModalAnalysis").modal();
+                }
+                else{
+                    $(".saveAsModalData").modal();
+                }                
+            }
+
 
         } //end controller
     ]

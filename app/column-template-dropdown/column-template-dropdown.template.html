@@ -27,8 +27,8 @@
                 <li><a href="" ng-click="$ctrl.ApplyDefaultTemplate()">
                     Default
                 </a></li>
-                <li ng-repeat="template in $ctrl.templates | filter:templateFilter  ">
-                    <a href="" ng-click="$ctrl.ApplyTemplate(template)">{{template.templateName}}</a>
+                <li ng-repeat="template in $ctrl.templates | filter:templateFilter">
+                    <a href="" ng-click="$ctrl.ApplyTemplate(template)">{{template.name}}</a>
                 </li>
             </ul>
         </div>
@@ -56,9 +56,9 @@
     </div> <!--end tableSettingsButtons -->
 
 
-<!-- START OF MODALS -->
+<!-- //======== Start of modal code =========// -->
 
-<!-- CSV File Name Modal for Data Tab -->
+<!-- CSV File Name Modal-->
 <div ng-class="{'downloadModalData': $ctrl.isAnalysis=='false', 'downloadModalAnalysis': $ctrl.isAnalysis=='true'}" class="modal fade" id="fileNameModalData" role="dialog">
     <div class="modal-dialog">
 <!-- Modal content-->
@@ -88,8 +88,6 @@
             <span class="glyphicon glyphicon-save-file"></span>
             </button>
 
-
-
         <!-- Download CSV with Data structure -->
 
         <!-- Download CSV Button -->
@@ -105,7 +103,7 @@
 
 
 
-<!-- Template name Modal for data tab -->
+<!-- Template Save Modal for data tab -->
 <div ng-class="{'saveModalData': $ctrl.isAnalysis=='false', 'saveModalAnalysis': $ctrl.isAnalysis=='true'}" class="modal fade" id="templateNameModalData" role="dialog">
     <div class="modal-dialog">
 <!-- Modal content-->
@@ -121,7 +119,6 @@
     </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-
             <button ng-click="$ctrl.SaveColumnList($ctrl.columns)" type="button" class="btn btn-default" aria-haspopup="true" aria-expanded="false" data-dismiss="modal">Save Current Template
             </button>
         </div>
@@ -147,6 +144,7 @@
 
             <button ng-click="$ctrl.DeleteTemplate()" type="button" class="btn btn-default" data-dismiss="modal">Delete Template
             </button>
+
         </div>
     </div>
 
@@ -154,7 +152,34 @@
 </div>
 
 
-<!-- Delete template modal -->
+<!-- Save As  modal -->
+<div ng-class="{'saveAsModalData': $ctrl.isAnalysis=='false', 'saveAsModalAnalysis': $ctrl.isAnalysis=='true'}" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+<!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">You Already Have A Template Named "{{$ctrl.newTemplateName}}"</h4>
+        </div>
+        <div class="modal-body">
+
+        Would you like to overwrite "{{$ctrl.newTemplateName}}"?
+
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button ng-click="$ctrl.OverwriteTemplate($ctrl.columns, $ctrl.newTemplateName)" type="button" class="btn btn-default" data-dismiss="modal">Overwrite
+            </button>
+
+        </div>
+    </div>
+
+    </div>
+</div>
+
+
+<!-- Error modal -->
 <div ng-class="{'errorModalData': $ctrl.isAnalysis=='false', 'errorModalAnalysis': $ctrl.isAnalysis=='true'}" class="modal"  data-backdrop="static" role="dialog">
     <div class="modal-dialog">
 <!-- Modal content-->
@@ -166,7 +191,6 @@
         <div class="modal-body">
             {{$ctrl.errorMessage}}
         </div>
-
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
         </div>
@@ -180,21 +204,4 @@
 
 
 
-<!--         <div class="menuDropdown">
-            <button type="button" class="btn btn-default dropdown-toggle tableButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {{$ctrl.currentTemplateName}} <span class="caret"></span>
-            </button>
 
-
-            <div class="dropdown-menu dropdown-content">
-                <input ng-model="" class="form-control" type="text" placeholder="Search For Column...">
-                <div> <a href="" ng-click="$ctrl.ApplyDefaultTemplate()">
-                    Default
-                </a> </div>
-
-                <div class="dropdownelm" ng-repeat="template in $ctrl.templates">
-                    <a href="" ng-click="$ctrl.ApplyTemplate(template)">{{template.templateName}}</a>
-                </div>
-            </div>
-
-        </div> -->

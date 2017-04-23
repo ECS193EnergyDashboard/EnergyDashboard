@@ -9,8 +9,8 @@
             </button>
 
             <div class="dropdown-menu dropdown-content">
-                <input class="form-control" type="text" placeholder="Search For Column...">
-                <div class="dropdownelm" ng-repeat="column in $ctrl.columns | orderBy:'name'">
+                <input ng-model="columnsFilter" class="form-control" type="text" placeholder="Search For Column...">
+                <div class="dropdownelm" ng-repeat="column in $ctrl.columns | orderBy:'name' | filter:columnsFilter">
                     <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}"> {{column.name}}
                 </div>
             </div>
@@ -22,13 +22,12 @@
             <button type="button" class="btn btn-default dropdown-toggle tableButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{$ctrl.currentTemplate.name}} <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu">
-                <!-- Default Template -->
+            <ul class="dropdown-menu dropdown-content">
+                <input ng-model="templateFilter" class="form-control" type="text" placeholder="Search For Template...">
                 <li><a href="" ng-click="$ctrl.ApplyDefaultTemplate()">
                     Default
                 </a></li>
-                <!-- All other templates -->
-                <li ng-repeat="template in $ctrl.templates">
+                <li ng-repeat="template in $ctrl.templates | filter:templateFilter  ">
                     <a href="" ng-click="$ctrl.ApplyTemplate(template)">{{template.templateName}}</a>
                 </li>
             </ul>
@@ -175,3 +174,27 @@
 
     </div>
 </div>
+
+
+
+
+
+
+<!--         <div class="menuDropdown">
+            <button type="button" class="btn btn-default dropdown-toggle tableButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{$ctrl.currentTemplateName}} <span class="caret"></span>
+            </button>
+
+
+            <div class="dropdown-menu dropdown-content">
+                <input ng-model="" class="form-control" type="text" placeholder="Search For Column...">
+                <div> <a href="" ng-click="$ctrl.ApplyDefaultTemplate()">
+                    Default
+                </a> </div>
+
+                <div class="dropdownelm" ng-repeat="template in $ctrl.templates">
+                    <a href="" ng-click="$ctrl.ApplyTemplate(template)">{{template.templateName}}</a>
+                </div>
+            </div>
+
+        </div> -->

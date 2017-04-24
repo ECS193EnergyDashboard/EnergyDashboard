@@ -1,4 +1,17 @@
-angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown', {
+angular.module('columnTemplateDropdownModule')
+    .filter('type', function(){
+        return function(templates, type){
+            var filteredTemplates = [];
+            for(var template of templates)
+            {
+                if(template.type == type){
+                    filteredTemplates.push(template);
+                }
+            }
+            return filteredTemplates;
+        }
+    }
+).component('columnTemplateDropdown', {
     templateUrl: 'column-template-dropdown/column-template-dropdown.template.html',
     bindings: {
         columns:        '<', //columnNamesObjs passed in (col order maintained),  current set of cols
@@ -11,10 +24,11 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
         elemName:       '<'  // Element name to determine template type (from side-nav)
     },
     controller: [
-        '$http',
-        function colTemplateController($http) {
+        '$http', 'typeFilter',
+        function colTemplateController($http, typeFilter) {
             var self = this;
             this.templates = [];
+            this.filteredTemplates = [];
             this.showTemplates = false;
             this.includeDR = false;
             var numInnerColumns =0;
@@ -33,15 +47,21 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             this.determineType = function(){
                 var regexpAHU = /ahu/gi;
                 var regexpRM = /ahu\d/gi;
-                if(this.elemName.match(regexpRM)){
-                    this.curType = "room";
+                if(self.elemName.match(regexpRM)){
+                    self.curType = "room";
                     //alert("room");
                 }
-                else if (this.elemName.match(regexpAHU)) {
-                    this.curType = "ahu";
+                else if (self.elemName.match(regexpAHU)) {
+                    self.curType = "ahu";
                     //alert("ahu");
                 }
             };
+
+            this.updateFiltered = function(){
+                if(this.templates.length > 0){
+                    this.filteredTemplates = typeFilter(this.templates, self.curType);
+                }
+            }
 
 
             this.$onInit = function(){
@@ -53,6 +73,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                 this.determineType();
                 // Get templates from server
                 this.getTemplates();
+                this.updateFiltered();
 
             };
 
@@ -75,7 +96,10 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                     "isDefault": "true"
                 };
                 this.currentTemplate = template;
+
+                // Push to templates
                 this.templates.push(template);
+                this.updateFiltered();
 
                 // Post the default
                 this.postTemplate(template);
@@ -85,7 +109,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
 
             this.isDefault = function(template){
                 if(template.name == "Default" || template.name == "default"){
-                    if(template.isDefault == true && template.type == this.curType){
+                    if(template.isDefault == "true" && template.type == self.curType){
                         return true;
                     }
                 }
@@ -98,8 +122,9 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                     //console.log("get templates success", response.data);
                     self.templates = response.data;
 
+                    self.determineType();
                     // If default doesnt exists yet
-                    if(self.templates.find(self.isDefault) == undefined && self.columns != undefined){
+                    if(self.templates.find(self.isDefault) == undefined && self.columns != undefined && self.columns.length > 0){
                         self.generateDefault();
                     }
 
@@ -293,7 +318,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
 
             // Save template/profile for cols
             // Called in html with $ctrl.columns
-            this.SaveColumnList = function(columnObjs) {
+            this.saveTemplate = function(columnObjs) {
 
 
                 // Check to make sure template is not named default or name is already taken
@@ -321,7 +346,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                     "isDefault": "false"
                 };
                 this.templates.push(template);
-                console.log("added template ", this.templates);
+                this.updateFiltered();
 
                 this.postTemplate(template);
                 $("#templateInput").val(''); // clear the inputbox
@@ -388,7 +413,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                 }, function errorCallback(response) {
                     console.error("POST Failed ", response);
                 });
-                
+
 
                 var colObjToAdd = JSON.parse(angular.toJson(template)); // Make clone
 
@@ -454,7 +479,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
                 }
                 else{
                     $(".saveAsModalData").modal();
-                }                
+                }
             }
 
 

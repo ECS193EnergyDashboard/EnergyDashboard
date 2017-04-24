@@ -24,10 +24,7 @@
             </button>
             <ul class="dropdown-menu dropdown-content">
                 <input ng-model="templateFilter" class="form-control" type="text" placeholder="Search For Template...">
-                <li><a href="" ng-click="$ctrl.ApplyDefaultTemplate()">
-                    Default
-                </a></li>
-                <li ng-repeat="template in $ctrl.templates | filter:templateFilter">
+                <li ng-repeat="template in $ctrl.filteredTemplates | filter:templateFilter">
                     <a href="" ng-click="$ctrl.ApplyTemplate(template)">{{template.name}}</a>
                 </li>
             </ul>
@@ -119,7 +116,7 @@
     </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button ng-click="$ctrl.SaveColumnList($ctrl.columns)" type="button" class="btn btn-default" aria-haspopup="true" aria-expanded="false" data-dismiss="modal">Save Current Template
+            <button ng-click="$ctrl.saveTemplate($ctrl.columns)" type="button" class="btn btn-default" aria-haspopup="true" aria-expanded="false" data-dismiss="modal">Save Current Template
             </button>
         </div>
     </div>
@@ -198,10 +195,3 @@
 
     </div>
 </div>
-
-
-
-
-
-
-

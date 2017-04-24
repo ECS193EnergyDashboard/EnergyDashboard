@@ -3,7 +3,7 @@ angular.module('chartOptionsModule').component('chartOptions', {
         bindings: {
             attributes: '<'
         },
-        controller: [ '$window', function($window) {
+        controller: [ '$window',  '$scope', function($window, $scope) {
             var self = this;
 
             this.yAxisName = '';
@@ -30,11 +30,19 @@ angular.module('chartOptionsModule').component('chartOptions', {
 
                 if (this.attributes) {
                     for (var attrib of this.attributes) {
-                        url += 'webId=' + attrib.webId + '&';
+                        url += 'webIdA' + attrib.axis + '=' + attrib.webId + '&';
                     }
                 }
 
                 $window.open(url);
             }
+
+            $scope.$watchCollection('$ctrl.attributes', function() {
+                for (var attrib of self.attributes) {
+                    if (attrib.axis === undefined) {
+                        attrib.axis = 1;
+                    }
+                }
+            })
         }]
     });

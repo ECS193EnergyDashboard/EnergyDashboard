@@ -4,11 +4,25 @@ angular.module('chartViewModule').component('chartView', {
             var self = this;
 
             this.isLoading = false;
+
+            var collectAttributes = function(params) {
+                var attributes = [];
+                for (var i = 1; i <= 2; i++) {
+                    var param = params['webIdA' + i];
+                    var webIds = Array.isArray(param) ? param : param ? [ param ] : [];
+                    if (webIds) {
+                        for (var id of webIds) {
+                            attributes.push({ webId: id, axis: i });
+                        }
+                    }
+                }
+                return attributes;
+            }
             
             var urlParams = $location.search();
 
             this.config = {
-                webIds: (Array.isArray(urlParams.webId) ? urlParams.webId : [ urlParams.webId ]) || [],
+                attributes: collectAttributes(urlParams),
                 yAxisName: urlParams.yAxis,
                 title: urlParams.title,
                 interval: urlParams.interval,
@@ -16,9 +30,14 @@ angular.module('chartViewModule').component('chartView', {
                 endTime: urlParams.end
             };
 
+            var timeFormat = function(time) {
+                return d3.time.format('%m/%d %H:%M')(new Date(time));
+            }
+
             this.d3options = {
                 chart: {
-                    type: 'lineWithFocusChart',
+                    type: 'multiAxisLineChart',
+                    //showLegend: false,
                     height: 450,
                     margin : {
                         top: 20,
@@ -26,22 +45,21 @@ angular.module('chartViewModule').component('chartView', {
                         bottom: 40,
                         left: 80
                     },
-                    x: function(d) { return d.timestamp; },
+                    x: function(d) { return new Date(d.timestamp).getTime(); },
                     y: function(d) { return d.value; },
-                    interpolate: 'linear',
                     useInteractiveGuideline: true, // if false use tooltipContent
                     xAxis: {
                         axisLabel: 'Time',
-                        tickFormat: function(d) {
-                            return d3.time.format('%m/%d %H:%M')(new Date(d));
-                        }
                     },
-                    x2Axis: {
-                        tickFormat: function(d) {
-                            return d3.time.format('%m/%d %H:%M')(new Date(d));
-                        }
+                    xTickFormat: timeFormat,
+                    yAxis1: {
+                        axisLabel: '',
+                        tickFormat: function(d){
+                            return d3.format('.02f')(d);
+                        },
+                        axisLabelDistance: 10
                     },
-                    yAxis: {
+                    yAxis2: {
                         axisLabel: '',
                         tickFormat: function(d){
                             return d3.format('.02f')(d);
@@ -51,7 +69,7 @@ angular.module('chartViewModule').component('chartView', {
                     interactiveLayer: {
                         tooltip: {
                             valueFormatter: function(d) {
-                                return d === null ? 'Bad' : self.d3options.chart.yAxis.tickFormat(d);
+                                return d === null ? 'Bad' : self.d3options.chart.yAxis1.tickFormat(d);
                             }
                         },
                     }
@@ -59,6 +77,29 @@ angular.module('chartViewModule').component('chartView', {
                 title: {
                     enable: true,
                     text: ''
+                }
+            };
+
+            var onChangeFocus = function(extent) {
+                var chart = self.api.getScope().chart;
+                if (chart.api.updateExtent) {
+                    chart.api.updateExtent(extent);
+                }
+                //self.api.refresh();              
+            }
+
+            this.focusOptions = {
+                chart: {
+                    type: 'focus',
+                    x: function(d) { return d.timestamp; },
+                    y: function(d) { return d.value; },
+                    xAxis: {
+                        axisLabel: 'Time',
+                        tickFormat: timeFormat
+                    },
+                    dispatch: {
+                        onBrush: onChangeFocus,
+                    }
                 }
             };
 
@@ -158,7 +199,7 @@ angular.module('chartViewModule').component('chartView', {
 
             this.generateChart = function() {
                 this.isLoading = true;
-                this.numRequests = this.config.webIds.length;
+                this.numRequests = this.config.attributes.length;
                 this.numRequestsDone = 0;
 
                 this.data = [];
@@ -173,13 +214,14 @@ angular.module('chartViewModule').component('chartView', {
                 $location.search('start', startTime);
                 $location.search('end', endTime);
 
-                for (var i = 0; i < this.config.webIds.length; i++) {
+                for (var i = 0; i < this.config.attributes.length; i++) {
                     this.data[i] = {
                         values: [],
-                        key: ''
+                        key: '',
+                        yAxis: this.config.attributes[i].axis
                     }
 
-                    var webId = this.config.webIds[i];
+                    var webId = this.config.attributes[i].webId;
                     promises.push(pi.getAttribute(webId));
                     var promise = pi.getInterpolatedOfAttribute(webId, interval, startTime, endTime);
                     promises.push(promise);

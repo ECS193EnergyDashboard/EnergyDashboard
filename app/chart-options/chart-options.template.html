@@ -17,9 +17,13 @@
     </a>
 <ul class="list-group">
     <li class="list-group-item" ng-repeat="attrib in $ctrl.attributes"> 
-        {{ attrib.buildingName + ": " + attrib.parentName + " | " + attrib.name }}
-        <a class="btn btn-default pull-right" ng-click="$ctrl.removeAttribute($index)">
-            <span class="glyphicon glyphicon-remove"></span>
-        </a>
+        {{ attrib.buildingName + ": " + attrib.parentName + " | " + attrib.name + " axis=" + attrib.axis }}
+        <div class="pull-right">
+            <label class="radio-inline"><input type="radio" name="{{axis + $index}}" ng-value="1" ng-model="attrib.axis">Axis 1</label>
+            <label class="radio-inline"><input type="radio" name="{{axis + $index}}" ng-value="2" ng-model="attrib.axis">Axis 2</label>
+            <a class="btn btn-default" ng-click="$ctrl.removeAttribute($index)">
+                <span class="glyphicon glyphicon-remove"></span>
+            </a>
+        </div>
     </li>
 </ul>

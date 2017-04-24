@@ -43,17 +43,26 @@ angular.module('columnTemplateDropdownModule')
 
             // Determine the type of current element
             this.curType = "";
-
+            
+            if(this.elemName === undefined){
+                this.elemName = "";
+            }
+            
             this.determineType = function(){
                 var regexpAHU = /ahu/gi;
                 var regexpRM = /ahu\d/gi;
+                // Check if name is undef
+                if(this.elemName === undefined){
+                    this.elemName = "";
+                }
+                console.log("col template elemName: ", this.elemName);
                 if(self.elemName.match(regexpRM)){
                     self.curType = "room";
-                    //alert("room");
+                    console.log("ROOM TYPE");
                 }
                 else if (self.elemName.match(regexpAHU)) {
                     self.curType = "ahu";
-                    //alert("ahu");
+                    console.log("AHU TYPE");
                 }
             };
 

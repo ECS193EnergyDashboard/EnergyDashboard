@@ -41,6 +41,25 @@ angular.
                 });
             }
 
+            pi.getAttribute = function(webId) {
+                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/attributes/' + webId + '?selectedFields=Name;WebId;Links.Element'; 
+                return $http.get(url).then(function(response) {
+                    var attrib = {
+                        name: response.data.Name || '',
+                        webId: response.data.WebId || ''
+                    }
+                    var regex = /elements\/(\S+)/g;
+                    var match = regex.exec(response.data.Links.Element);
+                    var elementWebId = match[1];
+                    return pi.getElement(elementWebId).then(function(response) {
+                        attrib.element = response;
+                        return attrib;
+                    });
+                }, function(response) {
+                    console.log('Error: getAttrib(): ' + response.status + ' - ' + response.statusText);
+                });      
+            }
+
             pi.getValuesOfElement = function(webId) {
                 var result = [];
                 var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/streamsets/' + webId + '/value?selectedFields=Items.Name;Items.WebId;Items.Value.Value;Items.Value.UnitsAbbreviation;Items.Value.Good'
@@ -64,6 +83,24 @@ angular.
                     console.log('Error: getValuesOfElement(): ' + response.status + ' - ' + response.statusText);
                 });
             };
+
+            pi.getValuesOfElements = function(webIds) {
+                var result = [];
+                var promises = [];
+                for (var webId of webIds) {
+                    promises.push(pi.getElement(webId));
+                    promises.push(pi.getValuesOfElement(webId));
+                }
+                return $q.all(promises).then(function(responses) {
+                    for (var i = 0; i < responses.length; i += 2) {
+                        var element = responses[i];
+                        element.values = responses[i + 1];
+                        result.push(element);
+                    }
+                    return result;
+                });
+            }
+
 
             pi.getChildrenOfElement = function(parentWebId) {
                 var result = [];
@@ -198,6 +235,37 @@ angular.
                 }, function(response) {
                     console.log('Error: getSummaryOfAttribute(): ' + response.status + ' - ' + response.statusText);
                 });
+            }
+
+            pi.getInterpolatedOfAttribute = function(webId, interval, startTime, endTime) {
+                var result = [];
+                var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/streams/' + webId + '/interpolated?selectedFields=Items.UnitsAbbreviation;Items.Timestamp;Items.Value;Items.Good';
+                if (startTime) {
+                    url += "&startTime=" + startTime;   
+                }
+                if (endTime) {
+                    url += "&endTime=" + endTime;
+                }
+                if (interval) {
+                    url += "&interval=" + interval;
+                }
+                return $http.get(url).then(function(response) {
+                    var items = response.data.Items;
+                    for (var item of items) {
+                        var v = { 
+                            timestamp: new Date(item.Timestamp),
+                            value: item.Value || 0, 
+                            good: item.Good || false
+                        };
+                        if (v.value.Value !== undefined) { // Handle nested value objects
+                            v.value = v.value.Value;
+                        }
+                        result.push(v);
+                    }
+                    return result;
+                }, function(response) {
+                    console.log('Error: getInterpolatedOfAttribute(): ' + response.status + ' - ' + response.statusText);
+                });            
             }
 
             pi.tabulateValues = function(element) {

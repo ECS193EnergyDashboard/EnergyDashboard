@@ -18,15 +18,38 @@
     flex: 0 1 auto;
     transition: all .5s ease;
 }
+#side-bar-chart {
+    /*border: 5px dotted red;*/
+    width: 0;
+    flex: 0 1 auto;
+    transition: all .5s ease;
+}
+
 #wrapper.toggled #side-bar {
     width: 0;
     flex: 1 1 auto;
     transition: all 0.5s ease;
 }
+#wrapper:not(.toggled) #menu-toggle {
+    background-color: #b1d8e1;
+}
+
 #wrapper.toggledSelector #side-bar-selector {
     width: 0;
     flex: 1 1 auto;
     transition: all 0.5s ease;
+}
+#wrapper:not(.toggledSelector) #menu-selector-toggle {
+    background-color: #b1d8e1;
+}
+
+#wrapper.toggledChart #side-bar-chart {
+    width: 0;
+    flex: 1 1 auto;
+    transition: all 0.5s ease;
+}
+#wrapper:not(.toggledChart) #menu-chart-toggle {
+    background-color: #b1d8e1;
 }
 
 @media(min-width:768px) {
@@ -46,7 +69,17 @@
         flex: 1 1 auto;
         transition: all .5s ease;
     }
+    #side-bar-chart {
+        /*border: 5px dotted red;*/
+        width: 0;
+        flex: 1 1 auto;
+        transition: all .5s ease;
+    }
     #wrapper.toggledSelector #side-bar-selector {
+        flex: 0 1 auto;
+        transition: all 0.5s ease;
+    }
+    #wrapper.toggledChart #side-bar-chart {
         flex: 0 1 auto;
         transition: all 0.5s ease;
     }

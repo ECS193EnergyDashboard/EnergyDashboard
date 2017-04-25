@@ -55,14 +55,14 @@ angular.module('columnTemplateDropdownModule')
                 if(this.elemName === undefined){
                     this.elemName = "";
                 }
-                console.log("col template elemName: ", this.elemName);
+//                console.log("col template elemName: ", this.elemName);
                 if(self.elemName.match(regexpRM)){
                     self.curType = "room";
-                    console.log("ROOM TYPE");
+//                    console.log("ROOM TYPE");
                 }
                 else if (self.elemName.match(regexpAHU)) {
                     self.curType = "ahu";
-                    console.log("AHU TYPE");
+//                    console.log("AHU TYPE");
                 }
             };
 
@@ -79,6 +79,7 @@ angular.module('columnTemplateDropdownModule')
             }
 
             this.$onChanges = function() {
+                console.log("temps", this.templates);
                 this.determineType();
                 // Get templates from server
                 this.getTemplates();
@@ -134,7 +135,16 @@ angular.module('columnTemplateDropdownModule')
                     self.determineType();
                     // If default doesnt exists yet
                     if(self.templates.find(self.isDefault) == undefined && self.columns != undefined && self.columns.length > 0){
+                        console.log("Generating default");
                         self.generateDefault();
+                    }
+                    else{
+                        console.log("HELLO");
+                        for(var template of self.templates){
+                            if(template.name == "Default" && template.type == self.curType){
+                                self.currentTemplate = template;
+                            }
+                        }
                     }
 
                 }, function errorCallback(response) {

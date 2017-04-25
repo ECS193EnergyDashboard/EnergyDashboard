@@ -84,7 +84,7 @@ angular.module('dataTableModule').component('datatable', {
                 return;
             }
 
-            console.log("Datatable elemName", this.elemName);
+//            console.log("Datatable elemName", this.elemName);
 
             var columnSet = {};
 

@@ -4,6 +4,7 @@ angular.module('chartViewModule').component('chartView', {
             var self = this;
 
             this.isLoading = false;
+            this.data = [];
 
             var collectAttributes = function(params) {
                 var attributes = [];
@@ -30,16 +31,57 @@ angular.module('chartViewModule').component('chartView', {
                 endTime: urlParams.end
             };
 
-            var timeFormat = function(time) {
+            var charts = [];
+
+            var xTickFormat = function(time) {
                 return d3.time.format('%m/%d %H:%M')(new Date(time));
             }
 
-            this.d3options = {
+            var yTickFormat = function(d) {
+                return d3.format('.02f')(d);
+            }
+
+            var tooltipValueFormat = function(d) {
+                return d === null ? 'Bad' : yTickFormat(d);
+            }
+
+            var tooltip = nv.models.tooltip()
+                .duration(0)
+                .hideDelay(0)
+                .hidden(false)
+                .headerFormatter(xTickFormat)
+                .valueFormatter(yTickFormat);
+
+            var showGuideline = function(x) {
+                var tooltipData = { series: [] };
+                for (var chart of charts) {
+                    chart.api.showGuidelineAt(x);
+                    var guideData = chart.api.getDataAt(x);
+                    tooltipData.value = guideData.xValue;
+                    tooltipData.series = tooltipData.series.concat(guideData.series);
+                }
+                tooltip.hidden(false).data(tooltipData);
+            }
+
+            var hideGuideline = function() {
+                for (var chart of charts) {
+                    chart.api.hideGuideline();
+                }
+                tooltip.hidden(true);
+            }
+
+            this.lineConfig = {
+                visible: true,
+                disabled: true
+            }
+
+            this.lineOptions = {
                 chart: {
                     type: 'multiAxisLineChart',
                     //showLegend: false,
-                    height: 450,
-                    margin : {
+                    height: 200,
+                    width: 960,
+                    margin: {
                         top: 20,
                         right: 40,
                         bottom: 40,
@@ -50,28 +92,31 @@ angular.module('chartViewModule').component('chartView', {
                     useInteractiveGuideline: true, // if false use tooltipContent
                     xAxis: {
                         axisLabel: 'Time',
+                        tickFormat: xTickFormat
                     },
-                    xTickFormat: timeFormat,
                     yAxis1: {
                         axisLabel: '',
-                        tickFormat: function(d){
-                            return d3.format('.02f')(d);
-                        },
+                        tickFormat: yTickFormat,
                         axisLabelDistance: 10
                     },
                     yAxis2: {
                         axisLabel: '',
-                        tickFormat: function(d){
-                            return d3.format('.02f')(d);
-                        },
+                        tickFormat: yTickFormat,
                         axisLabelDistance: 10
                     },
                     interactiveLayer: {
                         tooltip: {
-                            valueFormatter: function(d) {
-                                return d === null ? 'Bad' : self.d3options.chart.yAxis1.tickFormat(d);
-                            }
+                            enabled: false
                         },
+                        dispatch: {
+                            elementMousemove: function(e) {
+                                showGuideline(e.pointXValue);
+                            },
+                            elementMouseout: hideGuideline
+                        }
+                    },
+                    callback: function(chart) {
+                        charts.push(chart);
                     }
                 },
                 title: {
@@ -81,21 +126,33 @@ angular.module('chartViewModule').component('chartView', {
             };
 
             var onChangeFocus = function(extent) {
-                var chart = self.api.getScope().chart;
-                if (chart.api.updateExtent) {
-                    chart.api.updateExtent(extent);
-                }
-                //self.api.refresh();              
+                for (var chart of charts) {
+                    if (chart.api.updateExtent) {
+                        chart.api.updateExtent(extent);
+                    }
+                }          
+            }
+
+            this.focusConfig = {
+                visible: true,
+                disabled: true
             }
 
             this.focusOptions = {
                 chart: {
                     type: 'focus',
+                    width: 900,
+                    margin: {
+                        top: 20,
+                        bottom: 20,
+                        left: 30 + 80,
+                        right: 30
+                    },
                     x: function(d) { return d.timestamp; },
                     y: function(d) { return d.value; },
                     xAxis: {
                         axisLabel: 'Time',
-                        tickFormat: timeFormat
+                        tickFormat: xTickFormat
                     },
                     dispatch: {
                         onBrush: onChangeFocus,
@@ -103,6 +160,7 @@ angular.module('chartViewModule').component('chartView', {
                 }
             };
 
+    
             this.datePicker = {};
             if (this.config.startTime && this.config.endTime) {
                 this.datePicker.date = {
@@ -166,8 +224,6 @@ angular.module('chartViewModule').component('chartView', {
                 this.interval = 1;
                 this.intervalUnits = this.intervalOptions[1];
             }
-
-            // TODO: handle "bad values" (make them undefined? aka holes in chart)
 
             this.$onInit = function() {
                 if (this.config.yAxisName) {
@@ -239,6 +295,8 @@ angular.module('chartViewModule').component('chartView', {
                         self.data[i].key = attrib.element.building + ": " + attrib.element.name + " | " + attrib.name; 
                     }
                     self.isLoading = false;
+                    self.lineConfig.disabled = false;
+                    self.focusConfig.disabled = false;
                 });
             };
         }]

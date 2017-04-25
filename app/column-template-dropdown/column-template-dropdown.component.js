@@ -371,7 +371,7 @@ angular.module('columnTemplateDropdownModule')
                 this.postTemplate(template);
                 $("#templateInput").val(''); // clear the inputbox
 
-                this.currentTemplate = template;
+                this.ApplyTemplate(template);
             };
 
             // POST template/profile to server
@@ -416,6 +416,10 @@ angular.module('columnTemplateDropdownModule')
                 });
                 this.getTemplates();
                 $('.modal-backdrop').remove(); // Hard remove backdrop - HOT FIX
+                
+                // scope.$watchCollection(this.templates, function (newValue) {
+                //     self.templates = newValue;
+                // });
             };
 
             // A function to overwrite the template on the server
@@ -450,7 +454,7 @@ angular.module('columnTemplateDropdownModule')
                 this.postTemplate(template);
                 $("#templateInput").val(''); // clear the inputbox
 
-                this.currentTemplate = template;
+                this.ApplyTemplate(template);
 
             };
 

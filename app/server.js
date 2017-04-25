@@ -53,9 +53,9 @@ app.post('/templatesDelete', function(req, res) {
     // console.log("Got a POST request for the templatesDelete");
     // console.log("req.body: ", req.body);
 
-
-    FindAndRemove(templates, "templateName", req.body.templateName)
-
+    console.log(templates.length);
+    FindAndRemove(templates, "name", req.body.templateName)
+    console.log(templates.length);
     // for(var template of templates){
     //     console.log(template.templateName);
     // }
@@ -99,12 +99,15 @@ var server = app.listen(8081, function() {
 
 
 function FindAndRemove(array, property, value) {
-    array.forEach(function(result, index) {
-        if(result[property] === value) {
+    // console.log(array.length);
+    array.forEach(function(current, index, array) {
+        if(current.property === value) {
             //Remove from array
-            array.splice(index, 1);
-        }    
+            console.log("deletingj");
+            array = array.splice(index, 1);
+        }
     });
+    //console.log(array.length);
 }
 
 function shutdown() {

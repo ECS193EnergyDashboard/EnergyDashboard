@@ -40,7 +40,7 @@ app.post('/templates', function(req, res) {
     // console.log("Got a POST request for the templates");
     //console.log("req.body: ", req.body);
     templates.push(req.body);
-    console.dir("templates: ", templates);
+    //console.dir(templates);
     res.status(200).send('template saved on server');
     // save to file
     jsonfile.writeFile(templatesLocation, templates, function (err) {
@@ -54,11 +54,22 @@ app.post('/templatesDelete', function(req, res) {
     // console.log("req.body: ", req.body);
 
     console.log(templates.length);
-    FindAndRemove(templates, "name", req.body.templateName)
+    console.dir(templates);
+
+    // Remove the template
+    var index = 0;
+    for(var template of templates){
+        if(template.name == req.body.name){
+            console.log("=======----------   DELETING  -----------=======  ", index)
+            break;
+        }
+        index++;
+    }
+    templates.splice(index, 1);
+
+    console.log();
     console.log(templates.length);
-    // for(var template of templates){
-    //     console.log(template.templateName);
-    // }
+    console.dir(templates);
     res.status(200).send('template deleted on server');
     // save to file
     jsonfile.writeFile(templatesLocation, templates, function (err) {
@@ -97,18 +108,6 @@ var server = app.listen(8081, function() {
     console.log("Example app listening at http://%s:%s", host, port)
 })
 
-
-function FindAndRemove(array, property, value) {
-    // console.log(array.length);
-    array.forEach(function(current, index, array) {
-        if(current.property === value) {
-            //Remove from array
-            console.log("deletingj");
-            array = array.splice(index, 1);
-        }
-    });
-    //console.log(array.length);
-}
 
 function shutdown() {
     console.log("Shutting down server...")

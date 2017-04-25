@@ -12,6 +12,8 @@ nv.models.multiAxisLineChart = function() {
         height = null,
         showLegend = true,
         noData = null,
+        showXAxis = true,
+        showYAxis = true,
         yDomain1,
         yDomain2,
         getX = function(d) { return d.x },
@@ -162,44 +164,32 @@ nv.models.multiAxisLineChart = function() {
             //if(dataLines1.length){d3.transition(lines1Wrap).call(lines1);}
             //if(dataLines2.length){d3.transition(lines2Wrap).call(lines2);}
 
-            xAxis
-                ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
-                .tickSize(-availableHeight, 0);
+            if (showXAxis) {
+                xAxis
+                    ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                    .tickSize(-availableHeight, 0);
 
-            g.select('.nv-x.nv-axis')
-                .attr('transform', 'translate(0,' + availableHeight + ')');
+                g.select('.nv-x.nv-axis')
+                    .attr('transform', 'translate(0,' + availableHeight + ')');
+            }
 
-            /*
-            d3.transition(g.select('.nv-x.nv-axis'))
-                .call(xAxis);
-            */
+            if (showYAxis) {
+                yAxis1
+                    ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
+                    .tickSize( -availableWidth, 0);
 
-            yAxis1
-                ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
-                .tickSize( -availableWidth, 0);
+                yAxis2
+                    ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
+                    .tickSize( -availableWidth, 0);
 
+                g.select('.nv-y1.nv-axis')
+                    .classed('nv-disabled', series1.length ? false : true)
+                    .attr('transform', 'translate(' + x.range()[0] + ',0)');
 
-            /*
-            d3.transition(g.select('.nv-y1.nv-axis'))
-                .call(yAxis1);
-            */
-
-            yAxis2
-                ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
-                .tickSize( -availableWidth, 0);
-
-            /*
-            d3.transition(g.select('.nv-y2.nv-axis'))
-                .call(yAxis2);
-            */
-
-            g.select('.nv-y1.nv-axis')
-                .classed('nv-disabled', series1.length ? false : true)
-                .attr('transform', 'translate(' + x.range()[0] + ',0)');
-
-            g.select('.nv-y2.nv-axis')
-                .classed('nv-disabled', series2.length ? false : true)
-                .attr('transform', 'translate(' + x.range()[1] + ',0)');
+                g.select('.nv-y2.nv-axis')
+                    .classed('nv-disabled', series2.length ? false : true)
+                    .attr('transform', 'translate(' + x.range()[1] + ',0)');
+            }
 
             legend.dispatch.on('stateChange', function(newState) {
                 chart.update();
@@ -209,12 +199,16 @@ nv.models.multiAxisLineChart = function() {
             // Update Axes
             //============================================================
             function updateXAxis() {
-                d3.transition(g.select('.nv-x.nv-axis')).call(xAxis);
+                if (showXAxis) {
+                    d3.transition(g.select('.nv-x.nv-axis')).call(xAxis);
+                }
             }
 
             function updateYAxis() {
-                d3.transition(g.select('.nv-y1.nv-axis')).call(yAxis1);
-                d3.transition(g.select('.nv-y2.nv-axis')).call(yAxis2);
+                if (showYAxis) {
+                    d3.transition(g.select('.nv-y1.nv-axis')).call(yAxis1);
+                    d3.transition(g.select('.nv-y2.nv-axis')).call(yAxis2);
+                }
             }
 
             //============================================================
@@ -477,6 +471,8 @@ nv.models.multiAxisLineChart = function() {
         yDomain1:      {get: function(){return yDomain1;}, set: function(_){yDomain1=_;}},
         yDomain2:    {get: function(){return yDomain2;}, set: function(_){yDomain2=_;}},
         noData:    {get: function(){return noData;}, set: function(_){noData=_;}},
+        showXAxis:    {get: function(){return showXAxis;}, set: function(_){showXAxis=_;}},
+        showYAxis:    {get: function(){return showYAxis;}, set: function(_){showYAxis=_;}},
         interpolate:    {get: function(){return interpolate;}, set: function(_){interpolate=_;}},
         legendRightAxisHint:    {get: function(){return legendRightAxisHint;}, set: function(_){legendRightAxisHint=_;}},
 

@@ -21,9 +21,9 @@
 </div>
 
 <div>
-    <nvd3 ng-hide="$ctrl.isLoading" config="$ctrl.focusConfig" options="$ctrl.focusOptions" data="$ctrl.data"><nvd3>
+    <nvd3 ng-hide="$ctrl.isLoading" config="$ctrl.focusConfig" options="$ctrl.focusOptions" data="$ctrl.datasetFlat"><nvd3>
 </div>
 
-<div ng-repeat="data in [0, 1, 2, 3]">
-    <nvd3 ng-hide="$ctrl.isLoading" config="$ctrl.lineConfig" options="$ctrl.lineOptions" data="$ctrl.data"><nvd3>
+<div ng-repeat="data in $ctrl.dataset">
+    <nvd3 ng-hide="$ctrl.isLoading" config="$ctrl.lineConfig" options="$ctrl.lineOptions" data="data"><nvd3>
 </div>

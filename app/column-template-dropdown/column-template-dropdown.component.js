@@ -139,10 +139,11 @@ angular.module('columnTemplateDropdownModule')
                         self.generateDefault();
                     }
                     else{
-                        console.log("HELLO");
-                        for(var template of self.templates){
-                            if(template.name == "Default" && template.type == self.curType){
-                                self.currentTemplate = template;
+                        if(self.currentTemplate.name != "" && self.currentTemplate.type != self.curType){
+                            for(var template of self.templates){
+                                if(template.name == "Default" && template.type == self.curType){
+                                    self.currentTemplate = template;
+                                }
                             }
                         }
                     }

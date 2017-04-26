@@ -22,7 +22,8 @@
     <div class="just-padding" ng-class="{loadingList: $ctrl.loadingElems}">
 
         <!--Tab buttons-->
-        <div class="list-group list-group-root well">
+        <div class="list-group list-group-root well" >
+
             <div dummy="$ctrl.search.name.length" index="$index" custom-drag-src-safe="side-selector" ng-repeat="element in $ctrl.filteredItems" >
                 <div ng-click="$ctrl.onSelectElem(element)"  class="sidebar-item list-group-item" ng-class="{selected: $ctrl.isSelectedElem(element), loading: $ctrl.elemIsLoading(element)}" >
                     <span ng-show="$ctrl.showClosedIcon(element)" class="glyphicon glyphicon-chevron-right pointer" ng-click="$ctrl.clickElem(element);$event.stopPropagation()"></span>

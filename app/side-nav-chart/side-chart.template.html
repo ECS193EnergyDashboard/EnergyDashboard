@@ -12,7 +12,12 @@
         </div>
 
         <!-- <div id="textHere"> Drop Items Here</div>-->
-        <div class="list-group list-group-root well">
+        <div class="list-group list-group-root well" id="sideBarChart">
+            <p ng-if="$ctrl.selection.length === 0" id="sideBarChartText">
+                Click on <br>
+                table cells <br>
+                to add items
+            </p>
             <div ng-repeat="attrib in $ctrl.selection" >
                 <span class="sidebar-item list-group-item selectorItem">
                     <div id="itemText">

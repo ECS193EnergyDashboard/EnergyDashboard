@@ -12,7 +12,12 @@
         </div>
 
         <!-- <div id="textHere"> Drop Items Here</div>-->
-        <div class="list-group list-group-root well">
+        <div class="list-group list-group-root well" id="sideBarDrop">
+            <p ng-if="$ctrl.selected.length < 2" id="sideBarDropText">
+                Drop <br>
+                Items <br>
+                Here
+            </p>
             <div ng-repeat="element in $ctrl.selected" class="selectItem" custom-drop-target="side-selector" custom-drop-success="$ctrl.onDropSuccess(item)" ng-class="{hiddenListItem: $ctrl.isDummyItem(element)}">
                 <span class="sidebar-item list-group-item selectorItem">
                     <div id="itemText">

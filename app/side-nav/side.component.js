@@ -43,14 +43,16 @@ angular.module('sideNavModule').component('sideBar', {
 
         //Wrapper for pi getChildrenOfElement service
         this.getChildren = function(webId, func) {
-            //Incrememnts load count
+            //Increment load count
             self.loadingElems++;
             pi.getChildrenOfElement(webId).then( function(data){
                 func(data);
                 self.loadingElems--;
-                //Decrements load count
+                //Decrement load count
                 if(self.loadingElems === 0){
                     console.log("Done loading");
+
+                    console.log(self.templateList);
                 }
             });
         };
@@ -72,8 +74,22 @@ angular.module('sideNavModule').component('sideBar', {
 
         //Recursively visits all of an elements children
         this.exploreElem = function(element) {
-            //Add templates to templateList
-            self.templateList.push(element.template);
+            //Search for existing template
+            var found = self.templateList.find( function(e){
+
+                return e.name === element.template;
+            });
+
+            //If template not found
+            if(found === undefined){
+                //Make an element for the template
+                var tempElem = {name: element.template, hasChildren: true, elements: []};
+                self.templateList.push(tempElem);
+                found = tempElem;
+            }
+            //Make element child of template
+            found.elements.push(element);
+
 
             //If element has children, but children have not been explored
             if (element.hasChildren && (element.elements === undefined || element.elements == null )) {
@@ -155,9 +171,7 @@ angular.module('sideNavModule').component('sideBar', {
             self.filterType = "template";
             self.searchPlaceHolder = "Search Templates...";
 
-            //Remove duplicates
-            self.templateList = Array.from(new Set(self.templateList));
-            console.log(self.templateList);
+
             self.filteredItems = self.templateList;
         };
 

@@ -58,10 +58,8 @@
 #sidebar-wrapper {
     z-index: 1000;
     position: relative;
-    left: 250px;
     width: 0;
     height: 100%;
-    margin-left: -250px;
     overflow-y: auto;
     background: white;
     /* Closing animation */
@@ -305,3 +303,58 @@
     flex: initial;
 }
 
+.loadingList {
+    animation: loadingList 2s linear infinite;
+}
+
+
+@keyframes loadingList {
+    0% {
+        color: grey;
+    }
+
+    40% {
+        color: white;
+    }
+
+    60%{
+        color: white;
+    }
+
+    100% {
+        color: grey;
+    }
+
+}
+
+#loadingText {
+    position: absolute;
+    z-index: 1300;
+    color: rgb(255, 255, 255);
+    top: 49%;
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 2em;
+    left: 0px;
+    right: 15px;
+    font-family: fantasy;
+    text-align: center;
+    background-color: rgb(179, 179, 179);
+    box-shadow: 2px 2px 4px 0px black;
+    border-style: outset;
+}
+
+#loadingOverlay{
+    content: '\A';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 67px;
+    left: -14px;
+    bottom: 0;
+    background: #898989;
+    opacity: 0.5;
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    z-index: 1200;
+}

@@ -7,16 +7,21 @@
         <button ng-click="$ctrl.applyFilter()" type="button" class="btn btn-default glyphicon glyphicon-filter"></button>
     </div>
     <form ng-submit="$ctrl.applyFilter()" class="form-wrapper">
-        <input type="text" class="form-control" id="usr" placeholder="{{$ctrl.searchPlaceHolder}}" ng-model="$ctrl.searchInput[$ctrl.filter]">
+        <input type="text" class="form-control" id="usr" placeholder="{{$ctrl.searchPlaceHolder}}" ng-model="$ctrl.searchInput[$ctrl.filterType]">
         <button id="clearFilterButton" ng-click="$ctrl.clearFilter()" type="button" class="btn btn-default glyphicon glyphicon-trash"></button>
     </form>
 </div>
+
+<p ng-if="$ctrl.loadingElems" id="loadingText">
+    Loading...
+</p>
+<div ng-if="$ctrl.loadingElems" id="loadingOverlay">
+</div>
 <div id="sidebar-wrapper">
 
-    <div class="just-padding">
+    <div class="just-padding" ng-class="{loadingList: $ctrl.loadingElems}">
 
         <!--Tab buttons-->
-
         <div class="list-group list-group-root well">
             <div dummy="$ctrl.search.name.length" index="$index" custom-drag-src-safe="side-selector" ng-repeat="element in $ctrl.filteredItems" >
                 <div ng-click="$ctrl.onSelectElem(element)"  class="sidebar-item list-group-item" ng-class="{selected: $ctrl.isSelectedElem(element), loading: $ctrl.elemIsLoading(element)}" >

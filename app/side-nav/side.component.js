@@ -9,65 +9,84 @@ angular.module('sideNavModule').component('sideBar', {
         // Highlighted Item Index
         self.hlIndex = -1;
         self.searchPlaceHolder = "Search names...";
-        self.filter= "name";
+        self.filterType= "name";
         self.search = {name:'', template:''};
         self.searchInput = {name:'', template:''};
         self.filteredItems = {};
         self.buildings = [];
-        self.elemList = [];
         self.filteredItems = self.buildings;
         self.templateList = [];
+        self.loadingElems = 0;
 
         // webid for buildings list
         var webId = 'E0bgZy4oKQ9kiBiZJTW7eugwDBxX8Kms5BG77JiQlqSuWwVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdT';
 
-
         // Controller constructor called after bindings initialized
         self.$onInit = function() {
             //Populates building names
-            pi.getChildrenOfElement(webId).then(function(data) {
-                //@TODO REMOVE DEBUGGING ONLY SLICE
+            this.getChildren(webId, function(data) {
+                //DEBUGGING ONLY SLICEwhy
                 //self.buildings = data.slice(0,10);
+                //Store data in buildings array
                 self.buildings = data;
 
                 //Loop through each building
                 self.buildings.forEach( function(elem) {
-                    self.elemList.push(elem);
                     //Recursively explore buildings directory
-                    self.exploreElem(elem);
+                    self.exploreElem(elem); //self.exploreElem(elemList, elem)
                 });
-                console.log("buildings: ", self.buildings);
+                //console.log("buildings: ", self.buildings);
+                //Set buildings as default navigation in sidebar
                 self.filteredItems = self.buildings;
             });
         };
 
+        //Wrapper for pi getChildrenOfElement service
+        this.getChildren = function(webId, func) {
+            //Incrememnts load count
+            self.loadingElems++;
+            pi.getChildrenOfElement(webId).then( function(data){
+                func(data);
+                self.loadingElems--;
+                //Decrements load count
+                if(self.loadingElems === 0){
+                    console.log("Done loading");
+                }
+            });
+        };
 
+        //Clears the filtered list
         this.clearFilter = function() {
-               this.searchInput[this.filter] = "";
+               this.searchInput[this.filterType] = "";
                this.applyFilter();
         };
 
+        //Applies the typed in filter
         this.applyFilter = function() {
-            console.log("Copying search");
-            //this.search.name = this.searchInput.name;
-            //this.search.template = this.searchInput.template;
-            self.filteredItems = treeFilterFilter(self.buildings, self.searchInput, self.filter);
+            console.log("Applying Filter");
+            console.log(self.filterType);
+            console.log(self.searchInput);
+            console.log(self.filteredItems);
+            self.filteredItems = treeFilterFilter(self.buildings, self.searchInput, self.filterType);
         };
 
-        //Recursively visits all of an elents childrens
+        //Recursively visits all of an elements children
         this.exploreElem = function(element) {
+            //Add templates to templateList
             self.templateList.push(element.template);
+
+            //If element has children, but children have not been explored
             if (element.hasChildren && (element.elements === undefined || element.elements == null )) {
-                pi.getChildrenOfElement(element.webId).then(function(data) {
+                //Get children of element
+
+                this.getChildren(element.webId, function(data) {
+                    //Add children to elements array
                     element.elements = data;
 
-                    //console.log("clicked: " + element.name);
-
+                    //Explore each child
                     element.elements.forEach( function(elem) {
-                        self.elemList.push(element);
                         self.exploreElem(elem);
                     });
-                    //console.log(element.name +" data", data.elements);
                 });
             }
         };
@@ -121,21 +140,25 @@ angular.module('sideNavModule').component('sideBar', {
             return (e.hasChildren && e.show );
         };
         this.searchNames = function(){
-            self.filter = "name";
+            self.filterType = "name";
             self.searchPlaceHolder = "Search names...";
+            self.filteredItems = self.buildings;
         };
         /*
         this.searchTags = function(){
             console.log(self.search.name);
-            self.filter = "tag";
+            self.filterType = "tag";
             self.searchPlaceHolder = "Search Tags...";
         };
         */
         this.searchTemplates = function(){
-            self.filter = "template";
+            self.filterType = "template";
             self.searchPlaceHolder = "Search Templates...";
-            console.log(Array.from(new set(self.templateList)));
 
+            //Remove duplicates
+            self.templateList = Array.from(new Set(self.templateList));
+            console.log(self.templateList);
+            self.filteredItems = self.templateList;
         };
 
     }]

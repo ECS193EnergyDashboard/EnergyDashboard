@@ -44,6 +44,9 @@ angular.module('columnTemplateDropdownModule')
             // Determine the type of current element
             this.curType = "";
 
+            // Keep track of the prev type
+            this.prevType = "";
+
             if(this.elemName === undefined){
                 this.elemName = "";
             }
@@ -79,10 +82,19 @@ angular.module('columnTemplateDropdownModule')
             }
 
             this.$onChanges = function() {
-                console.log("temps", this.templates);
+                this.prevType = this.curType;
                 this.determineType();
-                // Get templates from server
-                this.getTemplates();
+
+                // If we changed type after clicking something
+                if(this.prevType != this.curType){
+                    // Get templates from server / do default stuff
+                    this.getTemplates();
+                }
+                // User clicked on something of same type
+                else{
+                    // Make template persist
+                    this.ApplyTemplate(this.currentTemplate);
+                }
                 this.updateFiltered();
 
             };
@@ -340,7 +352,6 @@ angular.module('columnTemplateDropdownModule')
             // Called in html with $ctrl.columns
             this.saveTemplate = function(columnObjs) {
 
-
                 // Check to make sure template is not named default or name is already taken
                 if(this.newTemplateName == "Default"){
                     // console.log("Cant have a template named Default");
@@ -357,7 +368,6 @@ angular.module('columnTemplateDropdownModule')
                 }
 
                 var colObjToAdd = JSON.parse(angular.toJson(columnObjs)); // Make clone
-
 
                 var template = {
                     "name": this.newTemplateName,

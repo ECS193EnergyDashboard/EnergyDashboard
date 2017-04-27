@@ -77,6 +77,34 @@ app.post('/templatesDelete', function(req, res) {
   });
 })
 
+//This responds a POST request to /templatesDelete that updates
+app.post('/templatesUpdate', function(req, res) {
+    // console.log("Got a POST request for the templatesUpdate");
+    // console.log("req.body: ", req.body);
+
+    console.log(templates.length);
+    console.dir(templates);
+
+    // Find the template
+    var index = 0;
+    for(var template of templates){
+        if(template.name == req.body.name && template.type == req.body.type){
+            break;
+        }
+        index++;
+    }
+    // Update the template
+    template.colObj = req.body.colObj;
+
+
+    console.dir(templates);
+    res.status(200).send('template updated on server');
+    // save to file
+    jsonfile.writeFile(templatesLocation, templates, function (err) {
+      console.error(err)
+  });
+})
+
 
 //This responds to getTemplates
 app.get('/getTemplates', function(req, res) {

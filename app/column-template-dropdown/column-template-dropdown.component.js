@@ -452,42 +452,30 @@ angular.module('columnTemplateDropdownModule')
             // A function to overwrite the template on the server
             this.OverwriteTemplate = function(templateCols, overWriteTemplateName){
                 var template;
+                
+                // Find template by name and type
                 for(template of self.templates){
                     // Is default of current type
                     if(template.name == overWriteTemplateName && template.type == self.curType){
                         break;
                     }
                 }
-                
+                template.colObj = templateCols;
                 
                 $http({
                     method: 'POST',
-                    url: '/templatesDelete',
+                    url: '/templatesUpdate',
                     data: angular.toJson(template),
                 }).then(function successCallback(response) {
-                    console.log("POST Templates Success");
+
                     document.getElementById("templateInput").value = "";
-                    self.getTemplates();
-                    // Change the template cols
-                    template.colObj = templateCols;
-                    self.saveTemplate(templateCols);
-                    
                 }, function errorCallback(response) {
                     console.error("POST Failed ", response);
                 });
+                
 
-
-                // var colObjToAdd = JSON.parse(angular.toJson(template)); // Make clone
-                // 
-                // 
-                // 
-                // this.templates.push(template);
-                // console.log("added template ", this.templates);
-                // 
-                // this.postTemplate(template);
                  $("#templateInput").val(''); // clear the inputbox
-                // 
-                // this.ApplyTemplate(template);
+        
 
             };
 

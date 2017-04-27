@@ -368,8 +368,9 @@ angular.module('columnTemplateDropdownModule')
                     this.ShowErrorModal();
                     return;
                 }
-                for(temp of this.templates){
-                    if(this.newTemplateName == temp.name){
+                for(templ of this.templates){
+                    // New template name already exists and its type is the current type
+                    if(this.newTemplateName == templ.name && templ.type == self.curType){
                         this.ShowSaveAsModal();
                         return;
                     }
@@ -449,10 +450,16 @@ angular.module('columnTemplateDropdownModule')
             };
 
             // A function to overwrite the template on the server
-            this.OverwriteTemplate = function(template, overWriteTemplateName){
-                var template = {
-                    "name": overWriteTemplateName,
-                };
+            this.OverwriteTemplate = function(templateCols, overWriteTemplateName){
+                var template;
+                for(template of self.templates){
+                    // Is default of current type
+                    if(template.name == overWriteTemplateName && template.type == self.curType){
+                        break;
+                    }
+                }
+                
+                
                 $http({
                     method: 'POST',
                     url: '/templatesDelete',
@@ -460,27 +467,27 @@ angular.module('columnTemplateDropdownModule')
                 }).then(function successCallback(response) {
                     console.log("POST Templates Success");
                     document.getElementById("templateInput").value = "";
+                    self.getTemplates();
+                    // Change the template cols
+                    template.colObj = templateCols;
+                    self.saveTemplate(templateCols);
+                    
                 }, function errorCallback(response) {
                     console.error("POST Failed ", response);
                 });
 
 
-                var colObjToAdd = JSON.parse(angular.toJson(template)); // Make clone
-
-
-                var template = {
-                    "name": overWriteTemplateName,
-                    "colObj": colObjToAdd,
-                    "type": this.curType,
-                    "isDefault": "false"
-                };
-                this.templates.push(template);
-                console.log("added template ", this.templates);
-
-                this.postTemplate(template);
-                $("#templateInput").val(''); // clear the inputbox
-
-                this.ApplyTemplate(template);
+                // var colObjToAdd = JSON.parse(angular.toJson(template)); // Make clone
+                // 
+                // 
+                // 
+                // this.templates.push(template);
+                // console.log("added template ", this.templates);
+                // 
+                // this.postTemplate(template);
+                 $("#templateInput").val(''); // clear the inputbox
+                // 
+                // this.ApplyTemplate(template);
 
             };
 

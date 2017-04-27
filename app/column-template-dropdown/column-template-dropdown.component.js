@@ -85,11 +85,30 @@ angular.module('columnTemplateDropdownModule')
                 this.prevType = this.currentTemplate.type;
                 this.determineType();
 
+                // Get templates from server
+                this.getTemplates();
+                
                 // If we changed type after clicking something
-                if(this.prevType != this.curType){
-                    // Get templates from server / do default stuff
-                    this.getTemplates();
+                if(this.prevType != this.curType){  // do default stuff
+                    // If default doesnt exists yet
+                    if(self.templates.find(self.isDefault) == undefined && self.columns != undefined && self.columns.length > 0){
+                        console.log("Generating default");
+                        self.generateDefault();
+                    }
+                    else{
+                        // Set default when changing types
+                        if(self.currentTemplate.name != "" && self.currentTemplate.type != self.curType){
+                            for(var template of self.templates){
+                                if(template.name == "Default" && template.type == self.curType){
+                                    self.currentTemplate = template;
+                                }
+                            }
+                        }
+                    }
                 }
+                
+                
+                
                 // User clicked on something of same type
                 else if(this.curType != "" && this.currentTemplate.name != undefined){
                     // Make template persist
@@ -147,21 +166,7 @@ angular.module('columnTemplateDropdownModule')
                     self.updateFiltered();
 
                     self.determineType();
-                    // If default doesnt exists yet
-                    if(self.templates.find(self.isDefault) == undefined && self.columns != undefined && self.columns.length > 0){
-                        console.log("Generating default");
-                        self.generateDefault();
-                    }
-                    else{
-                        // Set default when changing types
-                        if(self.currentTemplate.name != "" && self.currentTemplate.type != self.curType){
-                            for(var template of self.templates){
-                                if(template.name == "Default" && template.type == self.curType){
-                                    self.currentTemplate = template;
-                                }
-                            }
-                        }
-                    }
+                    
 
                 }, function errorCallback(response) {
                     console.error("get templates failed ", response);
@@ -408,7 +413,7 @@ angular.module('columnTemplateDropdownModule')
             this.ApplyTemplate = function(template){
                 this.currentTemplate = template;
                 var colObjToAdd = JSON.parse(angular.toJson(template.colObj)); // Make clone
-                this.columns = colObjToAdd;
+                this.columns = template.colObj;
                 this.updateColObj({cols: template.colObj});  //output binding
             };
 

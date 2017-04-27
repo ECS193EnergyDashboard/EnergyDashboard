@@ -12,14 +12,22 @@
     </form>
 </div>
 
-<p ng-if="$ctrl.loadingElems" id="loadingText">
-    Loading...
+<p ng-if="$ctrl.loadingList()" id="loadingText">
+    Loading
 </p>
-<div ng-if="$ctrl.loadingElems" id="loadingOverlay">
+
+<div ng-if="$ctrl.loadingList()" id="loadingOverlay">
 </div>
+
+<div class="spinner"></div>
+
+<div ng-if="$ctrl.loadingList()" class="cssload-battery">
+    <div class="cssload-liquid"></div>
+</div>
+
 <div id="sidebar-wrapper">
 
-    <div class="just-padding" ng-class="{loadingList: $ctrl.loadingElems}">
+    <div class="just-padding" ng-class="{loadingList: $ctrl.loadingList()}">
 
         <!--Tab buttons-->
         <div class="list-group list-group-root well" >

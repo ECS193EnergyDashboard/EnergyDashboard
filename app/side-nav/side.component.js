@@ -191,5 +191,10 @@ angular.module('sideNavModule').component('sideBar', {
             self.onSelectElem(e);
         };
 
+        this.loadingList = function(){
+            
+            return self.loadingElems;
+        };
+
     }]
 });

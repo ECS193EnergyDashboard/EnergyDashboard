@@ -44,7 +44,7 @@ app.post('/templates', function(req, res) {
     res.status(200).send('template saved on server');
     // save to file
     jsonfile.writeFile(templatesLocation, templates, function (err) {
-      console.error("Error posting", err)
+      console.error("Error writing to json", err)
   });
 })
 

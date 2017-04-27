@@ -82,7 +82,7 @@ angular.module('columnTemplateDropdownModule')
             }
 
             this.$onChanges = function() {
-                this.prevType = this.curType;
+                this.prevType = this.currentTemplate.type;
                 this.determineType();
 
                 // If we changed type after clicking something
@@ -91,7 +91,7 @@ angular.module('columnTemplateDropdownModule')
                     this.getTemplates();
                 }
                 // User clicked on something of same type
-                else{
+                else if(this.curType != "" && this.currentTemplate.name != undefined){
                     // Make template persist
                     this.ApplyTemplate(this.currentTemplate);
                 }
@@ -101,6 +101,7 @@ angular.module('columnTemplateDropdownModule')
 
             // Generate default, push it to templates, and post to server
             this.generateDefault = function(){
+                console.log("generating default...");
                 var firstValues = 0;
                 for(var col of self.columns){
                    if (firstValues < 10) {
@@ -111,9 +112,11 @@ angular.module('columnTemplateDropdownModule')
                     firstValues++;
                 }
 
+                // Make clone, otherwise they are same reference
+                var colObjToAdd = JSON.parse(angular.toJson(self.columns));
                 var template = {
                     "name": "Default",
-                    "colObj": self.columns,
+                    "colObj": colObjToAdd,
                     "type": self.curType,
                     "isDefault": "true"
                 };
@@ -404,7 +407,8 @@ angular.module('columnTemplateDropdownModule')
             // A function to apply a template to the data table
             this.ApplyTemplate = function(template){
                 this.currentTemplate = template;
-                this.columns = template.colObj;
+                var colObjToAdd = JSON.parse(angular.toJson(template.colObj)); // Make clone
+                this.columns = colObjToAdd;
                 this.updateColObj({cols: template.colObj});  //output binding
             };
 

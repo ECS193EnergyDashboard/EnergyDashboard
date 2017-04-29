@@ -4,7 +4,8 @@
     <div class="tableMenus">
         <column-template-dropdown columns="$ctrl.columnNamesObjs" update-col-obj= "$ctrl.updateCol(cols)"
         row-data="$ctrl.data" is-analysis="'false'"
-        elem-name="$ctrl.elemName">
+        elem-name="$ctrl.elemName"
+        create-new-template="$ctrl.passNewTemplateNameDropdown(currentColumns)">
         </column-template-dropdown>
     </div>
 

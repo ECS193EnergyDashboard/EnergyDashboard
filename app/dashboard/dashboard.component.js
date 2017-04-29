@@ -112,5 +112,12 @@ angular.module('dashboardModule').component('dashboard',{
         this.toggleChartMenu = function(){
             $("#wrapper").toggleClass("toggledChart");
         };
+
+        <!-- //======== Start of modal code =========// -->
+
+        this.ShowTemplateSaveModalDashboard = function(currentColumns){
+            $('#newTempModal').modal({show:true});
+        };
+
     }]
 });

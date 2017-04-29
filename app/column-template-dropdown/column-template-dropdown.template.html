@@ -32,7 +32,7 @@
 
 
         <!--Save Template button for Data Tab-->
-        <button ng-click="$ctrl.ShowSaveModal()" data-toggle="modal" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false">
+        <button ng-click="$ctrl.ShowSaveModal($ctrl.currentColumns)" data-toggle="modal" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false">
             Save Template
         </button>
 
@@ -100,8 +100,8 @@
 
 
 
-<!-- Template Save Modal for data tab -->
-<div ng-class="{'saveModalData': $ctrl.isAnalysis=='false', 'saveModalAnalysis': $ctrl.isAnalysis=='true'}" class="modal fade" id="templateNameModalData" role="dialog">
+<!-- Template Save Modal -->
+<div class="modal fade saveModal" id="templateNameModalData" role="dialog">
     <div class="modal-dialog">
 <!-- Modal content-->
     <div class="modal-content">

@@ -5,7 +5,8 @@ angular.module('dataTableModule').component('datatable', {
         searchEnabled:  '<',
         reorderEnabled: '<',
         elemName:       '<',   // passed to columnTemplate component to determine template type
-        selection:      '='
+        selection:      '=',
+        passNewTemplateNameDropdown: '&'
     },
     controller: ['$filter', '$scope', function TableController($filter, $scope) {
         var self = this;
@@ -185,6 +186,11 @@ angular.module('dataTableModule').component('datatable', {
             } else {
                 select(value);
             }
+        }
+
+        this.passNewTemplateNameTable = function(currentColumns){
+            this.passNewTemplateNameDropdown(currentColumns);
+
         }
 
         // Whenever the displayed data is changed, recalculate sum and average of the shown rows only

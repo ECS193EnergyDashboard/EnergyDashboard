@@ -21,7 +21,8 @@ angular.module('columnTemplateDropdownModule')
         innerColumns:   '<', // Min, max, avg, st - this is needed for CSV
         updateColObj:   '&', // Output binding to update the table
         dateRange:      '<', // The date range to print on the csv
-        elemName:       '<'  // Element name to determine template type (from side-nav)
+        elemName:       '<',  // Element name to determine template type (from side-nav)
+        createNewTemplate:           '&'
     },
     controller: [
         '$http', 'typeFilter',
@@ -445,6 +446,13 @@ angular.module('columnTemplateDropdownModule')
                     console.error("POST Failed ", response);
                 });
 
+                for(var temp of self.templates){
+                    if(this.isDefault(temp)){
+                        console.log("DEFAULT");
+                    }
+                    // this.isDefault
+                }
+
                 $('.modal-backdrop').remove(); // Hard remove backdrop - HOT FIX
 
             };
@@ -482,6 +490,11 @@ angular.module('columnTemplateDropdownModule')
 
             //========-- Start of modal code --=========//
 
+
+            this.ShowSaveModal = function(currentColumns){
+                this.createNewTemplate(currentColumns);
+            }
+
             this.ShowDeleteModal = function(){
                 if(this.isAnalysis == "true"){
                     $(".deleteModalAnalysis").modal();
@@ -491,14 +504,6 @@ angular.module('columnTemplateDropdownModule')
                 }
             }
 
-            this.ShowSaveModal = function(){
-                if(this.isAnalysis == "true"){
-                    $(".saveModalAnalysis").modal();
-                }
-                else{
-                    $(".saveModalData").modal();
-                }
-            }
 
             this.ShowDownloadModal = function(){
                 if(this.isAnalysis == "true"){

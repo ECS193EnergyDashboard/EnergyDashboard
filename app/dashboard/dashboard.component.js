@@ -16,7 +16,7 @@ angular.module('dashboardModule').component('dashboard',{
         //Modal Bindings
         this.templateType = "";
         this.templateColumns = [];
-        this.newTemplate = {};
+        this.newTemplate;
 
         // Increments and decrements the loading binding, like a semaphore
         // Example: multiple async requests, each one UPs when sent, each one DOWNs when done, 0 signals loading is done

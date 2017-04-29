@@ -18,66 +18,7 @@ angular.module('dataTableModule').component('datatable', {
         this.columnNamesObjs = [];
 
 
-        var selectionIndexOf = function(obj) {
-            for (var i = 0; i < self.selection.length; i++) {
-                if (self.selection[i].webId === obj.webId) {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
-        var isSelected = function(obj) {
-            return selectionIndexOf(obj) !== -1;
-        }
-
-        var deselect = function(obj) {
-            var idx = selectionIndexOf(obj);
-            if (idx !== -1) {
-                self.selection.splice(idx, 1);
-            }
-        }
-
-        var select = function(obj) {
-            if (!isSelected(obj)) {
-                self.selection.push(obj);
-            }
-        }
-
-        this.formatValue = function(value) {
-            if (value === undefined || value.value === undefined) {
-                return "N/A";
-            } else if (typeof(value.value) === "number") {
-                return $filter('number')(value.value, 2);
-            } else {
-                return value.value;
-            }
-        };
-
-        this.valueStyle = function(value) {
-            var style = 'dataCell ';
-            if (value === undefined) {
-                style += 'missing';
-            } else if (!value.good) {
-                style += 'bad ';
-            }
-            if (value && isSelected(value)) {
-                style += 'selected ';
-            }
-            return style;
-        }
-
-        this.getters = {
-            value: function(key, element) {
-                return element[key].value;
-            }
-        };
-
-        this.$onChanges = function(changes) {
-            if(changes.newTemplate && this.newTemplate != {}){
-                // this.updateCol(this.newTemplate.colObj);
-                console.log("on change", this.newTemplate);
-            }
+       this.$onChanges = function() {
 
             if (this.searchEnabled === undefined) {
                 this.searchEnabled = true;
@@ -136,6 +77,62 @@ angular.module('dataTableModule').component('datatable', {
 
             this.displayed = this.data = this.tableSrc;
         }; //end $onChanges
+
+
+        var selectionIndexOf = function(obj) {
+            for (var i = 0; i < self.selection.length; i++) {
+                if (self.selection[i].webId === obj.webId) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        var isSelected = function(obj) {
+            return selectionIndexOf(obj) !== -1;
+        }
+
+        var deselect = function(obj) {
+            var idx = selectionIndexOf(obj);
+            if (idx !== -1) {
+                self.selection.splice(idx, 1);
+            }
+        }
+
+        var select = function(obj) {
+            if (!isSelected(obj)) {
+                self.selection.push(obj);
+            }
+        }
+
+        this.formatValue = function(value) {
+            if (value === undefined || value.value === undefined) {
+                return "N/A";
+            } else if (typeof(value.value) === "number") {
+                return $filter('number')(value.value, 2);
+            } else {
+                return value.value;
+            }
+        };
+
+        this.valueStyle = function(value) {
+            var style = 'dataCell ';
+            if (value === undefined) {
+                style += 'missing';
+            } else if (!value.good) {
+                style += 'bad ';
+            }
+            if (value && isSelected(value)) {
+                style += 'selected ';
+            }
+            return style;
+        }
+
+        this.getters = {
+            value: function(key, element) {
+                return element[key].value;
+            }
+        };
 
         this.ShowColumnList = function(columnsNames) {
             // just a check to make sure the button can not be clicked when there is nothing to show

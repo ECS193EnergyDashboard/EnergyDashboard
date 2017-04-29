@@ -21,6 +21,7 @@ angular.module('columnTemplateDropdownModule')
         innerColumns:   '<', // Min, max, avg, st - this is needed for CSV
         updateColObj:   '&', // Output binding to update the table
         dateRange:      '<', // The date range to print on the csv
+        newTemplate:    '<',
         elemName:       '<',  // Element name to determine template type (from side-nav)
         createNewTemplate:'&'
     },
@@ -52,37 +53,13 @@ angular.module('columnTemplateDropdownModule')
                 this.elemName = "";
             }
 
-            this.determineType = function(){
-                var regexpAHU = /ahu/gi;
-                var regexpRM = /ahu\d/gi;
-                // Check if name is undef
-                if(this.elemName === undefined){
-                    this.elemName = "";
+
+            this.$onChanges = function(changes) {
+                // watch for if there is a new template
+                if(changes.newTemplate && this.newTemplate != null ){
+                    this.ApplyTemplate(this.newTemplate);
                 }
-//                console.log("col template elemName: ", this.elemName);
-                if(self.elemName.match(regexpRM)){
-                    self.curType = "room";
-//                    console.log("ROOM TYPE");
-                }
-                else if (self.elemName.match(regexpAHU)) {
-                    self.curType = "ahu";
-//                    console.log("AHU TYPE");
-                }
-            };
 
-            this.updateFiltered = function(){
-                if(this.templates.length > 0){
-                    this.filteredTemplates = typeFilter(this.templates, self.curType);
-                }
-            }
-
-
-            this.$onInit = function(){
-                this.determineType();
-
-            }
-
-            this.$onChanges = function() {
                 this.prevType = this.currentTemplate.type;
                 this.determineType();
 
@@ -119,6 +96,37 @@ angular.module('columnTemplateDropdownModule')
 
             };
 
+            this.determineType = function(){
+                var regexpAHU = /ahu/gi;
+                var regexpRM = /ahu\d/gi;
+                // Check if name is undef
+                if(this.elemName === undefined){
+                    this.elemName = "";
+                }
+//                console.log("col template elemName: ", this.elemName);
+                if(self.elemName.match(regexpRM)){
+                    self.curType = "room";
+//                    console.log("ROOM TYPE");
+                }
+                else if (self.elemName.match(regexpAHU)) {
+                    self.curType = "ahu";
+//                    console.log("AHU TYPE");
+                }
+            };
+
+            this.updateFiltered = function(){
+                if(this.templates.length > 0){
+                    this.filteredTemplates = typeFilter(this.templates, self.curType);
+                }
+            }
+
+
+            this.$onInit = function(){
+                this.determineType();
+
+            }
+
+
             // Generate default, push it to templates, and post to server
             this.generateDefault = function(){
                 console.log("generating default...");
@@ -147,7 +155,19 @@ angular.module('columnTemplateDropdownModule')
                 self.updateFiltered();
 
                 // Post the default
-                self.postTemplate(template);
+                $http({
+                    method: 'POST',
+                    url: '/templates',
+                    data: angular.toJson(template),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(function successCallback(response) {
+                    //console.log("POST Templates Success");
+                    //document.getElementById("templateInput").value = "";
+                }, function errorCallback(response) {
+                    console.error("POST templates Failed ", response);
+                });
             }
 
             this.isDefault = function(template){
@@ -356,59 +376,7 @@ angular.module('columnTemplateDropdownModule')
              }
 
 
-            // Save template/profile for cols
-            // Called in html with $ctrl.columns
-            this.saveTemplate = function(columnObjs) {
 
-                // Check to make sure template is not named default or name is already taken
-                if(this.newTemplateName == "Default"){
-                    // console.log("Cant have a template named Default");
-                    this.errorMessage = "We're sorry but you can not have a template named Default";
-                    $("#templateInput").val(''); // clear the inputbox
-                    this.ShowErrorModal();
-                    return;
-                }
-                for(templ of this.templates){
-                    // New template name already exists and its type is the current type
-                    if(this.newTemplateName == templ.name && templ.type == self.curType){
-                        this.ShowSaveAsModal();
-                        return;
-                    }
-                }
-
-                var colObjToAdd = JSON.parse(angular.toJson(columnObjs)); // Make clone
-
-                var template = {
-                    "name": this.newTemplateName,
-                    "colObj": colObjToAdd,
-                    "type": this.curType,
-                    "isDefault": "false"
-                };
-                this.templates.push(template);
-                this.updateFiltered();
-
-                this.postTemplate(template);
-                $("#templateInput").val(''); // clear the inputbox
-
-                this.ApplyTemplate(template);
-            };
-
-            // POST template/profile to server
-            this.postTemplate = function(template){
-                $http({
-                    method: 'POST',
-                    url: '/templates',
-                    data: angular.toJson(template),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }).then(function successCallback(response) {
-                    //console.log("POST Templates Success");
-                    //document.getElementById("templateInput").value = "";
-                }, function errorCallback(response) {
-                    console.error("POST templates Failed ", response);
-                });
-            }
 
             // A function to apply a template to the data table
             this.ApplyTemplate = function(template){

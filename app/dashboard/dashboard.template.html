@@ -40,14 +40,18 @@
         </div>
 
         <!-- data module -->
-        <datatable ng-show="$ctrl.isDataTabShown()" table-src="$ctrl.data" selection="$ctrl.chartSelection" search-enabled="true" elem-name="$ctrl.elemName" pass-new-template-name-dropdown="$ctrl.ShowTemplateSaveModalDashboard(currentColumns)">
+        <datatable ng-show="$ctrl.isDataTabShown()" table-src="$ctrl.data" selection="$ctrl.chartSelection" search-enabled="true" elem-name="$ctrl.elemName" pass-new-template-name-dropdown="$ctrl.showTemplateSaveModalDashboard(currentColumns, type)"
+        new-template="$ctrl.newTemplate">
         </datatable>
         <!-- Analysis module -->
-        <analysis ng-show="$ctrl.isAnalyzeTabShown()" web-ids="$ctrl.webIds" on-start-load="$ctrl.loadingUp('analysis')" on-end-load="$ctrl.loadingDown('analysis')" selection="$ctrl.chartSelection" elem-name="$ctrl.elemName">
+        <analysis ng-show="$ctrl.isAnalyzeTabShown()" web-ids="$ctrl.webIds" on-start-load="$ctrl.loadingUp('analysis')" on-end-load="$ctrl.loadingDown('analysis')" selection="$ctrl.chartSelection" elem-name="$ctrl.elemName"
+        new-template="$ctrl.newTemplate">
         </analysis>
 
         <chart-options ng-show="$ctrl.isGraphTabShown()" attributes="$ctrl.chartSelection"></chart-options>
-        <modals></modals>
+        <modals template-type= "$ctrl.templateType" 
+        template-columns="$ctrl.templateColumns"
+        pass-new-template="$ctrl.passNewTemplate(template)"></modals>
     </div>
 
     <!-- /#page-content-wrapper -->

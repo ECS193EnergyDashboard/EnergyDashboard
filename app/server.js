@@ -38,13 +38,13 @@ app.get('/', function(req, res) {
 //This responds a POST request to /templates that adds a template to the json file
 app.post('/templates', function(req, res) {
     // console.log("Got a POST request for the templates");
-    //console.log("req.body: ", req.body);
+    // console.log("req.body: ", req.body);
     templates.push(req.body);
     //console.dir(templates);
     res.status(200).send('template saved on server');
     // save to file
     jsonfile.writeFile(templatesLocation, templates, function (err) {
-      console.error("Error writing to json", err)
+      // console.error("Error writing to json", err)
   });
 })
 

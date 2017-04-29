@@ -13,6 +13,11 @@ angular.module('dashboardModule').component('dashboard',{
         this.chartSelection = [];
         this.elemName = "";
 
+        //Modal Bindings
+        this.templateType = "";
+        this.templateColumns = [];
+        this.newTemplate = {};
+
         // Increments and decrements the loading binding, like a semaphore
         // Example: multiple async requests, each one UPs when sent, each one DOWNs when done, 0 signals loading is done
         this.loadingUp = function(name) {
@@ -113,11 +118,19 @@ angular.module('dashboardModule').component('dashboard',{
             $("#wrapper").toggleClass("toggledChart");
         };
 
+        this.passNewTemplate = function(template){
+            this.newTemplate = template;
+        };
+
         <!-- //======== Start of modal code =========// -->
 
-        this.ShowTemplateSaveModalDashboard = function(currentColumns){
+        this.showTemplateSaveModalDashboard = function(currentColumns, type){
+            console.log("currencol", currentColumns);
+            this.templateType = type;
+            this.templateColumns = currentColumns;
             $('#newTempModal').modal({show:true});
         };
+
 
     }]
 });

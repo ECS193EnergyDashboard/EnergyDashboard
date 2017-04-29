@@ -4,7 +4,8 @@ angular.module('analysisModule').component('analysis', {
         webIds:      '<',
         elemName:    '<', // passed to columnTemplate component to determine template type
         onStartLoad: '&',
-        onEndLoad:   '&'
+        onEndLoad:   '&',
+        newTemplate:  '<',
     },
     controller: [
         '$filter',

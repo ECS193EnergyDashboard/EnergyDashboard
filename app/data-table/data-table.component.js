@@ -6,6 +6,7 @@ angular.module('dataTableModule').component('datatable', {
         reorderEnabled: '<',
         elemName:       '<',   // passed to columnTemplate component to determine template type
         selection:      '=',
+        newTemplate:    '<',
         passNewTemplateNameDropdown: '&'
     },
     controller: ['$filter', '$scope', function TableController($filter, $scope) {
@@ -15,6 +16,7 @@ angular.module('dataTableModule').component('datatable', {
         this.averages = {};
         this.columnNames = [];
         this.columnNamesObjs = [];
+
 
         var selectionIndexOf = function(obj) {
             for (var i = 0; i < self.selection.length; i++) {
@@ -71,7 +73,12 @@ angular.module('dataTableModule').component('datatable', {
             }
         };
 
-        this.$onChanges = function() {
+        this.$onChanges = function(changes) {
+            if(changes.newTemplate && this.newTemplate != {}){
+                // this.updateCol(this.newTemplate.colObj);
+                console.log("on change", this.newTemplate);
+            }
+
             if (this.searchEnabled === undefined) {
                 this.searchEnabled = true;
             }
@@ -84,8 +91,6 @@ angular.module('dataTableModule').component('datatable', {
             if (this.tableSrc.length == 0) {
                 return;
             }
-
-//            console.log("Datatable elemName", this.elemName);
 
             var columnSet = {};
 
@@ -188,15 +193,16 @@ angular.module('dataTableModule').component('datatable', {
             }
         }
 
-        this.passNewTemplateNameTable = function(currentColumns){
-            this.passNewTemplateNameDropdown(currentColumns);
-
+        // Passes the currentTemplate up to the dashboard component
+        this.passNewTemplateNameTable = function(currentColumns, type){
+            this.passNewTemplateNameDropdown({currentColumns: currentColumns, type: type});
+            return true;
         }
+
 
         // Whenever the displayed data is changed, recalculate sum and average of the shown rows only
         $scope.$watch('$ctrl.displayed', function(newValue, oldValue) {
-            console.log("Recalculating...");
-
+            // console.log("Recalculating...");
             self.updateCalculations();
         });
 

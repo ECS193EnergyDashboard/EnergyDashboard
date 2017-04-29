@@ -22,7 +22,7 @@ angular.module('columnTemplateDropdownModule')
         updateColObj:   '&', // Output binding to update the table
         dateRange:      '<', // The date range to print on the csv
         elemName:       '<',  // Element name to determine template type (from side-nav)
-        createNewTemplate:           '&'
+        createNewTemplate:'&'
     },
     controller: [
         '$http', 'typeFilter',
@@ -159,6 +159,7 @@ angular.module('columnTemplateDropdownModule')
                 return false;
             };
 
+            // Gets the tempaltes from the server 
             this.getTemplates = function(){
                 // Get templates from server
                 $http({method: 'GET', url: '/getTemplates'}).then(function successCallback(response) {
@@ -172,8 +173,6 @@ angular.module('columnTemplateDropdownModule')
                 }, function errorCallback(response) {
                     console.error("get templates failed ", response);
                 });
-
-
             };
 
             this.GetHeaderData = function() {
@@ -483,7 +482,6 @@ angular.module('columnTemplateDropdownModule')
                 
 
                  $("#templateInput").val(''); // clear the inputbox
-        
 
             };
 
@@ -491,9 +489,15 @@ angular.module('columnTemplateDropdownModule')
             //========-- Start of modal code --=========//
 
 
+
             this.ShowSaveModal = function(currentColumns){
-                this.createNewTemplate(currentColumns);
-            }
+                this.createNewTemplate({currentColumns: currentColumns, type: this.curType});
+                // this.createNewTemplate({currentColumns: currentColumns, type: this.curType}).then(function() {
+                this.getTemplates();
+                // });
+                // return true;
+            };
+
 
             this.ShowDeleteModal = function(){
                 if(this.isAnalysis == "true"){

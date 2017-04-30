@@ -33,7 +33,6 @@ angular.module('modalsModule').component('modals', {
         // Save template/profile for cols
         // Called in html with $ctrl.columns
         this.saveTemplate = function() {
-            this.getTemplates(); // update template array   
             // Check to make sure template is not named default or name is already taken
             if(this.newTemplateName == "Default"){
                 $("#templateNameErrorModal").modal('show');
@@ -116,12 +115,14 @@ angular.module('modalsModule').component('modals', {
                 data: angular.toJson(oldTemplate),
             }).then(function successCallback(response) {
                 console.log("POST Templates Success");
-                document.getElementById("templateInput").value = "";
+                self.getTemplates().then(function(){
+                    self.saveTemplate();
+                });
+                return self.getTemplates();
             }, function errorCallback(response) {
                 console.error("POST Failed ", response);
             });
-
-            this.saveTemplate();
+            document.getElementById("templateInput").value = "";
             $("#newTempModal").modal('hide');
             $("#templateInput").val(''); // clear the inputbox
         };

@@ -40,11 +40,24 @@
         </div>
 
         <!-- data module -->
-        <datatable ng-show="$ctrl.isDataTabShown()" table-src="$ctrl.data" selection="$ctrl.chartSelection" search-enabled="true" elem-name="$ctrl.elemName" pass-new-template-name-dropdown="$ctrl.showTemplateSaveModalDashboard(currentColumns, type)"
+        <datatable ng-show="$ctrl.isDataTabShown()" 
+        table-src="$ctrl.data" 
+        selection="$ctrl.chartSelection" 
+        search-enabled="true" 
+        elem-name="$ctrl.elemName" 
+        create-template-dropdown="$ctrl.createTemplate(currentColumns, type)"
+        delete-template-dropdown="$ctrl.deleteTemplate(deleteTemplate)"
         new-template="$ctrl.newTemplate">
         </datatable>
         <!-- Analysis module -->
-        <analysis ng-show="$ctrl.isAnalyzeTabShown()" web-ids="$ctrl.webIds" on-start-load="$ctrl.loadingUp('analysis')" on-end-load="$ctrl.loadingDown('analysis')" selection="$ctrl.chartSelection" elem-name="$ctrl.elemName"
+        <analysis ng-show="$ctrl.isAnalyzeTabShown()" 
+        web-ids="$ctrl.webIds" 
+        on-start-load="$ctrl.loadingUp('analysis')" 
+        on-end-load="$ctrl.loadingDown('analysis')" 
+        selection="$ctrl.chartSelection" 
+        elem-name="$ctrl.elemName"
+        create-template-dropdown="$ctrl.createTemplate(currentColumns, type)"
+        delete-template-dropdown="$ctrl.deleteTemplate(deleteTemplate)"
         new-template="$ctrl.newTemplate">
         </analysis>
 
@@ -52,7 +65,9 @@
         
         <modals template-type= "$ctrl.templateType" 
         template-columns="$ctrl.templateColumns"
-        pass-new-template="$ctrl.passNewTemplate(template)"></modals>
+        set-template="$ctrl.setTemplate(template)"
+        delete-template="$ctrl.deleteTemplate">
+        </modals>
     </div>
 
     <!-- /#page-content-wrapper -->

@@ -23,7 +23,8 @@ angular.module('columnTemplateDropdownModule')
         dateRange:      '<', // The date range to print on the csv
         newTemplate:    '<',
         elemName:       '<',  // Element name to determine template type (from side-nav)
-        createNewTemplate:'&'
+        createTemplate: '&',
+        deleteTemplate: '&'
     },
     controller: [
         '$http', 'typeFilter',
@@ -388,41 +389,6 @@ angular.module('columnTemplateDropdownModule')
 
 
 
-            this.DeleteTemplate = function(){
-                var template = {
-                    "name": this.currentTemplate.name,
-                };
-                $http({
-                    method: 'POST',
-                    url: '/templatesDelete',
-                    data: angular.toJson(template),
-                }).then(function successCallback(response) {
-                    // Update templates
-                    self.getTemplates();
-
-                    // Update currentTemplate
-                    for(var template of self.templates){
-                        // Is default of current type
-                        if(template.name == "Default" && template.isDefault == "true" && template.type == self.curType){
-                            self.currentTemplate = template;
-                        }
-                    }
-                    console.log("POST Templates Success");
-                    document.getElementById("templateInput").value = "";
-                }, function errorCallback(response) {
-                    console.error("POST Failed ", response);
-                });
-
-                for(var temp of self.templates){
-                    if(this.isDefault(temp)){
-                        console.log("DEFAULT");
-                    }
-                    // this.isDefault
-                }
-
-                $('.modal-backdrop').remove(); // Hard remove backdrop - HOT FIX
-
-            };
 
             // A function to overwrite the template on the server
             this.OverwriteTemplate = function(templateCols, overWriteTemplateName){
@@ -459,22 +425,14 @@ angular.module('columnTemplateDropdownModule')
 
 
             this.ShowSaveModal = function(currentColumns){
-                this.createNewTemplate({currentColumns: currentColumns, type: this.curType});
-                // this.createNewTemplate({currentColumns: currentColumns, type: this.curType}).then(function() {
+                this.createTemplate({currentColumns: currentColumns, type: this.curType});
                 this.getTemplates();
-                // });
-                // return true;
             };
 
 
-            this.ShowDeleteModal = function(){
-                if(this.isAnalysis == "true"){
-                    $(".deleteModalAnalysis").modal();
-                }
-                else{
-                    $(".deleteModalData").modal();
-                }
-            }
+            this.ShowDeleteModal = function(deleteTemplate){
+                this.deleteTemplate({deleteTemplate: deleteTemplate});
+            };
 
 
             this.ShowDownloadModal = function(){

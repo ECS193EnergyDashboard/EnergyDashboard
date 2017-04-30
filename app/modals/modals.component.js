@@ -3,7 +3,8 @@ angular.module('modalsModule').component('modals', {
     bindings: {
         templateType:       '<',
         templateColumns:    '<',
-        passNewTemplate:    '&'
+        setTemplate:        '&',
+        deleteTemplate:    '<'
     },
     controller: ['$scope', '$http', function TableController($scope, $http) {
         var self = this;
@@ -60,7 +61,7 @@ angular.module('modalsModule').component('modals', {
             $("#newTempModal").modal('hide');
             $("#templateInput").val(''); // clear the inputbox
 
-            this.passNewTemplate({template: template});
+            this.setTemplate({template: template});
             this.postTemplate(template);
         }; // end saveTemplate
 
@@ -81,6 +82,37 @@ angular.module('modalsModule').component('modals', {
                 console.error("POST templates Failed ", response);
             });
         } // end postTemplate
+
+
+        this.deleteTemp = function(){
+            var template = {
+                "name": this.deleteTemplate.name,
+            };
+            $http({
+                method: 'POST',
+                url: '/templatesDelete',
+                data: angular.toJson(template),
+            }).then(function successCallback(response) {
+                // Update templates
+
+                // // Update currentTemplate
+                // for(var template of self.templates){
+                //     // Is default of current type
+                //     if(template.name == "Default" && template.isDefault == "true" && template.type == self.curType){
+                //         self.currentTemplate = template;
+                //     }
+                // }
+                console.log("POST Templates Success");
+                document.getElementById("templateInput").value = "";
+            }, function errorCallback(response) {
+                console.error("POST Failed ", response);
+            });
+
+            $('.modal-backdrop').remove(); // Hard remove backdrop - HOT FIX
+
+        };
+
+
 
 
 

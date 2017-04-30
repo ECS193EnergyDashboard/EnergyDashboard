@@ -6,6 +6,8 @@ angular.module('analysisModule').component('analysis', {
         onStartLoad: '&',
         onEndLoad:   '&',
         newTemplate:  '<',
+        createTemplateDropdown: '&',
+        deleteTemplateDropdown: '&'
     },
     controller: [
         '$filter',
@@ -157,6 +159,16 @@ angular.module('analysisModule').component('analysis', {
             // Callback for column-template-dropdown component
             this.updateCol = function(cols) {
                 this.outerColumnNames = cols;
+            }
+
+            // Passes the currentTemplate up to the dashboard component
+            this.createTemplate = function(currentColumns, type){
+                this.createTemplateDropdown({currentColumns: currentColumns, type: type});
+                return true;
+            }
+            this.deleteTemplate = function(deleteTemplate){
+                this.createTemplateDropdown({deleteTemplate: deleteTemplate, type: type});
+                return true;
             }
 
         }

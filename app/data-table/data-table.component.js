@@ -7,7 +7,8 @@ angular.module('dataTableModule').component('datatable', {
         elemName:       '<',   // passed to columnTemplate component to determine template type
         selection:      '=',
         newTemplate:    '<',
-        passNewTemplateNameDropdown: '&'
+        createTemplateDropdown: '&',
+        deleteTemplateDropdown: '&'
     },
     controller: ['$filter', '$scope', function TableController($filter, $scope) {
         var self = this;
@@ -191,9 +192,12 @@ angular.module('dataTableModule').component('datatable', {
         }
 
         // Passes the currentTemplate up to the dashboard component
-        this.passNewTemplateNameTable = function(currentColumns, type){
-            this.passNewTemplateNameDropdown({currentColumns: currentColumns, type: type});
-            return true;
+        this.createTemplate = function(currentColumns, type){
+            this.createTemplateDropdown({currentColumns: currentColumns, type: type});
+        }
+
+        this.deleteTemplate = function(deleteTemplate){
+            this.deleteTemplateDropdown({deleteTemplate: deleteTemplate});
         }
 
 

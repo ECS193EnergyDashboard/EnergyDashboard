@@ -16,6 +16,7 @@ angular.module('dashboardModule').component('dashboard',{
         //Modal Bindings
         this.templateType = "";
         this.templateColumns = [];
+        this.deleteTemplate = {};
         this.newTemplate;
 
         // Increments and decrements the loading binding, like a semaphore
@@ -118,17 +119,24 @@ angular.module('dashboardModule').component('dashboard',{
             $("#wrapper").toggleClass("toggledChart");
         };
 
-        this.passNewTemplate = function(template){
-            this.newTemplate = template;
-        };
+
 
         <!-- //======== Start of modal code =========// -->
 
-        this.showTemplateSaveModalDashboard = function(currentColumns, type){
-            console.log("currencol", currentColumns);
+        this.setTemplate = function(template){
+            this.newTemplate = template;
+        };
+
+        this.createTemplate = function(currentColumns, type){
             this.templateType = type;
             this.templateColumns = currentColumns;
             $('#newTempModal').modal({show:true});
+        };
+
+
+        this.deleteTemplate = function(deleteTemplate){
+            this.deleteTemplate = deleteTemplate;
+            $('#deleteTempModal').modal({show:true});
         };
 
 

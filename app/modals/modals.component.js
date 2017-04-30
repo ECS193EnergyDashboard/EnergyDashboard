@@ -29,8 +29,6 @@ angular.module('modalsModule').component('modals', {
             });
         };
 
-      
-
 
         // Save template/profile for cols
         // Called in html with $ctrl.columns
@@ -61,13 +59,14 @@ angular.module('modalsModule').component('modals', {
             $("#newTempModal").modal('hide');
             $("#templateInput").val(''); // clear the inputbox
 
-            this.setTemplate({template: template});
             this.postTemplate(template);
+            this.setTemplate({template: template});
         }; // end saveTemplate
 
 
         // POST template/profile to server
         this.postTemplate = function(template){
+            console.log(template);   
             $http({
                 method: 'POST',
                 url: '/templates',
@@ -87,21 +86,13 @@ angular.module('modalsModule').component('modals', {
         this.deleteTemplate = function(){
             var template = {
                 "name": this.templateToDelete.name,
+                "type": this.templateToDelete.type,
             };
             $http({
                 method: 'POST',
                 url: '/templatesDelete',
                 data: angular.toJson(template),
             }).then(function successCallback(response) {
-                // Update templates
-
-                // // Update currentTemplate
-                // for(var template of self.templates){
-                //     // Is default of current type
-                //     if(template.name == "Default" && template.isDefault == "true" && template.type == self.curType){
-                //         self.currentTemplate = template;
-                //     }
-                // }
                 console.log("POST Templates Success");
                 document.getElementById("templateInput").value = "";
             }, function errorCallback(response) {
@@ -111,6 +102,32 @@ angular.module('modalsModule').component('modals', {
             $('.modal-backdrop').remove(); // Hard remove backdrop - HOT FIX
 
         };
+
+
+        // A function to overwrite the template on the server
+        this.overwriteTemplate = function(){
+            var oldTemplate = {
+                "name": this.newTemplateName,
+                "type": this.templateType,
+            };
+            $http({
+                method: 'POST',
+                url: '/templatesDelete',
+                data: angular.toJson(oldTemplate),
+            }).then(function successCallback(response) {
+                console.log("POST Templates Success");
+                document.getElementById("templateInput").value = "";
+            }, function errorCallback(response) {
+                console.error("POST Failed ", response);
+            });
+
+            this.saveTemplate();
+            $("#newTempModal").modal('hide');
+            $("#templateInput").val(''); // clear the inputbox
+        };
+
+
+
 
 
 

@@ -390,36 +390,6 @@ angular.module('columnTemplateDropdownModule')
 
 
 
-            // A function to overwrite the template on the server
-            this.OverwriteTemplate = function(templateCols, overWriteTemplateName){
-                var template;
-                
-                // Find template by name and type
-                for(template of self.templates){
-                    // Is default of current type
-                    if(template.name == overWriteTemplateName && template.type == self.curType){
-                        break;
-                    }
-                }
-                template.colObj = templateCols;
-                
-                $http({
-                    method: 'POST',
-                    url: '/templatesUpdate',
-                    data: angular.toJson(template),
-                }).then(function successCallback(response) {
-
-                    document.getElementById("templateInput").value = "";
-                }, function errorCallback(response) {
-                    console.error("POST Failed ", response);
-                });
-                
-
-                 $("#templateInput").val(''); // clear the inputbox
-
-            };
-
-
             //========-- Start of modal code --=========//
 
 
@@ -432,6 +402,7 @@ angular.module('columnTemplateDropdownModule')
 
             this.ShowDeleteModal = function(templateToDelete){
                 this.deleteTemplate({templateToDelete: templateToDelete});
+                this.getTemplates();
             };
 
 
@@ -444,23 +415,6 @@ angular.module('columnTemplateDropdownModule')
                 }
             }
 
-            this.ShowErrorModal = function(){
-                if(this.isAnalysis == "true"){
-                    $(".errorModalAnalysis").modal();
-                }
-                else{
-                    $(".errorModalData").modal();
-                }
-            }
-
-            this.ShowSaveAsModal = function(){
-                if(this.isAnalysis == "true"){
-                    $(".saveAsModalAnalysis").modal();
-                }
-                else{
-                    $(".saveAsModalData").modal();
-                }
-            }
 
 
         } //end controller

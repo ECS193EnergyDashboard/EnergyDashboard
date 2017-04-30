@@ -1,29 +1,6 @@
 
 
-<!-- Template Save Modal -->
-<!-- <div role="dialog">
-    <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Please Enter Template Name</h4>
-        </div>
-    <div class="modal-body">
-
-        <input autofocus="autofocus" id="templateInput" class="form-control" type="text" ng-init="$ctrl.newTemplateName" ng-model="$ctrl.newTemplateName" placeholder="My Template Name...">
-
-    </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button ng-click="$ctrl.saveTemplate($ctrl.columns)" type="button" class="btn btn-default" aria-haspopup="true" aria-expanded="false" data-dismiss="modal">Save Current Template
-            </button>
-        </div>
-    </div>
-
-    </div>
-</div> -->
-
-
+<!-- create template modal -->
 <div class="modal" id="newTempModal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -44,7 +21,7 @@
     </div>
 </div>
 
-
+<!-- Template can not be named default modal -->
 <div class="modal" id="templateNameErrorModal" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -63,21 +40,23 @@
 </div>
 
 
+
+<!-- Template name conflict modal -->
 <div class="modal" id="templateNameConflictModal" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">You Already have a templated named {{$ctrl.newTemplateName}} of type {{$ctrl.templateType}}
+            <h4 class="modal-title">You Already have a templated named "{{$ctrl.newTemplateName}}" of type "{{$ctrl.templateType}}"
             </h4>
         </div>
         <div class="modal-body">
             Would you like to Overwrite this template?
         </div>
         <div class="modal-footer">
-<!--             <button ng-click="$ctrl.saveTemplate()" type="button" class="btn btn-default"> Overwrite Template
-            </button> -->
             <a href="#" data-dismiss="modal" class="btn">Close</a>
+            <button ng-click="$ctrl.overwriteTemplate()" type="button" class="btn btn-default" data-dismiss="modal">Overwrite Template
+            </button>
         </div>
         </div>
     </div>
@@ -109,23 +88,3 @@
 
 
 
-
-
-<!-- <div class="modal" id="templateNameErrorModal" data-backdrop="static">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-          <h4 class="modal-title">Error:</h4>
-        </div><div class="container"></div>
-        <div class="modal-body">
-          Content for the dialog / modal goes here.
-        </div>
-        <div class="modal-footer">
-          <a href="#" data-dismiss="modal" class="btn">Close</a>
-          <a href="#" class="btn btn-primary">Save changes</a>
-        </div>
-      </div>
-    </div>
-</div>
- -->

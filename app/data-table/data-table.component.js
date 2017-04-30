@@ -196,8 +196,8 @@ angular.module('dataTableModule').component('datatable', {
             this.createTemplateDropdown({currentColumns: currentColumns, type: type});
         }
 
-        this.deleteTemplate = function(deleteTemplate){
-            this.deleteTemplateDropdown({deleteTemplate: deleteTemplate});
+        this.deleteTemplate = function(templateToDelete){
+            this.deleteTemplateDropdown({templateToDelete: templateToDelete});
         }
 
 

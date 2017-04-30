@@ -430,8 +430,8 @@ angular.module('columnTemplateDropdownModule')
             };
 
 
-            this.ShowDeleteModal = function(deleteTemplate){
-                this.deleteTemplate({deleteTemplate: deleteTemplate});
+            this.ShowDeleteModal = function(templateToDelete){
+                this.deleteTemplate({templateToDelete: templateToDelete});
             };
 
 

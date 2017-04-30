@@ -16,7 +16,7 @@ angular.module('dashboardModule').component('dashboard',{
         //Modal Bindings
         this.templateType = "";
         this.templateColumns = [];
-        this.deleteTemplate = {};
+        this.templateToDelete = {};
         this.newTemplate;
 
         // Increments and decrements the loading binding, like a semaphore
@@ -134,8 +134,8 @@ angular.module('dashboardModule').component('dashboard',{
         };
 
 
-        this.deleteTemplate = function(deleteTemplate){
-            this.deleteTemplate = deleteTemplate;
+        this.deleteTemplate = function(templateToDelete){
+            this.templateToDelete = templateToDelete;
             $('#deleteTempModal').modal({show:true});
         };
 

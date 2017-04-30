@@ -166,8 +166,8 @@ angular.module('analysisModule').component('analysis', {
                 this.createTemplateDropdown({currentColumns: currentColumns, type: type});
                 return true;
             }
-            this.deleteTemplate = function(deleteTemplate){
-                this.createTemplateDropdown({deleteTemplate: deleteTemplate, type: type});
+            this.deleteTemplate = function(templateToDelete){
+                this.deleteTemplateDropdown({templateToDelete: templateToDelete});
                 return true;
             }
 

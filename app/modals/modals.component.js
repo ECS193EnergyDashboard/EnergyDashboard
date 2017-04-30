@@ -4,7 +4,7 @@ angular.module('modalsModule').component('modals', {
         templateType:       '<',
         templateColumns:    '<',
         setTemplate:        '&',
-        deleteTemplate:    '<'
+        templateToDelete:    '<'
     },
     controller: ['$scope', '$http', function TableController($scope, $http) {
         var self = this;
@@ -84,9 +84,9 @@ angular.module('modalsModule').component('modals', {
         } // end postTemplate
 
 
-        this.deleteTemp = function(){
+        this.deleteTemplate = function(){
             var template = {
-                "name": this.deleteTemplate.name,
+                "name": this.templateToDelete.name,
             };
             $http({
                 method: 'POST',

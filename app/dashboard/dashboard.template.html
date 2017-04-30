@@ -46,7 +46,7 @@
         search-enabled="true" 
         elem-name="$ctrl.elemName" 
         create-template-dropdown="$ctrl.createTemplate(currentColumns, type)"
-        delete-template-dropdown="$ctrl.deleteTemplate(deleteTemplate)"
+        delete-template-dropdown="$ctrl.deleteTemplate(templateToDelete)"
         new-template="$ctrl.newTemplate">
         </datatable>
         <!-- Analysis module -->
@@ -57,7 +57,7 @@
         selection="$ctrl.chartSelection" 
         elem-name="$ctrl.elemName"
         create-template-dropdown="$ctrl.createTemplate(currentColumns, type)"
-        delete-template-dropdown="$ctrl.deleteTemplate(deleteTemplate)"
+        delete-template-dropdown="$ctrl.deleteTemplate(templateToDelete)"
         new-template="$ctrl.newTemplate">
         </analysis>
 
@@ -66,7 +66,7 @@
         <modals template-type= "$ctrl.templateType" 
         template-columns="$ctrl.templateColumns"
         set-template="$ctrl.setTemplate(template)"
-        delete-template="$ctrl.deleteTemplate">
+        template-to-delete="$ctrl.templateToDelete">
         </modals>
     </div>
 

@@ -6,7 +6,7 @@ inner-columns="$ctrl.innerColumnNames"
 elem-name="$ctrl.elemName" 
 date-range="$ctrl.datePicker.date"
 create-template="$ctrl.createTemplate(currentColumns, type)"
-delete-template="$ctrl.deleteTemplate(deleteTemplate)">
+delete-template="$ctrl.deleteTemplate(templateToDelete)">
 </column-template-dropdown>
 
 <h3>Data from {{$ctrl.datePicker.date.startDate}} until  {{$ctrl.datePicker.date.endDate}}</h3>

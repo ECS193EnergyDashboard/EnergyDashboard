@@ -1,0 +1,24 @@
+.tableSettingsButtons{
+    float: right;
+    position: relative;
+    display: inline-block;
+
+}
+
+/*.dropdownPullRight {
+  float: right !important;
+  right: 0;
+  left: auto;
+}*/
+
+.tableButton{
+	/*padding: 14px 40px;*/
+	min-width: 100px;
+}
+
+/* Has same CSS as Bootstrap dropdown class except for floar: right;*/
+.menuDropdown{
+	/*float: right;*/
+    position: relative;
+    display: inline-block;
+}

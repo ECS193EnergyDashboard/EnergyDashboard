@@ -1,4 +1,3 @@
-
 angular.module('dashboardModule').component('dashboard',{
 	templateUrl: 'dashboard/dashboard.template.html',
 	controller: ['pi', function TableController(pi){
@@ -12,6 +11,7 @@ angular.module('dashboardModule').component('dashboard',{
         this.itemsToAdd = [];
 		this.loading = { sidebar: 0, data: 0, analysis: 0 };
         this.chartSelection = [];
+        this.elemName = "";
 
         // Increments and decrements the loading binding, like a semaphore
         // Example: multiple async requests, each one UPs when sent, each one DOWNs when done, 0 signals loading is done
@@ -31,6 +31,7 @@ angular.module('dashboardModule').component('dashboard',{
 
         this.addChildElements = function(parent) {
             this.itemsToAdd = parent.elements;
+            this.elemName = parent.name;
         }
 
         this.addElement = function(element) {

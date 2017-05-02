@@ -33,7 +33,9 @@ angular.module('columnTemplateDropdownModule')
             this.includeDR = false;
             var numInnerColumns = 0;
             this.currentTemplate = {};
-            this.unalteredCurrentTemplate = {};
+
+            $scope.unalteredCurrentTemplate = {};
+            $scope.isAnalysis = this.isAnalysis;
 
             // Default file name for downloading to CSV
             this.fileName = "Data.csv";
@@ -48,24 +50,35 @@ angular.module('columnTemplateDropdownModule')
             }
 
             this.$onInit = function(){
+                $scope.isAnalysis = this.isAnalysis;
                 this.determineType();
-
             }
 
+
+            // A watcher for the current template
             $scope.$watch('$ctrl.currentTemplate', function(newVal, oldVal){
-                console.log(this.unalteredCurrentTemplate);
-                if(this.isAnalysis == "true"){
-                    $('.saveTemplateButtonAnalysis').css({'color': 'red'});
+                if(angular.equals($scope.unalteredCurrentTemplate, newVal.colObj)){
+                    if($scope.isAnalysis == "true"){
+                        $('.saveTemplateButtonAnalysis').css({'color': 'green'});
+                    }
+                    else{
+                        $('.saveTemplateButtonData').css({'color': 'green'});
+                    }
                 }
                 else{
-                    $('.saveTemplateButtonData').css({'color': 'red'});
+                    if($scope.isAnalysis == "true"){
+                        $('.saveTemplateButtonAnalysis').css({'color': 'red'});
+                    }
+                    else{
+                        $('.saveTemplateButtonData').css({'color': 'red'});
+                    }                   
                 }
             }, true);
 
 
             this.$onChanges = function(changes){
                 if(changes.columns){
-                    this.unalteredCurrentTemplate = this.columns;
+                    $scope.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns))
                     if(this.isAnalysis == "true"){
                         $('.saveTemplateButtonAnalysis').css({'color': 'green'});
                     }

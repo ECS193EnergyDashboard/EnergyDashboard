@@ -52,26 +52,26 @@ angular.module('columnTemplateDropdownModule')
 
             }
 
-
             $scope.$watch('$ctrl.currentTemplate', function(newVal, oldVal){
-                $('.saveTemplateButton').css({'color': 'green'});
-                // if(newVal == this.unalteredCurrentTemplate){
-                //     console.log("PERFECT%");
-                // }
-                // else{
-                //     console.log("UNALTERD", this.unalteredCurrentTemplate);
-                //     console.log(newVal);
-                // }
-
+                console.log(this.unalteredCurrentTemplate);
+                if(this.isAnalysis == "true"){
+                    $('.saveTemplateButtonAnalysis').css({'color': 'red'});
+                }
+                else{
+                    $('.saveTemplateButtonData').css({'color': 'red'});
+                }
             }, true);
 
 
             this.$onChanges = function(changes){
                 if(changes.columns){
-                    $('.saveTemplateButton').css({'color': 'red'});
-                    // console.log("COLUMNS ", this.columns);
-                    // this.unalteredCurrentTemplate = this.columns;
-                    // console.log("UNALTERD", this.unalteredCurrentTemplate);
+                    this.unalteredCurrentTemplate = this.columns;
+                    if(this.isAnalysis == "true"){
+                        $('.saveTemplateButtonAnalysis').css({'color': 'green'});
+                    }
+                    else{
+                        $('.saveTemplateButtonData').css({'color': 'green'});
+                    }
                 }
 
                 this.prevType = this.currentTemplate.type;

@@ -364,7 +364,6 @@ angular.module('columnTemplateDropdownModule')
                 if(this.newTemplateName == "Default"){
                     // console.log("Cant have a template named Default");
                     this.errorMessage = "We're sorry but you can not have a template named Default";
-                    $("#templateInput").val(''); // clear the inputbox
                     this.ShowErrorModal();
                     return;
                 }
@@ -391,6 +390,12 @@ angular.module('columnTemplateDropdownModule')
                 $("#templateInput").val(''); // clear the inputbox
 
                 this.ApplyTemplate(template);
+
+                // Hide both copies - we dont know which was opened
+                $(".saveModalData").modal('hide');
+                $(".saveModalAnalysis").modal('hide');
+                // this.ShowSaveModal();
+                this.ClearTemplateNameInput();
             };
 
             // POST template/profile to server
@@ -472,9 +477,14 @@ angular.module('columnTemplateDropdownModule')
                 }, function errorCallback(response) {
                     console.error("POST Failed ", response);
                 });
-                
 
-                 $("#templateInput").val(''); // clear the inputbox
+                // Close both modals
+                $(".saveModalData").modal('hide');
+                $(".saveModalAnalysis").modal('hide');
+
+                this.ClearTemplateNameInput();
+
+                
         
 
             };
@@ -499,6 +509,8 @@ angular.module('columnTemplateDropdownModule')
                     $(".saveModalData").modal();
                 }
             }
+
+
 
             this.ShowDownloadModal = function(){
                 if(this.isAnalysis == "true"){
@@ -525,6 +537,10 @@ angular.module('columnTemplateDropdownModule')
                 else{
                     $(".saveAsModalData").modal();
                 }
+            }
+
+            this.ClearTemplateNameInput = function(){
+                $("#templateInput").val(''); // clear the inputbox
             }
 
 

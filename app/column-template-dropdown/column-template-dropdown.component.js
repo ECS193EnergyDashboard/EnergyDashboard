@@ -24,64 +24,56 @@ angular.module('columnTemplateDropdownModule')
         elemName:       '<'  // Element name to determine template type (from side-nav)
     },
     controller: [
-        '$http', 'typeFilter',
-        function colTemplateController($http, typeFilter) {
+        '$scope', '$http', 'typeFilter',
+        function colTemplateController($scope, $http, typeFilter) {
             var self = this;
             this.templates = [];
             this.filteredTemplates = [];
             this.showTemplates = false;
             this.includeDR = false;
-            var numInnerColumns =0;
-
+            var numInnerColumns = 0;
             this.currentTemplate = {};
+            this.unalteredCurrentTemplate = {};
 
             // Default file name for downloading to CSV
             this.fileName = "Data.csv";
-
             // an error message for the modal. Always set the error message before showing modal
             this.errorMessage = "";
-
             // Determine the type of current element
             this.curType = "";
-
             // Keep track of the prev type
             this.prevType = "";
-
             if(this.elemName === undefined){
                 this.elemName = "";
             }
-
-            this.determineType = function(){
-                var regexpAHU = /ahu/gi;
-                var regexpRM = /ahu\d/gi;
-                // Check if name is undef
-                if(this.elemName === undefined){
-                    this.elemName = "";
-                }
-//                console.log("col template elemName: ", this.elemName);
-                if(self.elemName.match(regexpRM)){
-                    self.curType = "room";
-//                    console.log("ROOM TYPE");
-                }
-                else if (self.elemName.match(regexpAHU)) {
-                    self.curType = "ahu";
-//                    console.log("AHU TYPE");
-                }
-            };
-
-            this.updateFiltered = function(){
-                if(this.templates.length > 0){
-                    this.filteredTemplates = typeFilter(this.templates, self.curType);
-                }
-            }
-
 
             this.$onInit = function(){
                 this.determineType();
 
             }
 
-            this.$onChanges = function() {
+
+            $scope.$watch('$ctrl.currentTemplate', function(newVal, oldVal){
+                $('.saveTemplateButton').css({'color': 'green'});
+                // if(newVal == this.unalteredCurrentTemplate){
+                //     console.log("PERFECT%");
+                // }
+                // else{
+                //     console.log("UNALTERD", this.unalteredCurrentTemplate);
+                //     console.log(newVal);
+                // }
+
+            }, true);
+
+
+            this.$onChanges = function(changes){
+                if(changes.columns){
+                    $('.saveTemplateButton').css({'color': 'red'});
+                    // console.log("COLUMNS ", this.columns);
+                    // this.unalteredCurrentTemplate = this.columns;
+                    // console.log("UNALTERD", this.unalteredCurrentTemplate);
+                }
+
                 this.prevType = this.currentTemplate.type;
                 this.determineType();
 
@@ -108,7 +100,6 @@ angular.module('columnTemplateDropdownModule')
                 }
                 
                 
-                
                 // User clicked on something of same type
                 else if(this.curType != "" && this.currentTemplate.name != undefined){
                     // Make template persist
@@ -117,6 +108,32 @@ angular.module('columnTemplateDropdownModule')
                 this.updateFiltered();
 
             };
+
+            this.determineType = function(){
+                var regexpAHU = /ahu/gi;
+                var regexpRM = /ahu\d/gi;
+                // Check if name is undef
+                if(this.elemName === undefined){
+                    this.elemName = "";
+                }
+//                console.log("col template elemName: ", this.elemName);
+                if(self.elemName.match(regexpRM)){
+                    self.curType = "room";
+//                    console.log("ROOM TYPE");
+                }
+                else if (self.elemName.match(regexpAHU)) {
+                    self.curType = "ahu";
+//                    console.log("AHU TYPE");
+                }
+            };
+
+            this.updateFiltered = function(){
+                if(this.templates.length > 0){
+                    this.filteredTemplates = typeFilter(this.templates, self.curType);
+                }
+            }
+
+
 
             // Generate default, push it to templates, and post to server
             this.generateDefault = function(){
@@ -484,10 +501,8 @@ angular.module('columnTemplateDropdownModule')
 
                 this.ClearTemplateNameInput();
 
-                
-        
-
             };
+
 
 
             //========-- Start of modal code --=========//

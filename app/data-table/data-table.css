@@ -60,6 +60,9 @@
     outline: 3px solid rgba(217, 217, 217, 0.92);
 }
 
+#itemBtn{
+    position: inherit;
+}
 #dataTableBody{
 
 }

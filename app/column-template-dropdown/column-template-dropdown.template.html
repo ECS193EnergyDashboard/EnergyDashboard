@@ -54,7 +54,11 @@
         Columns <span class="caret"></span>
       </button>
     <div class="dropdown-menu dropdown-content">
-        Search by name: <input type="text" ng-model="search.templateName">
+        Search: <input type="text" ng-model="search.templateName">
+        <div id="itemBtn">
+            Selected
+            <span class="glyphicon glyphicon-ok pointer" ng-click="search.templateName = { isChecked: 'true'} ;$event.stopPropagation()"></span>
+        </div>
         <div class="dropdownelm" ng-repeat="column in $ctrl.columns | orderBy:'name' | filter: search.templateName">
             <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}"> {{column.name}}
         </div>

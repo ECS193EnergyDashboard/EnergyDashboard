@@ -425,7 +425,7 @@
     content: '';
     position: absolute;
     transform: translate(0, -50%);
-    width: 10.0625rem;
+    width: 57%;
     background: rgb(80, 126, 220);
     opacity: 0;
     border-radius: 50%;

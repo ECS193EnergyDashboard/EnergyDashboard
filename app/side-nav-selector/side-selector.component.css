@@ -309,6 +309,17 @@
     padding: 0px;
 }
 
+#searchBox{
+    z-index: 999;
+    overflow: hidden;
+}
+
+#wrapper.toggledSelector #searchBox {
+    z-index: 999;
+    width: 0px;
+    display: none;
+}
+
 #sideBarDropText {
     position: relative;
     margin: auto;

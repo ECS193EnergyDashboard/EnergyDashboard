@@ -72,6 +72,7 @@ column-template-dropdown {
     z-index: 100;
     top: 32px;
 }
+
 .dropdown-content {
     display: none;
     position: absolute;

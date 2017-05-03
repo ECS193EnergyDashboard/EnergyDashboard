@@ -54,7 +54,7 @@
     position: fixed;
     margin-left: 0px;
     z-index: 1;
-    transform: translate(0%, -100%);
+    /*transform: translate(0%, -100%);*/
     background-image: linear-gradient(rgb(248, 248, 248) 0px, rgb(255, 255, 255) 100%);
     box-shadow: rgba(255, 255, 255, 0.14902) 0px 1px 0px inset, rgba(0, 0, 0, 0.0745098) 0px 1px 5px;
     outline: 3px solid rgba(217, 217, 217, 0.92);
@@ -66,7 +66,7 @@
 column-template-dropdown {
     position: fixed;
     right: 0px;
-    z-index: 1;
+    z-index: 100;
     top: 32px;
 }
 .dropdown-content {
@@ -92,13 +92,18 @@ column-template-dropdown {
 td {
     white-space: nowrap;
     min-width: 80px;
+    /*
+    min-width: 80px;
     max-width: 80px;
+    */
     text-align: center;
 }
 
 th {
+    /*
     min-width: 80px;
     max-width: 80px;
+    */
 }
 
 .table {

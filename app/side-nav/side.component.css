@@ -94,7 +94,7 @@
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fdfad9+0,fefbee+100&1+0,0+100 */
     background: -moz-radial-gradient(center, ellipse cover,  rgba(253,250,217,1) 0%, rgba(254,251,238,0) 100%); /* FF3.6-15 */
     background: -webkit-radial-gradient(center, ellipse cover,  rgba(253,250,217,1) 0%,rgba(254,251,238,0) 100%); /* Chrome10-25,Safari5.1-6 */
-    background: radial-gradient(ellipse at center,  rgba(253,250,217,1) 0%,rgba(254,251,238,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    background: radial-gradient(ellipse at center, rgba(18, 115, 0, 0.1) 0%,rgba(254,251,238,0) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfad9', endColorstr='#00fefbee',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 
 }
@@ -360,7 +360,7 @@
     left: -14px;
     bottom: 0;
     background: #316589;
-    opacity: 0.7;
+    opacity: 0.3;
     transition: all 0.5s;
     -webkit-transition: all 0.5s;
     z-index: 1200;
@@ -409,7 +409,7 @@
 }
 
 .cssload-liquid {
-    opacity: 0.75;
+    opacity: 0.55;
     position: absolute;
     z-index: 9999999;
     top: 0;
@@ -417,7 +417,7 @@
     left: 0;
     right: 0;
     width: 100%;
-    background: rgb(66, 86, 166);
+    background: rgb(80, 126, 220);
 
     animation: load 2.59s infinite;
 }
@@ -426,7 +426,7 @@
     position: absolute;
     transform: translate(0, -50%);
     width: 10.0625rem;
-    background: rgb(66, 86, 166);
+    background: rgb(80, 126, 220);
     opacity: 0;
     border-radius: 50%;
 }
@@ -532,6 +532,9 @@
     }
 }
 
+.filterBtn {
+    color: #cea045;
+}
 
 
 

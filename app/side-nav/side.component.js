@@ -17,6 +17,7 @@ angular.module('sideNavModule').component('sideBar', {
         self.filteredItems = self.buildings;
         self.templateList = [];
         self.loadingElems = 0;
+        self.isFiltered = 0;
 
         // webid for buildings list
         var webId = 'E0bgZy4oKQ9kiBiZJTW7eugwDBxX8Kms5BG77JiQlqSuWwVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdT';
@@ -61,6 +62,7 @@ angular.module('sideNavModule').component('sideBar', {
         this.clearFilter = function() {
                this.searchInput[this.filterType] = "";
                this.applyFilter();
+               self.isFiltered = 0;
         };
 
         //Applies the typed in filter
@@ -70,6 +72,7 @@ angular.module('sideNavModule').component('sideBar', {
             console.log(self.searchInput);
             console.log(self.filteredItems);
             self.filteredItems = treeFilterFilter(self.buildings, self.searchInput, self.filterType);
+            self.isFiltered = 1;
         };
 
         //Recursively visits all of an elements children
@@ -192,7 +195,7 @@ angular.module('sideNavModule').component('sideBar', {
         };
 
         this.loadingList = function(){
-            
+
             return self.loadingElems;
         };
 

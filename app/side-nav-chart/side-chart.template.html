@@ -7,7 +7,7 @@
             <div class="btn-group" role="group" aria-label="...">
                 <button ng-click="" type="button" class="disabled btn btn-default glyphicon glyphicon-home"></button>
                 <button ng-click="" type="button" class="disabled btn btn-default  glyphicon glyphicon-tag"></button>
-                <button ng-click="$ctrl.clearSelected()" type="button" class="disabled btn btn-default glyphicon glyphicon-trash pointer"></button>
+                <button ng-click="$ctrl.clearSelected()" type="button" class="btn btn-default glyphicon glyphicon-trash pointer"></button>
             </div>
         </div>
 
@@ -24,6 +24,10 @@
                         <h6 id="buildingName">{{attrib.buildingName}}</h6>
                         <br>
                         {{  attrib.parentName + " | " + attrib.name }}
+                    </div>
+
+                    <div id="itemBtn">
+                        <span class="glyphicon glyphicon-remove pointer" ng-click="$ctrl.removeChartElement(attrib);$event.stopPropagation()"></span>
                     </div>
 
 

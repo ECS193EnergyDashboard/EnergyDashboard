@@ -314,9 +314,12 @@
     margin: auto;
     text-align: center;
     top: 40%;
-    font-size: xx-large;
+    font-size: 3em;
     color: white;
+    font-family: fantasy;
     font-weight: bolder;
-
+    letter-spacing: .005em;
+    -webkit-text-stroke-color: rgba(0, 0, 0, 0.39);
+    -webkit-text-stroke-width: 1px;
 
 }

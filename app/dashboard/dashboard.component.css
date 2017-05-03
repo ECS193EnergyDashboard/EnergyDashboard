@@ -5,6 +5,7 @@
     transition: all .5s ease;
     border-right: 5px solid #eeeeee;
     position: relative;
+    z-index: 2;
 }
 
 .form-group {
@@ -13,20 +14,21 @@
 
 #dashboardBtns {
     position: fixed;
-    z-index: 1;
-    top: 35px;
+    top: 33px;
 }
 #side-bar-selector {
     /*border: 5px dotted red;*/
     width: 0;
     flex: 0 1 auto;
     transition: all .5s ease;
+    z-index: 2;
 }
 #side-bar-chart {
     /*border: 5px dotted red;*/
     width: 0;
     flex: 0 1 auto;
     transition: all .5s ease;
+    z-index: 2;
 }
 
 #wrapper.toggled #side-bar {

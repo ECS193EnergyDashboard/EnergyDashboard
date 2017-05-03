@@ -4,7 +4,7 @@
     <div class="btn-group" role="group" aria-label="...">
         <button ng-click="$ctrl.searchNames()" type="button" class="btn btn-default glyphicon glyphicon-home"></button>
         <button ng-click="$ctrl.searchTemplates()" type="button" class="btn btn-default glyphicon glyphicon-book"></button>
-        <button ng-click="$ctrl.applyFilter()" type="button" class="btn btn-default glyphicon glyphicon-filter"></button>
+        <button ng-click="$ctrl.applyFilter()" ng-class="{filterBtn: $ctrl.isFiltered}" type="button" class="btn btn-default glyphicon glyphicon-filter"></button>
     </div>
     <form ng-submit="$ctrl.applyFilter()" class="form-wrapper">
         <input type="text" class="form-control" id="usr" placeholder="{{$ctrl.searchPlaceHolder}}" ng-model="$ctrl.searchInput[$ctrl.filterType]">

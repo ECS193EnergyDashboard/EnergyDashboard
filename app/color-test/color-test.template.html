@@ -1,12 +1,15 @@
-<div>
-    <input type="number" ng-model="$ctrl.minColor.r"></input>
-    <input type="number" ng-model="$ctrl.minColor.g"></input>
-    <input type="number" ng-model="$ctrl.minColor.b"></input>
-<div>
+
+Number of Stripes
+<input type="number" ng-model="$ctrl.n" min="1" ng-change="$ctrl.onNChanged()"></input>
+
+<div ng-repeat="point in $ctrl.points">
+    {{ $ctrl.names[$index] + " Value" }}
+    <input type="number" ng-model="point.value" min="0" max="1" step="0.01"></input>
+    {{ $ctrl.names[$index] + " Color" }}
+    <input type="number" ng-model="point.color.r" min="0" max="255"></input>
+    <input type="number" ng-model="point.color.g" min="0" max="255"></input>
+    <input type="number" ng-model="point.color.b" min="0" max="255"></input>
+</div>
+
 <div ng-repeat="i in $ctrl.range" ng-style="$ctrl.style(i)">
 </div>
-<div>
-    <input type="number" ng-model="$ctrl.maxColor.r"></input>
-    <input type="number" ng-model="$ctrl.maxColor.g"></input>
-    <input type="number" ng-model="$ctrl.maxColor.b"></input>
-<div>

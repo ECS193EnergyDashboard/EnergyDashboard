@@ -10,14 +10,31 @@ angular.module('colorTestModule', [ ])
                 return { r: r, g: g, b: b };
             }
 
-            this.range = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-            this.minColor = rgb(0, 0, 255), this.maxColor = rgb(255, 0, 0), this.midColor = rgb(255, 255, 255);
+            function range(n) {
+                return Array.from(Array(n).keys());
+            }
 
-            this.colors = gradient(0, this.minColor, 10, this.maxColor, this.midColor);
+            this.n = 30;
+
+            this.onNChanged = function() {
+                this.range = range(this.n);
+            }
+
+            this.range = range(this.n);
+
+            this.names = [ "Min", "Mid", "Max" ];
+
+            this.points = [ 
+                { value: 0.0, color: rgb(0, 0, 255) },
+                { value: 0.5, color: rgb(255, 255, 255) },
+                { value: 1.0, color: rgb(255, 0, 0) }
+            ];
+
+            this.colors = gradient(this.points);
 
             this.style = function(i) {
-                var style = { width: '100%', height: '50px' };
-                var c = this.colors(i);
+                var style = { width: '100%', height: '10px' };
+                var c = this.colors(i / (this.n - 1));
                 style['background-color'] = 'rgb(' + c.r + ',' + c.g + ',' + c.b + ')';
                 return style;
             }

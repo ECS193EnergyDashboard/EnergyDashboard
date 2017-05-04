@@ -27,7 +27,7 @@ angular.module('colorTestModule', [ ])
             this.points = [ 
                 { value: 0.0, color: rgb(0, 0, 255) },
                 { value: 0.5, color: rgb(255, 255, 255) },
-                { value: 1.0, color: rgb(255, 0, 0) }
+                { value: 1.0, color: rgb(255, 0, 0) },
             ];
 
             this.colors = gradient(this.points);
@@ -37,6 +37,16 @@ angular.module('colorTestModule', [ ])
                 var c = this.colors(i / (this.n - 1));
                 style['background-color'] = 'rgb(' + c.r + ',' + c.g + ',' + c.b + ')';
                 return style;
+            }
+
+            this.addPoint = function() {
+                this.points.push({ value: 1.0, color: rgb(0, 0, 0) });
+            }
+
+            this.removePoint = function() {
+                if (this.points.length > 1) {
+                    this.points.pop();
+                }
             }
 
         }]

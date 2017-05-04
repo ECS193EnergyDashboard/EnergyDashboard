@@ -24,6 +24,8 @@
     <nvd3 ng-hide="$ctrl.isLoading" config="$ctrl.focusConfig" options="$ctrl.focusOptions" data="$ctrl.datasetFlat"><nvd3>
 </div>
 
-<div ng-repeat="data in $ctrl.dataset">
-    <nvd3 ng-hide="$ctrl.isLoading" config="$ctrl.lineConfig" options="$ctrl.lineOptions" data="data"><nvd3>
-</div>
+<!--
+Time Range: {{ ($ctrl.extent[0] | date:'MM/dd HH:mm') + ' to ' + ($ctrl.extent[1] | date:'MM/dd HH:mm') }}
+-->
+
+<nvd3 ng-hide="$ctrl.isLoading" config="$ctrl.lineConfig" options="$ctrl.lineOptions" data="$ctrl.dataset"><nvd3>

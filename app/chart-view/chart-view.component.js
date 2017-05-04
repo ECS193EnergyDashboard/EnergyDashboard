@@ -38,7 +38,7 @@ angular.module('chartViewModule').component('chartView', {
                 endTime: urlParams.end
             };
 
-            var charts = [];
+            var chart;
 
             var xTickFormat = function(time) {
                 return d3.time.format('%m/%d %H:%M')(new Date(time));
@@ -52,30 +52,15 @@ angular.module('chartViewModule').component('chartView', {
                 return d === null ? 'Bad' : yTickFormat(d);
             }
 
+            var graphWidth = 960;
+            var lrMargin = 80;
+
             var tooltip = nv.models.tooltip()
                 .duration(0)
                 .hideDelay(0)
                 .hidden(false)
                 .headerFormatter(xTickFormat)
-                .valueFormatter(yTickFormat);
-
-            var showGuideline = function(x) {
-                var tooltipData = { series: [] };
-                for (var chart of charts) {
-                    chart.api.showGuidelineAt(x);
-                    var guideData = chart.api.getDataAt(x);
-                    tooltipData.value = guideData.xValue;
-                    tooltipData.series = tooltipData.series.concat(guideData.series);
-                }
-                tooltip.hidden(false).data(tooltipData);
-            }
-
-            var hideGuideline = function() {
-                for (var chart of charts) {
-                    chart.api.hideGuideline();
-                }
-                tooltip.hidden(true);
-            }
+                .valueFormatter(tooltipValueFormat);
 
             this.lineConfig = {
                 visible: true,
@@ -84,57 +69,44 @@ angular.module('chartViewModule').component('chartView', {
 
             this.lineOptions = {
                 chart: {
-                    type: 'multiAxisLineChart',
-                    //showLegend: false,
+                    type: 'multiLineChart',
                     height: 200,
-                    width: 960,
+                    width: graphWidth,
                     margin: {
                         top: 20,
-                        right: 40,
                         bottom: 40,
-                        left: 80
+                        right: lrMargin,
+                        left: lrMargin
                     },
                     x: function(d) { return new Date(d.timestamp).getTime(); },
                     y: function(d) { return d.value; },
                     useInteractiveGuideline: true, // if false use tooltipContent
-                    showXAxis: false,
+                    showXAxis: true,
                     xAxis: {
-                        axisLabel: 'Time',
+                        axisLabel: '',
                         tickFormat: xTickFormat
                     },
                     yAxis1: {
                         axisLabel: '',
                         tickFormat: yTickFormat,
-                        axisLabelDistance: 10
                     },
                     yAxis2: {
                         axisLabel: '',
                         tickFormat: yTickFormat,
-                        axisLabelDistance: 10
                     },
-                    interactiveLayer: {
-                        tooltip: {
-                            enabled: false
-                        },
-                        dispatch: {
-                            elementMousemove: function(e) {
-                                showGuideline(e.pointXValue);
-                            },
-                            elementMouseout: hideGuideline
-                        }
-                    },
-                    callback: function(chart) {
-                        charts.push(chart);
+                    callback: function(ch) {
+                        chart = ch;
                     }
                 }
             };
 
             var onChangeFocus = function(extent) {
-                for (var chart of charts) {
-                    if (chart.api.updateExtent) {
-                        chart.api.updateExtent(extent);
-                    }
-                }          
+                if (chart) {
+                    self.extent = extent;
+
+                    chart.brushExtent(extent);
+                    chart.update();
+                }    
             }
 
             this.focusConfig = {
@@ -145,19 +117,18 @@ angular.module('chartViewModule').component('chartView', {
             this.focusOptions = {
                 chart: {
                     type: 'focus',
-                    width: 900,
+                    width: graphWidth,
                     margin: {
                         top: 20,
                         bottom: 20,
-                        left: 30 + 80,
-                        right: 30
+                        left: lrMargin,
+                        right: lrMargin
                     },
                     x: function(d) { return d.timestamp; },
                     y: function(d) { return d.value; },
                     xAxis: {
                         tickFormat: xTickFormat,
                         rotateLabels: 30,
-                        ticks: 12
                     },
                     dispatch: {
                         onBrush: onChangeFocus,
@@ -229,6 +200,8 @@ angular.module('chartViewModule').component('chartView', {
                 this.interval = 1;
                 this.intervalUnits = this.intervalOptions[1];
             }
+
+            this.extent = [ new Date(this.datePicker.date.startDate.format()).getTime(), new Date(this.datePicker.date.endDate.format()).getTime() ];
 
             this.$onInit = function() {
                 this.generateChart();

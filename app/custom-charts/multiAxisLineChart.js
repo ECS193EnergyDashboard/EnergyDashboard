@@ -53,6 +53,7 @@ nv.models.multiAxisLineChart = function() {
 
     function chart(selection) {
         selection.each(function(data) {
+
             var container = d3.select(this),
                 that = this;
             nv.utils.initSVG(container);
@@ -320,7 +321,6 @@ nv.models.multiAxisLineChart = function() {
                             return chart.x()(d,i) >= extent[1] && chart.x()(d,i) <= extent[0];
                         }
                     });
-
                     pointIndex = nv.interactiveBisect(currentValues, pointXValue, chart.x());
                     var point = currentValues[pointIndex];
                     var pointYValue = chart.y()(point, pointIndex);
@@ -355,6 +355,7 @@ nv.models.multiAxisLineChart = function() {
                         series: allData
                     })();
 
+                
                 interactiveLayer.renderGuideLine(pointXLocation);
             }
 
@@ -435,7 +436,7 @@ nv.models.multiAxisLineChart = function() {
 
             api.updateExtent = function(extent) {
                 brushExtent = extent === null ? x.domain() : extent;
-                onBrush(extent);
+                onBrush(brushExtent);
             }
 
             api.showGuidelineAt = onElementMousemove;

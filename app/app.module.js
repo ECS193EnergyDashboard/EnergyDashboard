@@ -2,7 +2,8 @@ angular.module('energyDashboardModule', [
     'core',
     'menuBarModule',
     'dashboardModule',
-    'chartOptionsModule'
+    'chartOptionsModule',
+    'colorTestModule'
 ]);
 
 

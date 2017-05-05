@@ -114,6 +114,8 @@ angular.module('chartViewModule').component('chartView', {
                 disabled: true
             }
 
+            var focus = undefined;
+
             this.focusOptions = {
                 chart: {
                     type: 'focus',
@@ -132,6 +134,9 @@ angular.module('chartViewModule').component('chartView', {
                     },
                     dispatch: {
                         onBrush: onChangeFocus,
+                    },
+                    callback: function(chart) {
+                        focus = chart;
                     }
                 }
             };
@@ -200,8 +205,6 @@ angular.module('chartViewModule').component('chartView', {
                 this.interval = 1;
                 this.intervalUnits = this.intervalOptions[1];
             }
-
-            this.extent = [ new Date(this.datePicker.date.startDate.format()).getTime(), new Date(this.datePicker.date.endDate.format()).getTime() ];
 
             this.$onInit = function() {
                 this.generateChart();

@@ -34,42 +34,36 @@ angular.module('chartOptionsModule').component('chartOptions', {
             this.popChart = function() {
                 this.numCharts = Math.max(1, this.numCharts - 1);
                 for (var attribute of this.attributes) {
-                    var id = attribute.chartId;
-                    if (this.chartFromId(id) === this.numCharts) {
-                        attribute.chartId = this.createId(this.chartFromId(id) - 1, this.axisFromId(id))
-                    }
+                    this.clearAxis(attribute, this.numCharts);
                 }
             }
 
-            this.createId = function(chart, axis) {
-                return chart * 2 + axis;
-            }
-
-            this.chartFromId = function(id) {
-                return Math.floor(id / 2);
-            }
-
-            this.axisFromId = function(id) {
-                return id % 2;
+            this.clearAxis = function(attribute, chartId) {
+                delete attribute.charts[chartId];
             }
             
             this.launchChart = function() {
                 var url = 'chart.html?';
 
+                for (var a of this.attributes) {
+                    console.log(a.charts);
+                }
+
                 if (this.attributes) {
                     url += 'charts=' + this.numCharts;
                     for (var attrib of this.attributes) {
-                        url += '&webId' + 'C' + this.chartFromId(attrib.chartId) + 'A' + this.axisFromId(attrib.chartId) + '=' + attrib.webId;
+                        for (var chartId in attrib.charts) {
+                            url += '&webId' + 'C' + chartId + 'A' + attrib.charts[chartId] + '=' + attrib.webId;
+                        }
                     }
                 }
-
                 $window.open(url);
             }
 
             $scope.$watchCollection('$ctrl.attributes', function() {
                 for (var attrib of self.attributes) {
-                    if (attrib.chartId === undefined) {
-                        attrib.chartId = self.createId(0, 0);
+                    if (attrib.charts === undefined) {
+                        attrib.charts = { 0: 0 };
                     }
                 }
             })

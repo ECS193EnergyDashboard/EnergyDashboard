@@ -132,7 +132,9 @@ nv.models.multiLineChart = function() {
                     .datum(data.filter(function(d){return !d.disabled}))
                     .call(line);
 
-                line.api.updateExtent(brushExtent);
+                if (line.api.updateExtent) {
+                    line.api.updateExtent(brushExtent);
+                }
             });
 
             gEnter.append('g').attr('class', 'nv-interactive');
@@ -149,17 +151,21 @@ nv.models.multiLineChart = function() {
                 tooltip.hidden(true);
                 var tooltipData = { series: [] };
                 for (var line of lines) {
-                    line.api.showGuidelineAt(e.pointXValue);
-                    var guideData = line.api.getDataAt(e.pointXValue);
-                    tooltipData.value = guideData.xValue;
-                    tooltipData.series = tooltipData.series.concat(guideData.series);
+                    if (line.api.showGuidelineAt && line.api.getDataAt) {
+                        line.api.showGuidelineAt(e.pointXValue);
+                        var guideData = line.api.getDataAt(e.pointXValue);
+                        tooltipData.value = guideData.xValue;
+                        tooltipData.series = tooltipData.series.concat(guideData.series);
+                    }
                 }
                 tooltip.hidden(false).data(tooltipData);
             })
 
             interactiveLayer.dispatch.on('elementMouseout', function(e) {
                 for (var line of lines) {
-                    line.api.hideGuideline();
+                    if (line.api.hideGuideline) {
+                        line.api.hideGuideline();
+                    }
                 }
                 tooltip.hidden(true);
             })

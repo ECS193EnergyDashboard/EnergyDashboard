@@ -14,6 +14,7 @@ angular.module('dataTableModule').component('datatable', {
         this.averages = {};
         this.columnNames = [];
         this.columnNamesObjs = [];
+        this.maxAndMin = {};
 
         var selectionIndexOf = function(obj) {
             for (var i = 0; i < self.selection.length; i++) {
@@ -62,6 +63,27 @@ angular.module('dataTableModule').component('datatable', {
                 style += 'selected ';
             }
             return style;
+        }
+
+        this.conditionalFormat = function(value){
+            if(value == undefined || !value.good){
+                return {};
+            }
+            var r = 0;
+            var g = 0;
+            var b = 0;
+            var max = this.maxAndMin[value.name].max;
+            var min = this.maxAndMin[value.name].min;
+            var textColor = "white";
+            r = ((value.value - min) / (max - min)) * 255;
+            g = 0;
+            b = ((max - value.value) / (max - min)) * 255;
+            if(isNaN(r) || isNaN(b)){
+                return {};
+                textColor = "black";
+            }
+            return { "background-color": "rgb(" +Math.round(r)+ "," +g+ "," +Math.round(b)+ ")",
+                    "color": textColor };
         }
 
         this.getters = {
@@ -143,9 +165,11 @@ angular.module('dataTableModule').component('datatable', {
         this.updateCalculations = function() {
             this.sums = {};
             this.averages = {};
+            this.maxAndMin = {};
             for (var column of this.columnNamesObjs) {
                 this.sums[column.name] = this.sumColumn(column.name);
                 this.averages[column.name] = this.averageColumn(column.name);
+                this.maxAndMin[column.name] = this.maxMinColumn(column.name);
             }
         }
 
@@ -162,13 +186,32 @@ angular.module('dataTableModule').component('datatable', {
             return acc.len > 0 ? acc.sum / acc.len : 0;
         };
 
+        this.maxMinColumn = function(columnName){
+            var acc = this.reduceColumn(columnName, {max: null, min: null}, function(val, acc){
+                if(acc.max == null){
+                    acc.max = val;
+                }
+                else if(val > acc.max){
+                    acc.max = val;
+                }
+
+                if(acc.min == null){
+                    acc.min = val;
+                }
+                else if(val < acc.min){
+                    acc.min = val;
+                }
+            });
+            return acc;
+        }
+
         // For every currently displayed row in column 'columnName', applies the function 'opFunc' to the cell's value and the accumulator object 'accumulator'.
         // Returns the accumulated value object.
         this.reduceColumn = function(columnName, accumulator, opFunc) {
             var a = accumulator;
             for (var element of this.displayed) {
                 var colVal = element[columnName];
-                if (colVal && colVal.good && colVal.value) {
+                if (colVal && colVal.good && colVal.value != undefined) {
                     opFunc(colVal.value, a);
                 }
             }

@@ -30,7 +30,7 @@ body {
 }
 
 .table tbody tr > td.dataCell.bad {
-    background-color: red;
+    background-color: yellow;
 }
 
 .table tbody tr > td.dataCell.missing {
@@ -38,7 +38,7 @@ body {
 }
 
 .table tbody tr > td.dataCell.selected {
-    background-color: green;
+    outline: .3em solid green;
 }
 
 .progress {

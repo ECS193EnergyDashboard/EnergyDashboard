@@ -6,6 +6,8 @@
     border-right: 5px solid #eeeeee;
 }
 
+
+
 .form-group {
     margin-bottom: 1px;
 }
@@ -108,6 +110,8 @@
         transform: rotate(360deg) scale(1);
     }
 }
+
+
 
 .progress {
     position: absolute;

@@ -22,6 +22,8 @@
 }
 }
 
+
+
 .dropbtn {
     background-color: #4CAF50;
     color: white;
@@ -64,4 +66,14 @@
 
 td {
     white-space: nowrap;
+}
+
+.dataTitle{
+    text-align: center;
+    position: relative;
+    font-size: 25px;
+}
+
+.tableMenus{
+    float: right;
 }

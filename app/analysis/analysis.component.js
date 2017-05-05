@@ -1,11 +1,15 @@
 angular.module('analysisModule').component('analysis', {
     templateUrl: 'analysis/analysis.template.html',
     bindings: {
-        webIds: '<',
+        webIds:      '<',
+        elemName:    '<', // passed to columnTemplate component to determine template type
         onStartLoad: '&',
-        onEndLoad: '&'
+        onEndLoad:   '&'
     },
-    controller: ['$filter', 'pi', function AnalysisController($filter, pi) {
+    controller: [
+        '$filter',
+        'pi',
+        function AnalysisController($filter, pi) {
             var self = this;
             this.datePicker = {};
             this.datePicker.date = {
@@ -22,20 +26,24 @@ angular.module('analysisModule').component('analysis', {
                         moment().startOf('day'), moment()
                     ],
                     "Past 24 Hours": [
-                        moment().subtract(1, 'days'), moment()
+                        moment().subtract(1, 'days'),
+                        moment()
                     ],
                     "Last 7 Days": [
-                        moment().subtract(7, 'days'), moment()
+                        moment().subtract(7, 'days'),
+                        moment()
                     ],
                     "Past Month": [
-                        moment().subtract(1, 'months'),  moment()
+                        moment().subtract(1, 'months'),
+                        moment()
                     ],
-                    "Past Year": [moment().subtract(1, 'years'), moment()]
+                    "Past Year": [
+                        moment().subtract(1, 'years'),
+                        moment()
+                    ]
                 }
             }
             this.data = [];
-
-
 
             this.outerColumnNames = [];
             this.innerColumnNames = [
@@ -146,7 +154,7 @@ angular.module('analysisModule').component('analysis', {
             }
 
             // Callback for column-template-dropdown component
-            this.updateCol = function(cols){
+            this.updateCol = function(cols) {
                 this.outerColumnNames = cols;
             }
 

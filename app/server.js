@@ -15,7 +15,7 @@ var templatesLocation = './templates.json'
 jsonfile.readFile(templatesLocation, function(err, obj) {
     if(!(obj=== undefined || obj == null))
         templates = obj;
-    console.dir(templates);
+    // console.dir(templates);
 });
 
 //This responds on the homepage
@@ -35,22 +35,80 @@ app.get('/', function(req, res) {
 
 })
 
-//This responds a POST request to /templates
+//This responds a POST request to /templates that adds a template to the json file
 app.post('/templates', function(req, res) {
-    console.log("Got a POST request for the templates");
+    // console.log("Got a POST request for the templates");
     //console.log("req.body: ", req.body);
     templates.push(req.body);
-    console.dir("templates: ", templates);
+    //console.dir(templates);
     res.status(200).send('template saved on server');
+    // save to file
+    jsonfile.writeFile(templatesLocation, templates, function (err) {
+      console.error("Error writing to json", err)
+  });
+})
+
+//This responds a POST request to /templatesDelete that deletes
+app.post('/templatesDelete', function(req, res) {
+    // console.log("Got a POST request for the templatesDelete");
+    // console.log("req.body: ", req.body);
+
+    console.log(templates.length);
+    console.dir(templates);
+
+    // Remove the template
+    var index = 0;
+    for(var template of templates){
+        if(template.name == req.body.name){
+            console.log("=======----------   DELETING  -----------=======  ", index)
+            break;
+        }
+        index++;
+    }
+    templates.splice(index, 1);
+
+    console.log();
+    console.log(templates.length);
+    console.dir(templates);
+    res.status(200).send('template deleted on server');
     // save to file
     jsonfile.writeFile(templatesLocation, templates, function (err) {
       console.error(err)
   });
 })
 
+//This responds a POST request to /templatesDelete that updates
+app.post('/templatesUpdate', function(req, res) {
+    // console.log("Got a POST request for the templatesUpdate");
+    // console.log("req.body: ", req.body);
+
+    console.log(templates.length);
+    console.dir(templates);
+
+    // Find the template
+    var index = 0;
+    for(var template of templates){
+        if(template.name == req.body.name && template.type == req.body.type){
+            break;
+        }
+        index++;
+    }
+    // Update the template
+    template.colObj = req.body.colObj;
+
+
+    console.dir(templates);
+    res.status(200).send('template updated on server');
+    // save to file
+    jsonfile.writeFile(templatesLocation, templates, function (err) {
+      console.error(err)
+  });
+})
+
+
 //This responds to getTemplates
 app.get('/getTemplates', function(req, res) {
-    console.log("Got a GET request for getTemplates");
+    // console.log("Got a GET request for getTemplates");
 
     var options = {
         root: __dirname,
@@ -69,6 +127,34 @@ app.get('/test', function(req, res) {
     res.status(200).send("This is a test");
 })
 
+
+var server = app.listen(8081, function() {
+
+    var host = server.address().address
+    var port = server.address().port
+    console.log("host", host);
+    console.log("Example app listening at http://%s:%s", host, port)
+})
+
+
+function shutdown() {
+    console.log("Shutting down server...")
+    // Handle any cleanup here, closing DB connections etc
+
+
+    server.close(function() {
+        process.exit(0);
+    })
+}
+
+process.on('SIGTERM', shutdown);
+
+/*
+To start the server: node server.js
+
+
+
+*/
 // // This responds a DELETE request for the /del_user page.
 // app.delete('/del_user', function (req, res) {
 //    console.log("Got a DELETE request for /del_user");
@@ -96,30 +182,3 @@ app.get('/test', function(req, res) {
 //    console.log("Got a GET request for /ab*cd");
 //    res.send('Page Pattern Match');
 // })
-
-var server = app.listen(8081, function() {
-
-    var host = server.address().address
-    var port = server.address().port
-    console.log("host", host);
-    console.log("Example app listening at http://%s:%s", host, port)
-})
-
-function shutdown() {
-    console.log("Shutting down server...")
-    // Handle any cleanup here, closing DB connections etc
-
-
-    server.close(function() {
-        process.exit(0);
-    })
-}
-
-process.on('SIGTERM', shutdown);
-
-/*
-To start the server: node server.js
-
-
-
-*/

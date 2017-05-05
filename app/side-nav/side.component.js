@@ -36,7 +36,7 @@ angular.module('sideNavModule').component('sideBar', {
                     //Recursively explore buildings directory
                     self.exploreElem(elem);
                 });
-                console.log("buildings: ", self.buildings);
+                // console.log("buildings: ", self.buildings);
                 self.filteredItems = self.buildings;
             });
         };
@@ -48,7 +48,7 @@ angular.module('sideNavModule').component('sideBar', {
         };
 
         this.applyFilter = function() {
-            console.log("Copying search");
+            // console.log("Copying search");
             //this.search.name = this.searchInput.name;
             //this.search.template = this.searchInput.template;
             self.filteredItems = treeFilterFilter(self.buildings, self.searchInput, self.filter);
@@ -134,7 +134,7 @@ angular.module('sideNavModule').component('sideBar', {
         this.searchTemplates = function(){
             self.filter = "template";
             self.searchPlaceHolder = "Search Templates...";
-            console.log(Array.from(new set(self.templateList)));
+            // console.log(Array.from(new set(self.templateList)));
 
         };
 

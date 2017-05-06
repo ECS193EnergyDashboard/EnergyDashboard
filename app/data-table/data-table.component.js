@@ -240,8 +240,15 @@ angular.module('dataTableModule').component('datatable', {
                 { value: (max+min)/2, color: this.white },
                 { value: max, color: this.red },
             ]
-            var textColor = "black";
+
             var color = gradient(this.colsPoints[value.name])(value.value);
+
+            var textColor = "white";
+            // Calculate overall intensity of color to determine text color
+            var intensity = color.r * 0.299 + color.g * 0.597 + color.b * 0.114;
+            if (intensity > 186) {
+                textColor = "black";
+            }
 
             return { "background-color": "rgb(" +color.r+ "," +color.g+ "," +color.b+ ")",
                     "color": textColor };

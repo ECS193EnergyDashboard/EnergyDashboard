@@ -79,6 +79,9 @@ angular.module('dataTableModule').component('datatable', {
 
         this.getters = {
             value: function(key, element) {
+                if(element[key] == undefined){
+                    return;
+                }
                 return element[key].value;
             }
         };
@@ -224,7 +227,7 @@ angular.module('dataTableModule').component('datatable', {
 
 
         this.conditionalFormat = function(value){
-            if(value == undefined || !value.good){
+            if(value == undefined || !value.good || this.maxAndMin[value.name] == undefined){
                 return {};
             }
             var max = this.maxAndMin[value.name].max;
@@ -234,10 +237,10 @@ angular.module('dataTableModule').component('datatable', {
             }
             this.colsPoints[value.name] = [
                 { value: min, color: this.blue },
-                { value: (max-min)/2, color: this.white },
+                { value: (max+min)/2, color: this.white },
                 { value: max, color: this.red },
             ]
-            var textColor = "white";
+            var textColor = "black";
             var color = gradient(this.colsPoints[value.name])(value.value);
 
             return { "background-color": "rgb(" +color.r+ "," +color.g+ "," +color.b+ ")",

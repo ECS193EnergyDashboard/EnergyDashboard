@@ -5,5 +5,3 @@ angular.module('energyDashboardModule', [
     'chartOptionsModule',
     'colorTestModule'
 ]);
-
-

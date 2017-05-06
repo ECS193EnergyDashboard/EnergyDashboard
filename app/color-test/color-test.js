@@ -10,12 +10,14 @@ angular.module('colorTestModule', [ ])
                 return { r: r, g: g, b: b };
             }
 
+            // Returns array 0...n
             function range(n) {
                 return Array.from(Array(n).keys());
             }
 
             this.n = 30;
 
+            // Called with ng-change
             this.onNChanged = function() {
                 this.range = range(this.n);
             }
@@ -24,7 +26,7 @@ angular.module('colorTestModule', [ ])
 
             this.names = [ "Min", "Mid", "Max" ];
 
-            this.points = [ 
+            this.points = [
                 { value: 0.0, color: rgb(0, 0, 255) },
                 { value: 0.5, color: rgb(255, 255, 255) },
                 { value: 1.0, color: rgb(255, 0, 0) },

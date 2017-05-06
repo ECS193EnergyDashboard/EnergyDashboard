@@ -16,6 +16,16 @@ angular.module('dataTableModule').component('datatable', {
         this.columnNamesObjs = [];
         this.maxAndMin = {};
 
+        // Conditional Formatting Points
+        this.colsPoints = {};
+        function rgb(r, g, b) {
+            return { r: r, g: g, b: b };
+        }
+        this.blue = rgb(0, 0, 255);
+        this.white = rgb(255, 255, 255);
+        this.red = rgb(255, 0, 0);
+
+
         var selectionIndexOf = function(obj) {
             for (var i = 0; i < self.selection.length; i++) {
                 if (self.selection[i].webId === obj.webId) {
@@ -65,26 +75,7 @@ angular.module('dataTableModule').component('datatable', {
             return style;
         }
 
-        this.conditionalFormat = function(value){
-            if(value == undefined || !value.good){
-                return {};
-            }
-            var r = 0;
-            var g = 0;
-            var b = 0;
-            var max = this.maxAndMin[value.name].max;
-            var min = this.maxAndMin[value.name].min;
-            var textColor = "white";
-            r = ((value.value - min) / (max - min)) * 255;
-            g = 0;
-            b = ((max - value.value) / (max - min)) * 255;
-            if(isNaN(r) || isNaN(b)){
-                return {};
-                textColor = "black";
-            }
-            return { "background-color": "rgb(" +Math.round(r)+ "," +g+ "," +Math.round(b)+ ")",
-                    "color": textColor };
-        }
+
 
         this.getters = {
             value: function(key, element) {
@@ -105,8 +96,6 @@ angular.module('dataTableModule').component('datatable', {
             if (this.tableSrc.length == 0) {
                 return;
             }
-
-//            console.log("Datatable elemName", this.elemName);
 
             var columnSet = {};
 
@@ -228,6 +217,31 @@ angular.module('dataTableModule').component('datatable', {
             } else {
                 select(value);
             }
+        }
+
+        // =====--- CONDITIONAL FORMATTING ---===== //
+
+
+
+        this.conditionalFormat = function(value){
+            if(value == undefined || !value.good){
+                return {};
+            }
+            var max = this.maxAndMin[value.name].max;
+            var min = this.maxAndMin[value.name].min;
+            if(max == min){
+                return {};
+            }
+            this.colsPoints[value.name] = [
+                { value: min, color: this.blue },
+                { value: (max-min)/2, color: this.white },
+                { value: max, color: this.red },
+            ]
+            var textColor = "white";
+            var color = gradient(this.colsPoints[value.name])(value.value);
+
+            return { "background-color": "rgb(" +color.r+ "," +color.g+ "," +color.b+ ")",
+                    "color": textColor };
         }
 
         // Whenever the displayed data is changed, recalculate sum and average of the shown rows only

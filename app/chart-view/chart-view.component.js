@@ -273,25 +273,6 @@ angular.module('chartViewModule').component('chartView', {
                     }
                 }
 
-                /*
-                for (var i = 0; i < this.config.attributes.length; i++) {
-                    this.data[i] = {
-                        values: [],
-                        key: '',
-                        yAxis: this.config.attributes[i].axis
-                    }
-
-                    var webId = this.config.attributes[i].webId;
-                    promises.push(pi.getAttribute(webId));
-                    var promise = pi.getInterpolatedOfAttribute(webId, interval, startTime, endTime);
-                    promises.push(promise);
-
-                    promise.then(function(response) {
-                        self.numRequestsDone++;
-                    });
-                }
-                */
-
                 $q.all(promises).then(function(responses) {
                     for (var i = 0; i < responses.length - 1; i += 2) {
                         var attrib = responses[i];
@@ -307,5 +288,38 @@ angular.module('chartViewModule').component('chartView', {
                     self.focusConfig.disabled = false;
                 });
             };
+
+            this.fileName = 'Chart.csv';
+
+            this.ShowDownloadModal = function(){
+                $('#downloadModal').modal();
+                console.log(this.datasetFlat[0]);
+            }
+
+            this.GetHeaderData = function() {
+                var header = [ 'Attribute' ];
+                if (this.datasetFlat.length > 0) {
+                    for (var value of this.datasetFlat[0].values) {
+                        header.push(xTickFormat(value.timestamp));
+                    }
+                }
+                return header;
+            };
+
+            this.GetArrayData = function() {
+                var csv = [];
+
+                for (var data of this.datasetFlat) {
+                    var obj = {};
+                    obj['Attribute'] = data.key;
+                    for (var value of data.values) {
+                        var key = xTickFormat(value.timestamp);
+                        obj[key] = value.value;
+                    }
+                    csv.push(obj);
+                }
+                
+                return csv;
+            }
         }]
     });

@@ -119,6 +119,8 @@ angular.module('dataTableModule').component('datatable', {
                 var column = {};
 
                 column.name = columnName;
+                //All columns start showing conditional formating
+                column.showConditionalFormat = true;
 
                 try{
                     column.units = self.tableSrc[0][column.name].unitsAbbreviation;
@@ -141,6 +143,7 @@ angular.module('dataTableModule').component('datatable', {
                     Object.assign(element[name], { parentName: element.name, buildingName: element.building });
                 }
             }
+            console.log(this.columnNamesObjs);
 
             this.displayed = this.data = this.tableSrc;
         }; //end $onChanges
@@ -226,7 +229,13 @@ angular.module('dataTableModule').component('datatable', {
 
 
 
-        this.conditionalFormat = function(value){
+        this.conditionalFormat = function(value, showConditionalFormat){
+            // console.log(showConditionalFormat);
+            // conditionalFormatShow = false;
+            if(showConditionalFormat == false){
+                console.log(value);
+                return {"background-color": "white"}
+            }
             if(value == undefined || !value.good || this.maxAndMin[value.name] == undefined){
                 return {};
             }

@@ -12,7 +12,7 @@
         <th  ng-repeat="column in $ctrl.columnNamesObjs" ng-style="{'max-width': column.width, 'min-width': column.width}" ng-if="column.isChecked" st-sort="$ctrl.getters.value.bind(null, column.name)" lr-drag-src="header" lr-drop-target="header">
 
             {{column.units === "" ? column.name : column.name + " (" + column.units + ")"}}
-            
+
             <div id="itemBtn">
                 <span class="glyphicon glyphicon-remove pointer" ng-click="column.isChecked = false;$event.stopPropagation()"></span>
             </div>

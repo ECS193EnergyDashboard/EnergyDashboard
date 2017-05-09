@@ -29,6 +29,12 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
 
 
 
+            this.clearAll = function() {
+                for(var i = 0; i < this.columns.length; i++){
+                    this.columns[i].isChecked = false;
+                }
+            };
+
             this.GetHeaderData = function() {
                 columnNames = [];
                 columnNames.push("Name");

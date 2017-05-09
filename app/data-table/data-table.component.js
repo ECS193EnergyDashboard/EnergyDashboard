@@ -15,6 +15,7 @@ angular.module('dataTableModule').component('datatable', {
         this.columnNames = [];
         this.columnNamesObjs = [];
         this.maxAndMin = {};
+        this.currentFormattingSettingsCol = "";
 
         // Conditional Formatting Points
         this.colsPoints = {};
@@ -236,7 +237,20 @@ angular.module('dataTableModule').component('datatable', {
             else{
                 col.showConditionalFormat = !col.showConditionalFormat;
             }
-        }
+        };
+
+        this.showFormattingSettings = function(col){
+            console.log("col ", col);
+            this.currentFormattingSettingsCol = col.name
+            $(".formattingSettingsModal").modal();
+        };
+
+        this.submitFormattingSettings = function(colName){
+
+            this.maxAndMin[colName].max = document.getElementById("maxInput").value;
+            this.maxAndMin[colName].min = document.getElementById("minInput").value;
+
+        };
 
 
 

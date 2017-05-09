@@ -229,7 +229,7 @@ angular.module('dataTableModule').component('datatable', {
         // =====--- CONDITIONAL FORMATTING ---===== //
 
 
-        /* For some reason it is undefined the first time it runs. Although 
+        /* For some reason it is undefined the first time it runs. Although
         I say it is true up in $onChange - to fix I check if undefined then make false */
         this.switchShowConditionalFormat = function(col){
             if(angular.isUndefined(col.showConditionalFormat))
@@ -255,15 +255,16 @@ angular.module('dataTableModule').component('datatable', {
 
 
         this.conditionalFormat = function(value, showConditionalFormat){
-            // console.log(showConditionalFormat);
-            // conditionalFormatShow = false;
-            if(showConditionalFormat == false){
-                // console.log(value);
-                return {"background-color": "white"}
-            }
+            // Do nothing on bad/undef values
             if(value == undefined || !value.good || this.maxAndMin[value.name] == undefined){
                 return {};
             }
+
+            // Remove conditional formatting
+            if(showConditionalFormat == false){
+                return {"background-color": "white"}
+            }
+
             var max = this.maxAndMin[value.name].max;
             var min = this.maxAndMin[value.name].min;
             if(max == min){
@@ -291,7 +292,6 @@ angular.module('dataTableModule').component('datatable', {
         // Whenever the displayed data is changed, recalculate sum and average of the shown rows only
         $scope.$watch('$ctrl.displayed', function(newValue, oldValue) {
             console.log("Recalculating...");
-
             self.updateCalculations();
         });
 

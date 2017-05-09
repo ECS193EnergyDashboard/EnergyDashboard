@@ -8,7 +8,6 @@
         </column-template-dropdown>
     </div>
 
-    <span class="dataTitle"> DATA TAB </span>
 
 
 
@@ -32,11 +31,12 @@
     </thead>
 
     <tbody>
+    <!-- Row for Conditional Formatting settings-->
     <tr>
         <!-- 2 blank spaces for building and name -->
-        <td> </td> 
         <td> </td>
-        <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked">        
+        <td> </td>
+        <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked">
             <div class="btn-group-xs" role="group" aria-label="...">
                 <button ng-click="$ctrl.showFormattingSettings(column)" type="button" class="btn btn-default glyphicon glyphicon-cog"></button>
                 <button ng-click="$ctrl.switchShowConditionalFormat(column)" type="button" class="btn btn-default  glyphicon glyphicon-pencil"></button>

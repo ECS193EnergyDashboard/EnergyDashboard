@@ -41,7 +41,7 @@
     float: right;
     position: relative;
     display: inline-block;
-    
+
 }
 
 .dropdown-content {
@@ -62,6 +62,7 @@
 
 .bold {
     font-weight: bold;
+    text-align: center;
 }
 
 td {

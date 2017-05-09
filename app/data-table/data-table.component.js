@@ -227,6 +227,16 @@ angular.module('dataTableModule').component('datatable', {
                 }
 
                 var tableRef = document.getElementById('dataTable');
+
+                var headerHeight = document.getElementById('dataTableHead').offsetHeight;
+                console.log('header height: '+headerHeight);
+
+                tableRef.style.top = headerHeight + "px";
+
+                console.log('data table top: '+tableRef.style.top)
+
+
+
                 console.log("table has this many rows");
                 console.log(tableRef.rows.length);
 

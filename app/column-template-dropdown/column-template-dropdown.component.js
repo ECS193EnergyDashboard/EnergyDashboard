@@ -24,64 +24,69 @@ angular.module('columnTemplateDropdownModule')
         elemName:       '<'  // Element name to determine template type (from side-nav)
     },
     controller: [
-        '$http', 'typeFilter',
-        function colTemplateController($http, typeFilter) {
+        '$scope', '$http', 'typeFilter',
+        function colTemplateController($scope, $http, typeFilter) {
             var self = this;
             this.templates = [];
             this.filteredTemplates = [];
             this.showTemplates = false;
             this.includeDR = false;
-            var numInnerColumns =0;
-
+            var numInnerColumns = 0;
             this.currentTemplate = {};
+
+            $scope.unalteredCurrentTemplate = {};
+            $scope.isAnalysis = this.isAnalysis;
 
             // Default file name for downloading to CSV
             this.fileName = "Data.csv";
-
             // an error message for the modal. Always set the error message before showing modal
             this.errorMessage = "";
-
             // Determine the type of current element
             this.curType = "";
-
             // Keep track of the prev type
             this.prevType = "";
-
             if(this.elemName === undefined){
                 this.elemName = "";
             }
 
-            this.determineType = function(){
-                var regexpAHU = /ahu/gi;
-                var regexpRM = /ahu\d/gi;
-                // Check if name is undef
-                if(this.elemName === undefined){
-                    this.elemName = "";
-                }
-//                console.log("col template elemName: ", this.elemName);
-                if(self.elemName.match(regexpRM)){
-                    self.curType = "room";
-//                    console.log("ROOM TYPE");
-                }
-                else if (self.elemName.match(regexpAHU)) {
-                    self.curType = "ahu";
-//                    console.log("AHU TYPE");
-                }
-            };
-
-            this.updateFiltered = function(){
-                if(this.templates.length > 0){
-                    this.filteredTemplates = typeFilter(this.templates, self.curType);
-                }
-            }
-
-
             this.$onInit = function(){
+                $scope.isAnalysis = this.isAnalysis;
                 this.determineType();
-
             }
 
-            this.$onChanges = function() {
+
+            // A watcher for the current template
+            $scope.$watch('$ctrl.currentTemplate', function(newVal, oldVal){
+                if(angular.equals($scope.unalteredCurrentTemplate, newVal.colObj)){
+                    if($scope.isAnalysis == "true"){
+                        $('.saveTemplateButtonAnalysis').css({'color': 'green'});
+                    }
+                    else{
+                        $('.saveTemplateButtonData').css({'color': 'green'});
+                    }
+                }
+                else{
+                    if($scope.isAnalysis == "true"){
+                        $('.saveTemplateButtonAnalysis').css({'color': 'red'});
+                    }
+                    else{
+                        $('.saveTemplateButtonData').css({'color': 'red'});
+                    }                   
+                }
+            }, true);
+
+
+            this.$onChanges = function(changes){
+                if(changes.columns){
+                    $scope.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns))
+                    if(this.isAnalysis == "true"){
+                        $('.saveTemplateButtonAnalysis').css({'color': 'green'});
+                    }
+                    else{
+                        $('.saveTemplateButtonData').css({'color': 'green'});
+                    }
+                }
+
                 this.prevType = this.currentTemplate.type;
                 this.determineType();
 
@@ -108,7 +113,6 @@ angular.module('columnTemplateDropdownModule')
                 }
                 
                 
-                
                 // User clicked on something of same type
                 else if(this.curType != "" && this.currentTemplate.name != undefined){
                     // Make template persist
@@ -117,6 +121,32 @@ angular.module('columnTemplateDropdownModule')
                 this.updateFiltered();
 
             };
+
+            this.determineType = function(){
+                var regexpAHU = /ahu/gi;
+                var regexpRM = /ahu\d/gi;
+                // Check if name is undef
+                if(this.elemName === undefined){
+                    this.elemName = "";
+                }
+//                console.log("col template elemName: ", this.elemName);
+                if(self.elemName.match(regexpRM)){
+                    self.curType = "room";
+//                    console.log("ROOM TYPE");
+                }
+                else if (self.elemName.match(regexpAHU)) {
+                    self.curType = "ahu";
+//                    console.log("AHU TYPE");
+                }
+            };
+
+            this.updateFiltered = function(){
+                if(this.templates.length > 0){
+                    this.filteredTemplates = typeFilter(this.templates, self.curType);
+                }
+            }
+
+
 
             // Generate default, push it to templates, and post to server
             this.generateDefault = function(){
@@ -364,7 +394,6 @@ angular.module('columnTemplateDropdownModule')
                 if(this.newTemplateName == "Default"){
                     // console.log("Cant have a template named Default");
                     this.errorMessage = "We're sorry but you can not have a template named Default";
-                    $("#templateInput").val(''); // clear the inputbox
                     this.ShowErrorModal();
                     return;
                 }
@@ -391,6 +420,12 @@ angular.module('columnTemplateDropdownModule')
                 $("#templateInput").val(''); // clear the inputbox
 
                 this.ApplyTemplate(template);
+
+                // Hide both copies - we dont know which was opened
+                $(".saveModalData").modal('hide');
+                $(".saveModalAnalysis").modal('hide');
+                // this.ShowSaveModal();
+                this.ClearTemplateNameInput();
             };
 
             // POST template/profile to server
@@ -472,12 +507,15 @@ angular.module('columnTemplateDropdownModule')
                 }, function errorCallback(response) {
                     console.error("POST Failed ", response);
                 });
-                
 
-                 $("#templateInput").val(''); // clear the inputbox
-        
+                // Close both modals
+                $(".saveModalData").modal('hide');
+                $(".saveModalAnalysis").modal('hide');
+
+                this.ClearTemplateNameInput();
 
             };
+
 
 
             //========-- Start of modal code --=========//
@@ -499,6 +537,8 @@ angular.module('columnTemplateDropdownModule')
                     $(".saveModalData").modal();
                 }
             }
+
+
 
             this.ShowDownloadModal = function(){
                 if(this.isAnalysis == "true"){
@@ -525,6 +565,10 @@ angular.module('columnTemplateDropdownModule')
                 else{
                     $(".saveAsModalData").modal();
                 }
+            }
+
+            this.ClearTemplateNameInput = function(){
+                $("#templateInput").val(''); // clear the inputbox
             }
 
 

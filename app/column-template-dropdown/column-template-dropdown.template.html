@@ -32,7 +32,7 @@
 
 
         <!--Save Template button for Data Tab-->
-        <button ng-click="$ctrl.ShowSaveModal()" data-toggle="modal" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false">
+        <button ng-class="{'saveTemplateButtonData': $ctrl.isAnalysis=='false', 'saveTemplateButtonAnalysis': $ctrl.isAnalysis=='true'}" ng-click="$ctrl.ShowSaveModal()" data-toggle="modal" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false">
             Save Template
         </button>
 
@@ -112,11 +112,11 @@
     <div class="modal-body">
 
         <input autofocus="autofocus" id="templateInput" class="form-control" type="text" ng-init="$ctrl.newTemplateName" ng-model="$ctrl.newTemplateName" placeholder="My Template Name...">
-
+         <br> <br> <br> 
     </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button ng-click="$ctrl.saveTemplate($ctrl.columns)" type="button" class="btn btn-default" aria-haspopup="true" aria-expanded="false" data-dismiss="modal">Save Current Template
+            <button ng-click="$ctrl.ClearTemplateNameInput()" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button ng-click="$ctrl.saveTemplate($ctrl.columns)" type="button" class="btn btn-default">Save Current Template
             </button>
         </div>
     </div>

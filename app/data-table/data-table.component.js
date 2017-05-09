@@ -143,7 +143,7 @@ angular.module('dataTableModule').component('datatable', {
                     Object.assign(element[name], { parentName: element.name, buildingName: element.building });
                 }
             }
-            console.log(this.columnNamesObjs);
+            // console.log(this.columnNamesObjs);
 
             this.displayed = this.data = this.tableSrc;
         }; //end $onChanges
@@ -228,12 +228,23 @@ angular.module('dataTableModule').component('datatable', {
         // =====--- CONDITIONAL FORMATTING ---===== //
 
 
+        /* For some reason it is undefined the first time it runs. Although 
+        I say it is true up in $onChange - to fix I check if undefined then make false */
+        this.switchShowConditionalFormat = function(col){
+            if(angular.isUndefined(col.showConditionalFormat))
+                col.showConditionalFormat = false;
+            else{
+                col.showConditionalFormat = !col.showConditionalFormat;
+            }
+        }
+
+
 
         this.conditionalFormat = function(value, showConditionalFormat){
             // console.log(showConditionalFormat);
             // conditionalFormatShow = false;
             if(showConditionalFormat == false){
-                console.log(value);
+                // console.log(value);
                 return {"background-color": "white"}
             }
             if(value == undefined || !value.good || this.maxAndMin[value.name] == undefined){

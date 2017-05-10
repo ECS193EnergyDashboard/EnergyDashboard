@@ -1,16 +1,20 @@
 angular.module('dataTableModule').component('datatable', {
     templateUrl: 'data-table/data-table.template.html',
     bindings: {
-        tableSrc: '<',
-        selection: '=',
+        tableSrc:       '<',
+        searchEnabled:  '<',
+        reorderEnabled: '<',
+        elemName:       '<',   // passed to columnTemplate component to determine template type
+        selection:      '='
     },
-    controller: ['$filter', '$scope', '$timeout', function TableController($filter, $scope, $timeout) {
+    controller: ['$filter', '$scope', function TableController($filter, $scope) {
         var self = this;
         this.data = [];
         this.sums = {};
         this.averages = {};
         this.columnNames = [];
         this.columnNamesObjs = [];
+        this.maxAndMin = {};
 
         var selectionIndexOf = function(obj) {
             for (var i = 0; i < self.selection.length; i++) {
@@ -19,44 +23,24 @@ angular.module('dataTableModule').component('datatable', {
                 }
             }
             return -1;
-        };
+        }
 
         var isSelected = function(obj) {
             return selectionIndexOf(obj) !== -1;
-        };
+        }
 
         var deselect = function(obj) {
             var idx = selectionIndexOf(obj);
             if (idx !== -1) {
                 self.selection.splice(idx, 1);
             }
-        };
+        }
 
         var select = function(obj) {
             if (!isSelected(obj)) {
                 self.selection.push(obj);
             }
-        };
-
-
-        var defaultValues = [
-            // Start of AHU default values
-            "ACH",
-            "Air Flow Differential",
-            "Air Flow Differential Setpoint",
-            "Calculated Occ Total Exhaust",
-            "Calculated Unocc Total Exhaust",
-            "Canopy Hood High Daily Duration",
-            "Canopy Hood High Monthly Duration",
-            'Cooling Driving Lab',
-
-            //Start of SubSystem default values
-            "Coil Heating Energy BTU per Hr",
-            "Cooling Energy BTU per Hr",
-            "Heating Energy BTU per Hr",
-            "Reheating Energy BTU per Hr",
-            "Total Air Flow Avoided"
-        ];
+        }
 
         this.formatValue = function(value) {
             if (value === undefined || value.value === undefined) {
@@ -79,7 +63,28 @@ angular.module('dataTableModule').component('datatable', {
                 style += 'selected ';
             }
             return style;
-        };
+        }
+
+        this.conditionalFormat = function(value){
+            if(value == undefined || !value.good){
+                return {};
+            }
+            var r = 0;
+            var g = 0;
+            var b = 0;
+            var max = this.maxAndMin[value.name].max;
+            var min = this.maxAndMin[value.name].min;
+            var textColor = "white";
+            r = ((value.value - min) / (max - min)) * 255;
+            g = 0;
+            b = ((max - value.value) / (max - min)) * 255;
+            if(isNaN(r) || isNaN(b)){
+                return {};
+                textColor = "black";
+            }
+            return { "background-color": "rgb(" +Math.round(r)+ "," +g+ "," +Math.round(b)+ ")",
+                    "color": textColor };
+        }
 
         this.getters = {
             value: function(key, element) {
@@ -101,7 +106,7 @@ angular.module('dataTableModule').component('datatable', {
                 return;
             }
 
-            //console.log(this.tableSrc);
+//            console.log("Datatable elemName", this.elemName);
 
             var columnSet = {};
 
@@ -129,8 +134,8 @@ angular.module('dataTableModule').component('datatable', {
                 catch(e){
                     column.units = "";
                 }
-                // check if the string element is in the defaultValues array
-                if (defaultValues.includes(columnName) || firstValues < 10) {
+                // Set the first 10 values as default
+                if (firstValues < 10) {
                     column.isChecked = true;
                 } else {
                     column.isChecked = false;
@@ -160,11 +165,13 @@ angular.module('dataTableModule').component('datatable', {
         this.updateCalculations = function() {
             this.sums = {};
             this.averages = {};
+            this.maxAndMin = {};
             for (var column of this.columnNamesObjs) {
                 this.sums[column.name] = this.sumColumn(column.name);
                 this.averages[column.name] = this.averageColumn(column.name);
+                this.maxAndMin[column.name] = this.maxMinColumn(column.name);
             }
-        };
+        }
 
         this.sumColumn = function(columnName) {
             var acc = this.reduceColumn(columnName, { sum: 0 }, function(val, acc) { acc.sum += val; });
@@ -179,22 +186,41 @@ angular.module('dataTableModule').component('datatable', {
             return acc.len > 0 ? acc.sum / acc.len : 0;
         };
 
+        this.maxMinColumn = function(columnName){
+            var acc = this.reduceColumn(columnName, {max: null, min: null}, function(val, acc){
+                if(acc.max == null){
+                    acc.max = val;
+                }
+                else if(val > acc.max){
+                    acc.max = val;
+                }
+
+                if(acc.min == null){
+                    acc.min = val;
+                }
+                else if(val < acc.min){
+                    acc.min = val;
+                }
+            });
+            return acc;
+        }
+
         // For every currently displayed row in column 'columnName', applies the function 'opFunc' to the cell's value and the accumulator object 'accumulator'.
         // Returns the accumulated value object.
         this.reduceColumn = function(columnName, accumulator, opFunc) {
             var a = accumulator;
             for (var element of this.displayed) {
                 var colVal = element[columnName];
-                if (colVal && colVal.good && colVal.value) {
+                if (colVal && colVal.good && colVal.value != undefined) {
                     opFunc(colVal.value, a);
                 }
             }
             return a;
-        };
+        }
 
         this.updateCol = function(cols){
             this.columnNamesObjs = cols;
-        };
+        }
 
         this.toggleCellSelected = function(value) {
             if (isSelected(value)) {
@@ -202,7 +228,7 @@ angular.module('dataTableModule').component('datatable', {
             } else {
                 select(value);
             }
-        };
+        }
 
         // Whenever the displayed data is changed, recalculate sum and average of the shown rows only
         $scope.$watch('$ctrl.displayed', function(newValue, oldValue) {
@@ -210,83 +236,6 @@ angular.module('dataTableModule').component('datatable', {
 
             self.updateCalculations();
         });
-
-        var timeoutPromise;
-        var delayInMs = 200;
-        var newWatch  = true;
-        $scope.$watch('$ctrl.columnNamesObjs', function(newValue, oldValue){
-
-            $timeout.cancel(timeoutPromise);  //does nothing, if timeout alrdy done
-            timeoutPromise = $timeout(function() {   //Set timeout
-                console.log("timeout fired");
-                if (!newWatch) {
-                    //is not a new watch
-                    newWatch = true;
-                    console.log('ignoring duplicate watch');
-                    return;
-                }
-
-                var tableRef = document.getElementById('dataTable');
-                console.log("table has this many rows");
-                console.log(tableRef.rows.length);
-
-                console.log(self.columnNamesObjs);
-
-                for (var i = 0; (i < 3) && (i < tableRef.rows.length); i++) {
-                    var col;
-
-
-                    var tableRow = tableRef.rows[i];
-                    var c = 0;
-                    for (var j = 0; j < tableRow.cells.length; j++) {
-                        var tableCell = tableRow.cells[j];
-                        var print = '#' + i + ',' + j + ': ' + tableCell.offsetWidth;
-                        /*
-                         var textNode = document.createTextNode(print)
-                         tableCell.appendChild(textNode);
-                         */
-                        console.log(print);
-
-                        if (i === 2) {
-                            newWatch = false;
-                            if (j === 0) {
-                                tableRef.rows[0].cells[j].style.maxWidth = tableCell.offsetWidth + 'px';
-                                tableRef.rows[0].cells[j].style.minWidth = tableCell.offsetWidth + 'px';
-
-                            }
-                            else if (j === 1) {
-                                tableRef.rows[0].cells[j].style.maxWidth = tableCell.offsetWidth + 'px';
-                                tableRef.rows[0].cells[j].style.minWidth = tableCell.offsetWidth + 'px';
-
-                            }
-                            else {
-                                col = self.columnNamesObjs[c];
-                                console.log("enter with col: " + col.name);
-                                console.log("is checked: " + col.isChecked);
-
-                                for (; !col.isChecked; c++) {
-                                    console.log("skipping over: " + col.name);
-                                    col = self.columnNamesObjs[c];
-                                }
-
-                                c++;
-                                console.log("found: " + col.name)
-                                col.width = tableCell.offsetWidth + 'px';
-                                console.log("changing width to: " + tableCell.offsetWidth);
-                            }
-                        }
-                    }
-                }
-
-            }, delayInMs);
-        }, true);
-
-
-        this.colUpdate = function(column){
-            console.log(column.name + " changed");
-        }
-
-
 
     }]
 });

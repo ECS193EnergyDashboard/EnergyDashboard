@@ -1,10 +1,14 @@
 <!--NOTE: for this we use the  columnNamesObjs however in the actual table we use columnNames -->
+<div class="tableParent">
+    <div class="tableMenus">
+        <column-template-dropdown columns="$ctrl.columnNamesObjs" update-col-obj= "$ctrl.updateCol(cols)"  row-data="$ctrl.data" is-analysis="'false'" elem-name="$ctrl.elemName"></column-template-dropdown>
+    </div>
 
-<column-template-dropdown columns="$ctrl.columnNamesObjs" update-col-obj= "$ctrl.updateCol(cols)" row-data="$ctrl.data" is-analysis="'false'" ></column-template-dropdown>
-<img ng-if="!$ctrl.displayed" id="mainLogo" src="../img/ecoMainLogo.png">
+    <span class="dataTitle"> DATA TAB </span>
 
-<table id="dataTable" ng-if="$ctrl.displayed" st-table="$ctrl.displayed" st-safe-src="$ctrl.data"  class="table table-striped">
 
+<table id="dataTable" ng-if="$ctrl.displayed" st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped">
+    <img ng-if="!$ctrl.displayed" id="mainLogo" src="../img/ecoMainLogo.png">
     <thead id="dataTableHead">
     <tr>
         <th st-sort="building">Building</th>
@@ -12,15 +16,9 @@
         <th  ng-repeat="column in $ctrl.columnNamesObjs" ng-style="{'max-width': column.width, 'min-width': column.width}" ng-if="column.isChecked" st-sort="$ctrl.getters.value.bind(null, column.name)" lr-drag-src="header" lr-drop-target="header">
 
             {{column.units === "" ? column.name : column.name + " (" + column.units + ")"}}
-
             <div id="itemBtn">
                 <span class="glyphicon glyphicon-remove pointer" ng-click="column.isChecked = false;$event.stopPropagation()"></span>
             </div>
-
-            <!-- From merge with SideBarSelectorRefactor, found in Master
-            <th ng-if="!$ctrl.reorderEnabled" ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" st-sort="$ctrl.getters.value.bind(null, column)">
-                {{column.units === "" ? column.name : column.name + " (" + column.units + ")"}}
-            -->
         </th>
 
     </tr>
@@ -36,7 +34,7 @@
     <tr ng-repeat="element in $ctrl.displayed">
         <td class="bold">{{element.building}}</td>
         <td class="bold">{{element.name}}</td>
-        <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" ng-class="$ctrl.valueStyle(element[column.name])" ng-click="$ctrl.toggleCellSelected(element[column.name])">
+        <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" ng-class="$ctrl.valueStyle(element[column.name])" ng-style="$ctrl.conditionalFormat(element[column.name])" ng-click="$ctrl.toggleCellSelected(element[column.name])">
             {{$ctrl.formatValue(element[column.name])}}
         </td>
     </tr>

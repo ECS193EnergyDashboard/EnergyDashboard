@@ -82,7 +82,7 @@ column-template-dropdown {
     overflow: scroll;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     right: 0;
-    z-index: 100;
+    z-index: 999999;
 }
 
 .dropdown a:hover {background-color: #f1f1f1}
@@ -113,4 +113,14 @@ th {
 .table {
     width: auto;
     max-width: none;
+}
+
+.dataTitle{
+    text-align: center;
+    position: relative;
+    font-size: 25px;
+}
+
+.tableMenus{
+    float: right;
 }

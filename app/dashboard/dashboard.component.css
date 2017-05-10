@@ -8,6 +8,8 @@
     z-index: 2;
 }
 
+
+
 .form-group {
     margin-bottom: 1px;
 }
@@ -116,6 +118,8 @@
         transform: rotate(360deg) scale(1);
     }
 }
+
+
 
 .progress {
     position: absolute;

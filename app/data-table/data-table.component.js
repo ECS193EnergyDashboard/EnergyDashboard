@@ -1,8 +1,11 @@
 angular.module('dataTableModule').component('datatable', {
     templateUrl: 'data-table/data-table.template.html',
     bindings: {
-        tableSrc: '<',
-        selection: '=',
+        tableSrc:       '<',
+        searchEnabled:  '<',
+        reorderEnabled: '<',
+        elemName:       '<',   // passed to columnTemplate component to determine template type
+        selection:      '='
     },
     controller: ['$filter', '$scope', '$timeout', function TableController($filter, $scope, $timeout) {
         var self = this;
@@ -11,6 +14,7 @@ angular.module('dataTableModule').component('datatable', {
         this.averages = {};
         this.columnNames = [];
         this.columnNamesObjs = [];
+        this.maxAndMin = {};
 
         var selectionIndexOf = function(obj) {
             for (var i = 0; i < self.selection.length; i++) {
@@ -38,26 +42,6 @@ angular.module('dataTableModule').component('datatable', {
             }
         };
 
-
-        var defaultValues = [
-            // Start of AHU default values
-            "ACH",
-            "Air Flow Differential",
-            "Air Flow Differential Setpoint",
-            "Calculated Occ Total Exhaust",
-            "Calculated Unocc Total Exhaust",
-            "Canopy Hood High Daily Duration",
-            "Canopy Hood High Monthly Duration",
-            'Cooling Driving Lab',
-
-            //Start of SubSystem default values
-            "Coil Heating Energy BTU per Hr",
-            "Cooling Energy BTU per Hr",
-            "Heating Energy BTU per Hr",
-            "Reheating Energy BTU per Hr",
-            "Total Air Flow Avoided"
-        ];
-
         this.formatValue = function(value) {
             if (value === undefined || value.value === undefined) {
                 return "N/A";
@@ -81,6 +65,27 @@ angular.module('dataTableModule').component('datatable', {
             return style;
         };
 
+        this.conditionalFormat = function(value){
+            if(value == undefined || !value.good){
+                return {};
+            }
+            var r = 0;
+            var g = 0;
+            var b = 0;
+            var max = this.maxAndMin[value.name].max;
+            var min = this.maxAndMin[value.name].min;
+            var textColor = "white";
+            r = ((value.value - min) / (max - min)) * 255;
+            g = 0;
+            b = ((max - value.value) / (max - min)) * 255;
+            if(isNaN(r) || isNaN(b)){
+                return {};
+                textColor = "black";
+            }
+            return { "background-color": "rgb(" +Math.round(r)+ "," +g+ "," +Math.round(b)+ ")",
+                    "color": textColor };
+        }
+
         this.getters = {
             value: function(key, element) {
                 return element[key].value;
@@ -102,6 +107,7 @@ angular.module('dataTableModule').component('datatable', {
             }
 
             //console.log(this.tableSrc);
+//            console.log("Datatable elemName", this.elemName);
 
             var columnSet = {};
 
@@ -129,8 +135,8 @@ angular.module('dataTableModule').component('datatable', {
                 catch(e){
                     column.units = "";
                 }
-                // check if the string element is in the defaultValues array
-                if (defaultValues.includes(columnName) || firstValues < 10) {
+                // Set the first 10 values as default
+                if (firstValues < 10) {
                     column.isChecked = true;
                 } else {
                     column.isChecked = false;
@@ -160,9 +166,11 @@ angular.module('dataTableModule').component('datatable', {
         this.updateCalculations = function() {
             this.sums = {};
             this.averages = {};
+            this.maxAndMin = {};
             for (var column of this.columnNamesObjs) {
                 this.sums[column.name] = this.sumColumn(column.name);
                 this.averages[column.name] = this.averageColumn(column.name);
+                this.maxAndMin[column.name] = this.maxMinColumn(column.name);
             }
         };
 
@@ -179,13 +187,32 @@ angular.module('dataTableModule').component('datatable', {
             return acc.len > 0 ? acc.sum / acc.len : 0;
         };
 
+        this.maxMinColumn = function(columnName){
+            var acc = this.reduceColumn(columnName, {max: null, min: null}, function(val, acc){
+                if(acc.max == null){
+                    acc.max = val;
+                }
+                else if(val > acc.max){
+                    acc.max = val;
+                }
+
+                if(acc.min == null){
+                    acc.min = val;
+                }
+                else if(val < acc.min){
+                    acc.min = val;
+                }
+            });
+            return acc;
+        }
+
         // For every currently displayed row in column 'columnName', applies the function 'opFunc' to the cell's value and the accumulator object 'accumulator'.
         // Returns the accumulated value object.
         this.reduceColumn = function(columnName, accumulator, opFunc) {
             var a = accumulator;
             for (var element of this.displayed) {
                 var colVal = element[columnName];
-                if (colVal && colVal.good && colVal.value) {
+                if (colVal && colVal.good && colVal.value != undefined) {
                     opFunc(colVal.value, a);
                 }
             }

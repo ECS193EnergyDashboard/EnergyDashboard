@@ -4,121 +4,93 @@ angular.module('sideNavModule').component('sideBar', {
         isLoading: '<',
         onClick: '&'
     },
-    controller: ['pi','treeFilterFilter', '$scope', function TableController(pi, treeFilterFilter, $scope) {
+    controller: ['pi','treeFilterFilter', function TableController(pi, treeFilterFilter) {
         var self = this;
         // Highlighted Item Index
         self.hlIndex = -1;
         self.searchPlaceHolder = "Search names...";
-        self.filterType= "name";
+        self.filter= "name";
         self.search = {name:'', template:''};
         self.searchInput = {name:'', template:''};
         self.filteredItems = {};
         self.buildings = [];
+        self.elemList = [];
         self.filteredItems = self.buildings;
         self.templateList = [];
-        self.loadingElems = 0;
-        self.isFiltered = 0;
 
         // webid for buildings list
         var webId = 'E0bgZy4oKQ9kiBiZJTW7eugwDBxX8Kms5BG77JiQlqSuWwVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdT';
 
+
         // Controller constructor called after bindings initialized
         self.$onInit = function() {
             //Populates building names
-            this.getChildren(webId, function(data) {
-                //DEBUGGING ONLY SLICEwhy
+            pi.getChildrenOfElement(webId).then(function(data) {
+                //@TODO REMOVE DEBUGGING ONLY SLICE
                 //self.buildings = data.slice(0,10);
-                //Store data in buildings array
                 self.buildings = data;
 
                 //Loop through each building
                 self.buildings.forEach( function(elem) {
+                    self.elemList.push(elem);
                     //Recursively explore buildings directory
-                    self.exploreElem(elem); //self.exploreElem(elemList, elem)
+                    self.exploreElem(elem);
                 });
-                //console.log("buildings: ", self.buildings);
-                //Set buildings as default navigation in sidebar
+                // console.log("buildings: ", self.buildings);
                 self.filteredItems = self.buildings;
             });
         };
 
-        //Wrapper for pi getChildrenOfElement service
-        this.getChildren = function(webId, func) {
-            //Increment load count
-            self.loadingElems++;
-            pi.getChildrenOfElement(webId).then( function(data){
-                func(data);
-                self.loadingElems--;
-                //Decrement load count
-                if(self.loadingElems === 0){
-                    console.log("Done loading");
 
-                    console.log(self.templateList);
-                }
-            });
-        };
-
-        //Clears the filtered list
         this.clearFilter = function() {
-               this.searchInput[this.filterType] = "";
+               this.searchInput[this.filter] = "";
                this.applyFilter();
-               self.isFiltered = 0;
         };
 
-        //Applies the typed in filter
         this.applyFilter = function() {
-            console.log("Applying Filter");
-            console.log(self.filterType);
-            console.log(self.searchInput);
-            console.log(self.filteredItems);
-            self.filteredItems = treeFilterFilter(self.buildings, self.searchInput, self.filterType);
-            self.isFiltered = 1;
+            // console.log("Copying search");
+            //this.search.name = this.searchInput.name;
+            //this.search.template = this.searchInput.template;
+            self.filteredItems = treeFilterFilter(self.buildings, self.searchInput, self.filter);
         };
 
-        //Recursively visits all of an elements children
+        //Recursively visits all of an elents childrens
         this.exploreElem = function(element) {
-            //Search for existing template
-            var found = self.templateList.find( function(e){
-
-                return e.name === element.template;
-            });
-
-            //If template not found
-            if(found === undefined){
-                //Make an element for the template
-                var tempElem = {name: element.template, hasChildren: true, elements: []};
-                self.templateList.push(tempElem);
-                found = tempElem;
-            }
-            //Make element child of template
-            found.elements.push(element);
-
-
-            //If element has children, but children have not been explored
+            self.templateList.push(element.template);
             if (element.hasChildren && (element.elements === undefined || element.elements == null )) {
-                //Get children of element
-
-                this.getChildren(element.webId, function(data) {
-                    //Add children to elements array
+                pi.getChildrenOfElement(element.webId).then(function(data) {
                     element.elements = data;
 
-                    //Explore each child
+                    //console.log("clicked: " + element.name);
+
                     element.elements.forEach( function(elem) {
+                        self.elemList.push(element);
                         self.exploreElem(elem);
                     });
+                    //console.log(element.name +" data", data.elements);
                 });
             }
         };
 
         this.clickElem = function(element) {
+            /*
+            if (element.elements === undefined || element.elements == null ) {
+                pi.getChildrenOfElement(element.webId).then(function(data) {
+                    element.elements = data;
+                    console.log("clicked: " + element.name);
+                    //console.log(element.name +" data", data.elements);
+                });
+            }
+            */
+
             // element does not have show property yet
             if (element.show == null || element.show === undefined) {
                 element.show = true;
             } else {
                 element.show = !element.show;
             }
-
         };
+
 
 
         this.onSelectElem = function(element) {
@@ -149,54 +121,21 @@ angular.module('sideNavModule').component('sideBar', {
             return (e.hasChildren && e.show );
         };
         this.searchNames = function(){
-            self.filterType = "name";
+            self.filter = "name";
             self.searchPlaceHolder = "Search names...";
-            self.filteredItems = self.buildings;
         };
         /*
         this.searchTags = function(){
             console.log(self.search.name);
-            self.filterType = "tag";
+            self.filter = "tag";
             self.searchPlaceHolder = "Search Tags...";
         };
         */
         this.searchTemplates = function(){
-            self.filterType = "template";
+            self.filter = "template";
             self.searchPlaceHolder = "Search Templates...";
+            // console.log(Array.from(new set(self.templateList)));
 
-
-            self.filteredItems = self.templateList;
-        };
-
-        var timer = 0;
-        var delay = 200;
-        var prevent = false;
-
-        this.clickedItem = function(e) {
-            console.log("single clicked "+e.name);
-            timer = setTimeout(function() {
-                if (!prevent) {
-                    $scope.$apply(function(){
-                        console.log("not prevent");
-                        self.clickElem(e);
-                    });
-                }
-                console.log("Setting prevent false");
-                prevent = false;
-            }, delay);
-        };
-
-        this.dblClickedItem = function (e){
-            console.log("double clicked "+e.name);
-            clearTimeout(timer);
-            prevent = true;
-            console.log("setting prevent true");
-            self.onSelectElem(e);
-        };
-
-        this.loadingList = function(){
-
-            return self.loadingElems;
         };
 
     }]

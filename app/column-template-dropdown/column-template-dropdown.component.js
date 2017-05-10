@@ -13,6 +13,7 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
             //self.columnNamesObjs = []
             this.templates = [];
             this.showTemplates = false;
+            this.filteredColumns = [];
 
 
             this.$onChanges = function() {
@@ -30,8 +31,14 @@ angular.module('columnTemplateDropdownModule').component('columnTemplateDropdown
 
 
             this.clearAll = function() {
-                for(var i = 0; i < this.columns.length; i++){
-                    this.columns[i].isChecked = false;
+                for(var i = 0; i < this.filteredColumns.length; i++){
+                    this.filteredColumns[i].isChecked = false;
+                }
+            };
+
+            this.selectAll = function(){
+                for(var i = 0; i < this.filteredColumns.length; i++){
+                    this.filteredColumns[i].isChecked = true;
                 }
             };
 

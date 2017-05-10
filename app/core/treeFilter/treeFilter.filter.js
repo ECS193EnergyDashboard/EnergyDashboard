@@ -9,8 +9,8 @@ angular.module('core.treeFilter').filter('treeFilter', function() {
             return input;
         }
 
-        console.log("Filter enabled looking for:"+optional1.name+" "+optional2+": in: ");
-        console.log(input);
+        //console.log("Filter enabled looking for:"+optional1.name+" "+optional2+": in: ");
+        //console.log(input);
         //Var to hold search results
         var out = [];
         //Clone input array into queue

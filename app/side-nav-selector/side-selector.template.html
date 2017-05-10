@@ -11,7 +11,7 @@
             </div>
         </div>
             <div id="searchBox">
-            Search by name: <input id="searchName" type="text" ng-model="search.selectedName">
+                <input id="searchName"  ng-model="search.name" class="form-control" type="text" placeholder="Search By Name">
             </div>
             <!-- <div id="textHere"> Drop Items Here</div>-->
 
@@ -21,9 +21,7 @@
                 Items <br>
                 Here
             </p>
-
-
-            <div ng-repeat="element in $ctrl.selected | filter: search.selectedName" class="selectItem" custom-drop-target="side-selector" custom-drop-success="$ctrl.onDropSuccess(item)" ng-class="{hiddenListItem: $ctrl.isDummyItem(element)}">
+            <div ng-repeat="element in $ctrl.selected | filter: search" class="selectItem" custom-drop-target="side-selector" custom-drop-success="$ctrl.onDropSuccess(item)" ng-class="{hiddenListItem: $ctrl.isDummyItem(element)}">
                 <span class="sidebar-item list-group-item selectorItem">
                     <div id="itemText">
                         <h6 id="buildingName">{{element.building}}</h6>
@@ -33,7 +31,6 @@
                     <div id="itemBtn">
                         <span ng-show="!$ctrl.isDummyItem(element)" class="glyphicon glyphicon-remove pointer" ng-click="$ctrl.removeElement(element);$event.stopPropagation()"></span>
                     </div>
-
                 </span>
             </div>
         </div>

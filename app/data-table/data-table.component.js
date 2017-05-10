@@ -357,7 +357,7 @@ angular.module('dataTableModule').component('datatable', {
 
             $timeout.cancel(timeoutPromise);  //does nothing, if timeout already done
             timeoutPromise = $timeout(function() {   //Set timeout
-                console.log("timeout fired");
+                //console.log("timeout fired");
 
                 /*
                 if (!newWatch) {
@@ -384,7 +384,7 @@ angular.module('dataTableModule').component('datatable', {
                     for (var j = 0; j < tableRow.cells.length; j++) {
                         var tableCell = tableRow.cells[j];
                         var print = '#' + i + ',' + j + ': ' + tableCell.offsetWidth + " px";
-                        console.log(print);
+                        //console.log(print);
 
                         if (i === 3) {
                             //newWatch = false;
@@ -400,39 +400,39 @@ angular.module('dataTableModule').component('datatable', {
                             }
                             else {
                                 col = self.columnNamesObjs[c];
-                                console.log("enter with col: " + col.name);
-                                console.log("is checked: " + col.isChecked);
+                                //console.log("enter with col: " + col.name);
+                                //console.log("is checked: " + col.isChecked);
 
                                 for (; !col.isChecked; c++) {
-                                    console.log("skipping over: " + col.name);
+                                    //console.log("skipping over: " + col.name);
                                     col = self.columnNamesObjs[c];
                                 }
 
                                 c++;
-                                console.log("found: " + col.name)
+                                //console.log("found: " + col.name)
                                 col.width = tableCell.offsetWidth + 'px';
                                 $scope.$apply(function (){
                                     self.columnWidths[col]  = tableCell.offsetWidth + 'px';
                                 });
-                                console.log("changing width to: " + tableCell.offsetWidth);
+                                //console.log("changing width to: " + tableCell.offsetWidth);
                             }
                         }
                     }
                 }
 
                 var headerHeight = document.getElementById('dataTableHead').offsetHeight;
-                console.log('header height: '+headerHeight);
+                //console.log('header height: '+headerHeight);
 
                 tableRef.style.top = headerHeight + "px";
 
-                console.log('data table top: '+tableRef.style.top)
+                //console.log('data table top: '+tableRef.style.top)
 
             }, delayInMs);
         }, true);
 
 
         this.colUpdate = function(column){
-            console.log(column.name + " changed");
+            //console.log(column.name + " changed");
         }
 
 

@@ -112,5 +112,29 @@ angular.module('dashboardModule').component('dashboard',{
         this.toggleChartMenu = function(){
             $("#wrapper").toggleClass("toggledChart");
         };
+
+
+        /* @Note: not sure e.pageX will work in IE8 */
+        (function(window){
+
+            /* A full compatability script from MDN: */
+            var supportPageOffset = window.pageXOffset !== undefined;
+            var isCSS1Compat = ((document.compatMode || "") === "CSS1Compat");
+
+            /* Set up some variables  */
+            var dataTableHead = document.getElementById("dataTableHead");
+            //var demoItem3 = document.getElementById("demoItem3");
+            /* Add an event to the window.onscroll event */
+            window.addEventListener("scroll", function(e) {
+                console.log("SCROLLED");
+                /* A full compatability script from MDN for gathering the x and y values of scroll: */
+                var x = supportPageOffset ? window.pageXOffset : isCSS1Compat ? document.documentElement.scrollLeft : document.body.scrollLeft;
+                var y = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop;
+
+                dataTableHead.style.left = -x + 50 + "px";
+                //demoItem3.style.top = -y + 50 + "px";
+            });
+
+        })(window);
     }]
 });

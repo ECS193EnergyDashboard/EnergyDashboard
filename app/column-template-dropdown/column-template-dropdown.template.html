@@ -8,9 +8,27 @@
                 Columns <span class="caret"></span>
             </button>
 
+
             <div class="dropdown-menu dropdown-content">
-                <input ng-model="columnsFilter" class="form-control" type="text" placeholder="Search For Column...">
-                <div class="dropdownelm" ng-repeat="column in $ctrl.columns | orderBy:'name' | filter:columnsFilter">
+                <!--- START: From columnDropwdownSearch-->
+                <div id="columnBtnSelected">
+                    Selected
+                    <span class="glyphicon glyphicon-ok-circle pointer" ng-click="search.isChecked = { isChecked: 'true'} ;$event.stopPropagation()"></span>
+                    <span class="glyphicon glyphicon-ban-circle pointer" ng-click="search.isChecked = { } ;$event.stopPropagation()"></span>
+                </div>
+                <br>
+                <div id="columnBtnCheck">
+                    Trash Shown
+                    <span class="glyphicon glyphicon-remove pointer" ng-click="$ctrl.clearAll();$event.stopPropagation()"></span>
+                </div>
+                <div id="columnBtnCheck">
+                    Select Shown
+                    <span class="glyphicon glyphicon-ok pointer" ng-click="$ctrl.selectAll();$event.stopPropagation()"></span>
+                </div>
+                <!--- END: From columnDropwdownSearch-->
+
+                <input ng-model="search.columnName" class="form-control" type="text" placeholder="Search For Column...">
+                <div class="dropdownelm" ng-repeat="column in ($ctrl.filteredColumns = ($ctrl.columns | orderBy:'name' | filter: search.columnName| filter: search.isChecked))  ">
                     <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}"> {{column.name}}
                 </div>
             </div>
@@ -112,7 +130,7 @@
     <div class="modal-body">
 
         <input autofocus="autofocus" id="templateInput" class="form-control" type="text" ng-init="$ctrl.newTemplateName" ng-model="$ctrl.newTemplateName" placeholder="My Template Name...">
-         <br> <br> <br> 
+         <br> <br> <br>
     </div>
         <div class="modal-footer">
             <button ng-click="$ctrl.ClearTemplateNameInput()" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

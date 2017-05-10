@@ -20,22 +20,16 @@ angular.module('sideNavChartModule').component('sideBarChart', {
             return this.selected.slice(0, this.selected.length - 1);
         };
 
-        this.removeElement = function (element)   {
-            this.selected.splice(this.selected.indexOf(element), 1);
+        this.removeChartElement = function (element)   {
+            this.selection.splice(this.selection.indexOf(element), 1);
 
-            this.onDeselect({ item: element });
+
         };
 
         this.clearSelected = function() {
-            this.selected.length = 0;
-            this.selected.push(dummyItem);
-
-            this.onClear();
+            this.selection.length = 0;
         };
 
-        this.isDummyItem = function(e) {
-            return -1 === e.numId;
-        };
 
     }]
 });

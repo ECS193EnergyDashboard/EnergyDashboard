@@ -2,7 +2,7 @@
     height: 100%;
     width: 100%;
     mix-blend-mode: multiply;
-    animation: fadeInFromNone 3s ease-out;
+    animation: fadeInFromNone 5s ease;
 }
 @keyframes fadeInFromNone {
     0% {
@@ -22,8 +22,6 @@
 }
 }
 
-
-
 .dropbtn {
     background-color: #4CAF50;
     color: white;
@@ -42,6 +40,40 @@
     position: relative;
     display: inline-block;
 
+}
+
+#dataTable {
+    width: auto;
+    /*max-width: none;*/
+    top: 165px;
+    margin: auto;
+    position: relative;
+    border: 2px solid #cccccc;
+    background-color: white;
+}
+
+#dataTableHead {
+    position: fixed;
+    margin-left: 0px;
+    z-index: 1;
+    transform: translate(0%, -100%);
+    background-image: linear-gradient(rgb(248, 248, 248) 0px, rgb(255, 255, 255) 100%);
+    box-shadow: rgba(255, 255, 255, 0.14902) 0px 1px 0px inset, rgba(0, 0, 0, 0.0745098) 0px 1px 5px;
+    outline: 3px solid rgba(217, 217, 217, 0.92);
+}
+
+#itemBtn{
+    position: inherit;
+}
+#dataTableBody{
+
+}
+column-template-dropdown {
+    position: fixed;
+    right: 0px;
+    z-index: 100;
+    /* top: 32px; */
+    transform: translate(0%,-100%);
 }
 
 .dropdown-content {
@@ -65,8 +97,20 @@
     text-align: center;
 }
 
-td {
+#dataTable td {
     white-space: nowrap;
+    min-width: 97px;
+    text-align: center;
+}
+
+#dataTable th {
+    min-width: 97px;
+    max-width: 97px;
+}
+
+.table {
+
+
 }
 
 .dataTitle{

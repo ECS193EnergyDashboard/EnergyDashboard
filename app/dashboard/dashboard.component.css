@@ -4,6 +4,8 @@
     flex: 0 1 auto;
     transition: all .5s ease;
     border-right: 5px solid #eeeeee;
+    position: relative;
+    z-index: 2;
 }
 
 
@@ -12,17 +14,24 @@
     margin-bottom: 1px;
 }
 
+#dashboardBtns {
+    position: fixed;
+    /* top: 33px; */
+    transform: translate(0%,-100%);
+}
 #side-bar-selector {
     /*border: 5px dotted red;*/
     width: 0;
     flex: 0 1 auto;
     transition: all .5s ease;
+    z-index: 2;
 }
 #side-bar-chart {
     /*border: 5px dotted red;*/
     width: 0;
     flex: 0 1 auto;
     transition: all .5s ease;
+    z-index: 2;
 }
 
 #wrapper.toggled #side-bar {
@@ -120,6 +129,7 @@
     opacity: 100;
     animation: fadeInFromNone 3s ease-out;
 }
+
 @keyframes fadeInFromNone {
     0% {
         display: none;

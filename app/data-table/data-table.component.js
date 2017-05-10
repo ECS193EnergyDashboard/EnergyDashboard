@@ -281,13 +281,13 @@ angular.module('dataTableModule').component('datatable', {
                 max = this.maxAndMin[value.name].max;
             }
             else{
-                max = col.max
+                max = Number(col.max)
             }
             if(angular.isUndefined(col.min)){
                 min = this.maxAndMin[value.name].min;
             }
             else{
-                min = col.min
+                min = Number(col.min)
             }
             if(max == min){
                 return {};

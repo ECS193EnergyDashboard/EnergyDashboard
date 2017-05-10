@@ -39,7 +39,7 @@
     float: right;
     position: relative;
     display: inline-block;
-    
+
 }
 
 #dataTable {
@@ -91,6 +91,7 @@ column-template-dropdown {
 
 .bold {
     font-weight: bold;
+    text-align: center;
 }
 
 td {

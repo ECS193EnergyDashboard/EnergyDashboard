@@ -19,8 +19,8 @@ angular.module('sideNavModule').component('sideBar', {
         self.loadingElems = 0;
         self.isFiltered = 0;
 
-        // webid for buildings list
-        var webId = 'E0bgZy4oKQ9kiBiZJTW7eugwDBxX8Kms5BG77JiQlqSuWwVVRJTC1BRlxBQ0VcVUMgREFWSVNcQlVJTERJTkdT';
+        // Root webid for UTIL-AF\\ACE\\UC Davis
+        var webId = 'E0bgZy4oKQ9kiBiZJTW7eugwBDwW6ams5BG77JiQlqSuWwVVRJTC1BRlxBQ0VcVUMgREFWSVM';
 
         // Controller constructor called after bindings initialized
         self.$onInit = function() {

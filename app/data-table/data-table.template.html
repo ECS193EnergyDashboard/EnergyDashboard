@@ -7,9 +7,6 @@
         elem-name="$ctrl.elemName">
         </column-template-dropdown>
 
-        <button ng-if="$ctrl.columnNamesObjs.length != 0" ng-click="$ctrl.showHideSettingsButtons()" type="button" class="btn btn-default tableButton">
-            Conditional Formatting
-        </button>
     </div>
 
 
@@ -28,6 +25,11 @@
     <tr>
         <th colspan="4">
             <input st-search="name" placeholder="search for name..." class="input-sm form-control" type="search"/>
+        </th>
+        <th>
+            <button ng-if="$ctrl.columnNamesObjs.length != 0" ng-click="$ctrl.showHideSettingsButtons()" type="button" class="btn btn-default">
+            Conditional Formatting
+            </button>
         </th>
     </tr>
     </thead>

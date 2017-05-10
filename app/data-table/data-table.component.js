@@ -249,6 +249,11 @@ angular.module('dataTableModule').component('datatable', {
             $(".formattingSettingsModal").modal();
         };
 
+        this.showHideSettingsButtons = function(){
+            this.showFormattingSettingsButtons = !this.showFormattingSettingsButtons;
+            console.log(this.showFormattingSettingsButtons);
+        };
+
         this.submitFormattingSettings = function(col){
             // this.maxAndMin[colName.name].max = document.getElementById("maxInput").value;
             // this.maxAndMin[colName.name].min = document.getElementById("minInput").value;

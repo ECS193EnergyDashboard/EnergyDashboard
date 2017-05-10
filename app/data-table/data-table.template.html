@@ -6,9 +6,11 @@
         row-data="$ctrl.data" is-analysis="'false'"
         elem-name="$ctrl.elemName">
         </column-template-dropdown>
+
+        <button ng-if="$ctrl.columnNamesObjs.length != 0" ng-click="$ctrl.showHideSettingsButtons()" type="button" class="btn btn-default tableButton">
+            Conditional Formatting
+        </button>
     </div>
-
-
 
 
 <table st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped">
@@ -32,7 +34,7 @@
 
     <tbody>
     <!-- Row for Conditional Formatting settings-->
-    <tr>
+    <tr ng-if="$ctrl.showFormattingSettingsButtons">
         <!-- 2 blank spaces for building and name -->
         <td> </td>
         <td> </td>

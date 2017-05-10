@@ -17,6 +17,7 @@ angular.module('dataTableModule').component('datatable', {
         this.maxAndMin = {};
         this.currentFormattingSettingsCol = {};
         this.showFormattingSettingsButtons = true;
+        this.columnWidths = {};
 
         // Conditional Formatting Points
         this.colsPoints = {};
@@ -254,7 +255,7 @@ angular.module('dataTableModule').component('datatable', {
 
         this.showHideSettingsButtons = function(){
             this.showFormattingSettingsButtons = !this.showFormattingSettingsButtons;
-            console.log(this.showFormattingSettingsButtons);
+            //console.log(this.showFormattingSettingsButtons);
         };
 
         this.submitFormattingSettings = function(col){
@@ -349,53 +350,44 @@ angular.module('dataTableModule').component('datatable', {
         });
 
         var timeoutPromise;
-        var delayInMs = 200;
+        var delayInMs = 1000;
         var newWatch  = true;
+
         $scope.$watch('$ctrl.columnNamesObjs', function(newValue, oldValue){
 
-            $timeout.cancel(timeoutPromise);  //does nothing, if timeout alrdy done
+            $timeout.cancel(timeoutPromise);  //does nothing, if timeout already done
             timeoutPromise = $timeout(function() {   //Set timeout
                 console.log("timeout fired");
+
+                /*
                 if (!newWatch) {
                     //is not a new watch
                     newWatch = true;
                     console.log('ignoring duplicate watch');
                     return;
                 }
+                */
 
                 var tableRef = document.getElementById('dataTable');
+                //console.log("table has this many rows");
+                //console.log(tableRef.rows.length);
 
-                var headerHeight = document.getElementById('dataTableHead').offsetHeight;
-                console.log('header height: '+headerHeight);
-
-                tableRef.style.top = headerHeight + "px";
-
-                console.log('data table top: '+tableRef.style.top)
-
-
-
-                console.log("table has this many rows");
-                console.log(tableRef.rows.length);
-
-                console.log(self.columnNamesObjs);
-
-                for (var i = 0; (i < 3) && (i < tableRef.rows.length); i++) {
+                //console.log(self.columnNamesObjs);
+                //For rows 2 and 3
+                for (var i = 1; (i < 4) && (i < tableRef.rows.length); i++) {
                     var col;
 
 
                     var tableRow = tableRef.rows[i];
                     var c = 0;
+                    //For every cell
                     for (var j = 0; j < tableRow.cells.length; j++) {
                         var tableCell = tableRow.cells[j];
-                        var print = '#' + i + ',' + j + ': ' + tableCell.offsetWidth;
-                        /*
-                         var textNode = document.createTextNode(print)
-                         tableCell.appendChild(textNode);
-                         */
+                        var print = '#' + i + ',' + j + ': ' + tableCell.offsetWidth + " px";
                         console.log(print);
 
-                        if (i === 2) {
-                            newWatch = false;
+                        if (i === 3) {
+                            //newWatch = false;
                             if (j === 0) {
                                 tableRef.rows[0].cells[j].style.maxWidth = tableCell.offsetWidth + 'px';
                                 tableRef.rows[0].cells[j].style.minWidth = tableCell.offsetWidth + 'px';
@@ -419,11 +411,21 @@ angular.module('dataTableModule').component('datatable', {
                                 c++;
                                 console.log("found: " + col.name)
                                 col.width = tableCell.offsetWidth + 'px';
+                                $scope.$apply(function (){
+                                    self.columnWidths[col]  = tableCell.offsetWidth + 'px';
+                                });
                                 console.log("changing width to: " + tableCell.offsetWidth);
                             }
                         }
                     }
                 }
+
+                var headerHeight = document.getElementById('dataTableHead').offsetHeight;
+                console.log('header height: '+headerHeight);
+
+                tableRef.style.top = headerHeight + "px";
+
+                console.log('data table top: '+tableRef.style.top)
 
             }, delayInMs);
         }, true);

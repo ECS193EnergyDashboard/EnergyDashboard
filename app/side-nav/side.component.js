@@ -52,9 +52,9 @@ angular.module('sideNavModule').component('sideBar', {
                 self.loadingElems--;
                 //Decrement load count
                 if(self.loadingElems === 0){
-                    console.log("Done loading");
+                    //console.log("Done loading");
 
-                    console.log(self.templateList);
+                    //console.log(self.templateList);
                 }
             });
         };
@@ -68,10 +68,10 @@ angular.module('sideNavModule').component('sideBar', {
 
         //Applies the typed in filter
         this.applyFilter = function() {
-            console.log("Applying Filter");
-            console.log(self.filterType);
-            console.log(self.searchInput);
-            console.log(self.filteredItems);
+            //console.log("Applying Filter");
+            //console.log(self.filterType);
+            //console.log(self.searchInput);
+            //console.log(self.filteredItems);
             self.filteredItems = treeFilterFilter(self.buildings, self.searchInput, self.filterType);
             self.isFiltered = 1;
             // console.log("Copying search");
@@ -179,24 +179,24 @@ angular.module('sideNavModule').component('sideBar', {
         var prevent = false;
 
         this.clickedItem = function(e) {
-            console.log("single clicked "+e.name);
+            //console.log("single clicked "+e.name);
             timer = setTimeout(function() {
                 if (!prevent) {
                     $scope.$apply(function(){
-                        console.log("not prevent");
+                        //console.log("not prevent");
                         self.clickElem(e);
                     });
                 }
-                console.log("Setting prevent false");
+                //console.log("Setting prevent false");
                 prevent = false;
             }, delay);
         };
 
         this.dblClickedItem = function (e){
-            console.log("double clicked "+e.name);
+            //console.log("double clicked "+e.name);
             clearTimeout(timer);
             prevent = true;
-            console.log("setting prevent true");
+            //console.log("setting prevent true");
             self.onSelectElem(e);
         };
 

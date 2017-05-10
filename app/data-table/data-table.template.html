@@ -11,7 +11,7 @@
     <tr>
         <th st-sort="building">Building</th>
         <th st-sort="name">Name</th>
-        <th  ng-repeat="column in $ctrl.columnNamesObjs" ng-style="{'max-width': column.width, 'min-width': column.width}" ng-if="column.isChecked" st-sort="$ctrl.getters.value.bind(null, column.name)" lr-drag-src="header" lr-drop-target="header">
+        <th  ng-repeat="column in $ctrl.columnNamesObjs" ng-style="{'max-width': $ctrl.columnWidths[column], 'min-width': $ctrl.columnWidths[column]}" ng-if="column.isChecked" st-sort="$ctrl.getters.value.bind(null, column.name)" lr-drag-src="header" lr-drop-target="header">
 
             {{column.units === "" ? column.name : column.name + " (" + column.units + ")"}}
             <!-- Remove Column Button on Column Name

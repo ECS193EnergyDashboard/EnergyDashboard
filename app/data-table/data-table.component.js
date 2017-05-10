@@ -7,7 +7,7 @@ angular.module('dataTableModule').component('datatable', {
         elemName:       '<',   // passed to columnTemplate component to determine template type
         selection:      '='
     },
-    controller: ['$filter', '$scope', function TableController($filter, $scope) {
+    controller: ['$filter', '$scope', '$timeout', function TableController($filter, $scope, $timeout) {
         var self = this;
         this.data = [];
         this.sums = {};
@@ -23,24 +23,24 @@ angular.module('dataTableModule').component('datatable', {
                 }
             }
             return -1;
-        }
+        };
 
         var isSelected = function(obj) {
             return selectionIndexOf(obj) !== -1;
-        }
+        };
 
         var deselect = function(obj) {
             var idx = selectionIndexOf(obj);
             if (idx !== -1) {
                 self.selection.splice(idx, 1);
             }
-        }
+        };
 
         var select = function(obj) {
             if (!isSelected(obj)) {
                 self.selection.push(obj);
             }
-        }
+        };
 
         this.formatValue = function(value) {
             if (value === undefined || value.value === undefined) {
@@ -63,7 +63,7 @@ angular.module('dataTableModule').component('datatable', {
                 style += 'selected ';
             }
             return style;
-        }
+        };
 
         this.conditionalFormat = function(value){
             if(value == undefined || !value.good){
@@ -106,6 +106,7 @@ angular.module('dataTableModule').component('datatable', {
                 return;
             }
 
+            //console.log(this.tableSrc);
 //            console.log("Datatable elemName", this.elemName);
 
             var columnSet = {};
@@ -171,7 +172,7 @@ angular.module('dataTableModule').component('datatable', {
                 this.averages[column.name] = this.averageColumn(column.name);
                 this.maxAndMin[column.name] = this.maxMinColumn(column.name);
             }
-        }
+        };
 
         this.sumColumn = function(columnName) {
             var acc = this.reduceColumn(columnName, { sum: 0 }, function(val, acc) { acc.sum += val; });
@@ -216,11 +217,11 @@ angular.module('dataTableModule').component('datatable', {
                 }
             }
             return a;
-        }
+        };
 
         this.updateCol = function(cols){
             this.columnNamesObjs = cols;
-        }
+        };
 
         this.toggleCellSelected = function(value) {
             if (isSelected(value)) {
@@ -228,7 +229,7 @@ angular.module('dataTableModule').component('datatable', {
             } else {
                 select(value);
             }
-        }
+        };
 
         // Whenever the displayed data is changed, recalculate sum and average of the shown rows only
         $scope.$watch('$ctrl.displayed', function(newValue, oldValue) {
@@ -236,6 +237,93 @@ angular.module('dataTableModule').component('datatable', {
 
             self.updateCalculations();
         });
+
+        var timeoutPromise;
+        var delayInMs = 200;
+        var newWatch  = true;
+        $scope.$watch('$ctrl.columnNamesObjs', function(newValue, oldValue){
+
+            $timeout.cancel(timeoutPromise);  //does nothing, if timeout alrdy done
+            timeoutPromise = $timeout(function() {   //Set timeout
+                console.log("timeout fired");
+                if (!newWatch) {
+                    //is not a new watch
+                    newWatch = true;
+                    console.log('ignoring duplicate watch');
+                    return;
+                }
+
+                var tableRef = document.getElementById('dataTable');
+
+                var headerHeight = document.getElementById('dataTableHead').offsetHeight;
+                console.log('header height: '+headerHeight);
+
+                tableRef.style.top = headerHeight + "px";
+
+                console.log('data table top: '+tableRef.style.top)
+
+
+
+                console.log("table has this many rows");
+                console.log(tableRef.rows.length);
+
+                console.log(self.columnNamesObjs);
+
+                for (var i = 0; (i < 3) && (i < tableRef.rows.length); i++) {
+                    var col;
+
+
+                    var tableRow = tableRef.rows[i];
+                    var c = 0;
+                    for (var j = 0; j < tableRow.cells.length; j++) {
+                        var tableCell = tableRow.cells[j];
+                        var print = '#' + i + ',' + j + ': ' + tableCell.offsetWidth;
+                        /*
+                         var textNode = document.createTextNode(print)
+                         tableCell.appendChild(textNode);
+                         */
+                        console.log(print);
+
+                        if (i === 2) {
+                            newWatch = false;
+                            if (j === 0) {
+                                tableRef.rows[0].cells[j].style.maxWidth = tableCell.offsetWidth + 'px';
+                                tableRef.rows[0].cells[j].style.minWidth = tableCell.offsetWidth + 'px';
+
+                            }
+                            else if (j === 1) {
+                                tableRef.rows[0].cells[j].style.maxWidth = tableCell.offsetWidth + 'px';
+                                tableRef.rows[0].cells[j].style.minWidth = tableCell.offsetWidth + 'px';
+
+                            }
+                            else {
+                                col = self.columnNamesObjs[c];
+                                console.log("enter with col: " + col.name);
+                                console.log("is checked: " + col.isChecked);
+
+                                for (; !col.isChecked; c++) {
+                                    console.log("skipping over: " + col.name);
+                                    col = self.columnNamesObjs[c];
+                                }
+
+                                c++;
+                                console.log("found: " + col.name)
+                                col.width = tableCell.offsetWidth + 'px';
+                                console.log("changing width to: " + tableCell.offsetWidth);
+                            }
+                        }
+                    }
+                }
+
+            }, delayInMs);
+        }, true);
+
+
+        this.colUpdate = function(column){
+            console.log(column.name + " changed");
+        }
+
+
 
     }]
 });

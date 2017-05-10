@@ -16,7 +16,8 @@
 
 #dashboardBtns {
     position: fixed;
-    top: 33px;
+    /* top: 33px; */
+    transform: translate(0%,-100%);
 }
 #side-bar-selector {
     /*border: 5px dotted red;*/

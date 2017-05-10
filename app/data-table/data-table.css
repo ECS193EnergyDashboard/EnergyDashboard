@@ -72,7 +72,8 @@ column-template-dropdown {
     position: fixed;
     right: 0px;
     z-index: 100;
-    top: 32px;
+    /* top: 32px; */
+    transform: translate(0%,-100%);
 }
 
 .dropdown-content {

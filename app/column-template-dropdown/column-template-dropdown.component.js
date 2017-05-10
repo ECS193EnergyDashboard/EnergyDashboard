@@ -33,6 +33,7 @@ angular.module('columnTemplateDropdownModule')
             this.includeDR = false;
             var numInnerColumns = 0;
             this.currentTemplate = {};
+            this.filteredColumns = [];
 
             $scope.unalteredCurrentTemplate = {};
             $scope.isAnalysis = this.isAnalysis;
@@ -71,7 +72,7 @@ angular.module('columnTemplateDropdownModule')
                     }
                     else{
                         $('.saveTemplateButtonData').css({'color': 'red'});
-                    }                   
+                    }
                 }
             }, true);
 
@@ -92,7 +93,7 @@ angular.module('columnTemplateDropdownModule')
 
                 // Get templates from server
                 this.getTemplates();
-                
+
                 // If we changed type after clicking something
                 if(this.prevType != this.curType){  // do default stuff
                     // If default doesnt exists yet
@@ -111,8 +112,8 @@ angular.module('columnTemplateDropdownModule')
                         }
                     }
                 }
-                
-                
+
+
                 // User clicked on something of same type
                 else if(this.curType != "" && this.currentTemplate.name != undefined){
                     // Make template persist
@@ -196,7 +197,7 @@ angular.module('columnTemplateDropdownModule')
                     self.updateFiltered();
 
                     self.determineType();
-                    
+
 
                 }, function errorCallback(response) {
                     console.error("get templates failed ", response);
@@ -206,8 +207,14 @@ angular.module('columnTemplateDropdownModule')
             };
 
             this.clearAll = function() {
-                for(var i = 0; i < this.columns.length; i++){
-                    this.columns[i].isChecked = false;
+                for(var i = 0; i < this.filteredColumns.length; i++){
+                    this.filteredColumns[i].isChecked = false;
+                }
+            };
+
+            this.selectAll = function(){
+                for(var i = 0; i < this.filteredColumns.length; i++){
+                    this.filteredColumns[i].isChecked = true;
                 }
             };
 
@@ -493,7 +500,7 @@ angular.module('columnTemplateDropdownModule')
             // A function to overwrite the template on the server
             this.OverwriteTemplate = function(templateCols, overWriteTemplateName){
                 var template;
-                
+
                 // Find template by name and type
                 for(template of self.templates){
                     // Is default of current type
@@ -502,7 +509,7 @@ angular.module('columnTemplateDropdownModule')
                     }
                 }
                 template.colObj = templateCols;
-                
+
                 $http({
                     method: 'POST',
                     url: '/templatesUpdate',

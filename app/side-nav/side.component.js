@@ -36,6 +36,7 @@ angular.module('sideNavModule').component('sideBar', {
                     //Recursively explore buildings directory
                     self.exploreElem(elem); //self.exploreElem(elemList, elem)
                 });
+                // console.log("buildings: ", self.buildings);
                 //console.log("buildings: ", self.buildings);
                 //Set buildings as default navigation in sidebar
                 self.filteredItems = self.buildings;
@@ -73,6 +74,10 @@ angular.module('sideNavModule').component('sideBar', {
             console.log(self.filteredItems);
             self.filteredItems = treeFilterFilter(self.buildings, self.searchInput, self.filterType);
             self.isFiltered = 1;
+            // console.log("Copying search");
+            //this.search.name = this.searchInput.name;
+            //this.search.template = this.searchInput.template;
+            self.filteredItems = treeFilterFilter(self.buildings, self.searchInput, self.filter);
         };
 
         //Recursively visits all of an elements children
@@ -163,6 +168,7 @@ angular.module('sideNavModule').component('sideBar', {
         this.searchTemplates = function(){
             self.filterType = "template";
             self.searchPlaceHolder = "Search Templates...";
+            // console.log(Array.from(new set(self.templateList)));
 
 
             self.filteredItems = self.templateList;

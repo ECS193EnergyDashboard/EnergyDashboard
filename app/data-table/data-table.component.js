@@ -354,21 +354,15 @@ angular.module('dataTableModule').component('datatable', {
         var newWatch  = true;
 
         $scope.$watch('$ctrl.columnNamesObjs', function(newValue, oldValue){
-
+            //console.log("watch fired");
             $timeout.cancel(timeoutPromise);  //does nothing, if timeout already done
             timeoutPromise = $timeout(function() {   //Set timeout
                 //console.log("timeout fired");
 
-                /*
-                if (!newWatch) {
-                    //is not a new watch
-                    newWatch = true;
-                    console.log('ignoring duplicate watch');
+                var tableRef = document.getElementById('dataTable');
+                if(tableRef == null){
                     return;
                 }
-                */
-
-                var tableRef = document.getElementById('dataTable');
                 //console.log("table has this many rows");
                 //console.log(tableRef.rows.length);
 
@@ -402,7 +396,10 @@ angular.module('dataTableModule').component('datatable', {
                                 col = self.columnNamesObjs[c];
                                 //console.log("enter with col: " + col.name);
                                 //console.log("is checked: " + col.isChecked);
-
+                                if(typeof col == 'undefined'){
+                                    //console.log('undefined col in timeout')
+                                    continue;
+                                }
                                 for (; !col.isChecked; c++) {
                                     //console.log("skipping over: " + col.name);
                                     col = self.columnNamesObjs[c];
@@ -419,15 +416,27 @@ angular.module('dataTableModule').component('datatable', {
                         }
                     }
                 }
+                var headerHeight = document.getElementById('dataTableHead').offsetHeight;
+                //console.log('Timeout: header height: '+headerHeight);
+                tableRef.style.top = headerHeight + "px";
 
+                 $scope.$apply(function (){
+                    tableRef.style.top = headerHeight + "px";
+                 });
+
+                //console.log('Timeout: data table top: '+tableRef.style.top)
+
+            }, delayInMs);
+            var tableRef = document.getElementById('dataTable');
+            var fixedHeader = document.getElementById('dataTableHead');
+            if(fixedHeader != null) {
                 var headerHeight = document.getElementById('dataTableHead').offsetHeight;
                 //console.log('header height: '+headerHeight);
-
                 tableRef.style.top = headerHeight + "px";
 
                 //console.log('data table top: '+tableRef.style.top)
+            }
 
-            }, delayInMs);
         }, true);
 
 

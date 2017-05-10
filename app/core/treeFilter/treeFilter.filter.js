@@ -1,7 +1,16 @@
 angular.module('core.treeFilter').filter('treeFilter', function() {
     return function (input, optional1, optional2) {
         var searchType = optional2;
-        var searchString = optional1[searchType].toLowerCase();
+        //console.log(searchType);
+        //console.log(optional1);
+        if(optional1[searchType] == null){
+            //console.log(optional2);
+            var searchString = optional1[searchType].toLowerCase();;
+        }
+        else {
+            var searchString = optional1[searchType].toLowerCase();
+        }
+
         //Check if filter is disabled
         if(searchString.length == 0){
             //console.log("treeFilter: disabled input: ");
@@ -9,7 +18,7 @@ angular.module('core.treeFilter').filter('treeFilter', function() {
             return input;
         }
 
-        //console.log("Filter enabled looking for:"+optional1.name+" "+optional2+": in: ");
+        //console.log("Filter enabled looking for:"+optional1.name+" "+optional2+" in: ");
         //console.log(input);
         //Var to hold search results
         var out = [];

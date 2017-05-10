@@ -43,6 +43,8 @@
 }
 
 #dataTable {
+    width: auto;
+    /*max-width: none;*/
     top: 165px;
     margin: auto;
     position: relative;
@@ -94,20 +96,20 @@ column-template-dropdown {
     text-align: center;
 }
 
-td {
+#dataTable td {
     white-space: nowrap;
     min-width: 97px;
     text-align: center;
 }
 
-th {
+#dataTable th {
     min-width: 97px;
     max-width: 97px;
 }
 
 .table {
-    width: auto;
-    max-width: none;
+
+
 }
 
 .dataTitle{

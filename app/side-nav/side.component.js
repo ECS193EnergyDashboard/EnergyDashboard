@@ -61,7 +61,8 @@ angular.module('sideNavModule').component('sideBar', {
 
         //Clears the filtered list
         this.clearFilter = function() {
-               this.searchInput[this.filterType] = "";
+               this.searchInput["name"] = "";
+               this.searchInput["template"] = "";
                this.applyFilter();
                self.isFiltered = 0;
         };
@@ -77,7 +78,7 @@ angular.module('sideNavModule').component('sideBar', {
             // console.log("Copying search");
             //this.search.name = this.searchInput.name;
             //this.search.template = this.searchInput.template;
-            self.filteredItems = treeFilterFilter(self.buildings, self.searchInput, self.filter);
+
         };
 
         //Recursively visits all of an elements children

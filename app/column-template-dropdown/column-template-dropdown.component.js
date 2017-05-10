@@ -34,7 +34,9 @@ angular.module('columnTemplateDropdownModule')
             var numInnerColumns = 0;
             this.currentTemplate = {};
 
+
             this.unalteredCurrentTemplate = {};
+
 
             // Default file name for downloading to CSV
             this.fileName = "Data.csv";
@@ -49,14 +51,18 @@ angular.module('columnTemplateDropdownModule')
             }
 
             this.$onInit = function(){
+
+
                 this.determineType();
             }
 
 
             // A watcher for the current template
             $scope.$watch('$ctrl.currentTemplate', function(newVal, oldVal){
+
                 if(angular.equals(self.unalteredCurrentTemplate, newVal.colObj)){
                     if(self.isAnalysis == "true"){
+
                         $('.saveTemplateButtonAnalysis').css({'color': 'green'});
                     }
                     else{
@@ -64,7 +70,9 @@ angular.module('columnTemplateDropdownModule')
                     }
                 }
                 else{
+
                     if(self.isAnalysis == "true"){
+
                         $('.saveTemplateButtonAnalysis').css({'color': 'red'});
                     }
                     else{
@@ -76,7 +84,9 @@ angular.module('columnTemplateDropdownModule')
 
             this.$onChanges = function(changes){
                 if(changes.columns){
+
                     this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns))
+
                     if(this.isAnalysis == "true"){
                         $('.saveTemplateButtonAnalysis').css({'color': 'green'});
                     }

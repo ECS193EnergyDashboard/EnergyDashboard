@@ -16,6 +16,7 @@ angular.module('dataTableModule').component('datatable', {
         this.columnNamesObjs = [];
         this.maxAndMin = {};
         this.currentFormattingSettingsCol = {};
+        this.showFormattingSettingsButtons = true;
 
         // Conditional Formatting Points
         this.colsPoints = {};
@@ -127,8 +128,8 @@ angular.module('dataTableModule').component('datatable', {
                 column.showConditionalFormat = true;
                 column.max;
                 column.min;
-                column.maxColor;
-                column.minColor;
+                column.maxColor = "Red";
+                column.minColor = "Blue";
 
                 try{
                     column.units = self.tableSrc[0][column.name].unitsAbbreviation;
@@ -235,6 +236,10 @@ angular.module('dataTableModule').component('datatable', {
 
         // =====--- CONDITIONAL FORMATTING ---===== //
 
+        this.isUndefined = function(thing) {
+            return angular.isUndefined(thing);
+        }
+
         this.switchShowConditionalFormat = function(col){
             col.showConditionalFormat = !col.showConditionalFormat;
         };
@@ -251,10 +256,9 @@ angular.module('dataTableModule').component('datatable', {
             col.min = document.getElementById("minInput").value;
             col.maxColor = document.getElementById("maxColor").value;
             col.minColor = document.getElementById("minColor").value;
-            // console.log(document.getElementById("minColor").value);
-            console.log(col);
-
+            document.getElementById("conditionalFormatForm").reset();
         };
+
 
         this.conditionalFormat = function(value, col){
             // Do nothing on bad/undef values
@@ -266,17 +270,55 @@ angular.module('dataTableModule').component('datatable', {
             if(col.showConditionalFormat == false){
                 return {"background-color": "white"}
             }
-            // var min;
-            // var max;
-            var max = this.maxAndMin[value.name].max;
-            var min = this.maxAndMin[value.name].min;
+            // Check is there is a user submitted max and min else use the max/ min of current data.
+            var max, min;
+            if(angular.isUndefined(col.max)){
+                max = this.maxAndMin[value.name].max;
+            }
+            else{
+                max = col.max
+            }
+            if(angular.isUndefined(col.min)){
+                min = this.maxAndMin[value.name].min;
+            }
+            else{
+                min = col.min
+            }
             if(max == min){
                 return {};
             }
+
+            // Check if user submitted color, if not default to red and blue for max and min respectivly.
+            var maxColor, minColor;
+            if(col.maxColor == "Red"){
+                maxColor = this.red;
+            }
+            else if(col.maxColor == "Blue"){
+                maxColor = this.blue;
+            }
+            else if(col.maxColor == "Green"){
+                maxColor = this.green;
+            }
+            else if(col.maxColor == "Purple"){
+                maxColor = this.purple;
+            }
+
+            if(col.minColor == "Red"){
+                minColor = this.red;
+            }
+            else if(col.minColor == "Blue"){
+                minColor = this.blue;
+            }
+            else if(col.minColor == "Green"){
+                minColor = this.green;
+            }
+            else if(col.minColor == "Purple"){
+                minColor = this.purple;
+            } 
             this.colsPoints[value.name] = [
-                { value: min, color: this.blue },
+                { value: min, color: minColor},
                 { value: (max+min)/2, color: this.white },
-                { value: max, color: this.red },
+                { value: max, color: maxColor},
             ]
 
             var color = gradient(this.colsPoints[value.name])(value.value);
@@ -291,101 +333,6 @@ angular.module('dataTableModule').component('datatable', {
             return { "background-color": "rgb(" +color.r+ "," +color.g+ "," +color.b+ ")",
                     "color": textColor };
         }
-
-
-
-        // this.conditionalFormat = function(value, col){
-        //     // Do nothing on bad/undef values
-        //     if(value == undefined || !value.good || this.maxAndMin[value.name] == undefined){
-        //         return {};
-        //     }
-
-        //     // Remove conditional formatting
-        //     if(col.showConditionalFormat == false){
-        //         return {"background-color": "white"}
-        //     }
-        //     // Check is there is a user submitted max and min else use the max/ min of current data.
-        //     var max, min;
-        //     if(angular.isUndefined(col.max)){
-        //         max = this.maxAndMin[value.name].max;
-        //     }
-        //     else{
-        //         max = col.max
-        //     }
-        //     if(angular.isUndefined(col.min)){
-        //         min = this.maxAndMin[value.name].min;
-        //     }
-        //     else{
-        //         min = col.min
-        //     }
-        //     // var max = this.maxAndMin[value.name].max;
-        //     // var min = this.maxAndMin[value.name].min;
-        //     if(max == min){
-        //         return {};
-        //     }
-
-        //     // Check if user submitted color, if not default to red and blue for max and min respectivly.
-        //     var maxColor, minColor;
-        //     if(angular.isUndefined(col.maxColor)){
-        //         maxColor = this.red;
-        //     }
-        //     else{
-        //         if(col.maxColor = "Red"){
-        //             maxColor = this.red;
-        //         }
-        //         else if(col.maxColor = "Blue"){
-        //             maxColor = this.blue;
-        //         }
-        //         else if(col.maxColor = "Green"){
-        //             maxColor = this.green;
-        //         }
-        //         else if(col.maxColor = "Purple"){
-        //             maxColor = this.purple;
-        //         }
-        //     } 
-
-        //     if(angular.isUndefined(col.minColor)){
-        //         minColor = this.blue;
-        //     }
-        //     else{
-        //         if(col.minColor = "Red"){
-        //             console.log("MIN-red");
-        //             minColor = this.red;
-        //         }
-        //         else if(col.minColor = "Blue"){
-        //             console.log("MIN-blue");
-        //             minColor = this.blue;
-        //         }
-        //         else if(col.minColor = "Green"){
-        //             console.log("MIN-green");
-        //             minColor = this.green;
-        //         }
-        //         else if(col.minColor = "Purple"){
-        //             console.log("MIN-purple");
-        //             minColor = this.purple;
-        //         }
-        //     } 
-        //     // console.log(col);
-        //     // console.log(col.maxColor);
-        //     // console.log(col.minColor);
-        //     this.colsPoints[value.name] = [
-        //         { value: min, color: minColor},
-        //         { value: (max+min)/2, color: this.white },
-        //         { value: max, color: maxColor},
-        //     ]
-
-        //     var color = gradient(this.colsPoints[value.name])(value.value);
-
-        //     var textColor = "white";
-        //     // Calculate overall intensity of color to determine text color
-        //     var intensity = color.r * 0.299 + color.g * 0.597 + color.b * 0.114;
-        //     if (intensity > 186) {
-        //         textColor = "black";
-        //     }
-
-        //     return { "background-color": "rgb(" +color.r+ "," +color.g+ "," +color.b+ ")",
-        //             "color": textColor };
-        // }
 
         // Whenever the displayed data is changed, recalculate sum and average of the shown rows only
         $scope.$watch('$ctrl.displayed', function(newValue, oldValue) {

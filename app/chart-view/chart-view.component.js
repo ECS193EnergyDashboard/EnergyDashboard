@@ -1,6 +1,6 @@
 angular.module('chartViewModule').component('chartView', {
         templateUrl: 'chart-view/chart-view.template.html',
-        controller: [ 'pi', '$q', '$location', function(pi, $q, $location) {
+        controller: [ 'pi', '$q', '$location', '$window', function(pi, $q, $location, $window) {
             var self = this;
 
             this.isLoading = false;
@@ -52,7 +52,7 @@ angular.module('chartViewModule').component('chartView', {
                 return d === null ? 'Bad' : yTickFormat(d);
             }
 
-            var graphWidth = 960;
+            var graphWidth = $window.innerWidth;
             var lrMargin = 80;
 
             var tooltip = nv.models.tooltip()

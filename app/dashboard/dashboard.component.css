@@ -16,7 +16,8 @@
 
 #dashboardBtns {
     position: fixed;
-    /* top: 33px; */
+    /*top: 33px; */
+    /*z-index: 999;*/
     transform: translate(0%,-100%);
 }
 #side-bar-selector {
@@ -129,7 +130,6 @@
     opacity: 100;
     animation: fadeInFromNone 3s ease-out;
 }
-
 @keyframes fadeInFromNone {
     0% {
         display: none;

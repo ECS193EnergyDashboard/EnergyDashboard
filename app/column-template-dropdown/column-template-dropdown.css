@@ -1,8 +1,10 @@
 .tableSettingsButtons{
-    float: right;
-    position: relative;
-    display: inline-block;
-
+    /* float: right; */
+    position: fixed;
+    /* display: inline-block; */
+    z-index: 999;
+    transform: translate(0%, -100%);
+    right: 0px;
 }
 
 /*.dropdownPullRight {
@@ -25,4 +27,12 @@
 	/*float: right;*/
     position: relative;
     display: inline-block;
+}
+
+#columnBtnSelected {
+
+}
+
+#columnBtnThrash {
+
 }

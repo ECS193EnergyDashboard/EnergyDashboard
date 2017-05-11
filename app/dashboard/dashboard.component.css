@@ -16,6 +16,7 @@
 
 #dashboardBtns {
     position: fixed;
+    left: 0px;
     /*top: 33px; */
     /*z-index: 999;*/
     transform: translate(0%,-100%);

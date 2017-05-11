@@ -407,7 +407,7 @@ angular.module('dataTableModule').component('datatable', {
 
                                 c++;
                                 //console.log("found: " + col.name)
-                                col.width = tableCell.offsetWidth + 'px';
+
                                 $scope.$apply(function (){
                                     self.columnWidths[col]  = tableCell.offsetWidth + 'px';
                                 });

@@ -540,12 +540,18 @@ angular.module('columnTemplateDropdownModule')
                 $(".saveModalData").modal('hide');
                 $(".saveModalAnalysis").modal('hide');
 
+                // if(this.isAnalysis == "true")
+                //     $('.saveTemplateButtonAnalysis').css({'color': 'green'});
+                // else{
+                //     $('.saveTemplateButtonData').css({'color': 'green'});
+                // }
+                this.ApplyTemplate(template);
+
                 this.ClearTemplateNameInput();
 
             };
 
-            this.check = function(col){
-                console.log(col);
+            this.switchColumnIsChecked = function(col){
                 if(angular.isUndefined(col))
                     return;
                 col.isChecked = !col.isChecked;

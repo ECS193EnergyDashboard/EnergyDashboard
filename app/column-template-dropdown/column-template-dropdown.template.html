@@ -1,4 +1,4 @@
-<div class="columnTemplateParent" ng-if="$ctrl.columns.length != 0">
+<div class="columnTemplateParent" ng-if="$ctrl.rowData.length != 0">
 <!-- <div class="columnTemplateParent"> -->
     <div class="tableSettingsButtons">
 
@@ -27,7 +27,7 @@
                 <!--- END: From columnDropwdownSearch-->
 
                 <input ng-model="search.columnName" class="form-control" type="text" placeholder="Search For Column...">
-                <div class="dropdownelm" ng-repeat="column in ($ctrl.filteredColumns = ($ctrl.columns | orderBy:'name' | filter: search.columnName| filter: search.isChecked))  " ng-click="$ctrl.check(column)" ng-class="{'columnChecked': column.isChecked}">
+                <div class="dropdownelm" ng-repeat="column in ($ctrl.filteredColumns = ($ctrl.columns | orderBy:'name' | filter: search.columnName| filter: search.isChecked))  " ng-click="$ctrl.switchColumnIsChecked(column)" ng-class="{'columnChecked': column.isChecked}">
 <!--                     <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">  -->
                     {{column.name}}
                 </div>
@@ -43,7 +43,7 @@
             <ul class="dropdown-menu dropdown-content">
                 <input ng-model="templateFilter" class="form-control" type="text" placeholder="Search For Template...">
                 <li ng-repeat="template in $ctrl.filteredTemplates | filter:templateFilter">
-                    <a href="" ng-click="$ctrl.ApplyTemplate(template)">{{template.name}}</a>
+                    <a class="dropdownelm" ng-class="{'columnChecked': template.name == $ctrl.currentTemplate.name}" href="" ng-click="$ctrl.ApplyTemplate(template)">{{template.name}}</a>
                 </li>
             </ul>
         </div>

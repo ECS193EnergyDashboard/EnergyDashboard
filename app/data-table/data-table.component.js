@@ -346,6 +346,11 @@ angular.module('dataTableModule').component('datatable', {
 
         // Whenever the displayed data is changed, recalculate sum and average of the shown rows only
         $scope.$watch('$ctrl.displayed', function(newValue, oldValue) {
+            // if nothing in data remove elms in columnNamesObjs to hide buttons/columns
+            console.log(newValue);
+            if(!(angular.isUndefined(newValue)) && newValue.length == 0){
+                self.columnNamesObjs.length = 0;
+            }
             self.updateCalculations();
         });
 

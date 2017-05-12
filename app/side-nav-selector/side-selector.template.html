@@ -10,10 +10,18 @@
                 <button ng-click="$ctrl.clearSelected()" type="button" class="btn btn-default glyphicon glyphicon-trash"></button>
             </div>
         </div>
+            <div id="searchBox">
+                <input id="searchName"  ng-model="search.name" class="form-control" type="text" placeholder="Search By Name">
+            </div>
+            <!-- <div id="textHere"> Drop Items Here</div>-->
 
-        <!-- <div id="textHere"> Drop Items Here</div>-->
-        <div class="list-group list-group-root well">
-            <div ng-repeat="element in $ctrl.selected" class="selectItem" custom-drop-target="side-selector" custom-drop-success="$ctrl.onDropSuccess(item)" ng-class="{hiddenListItem: $ctrl.isDummyItem(element)}">
+        <div class="list-group list-group-root well" id="sideBarDrop">
+            <p ng-if="$ctrl.selected.length < 2" id="sideBarDropText">
+                Drop <br>
+                Items <br>
+                Here
+            </p>
+            <div ng-repeat="element in $ctrl.selected | filter: search" class="selectItem" custom-drop-target="side-selector" custom-drop-success="$ctrl.onDropSuccess(item)" ng-class="{hiddenListItem: $ctrl.isDummyItem(element)}">
                 <span class="sidebar-item list-group-item selectorItem">
                     <div id="itemText">
                         <h6 id="buildingName">{{element.building}}</h6>
@@ -23,7 +31,6 @@
                     <div id="itemBtn">
                         <span ng-show="!$ctrl.isDummyItem(element)" class="glyphicon glyphicon-remove pointer" ng-click="$ctrl.removeElement(element);$event.stopPropagation()"></span>
                     </div>
-
                 </span>
             </div>
         </div>

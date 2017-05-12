@@ -93,6 +93,7 @@ angular.module('dataTableModule').component('datatable', {
         };
 
         this.$onChanges = function() {
+
             if (this.searchEnabled === undefined) {
                 this.searchEnabled = true;
             }
@@ -345,7 +346,6 @@ angular.module('dataTableModule').component('datatable', {
 
         // Whenever the displayed data is changed, recalculate sum and average of the shown rows only
         $scope.$watch('$ctrl.displayed', function(newValue, oldValue) {
-            console.log("Recalculating...");
             self.updateCalculations();
         });
 

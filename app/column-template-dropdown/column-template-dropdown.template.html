@@ -27,8 +27,9 @@
                 <!--- END: From columnDropwdownSearch-->
 
                 <input ng-model="search.columnName" class="form-control" type="text" placeholder="Search For Column...">
-                <div class="dropdownelm" ng-repeat="column in ($ctrl.filteredColumns = ($ctrl.columns | orderBy:'name' | filter: search.columnName| filter: search.isChecked))  ">
-                    <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}"> {{column.name}}
+                <div class="dropdownelm" ng-repeat="column in ($ctrl.filteredColumns = ($ctrl.columns | orderBy:'name' | filter: search.columnName| filter: search.isChecked))  " ng-click="$ctrl.check(column)" ng-class="{'columnChecked': column.isChecked}">
+<!--                     <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">  -->
+                    {{column.name}}
                 </div>
             </div>
         </div>
@@ -128,7 +129,7 @@
         </div>
     <div class="modal-body">
 
-        <input autofocus="autofocus" id="templateInput" class="form-control" type="text" ng-init="$ctrl.newTemplateName" ng-model="$ctrl.newTemplateName" placeholder="My Template Name...">
+        <input autofocus="autofocus" id="templateInput" class="form-control" type="text" ng-model="$ctrl.newTemplateName" placeholder="My Template Name...">
          <br> <br> <br>
     </div>
         <div class="modal-footer">

@@ -61,7 +61,7 @@ angular.module('columnTemplateDropdownModule')
 
             // A watcher for the current template used to set the color of the Save button
             $scope.$watch('$ctrl.currentTemplate', function(newVal, oldVal){
-
+                console.log("Watch");
                 if(angular.equals(self.unalteredCurrentTemplate, newVal.colObj)){
                     if(self.isAnalysis == "true"){
 
@@ -85,9 +85,10 @@ angular.module('columnTemplateDropdownModule')
 
 
             this.$onChanges = function(changes){
+                console.log("Change");
                 if(changes.columns){
 
-                    this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns))
+                    this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns));
 
                     if(this.isAnalysis == "true"){
                         $('.saveTemplateButtonAnalysis').css({'color': 'green'});
@@ -523,14 +524,15 @@ angular.module('columnTemplateDropdownModule')
                         break;
                     }
                 }
+                console.log("BEFORE ",template);
                 template.colObj = templateCols;
+                console.log(template);
 
                 $http({
                     method: 'POST',
                     url: '/templatesUpdate',
                     data: angular.toJson(template),
                 }).then(function successCallback(response) {
-
                     document.getElementById("templateInput").value = "";
                 }, function errorCallback(response) {
                     console.error("POST Failed ", response);
@@ -545,7 +547,15 @@ angular.module('columnTemplateDropdownModule')
                 // else{
                 //     $('.saveTemplateButtonData').css({'color': 'green'});
                 // }
-                this.ApplyTemplate(template);
+                this.getTemplates();
+                console.log(this.templates);
+                this.ApplyTemplate(this.templates[0]);
+                for(temp of self.templates){
+                    // Is default of current type
+                    if(temp.name == overWriteTemplateName && temp.type == self.curType){
+                        this.ApplyTemplate(temp);
+                    }
+                }
 
                 this.ClearTemplateNameInput();
 

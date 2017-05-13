@@ -76,31 +76,32 @@ angular.module('dashboardModule').component('dashboard',{
                 this.cancelAysnc = true;
                 this.asyncData = [];
             }
-        }
+        };
 
         this.showDataTab = function() {
             this.show = 0;
-        }
+            this.dataTable.update();
+        };
 
         this.showAnalyzeTab = function() {
             this.show = 1;
-        }
+        };
 
         this.showGraphTab = function() {
             this.show = 2;
-        }
+        };
 
         this.isDataTabShown = function() {
             return this.show === 0;
-        }
+        };
 
         this.isAnalyzeTabShown = function() {
             return this.show === 1;
-        }
+        };
 
         this.isGraphTabShown = function() {
             return this.show === 2;
-        }
+        };
 
 
         this.toggleMenu = function(){

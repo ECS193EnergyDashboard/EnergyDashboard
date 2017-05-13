@@ -61,7 +61,7 @@ angular.module('columnTemplateDropdownModule')
 
             // A watcher for the current template used to set the color of the Save button
             $scope.$watch('$ctrl.currentTemplate', function(newVal, oldVal){
-                console.log("Watch");
+                // console.log("Watch");
                 if(angular.equals(self.unalteredCurrentTemplate, newVal.colObj)){
                     if(self.isAnalysis == "true"){
 
@@ -161,7 +161,7 @@ angular.module('columnTemplateDropdownModule')
 
             // Generate default, push it to templates, and post to server
             this.generateDefault = function(){
-                console.log("generating default...");
+                // console.log("generating default...");
                 var firstValues = 0;
                 for(var col of self.columns){
                    if (firstValues < 10) {
@@ -548,14 +548,14 @@ angular.module('columnTemplateDropdownModule')
                 //     $('.saveTemplateButtonData').css({'color': 'green'});
                 // }
                 this.getTemplates();
-                console.log(this.templates);
-                this.ApplyTemplate(this.templates[0]);
-                for(temp of self.templates){
-                    // Is default of current type
-                    if(temp.name == overWriteTemplateName && temp.type == self.curType){
-                        this.ApplyTemplate(temp);
-                    }
-                }
+                // console.log(this.templates);
+                this.ApplyTemplate(template);
+                // for(temp of self.templates){
+                //     // Is default of current type
+                //     if(temp.name == overWriteTemplateName && temp.type == self.curType){
+                //         this.ApplyTemplate(temp);
+                //     }
+                // }
 
                 this.ClearTemplateNameInput();
 

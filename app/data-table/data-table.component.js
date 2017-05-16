@@ -5,7 +5,8 @@ angular.module('dataTableModule').component('datatable', {
         searchEnabled:  '<',
         reorderEnabled: '<',
         elemName:       '<',   // passed to columnTemplate component to determine template type
-        selection:      '='
+        selection:      '=',
+        api:            '='
     },
     controller: ['$filter', '$scope', '$timeout', function TableController($filter, $scope, $timeout) {
         var self = this;
@@ -18,6 +19,17 @@ angular.module('dataTableModule').component('datatable', {
         this.currentFormattingSettingsCol = {};
         this.showFormattingSettingsButtons = true;
         this.columnWidths = {};
+        this.columNumWidths = [];
+
+
+        this.$onInit = function(){
+            this.api = {};
+            this.api.update = onDataTableUpdate;
+        };
+
+        function onDataTableUpdate(){
+            self.onColObjUpdate(null, null);
+        };
 
         // Conditional Formatting Points
         this.colsPoints = {};
@@ -353,11 +365,12 @@ angular.module('dataTableModule').component('datatable', {
         var delayInMs = 1000;
         var newWatch  = true;
 
-        $scope.$watch('$ctrl.columnNamesObjs', function(newValue, oldValue){
-            //console.log("watch fired");
+
+        this.onColObjUpdate = function(newValue, oldValue){
+            console.log("watch fired");
             $timeout.cancel(timeoutPromise);  //does nothing, if timeout already done
             timeoutPromise = $timeout(function() {   //Set timeout
-                //console.log("timeout fired");
+                console.log("timeout fired");
 
                 var tableRef = document.getElementById('dataTable');
                 if(tableRef == null){
@@ -367,66 +380,57 @@ angular.module('dataTableModule').component('datatable', {
                 //console.log(tableRef.rows.length);
 
                 //console.log(self.columnNamesObjs);
-                //For rows 2 and 3
-                for (var i = 1; (i < 4) && (i < tableRef.rows.length); i++) {
-                    var col;
-
-
-                    var tableRow = tableRef.rows[i];
+                //For rows 1, 2 and 3
+                for (var row = 1; (row < 4) && (row < tableRef.rows.length); row++) {
+                    var colObj;
+                    var tableRow = tableRef.rows[row]; //Get reference to row of table
                     var c = 0;
+
                     //For every cell
-                    for (var j = 0; j < tableRow.cells.length; j++) {
-                        var tableCell = tableRow.cells[j];
-                        var print = '#' + i + ',' + j + ': ' + tableCell.offsetWidth + " px";
-                        //console.log(print);
+                    for (var col = 0; col < tableRow.cells.length; col++) {
+                        var tableCell = tableRow.cells[col]; //get cell at position col
+                        var print = '#' + row + ',' + col + ': ' + tableCell.offsetWidth + " px";
+                        console.log(print);
 
-                        if (i === 3) {
-                            //newWatch = false;
-                            if (j === 0) {
-                                tableRef.rows[0].cells[j].style.maxWidth = tableCell.offsetWidth + 'px';
-                                tableRef.rows[0].cells[j].style.minWidth = tableCell.offsetWidth + 'px';
-
+                        if (row === 3) {
+                            if (true) {
+                                tableRef.rows[0].cells[col].style.maxWidth = tableCell.offsetWidth + 'px';
+                                tableRef.rows[0].cells[col].style.minWidth = tableCell.offsetWidth + 'px';
                             }
-                            else if (j === 1) {
-                                tableRef.rows[0].cells[j].style.maxWidth = tableCell.offsetWidth + 'px';
-                                tableRef.rows[0].cells[j].style.minWidth = tableCell.offsetWidth + 'px';
+                            else { /* For debugging purposes */
+                                colObj = self.columnNamesObjs[c];
+                                console.log("Entering col: " + colObj.name +" isChecked: "+colObj.isChecked);
 
-                            }
-                            else {
-                                col = self.columnNamesObjs[c];
-                                //console.log("enter with col: " + col.name);
-                                //console.log("is checked: " + col.isChecked);
-                                if(typeof col == 'undefined'){
-                                    //console.log('undefined col in timeout')
+                                if(typeof colObj == 'undefined'){
+                                    console.log('undefined col in timeout')
                                     continue;
                                 }
-                                for (; !col.isChecked; c++) {
-                                    //console.log("skipping over: " + col.name);
-                                    col = self.columnNamesObjs[c];
+                                for (;c  <=  tableRow.cells.length && !colObj.isChecked; c++) {
+                                    console.log("skipping over: " + colObj.name+" isChecked: "+colObj.isChecked);
+                                    colObj = self.columnNamesObjs[c];
                                 }
 
                                 c++;
-                                //console.log("found: " + col.name)
-
+                                console.log("Found: " + colObj.name)
                                 $scope.$apply(function (){
-                                    self.columnWidths[col]  = tableCell.offsetWidth + 'px';
+                                    //self.columnWidths[col]  = tableCell.offsetWidth + 'px';
+                                    self.columNumWidths[col] = tableCell.offsetWidth + 'px';
                                 });
-                                //console.log("changing width to: " + tableCell.offsetWidth);
+                                console.log("changing width to: " + tableCell.offsetWidth);
                             }
                         }
                     }
                 }
                 var headerHeight = document.getElementById('dataTableHead').offsetHeight;
-                //console.log('Timeout: header height: '+headerHeight);
+                console.log('Timeout: header height: '+headerHeight);
                 tableRef.style.top = headerHeight + "px";
 
-                 $scope.$apply(function (){
+                $scope.$apply(function (){
                     tableRef.style.top = headerHeight + "px";
-                 });
-
-                //console.log('Timeout: data table top: '+tableRef.style.top)
-
+                });
+                console.log('Timeout: data table top: '+tableRef.style.top)
             }, delayInMs);
+
             var tableRef = document.getElementById('dataTable');
             var fixedHeader = document.getElementById('dataTableHead');
             if(fixedHeader != null) {
@@ -436,9 +440,9 @@ angular.module('dataTableModule').component('datatable', {
 
                 //console.log('data table top: '+tableRef.style.top)
             }
+        };
 
-        }, true);
-
+        $scope.$watch('$ctrl.columnNamesObjs', self.onColObjUpdate, true);
 
         this.colUpdate = function(column){
             //console.log(column.name + " changed");

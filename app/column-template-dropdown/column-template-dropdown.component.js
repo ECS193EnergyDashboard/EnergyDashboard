@@ -542,20 +542,22 @@ angular.module('columnTemplateDropdownModule')
                 $(".saveModalData").modal('hide');
                 $(".saveModalAnalysis").modal('hide');
 
-                // if(this.isAnalysis == "true")
-                //     $('.saveTemplateButtonAnalysis').css({'color': 'green'});
-                // else{
-                //     $('.saveTemplateButtonData').css({'color': 'green'});
-                // }
+                if(this.isAnalysis == "true")
+                    $('.saveTemplateButtonAnalysis').css({'color': 'green'});
+                else{
+                    $('.saveTemplateButtonData').css({'color': 'green'});
+                }
+
                 this.getTemplates();
                 // console.log(this.templates);
                 this.ApplyTemplate(template);
-                // for(temp of self.templates){
-                //     // Is default of current type
-                //     if(temp.name == overWriteTemplateName && temp.type == self.curType){
-                //         this.ApplyTemplate(temp);
-                //     }
-                // }
+                for(temp of self.templates){
+                    // Is default of current type
+                    if(temp.name == overWriteTemplateName && temp.type == self.curType){
+                        this.ApplyTemplate(temp);
+                        this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(temp.colObj));
+                    }
+                }
 
                 this.ClearTemplateNameInput();
 

@@ -1,5 +1,5 @@
 <div  custom-drag-src-safe="side-selector" index="$index" ng-repeat="e in elems = (element.elements )">
-    <div ng-click="$ctrl.onSelectElem(e)" class="sidebar-item list-group-item " ng-class="{selected: $ctrl.isSelectedElem(e), loading: $ctrl.elemIsLoading(e)}">
+    <div ng-click="$ctrl.clickedItem(e);$event.stopPropagation()"  ng-dblclick="$ctrl.dblClickedItem(e);$event.stopPropagation()" class="sidebar-item list-group-item " ng-class="{selected: $ctrl.isSelectedElem(e), loading: $ctrl.elemIsLoading(e)}">
         <span ng-show="$ctrl.showLeafNodeIcon(e)" class="glyphicon glyphicon-modal-window"></span>
         <span ng-show="$ctrl.showClosedIcon(e)" class="glyphicon glyphicon-chevron-right pointer" ng-click="$ctrl.clickElem(e);$event.stopPropagation()"></span>
         <span ng-show="$ctrl.showOpenIcon(e)" class="glyphicon glyphicon-chevron-down pointer" ng-click="$ctrl.clickElem(e);$event.stopPropagation()"></span>

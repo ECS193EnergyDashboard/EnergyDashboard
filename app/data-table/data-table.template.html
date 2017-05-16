@@ -1,20 +1,24 @@
 <!--NOTE: for this we use the  columnNamesObjs however in the actual table we use columnNames -->
+<div class="tableParent">
+    <div class="tableMenus">
+        <column-template-dropdown columns="$ctrl.columnNamesObjs" update-col-obj= "$ctrl.updateCol(cols)"  row-data="$ctrl.data" is-analysis="'false'" elem-name="$ctrl.elemName"></column-template-dropdown>
+    </div>
 
-<column-template-dropdown columns="$ctrl.columnNamesObjs" update-col-obj= "$ctrl.updateCol(cols)" row-data="$ctrl.data" is-analysis="'false'" ></column-template-dropdown>
 
-
-<table st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped">
+<table id="dataTable" ng-if="$ctrl.displayed" st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped">
     <img ng-if="!$ctrl.displayed" id="mainLogo" src="../img/ecoMainLogo.png">
-    <thead>
+    <thead id="dataTableHead">
     <tr>
         <th st-sort="building">Building</th>
         <th st-sort="name">Name</th>
-        <th ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" st-sort="$ctrl.getters.value.bind(null, column.name)" lr-drag-src="header" lr-drop-target="header">
+        <th  ng-repeat="column in $ctrl.columnNamesObjs" ng-style="{'max-width': $ctrl.columnWidths[column], 'min-width': $ctrl.columnWidths[column]}" ng-if="column.isChecked" st-sort="$ctrl.getters.value.bind(null, column.name)" lr-drag-src="header" lr-drop-target="header">
+
             {{column.units === "" ? column.name : column.name + " (" + column.units + ")"}}
-        <!-- From merge with SideBarSelectorRefactor, found in Master
-        <th ng-if="!$ctrl.reorderEnabled" ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" st-sort="$ctrl.getters.value.bind(null, column)">
-            {{column.units === "" ? column.name : column.name + " (" + column.units + ")"}}
-        -->
+            <!-- Remove Column Button on Column Name
+            <div id="itemBtn">
+                <span class="glyphicon glyphicon-remove pointer" ng-click="column.isChecked = false;$event.stopPropagation()"></span>
+            </div>
+            -->
         </th>
 
     </tr>
@@ -23,14 +27,33 @@
         <th colspan="4">
             <input st-search="name" placeholder="search for name..." class="input-sm form-control" type="search"/>
         </th>
+        <th>
+            <button ng-if="$ctrl.columnNamesObjs.length != 0" ng-click="$ctrl.showHideSettingsButtons()" type="button" class="btn btn-default">
+            Conditional Formatting
+            </button>
+        </th>
     </tr>
     </thead>
 
-    <tbody>
+    <tbody id="dataTableBody">
+    <!-- Row for Conditional Formatting settings-->
+    <tr ng-if="$ctrl.showFormattingSettingsButtons">
+        <!-- 2 blank spaces for building and name -->
+        <td> </td>
+        <td> </td>
+        <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked">
+            <div class="btn-group-xs" role="group" aria-label="...">
+                <button ng-click="$ctrl.showFormattingSettings(column)" type="button" class="btn btn-default glyphicon glyphicon-cog"></button>
+                <button ng-click="$ctrl.switchShowConditionalFormat(column)" type="button" class="btn btn-default  glyphicon glyphicon-pencil"></button>
+                <button ng-click="column.isChecked=false" type="button" class="btn btn-default glyphicon glyphicon-trash"></button>
+            </div>
+        </td>
+    </tr>
+
     <tr ng-repeat="element in $ctrl.displayed">
         <td class="bold">{{element.building}}</td>
         <td class="bold">{{element.name}}</td>
-        <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" ng-class="$ctrl.valueStyle(element[column.name])" ng-click="$ctrl.toggleCellSelected(element[column.name])">
+        <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" ng-class="$ctrl.valueStyle(element[column.name])" ng-style="$ctrl.conditionalFormat(element[column.name], column)" ng-click="$ctrl.toggleCellSelected(element[column.name])">
             {{$ctrl.formatValue(element[column.name])}}
         </td>
     </tr>
@@ -53,3 +76,98 @@
     </tr>
     </tbody>
 </table>
+
+
+
+<!-- Save As  modal -->
+<div ng-class="" class="modal fade formattingSettingsModal" role="dialog">
+    <div class="modal-dialog">
+<!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Conditional Formatting Settings for Column "{{$ctrl.currentFormattingSettingsCol.name}}"</h4>
+        </div>
+        <div class="modal-body">
+            <form class="form-horizontal" id="conditionalFormatForm">
+                <label ng-if="!$ctrl.isUndefined($ctrl.currentFormattingSettingsCol.max)" for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.name}}: (Currently set at {{$ctrl.currentFormattingSettingsCol.max}})</label>
+                <label ng-if="$ctrl.isUndefined($ctrl.currentFormattingSettingsCol.max)" for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.name}}: </label>
+                <input class="form-control" id="maxInput" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].max}}">
+
+
+                <label ng-if="!$ctrl.isUndefined($ctrl.currentFormattingSettingsCol.min)" for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.name}}: (Currently set at {{$ctrl.currentFormattingSettingsCol.min}})</label>
+                <label ng-if="$ctrl.isUndefined($ctrl.currentFormattingSettingsCol.min)" for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.name}}: </label>
+                <input class="form-control" id="minInput" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].min}}">
+
+
+                <label for="maxColor">Color for Max: (Currently set at {{$ctrl.currentFormattingSettingsCol.maxColor}})</label>
+                <select class="form-control" id="maxColor">
+                    <option>Red</option>
+                    <option>Blue</option>
+                    <option>Green</option>
+                    <option>Purple</option>
+                </select>
+
+                <label for="minColor">Color for Min: (Currently set at {{$ctrl.currentFormattingSettingsCol.minColor}})</label>
+                <select class="form-control" id="minColor">
+                    <option>Blue</option>
+                    <option>Red</option>
+                    <option>Green</option>
+                    <option>Purple</option>
+                </select>
+
+
+            </form>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button ng-click="$ctrl.submitFormattingSettings($ctrl.currentFormattingSettingsCol)" type="button" class="btn btn-default" data-dismiss="modal">Save
+            </button>
+
+        </div>
+    </div>
+
+    </div>
+</div>
+
+
+
+
+
+<!--                 <label for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.name}}: </label>
+                <input ng-if="!$ctrl.isUndefined(currentFormattingSettingsCol.max)" class="form-control" id="maxInput" value="{{$ctrl.currentFormattingSettingsCol.max}}">
+                <input ng-if="$ctrl.isUndefined(currentFormattingSettingsCol.max)" class="form-control" id="maxInput" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].max}}">
+
+
+                <label for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.name}}: </label>
+                <input ng-if="!$ctrl.isUndefined(currentFormattingSettingsCol.min)" class="form-control" id="minInput" value="{{$ctrl.currentFormattingSettingsCol.min}}">
+                <input ng-if="$ctrl.isUndefined(currentFormattingSettingsCol.min)" class="form-control" id="minInput" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].min}}"> -->
+
+<script>
+    var dataTableWidths = $('#dataTableBody tr td').width();
+    var onTableWidthChange = function () {
+        console.log("new width is: ");
+        console.log(dataTableWidths);
+    };
+
+
+    /* A full compatability script from MDN: */
+    var supportPageOffset = window.pageXOffset !== undefined;
+    var isCSS1Compat = ((document.compatMode || "") === "CSS1Compat");
+
+
+
+    var scrollable = document.getElementById("page-content-wrapper");
+    var scrollLeft = scrollable.scrollLeft;
+
+    scrollable.onscroll = function() {
+        //console.log("SCRL");
+        var dataTableHead = document.getElementById("dataTableHead");
+        var x = scrollable.scrollLeft;
+        //console.log(x);
+
+        dataTableHead.style.marginLeft = -x + "px";
+        //demoItem3.style.top = -y + 50 + "px";
+    };
+</script>

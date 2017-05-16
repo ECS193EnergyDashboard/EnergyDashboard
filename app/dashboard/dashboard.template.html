@@ -18,7 +18,7 @@
         </div>
         -->
         <!--Tab buttons-->
-        <div class="btn-group" role="group" aria-label="...">
+        <div id="dashboardBtns" class="btn-group menuButtons" role="group" aria-label="...">
             <a ng-click="$ctrl.toggleMenu()" class="btn btn-default " id="menu-toggle">
                 <span class="glyphicon glyphicon-menu-hamburger"></span>
             </a>
@@ -40,8 +40,8 @@
         </div>
 
         <!-- Table modules -->
-        <datatable ng-show="$ctrl.isDataTabShown()" table-src="$ctrl.data" selection="$ctrl.chartSelection"></datatable>
-        <analysis ng-show="$ctrl.isAnalyzeTabShown()" web-ids="$ctrl.webIds" on-start-load="$ctrl.loadingUp('analysis')" on-end-load="$ctrl.loadingDown('analysis')" selection="$ctrl.chartSelection"></analysis>
+        <datatable ng-show="$ctrl.isDataTabShown()" table-src="$ctrl.data" selection="$ctrl.chartSelection" search-enabled="true" elem-name="$ctrl.elemName" api="$ctrl.dataTable"></datatable>
+        <analysis ng-show="$ctrl.isAnalyzeTabShown()" web-ids="$ctrl.webIds" on-start-load="$ctrl.loadingUp('analysis')" on-end-load="$ctrl.loadingDown('analysis')" selection="$ctrl.chartSelection" elem-name="$ctrl.elemName"></analysis>
         <chart-options ng-show="$ctrl.isGraphTabShown()" attributes="$ctrl.chartSelection"></chart-options>
     </div>
     <!-- /#page-content-wrapper -->

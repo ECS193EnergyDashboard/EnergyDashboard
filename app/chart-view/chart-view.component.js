@@ -4,64 +4,144 @@ angular.module('chartViewModule').component('chartView', {
             var self = this;
 
             this.isLoading = false;
+            this.dataset = [];
+            this.datasetFlat = [];
+
+            var collectAttributes = function(params) {
+                var attributes = [];
+                var numCharts = params.charts;
+                if (!numCharts) {
+                    return [];
+                }
+                for (var chart = 0; chart < numCharts; chart++) {
+                    attributes[chart] = [];
+                    for (var axis = 0; axis <= 1; axis++) {
+                        var param = params['webIdC' + chart + 'A' + axis];
+                        var webIds = Array.isArray(param) ? param : param ? [ param ] : [];
+                        if (webIds) {
+                            for (var id of webIds) {
+                                attributes[chart].push({ webId: id, chart: chart, axis: axis });
+                            }
+                        }
+                    }
+                }
+
+                return attributes;
+            }
             
             var urlParams = $location.search();
 
             this.config = {
-                webIds: (Array.isArray(urlParams.webId) ? urlParams.webId : [ urlParams.webId ]) || [],
-                yAxisName: urlParams.yAxis,
-                title: urlParams.title,
+                attributes: collectAttributes(urlParams),
                 interval: urlParams.interval,
                 startTime: urlParams.start,
                 endTime: urlParams.end
             };
 
-            this.d3options = {
+            var chart;
+
+            var xTickFormat = function(time) {
+                return d3.time.format('%m/%d %H:%M')(new Date(time));
+            }
+
+            var yTickFormat = function(d) {
+                return d3.format('.02f')(d);
+            }
+
+            var tooltipValueFormat = function(d) {
+                return d === null ? 'Bad' : yTickFormat(d);
+            }
+
+            var graphWidth = 960;
+            var lrMargin = 80;
+
+            var tooltip = nv.models.tooltip()
+                .duration(0)
+                .hideDelay(0)
+                .hidden(false)
+                .headerFormatter(xTickFormat)
+                .valueFormatter(tooltipValueFormat);
+
+            this.lineConfig = {
+                visible: true,
+                disabled: true
+            }
+
+            this.lineOptions = {
                 chart: {
-                    type: 'lineWithFocusChart',
-                    height: 450,
-                    margin : {
+                    type: 'multiLineChart',
+                    height: 200,
+                    width: graphWidth,
+                    margin: {
                         top: 20,
-                        right: 40,
                         bottom: 40,
-                        left: 80
+                        right: lrMargin,
+                        left: lrMargin
                     },
-                    x: function(d) { return d.timestamp; },
+                    x: function(d) { return new Date(d.timestamp).getTime(); },
                     y: function(d) { return d.value; },
-                    interpolate: 'linear',
                     useInteractiveGuideline: true, // if false use tooltipContent
+                    showXAxis: true,
                     xAxis: {
-                        axisLabel: 'Time',
-                        tickFormat: function(d) {
-                            return d3.time.format('%m/%d %H:%M')(new Date(d));
-                        }
-                    },
-                    x2Axis: {
-                        tickFormat: function(d) {
-                            return d3.time.format('%m/%d %H:%M')(new Date(d));
-                        }
-                    },
-                    yAxis: {
                         axisLabel: '',
-                        tickFormat: function(d){
-                            return d3.format('.02f')(d);
-                        },
-                        axisLabelDistance: 10
+                        tickFormat: xTickFormat
                     },
-                    interactiveLayer: {
-                        tooltip: {
-                            valueFormatter: function(d) {
-                                return d === null ? 'Bad' : self.d3options.chart.yAxis.tickFormat(d);
-                            }
-                        },
+                    yAxis1: {
+                        axisLabel: '',
+                        tickFormat: yTickFormat,
+                    },
+                    yAxis2: {
+                        axisLabel: '',
+                        tickFormat: yTickFormat,
+                    },
+                    callback: function(ch) {
+                        chart = ch;
                     }
-                },
-                title: {
-                    enable: true,
-                    text: ''
                 }
             };
 
+            var onChangeFocus = function(extent) {
+                if (chart) {
+                    self.extent = extent;
+
+                    chart.brushExtent(extent);
+                    chart.update();
+                }    
+            }
+
+            this.focusConfig = {
+                visible: true,
+                disabled: true
+            }
+
+            var focus = undefined;
+
+            this.focusOptions = {
+                chart: {
+                    type: 'focus',
+                    width: graphWidth,
+                    margin: {
+                        top: 20,
+                        bottom: 20,
+                        left: lrMargin,
+                        right: lrMargin
+                    },
+                    x: function(d) { return d.timestamp; },
+                    y: function(d) { return d.value; },
+                    xAxis: {
+                        tickFormat: xTickFormat,
+                        rotateLabels: 30,
+                    },
+                    dispatch: {
+                        onBrush: onChangeFocus,
+                    },
+                    callback: function(chart) {
+                        focus = chart;
+                    }
+                }
+            };
+
+    
             this.datePicker = {};
             if (this.config.startTime && this.config.endTime) {
                 this.datePicker.date = {
@@ -126,17 +206,7 @@ angular.module('chartViewModule').component('chartView', {
                 this.intervalUnits = this.intervalOptions[1];
             }
 
-            // TODO: handle "bad values" (make them undefined? aka holes in chart)
-
             this.$onInit = function() {
-                if (this.config.yAxisName) {
-                    this.d3options.chart.yAxis.axisLabel = this.config.yAxisName;
-                }
-                if (this.config.title) {
-                    this.d3options.title.text = this.config.title;
-                } else if (this.config.yAxisName) {
-                    this.d3options.title.text = this.config.yAxisName + ' vs ' + this.d3options.chart.xAxis.axisLabel;
-                }
                 this.generateChart();
             }
 
@@ -158,10 +228,12 @@ angular.module('chartViewModule').component('chartView', {
 
             this.generateChart = function() {
                 this.isLoading = true;
-                this.numRequests = this.config.webIds.length;
+                this.numRequests = this.config.attributes.reduce(function(acc, attrib) {
+                    return acc + attrib.length;
+                }, 0);
                 this.numRequestsDone = 0;
 
-                this.data = [];
+                this.dataset = [];
                 var promises = [];
                 
                 var startTime = this.datePicker.date.startDate.format();
@@ -173,31 +245,81 @@ angular.module('chartViewModule').component('chartView', {
                 $location.search('start', startTime);
                 $location.search('end', endTime);
 
-                for (var i = 0; i < this.config.webIds.length; i++) {
-                    this.data[i] = {
-                        values: [],
-                        key: ''
+                var chartMap = {};
+                var idxMap = {};
+
+                for (var chart = 0; chart < this.config.attributes.length; chart++) {
+                    this.dataset[chart] = [];
+
+                    for (var i = 0; i < this.config.attributes[chart].length; i++) {
+                        var attrib = this.config.attributes[chart][i];
+                        this.dataset[chart][i] = {
+                            values: [],
+                            key: '',
+                            yAxis: attrib.axis + 1       
+                        }
+
+                        var idx = Math.floor(promises.length / 2);
+                        chartMap[idx] = chart;
+                        idxMap[idx] = i;
+
+                        promises.push(pi.getAttribute(attrib.webId));
+                        var promise = pi.getInterpolatedOfAttribute(attrib.webId, interval, startTime, endTime);
+                        promises.push(promise);
+
+                        promise.then(function(response) {
+                            self.numRequestsDone++;
+                        });
                     }
-
-                    var webId = this.config.webIds[i];
-                    promises.push(pi.getAttribute(webId));
-                    var promise = pi.getInterpolatedOfAttribute(webId, interval, startTime, endTime);
-                    promises.push(promise);
-
-                    promise.then(function(response) {
-                        self.numRequestsDone++;
-                    });
                 }
 
                 $q.all(promises).then(function(responses) {
-                    for (var i = 0; i < self.data.length; i++) {
-                        var idx = i * 2;
-                        var attrib = responses[idx];
-                        self.data[i].values = replaceBadValues(responses[idx + 1]);
-                        self.data[i].key = attrib.element.building + ": " + attrib.element.name + " | " + attrib.name; 
+                    for (var i = 0; i < responses.length - 1; i += 2) {
+                        var attrib = responses[i];
+                        var idx = Math.floor(i / 2);
+                        var chart = chartMap[idx];
+                        var attribIdx = idxMap[idx];
+                        self.dataset[chart][attribIdx].values = replaceBadValues(responses[i + 1]);
+                        self.dataset[chart][attribIdx].key = attrib.element.building + ": " + attrib.element.name + " | " + attrib.name; 
                     }
+                    self.datasetFlat = d3.merge(self.dataset);
                     self.isLoading = false;
+                    self.lineConfig.disabled = false;
+                    self.focusConfig.disabled = false;
                 });
             };
+
+            this.fileName = 'Chart.csv';
+
+            this.ShowDownloadModal = function(){
+                $('#downloadModal').modal();
+                console.log(this.datasetFlat[0]);
+            }
+
+            this.GetHeaderData = function() {
+                var header = [ 'Attribute' ];
+                if (this.datasetFlat.length > 0) {
+                    for (var value of this.datasetFlat[0].values) {
+                        header.push(xTickFormat(value.timestamp));
+                    }
+                }
+                return header;
+            };
+
+            this.GetArrayData = function() {
+                var csv = [];
+
+                for (var data of this.datasetFlat) {
+                    var obj = {};
+                    obj['Attribute'] = data.key;
+                    for (var value of data.values) {
+                        var key = xTickFormat(value.timestamp);
+                        obj[key] = value.value;
+                    }
+                    csv.push(obj);
+                }
+                
+                return csv;
+            }
         }]
     });

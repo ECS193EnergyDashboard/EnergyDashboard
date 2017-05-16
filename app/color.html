@@ -2,10 +2,8 @@
 <html ng-app="energyDashboardModule">
 <meta charset="UTF-8">
     <head>
-        <!-- BILLY: I deleted 2 other instances of JQUERY plz make sure that everything
-            for your parts of the dashboard still work-->
-
-        <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+		<!-- jquery required for bootstrap -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
         <!-- Bootstrap Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -15,6 +13,7 @@
 
         <!-- Bootstrap Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
 
         <!-- Angular JS -->
         <script src="node_modules/angular/angular.js"></script>
@@ -28,7 +27,8 @@
        <!-- customDragNDrop -->
         <script type="text/javascript" src="core/customDragNDrop/customDragNDrop.js"></script>
 
-
+        <!-- Date Range Picker Depeendencies -->
+        <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
         <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
         <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css" />
 
@@ -56,11 +56,9 @@
         <link rel="stylesheet" href="bower_components/nvd3/build/nv.d3.css">
 
         <!--==== Dev Scripts ====-->
-        
+
         <!-- Color Gradient JS -->
         <script src="gradient.js"></script>
-        <!-- Color test module -->
-        <script src="color-test/color-test.js"></script>
 
         <!--Main App js -->
         <script src="app.module.js"></script>
@@ -86,8 +84,6 @@
         <!--dropdown js -->
         <script src="column-template-dropdown/column-template-dropdown.module.js"></script>
         <script src="column-template-dropdown/column-template-dropdown.component.js"></script>
-        <link href="column-template-dropdown/column-template-dropdown.css" rel="stylesheet">
-
 
         <!-- Table JS -->
         <script src="data-table/data-table.module.js"></script>
@@ -130,10 +126,12 @@
         <script src="chart-options/chart-options.module.js"></script>
         <script src="chart-options/chart-options.component.js"></script>
 
+        <script src="color-test/color-test.js"></script>
+
     </head>
     <body>
-        <!-- MenuBar module -->
-        <menu-bar id="menu-bar"></menu-bar>
-        <dashboard id="dashbboard"></dashboard>
+
+        <color-test></color-test>
+
     </body>
 </html>

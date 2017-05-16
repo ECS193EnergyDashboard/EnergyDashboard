@@ -1,0 +1,17 @@
+<!-- http://127.0.0.1:8081/color.html  -->
+Number of Stripes
+<input type="number" ng-model="$ctrl.n" min="1" ng-change="$ctrl.onNChanged()"></input>
+<button ng-click="$ctrl.addPoint()">Add Point</button>
+<button ng-click="$ctrl.removePoint()">Remove Point</button>
+
+<div ng-repeat="point in $ctrl.points">
+    Value
+    <input type="number" ng-model="point.value" min="0" max="1" step="0.01"></input>
+    Color
+    <input type="number" ng-model="point.color.r" min="0" max="255"></input>
+    <input type="number" ng-model="point.color.g" min="0" max="255"></input>
+    <input type="number" ng-model="point.color.b" min="0" max="255"></input>
+</div>
+
+<div ng-repeat="i in $ctrl.range" ng-style="$ctrl.style(i)">
+</div>

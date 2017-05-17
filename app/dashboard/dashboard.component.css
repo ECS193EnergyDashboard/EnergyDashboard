@@ -6,6 +6,8 @@
     border-right: 5px solid #eeeeee;
     position: relative;
     z-index: 2;
+    display: flex;
+    flex-direction: column;
 }
 
 
@@ -65,8 +67,6 @@
 
 @media(min-width:768px) {
     #side-bar {
-        /*border: 5px dotted red;*/
-        width: 0;
         flex: 1 1 auto;
         transition: all .5s ease;
     }
@@ -74,15 +74,8 @@
         flex: 0 1 auto;
         transition: all 0.5s ease;
     }
+
     #side-bar-selector {
-        /*border: 5px dotted red;*/
-        width: 0;
-        flex: 1 1 auto;
-        transition: all .5s ease;
-    }
-    #side-bar-chart {
-        /*border: 5px dotted red;*/
-        width: 0;
         flex: 1 1 auto;
         transition: all .5s ease;
     }
@@ -90,6 +83,12 @@
         flex: 0 1 auto;
         transition: all 0.5s ease;
     }
+
+    #side-bar-chart {
+        flex: 1 1 auto;
+        transition: all .5s ease;
+    }
+
     #wrapper.toggledChart #side-bar-chart {
         flex: 0 1 auto;
         transition: all 0.5s ease;

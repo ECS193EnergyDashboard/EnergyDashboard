@@ -129,7 +129,7 @@
         </div>
     <div class="modal-body">
 
-        <input autofocus="autofocus" id="templateInput" class="form-control" type="text" ng-model="$ctrl.newTemplateName" placeholder="My Template Name...">
+        <input autofocus="autofocus" id="templateInput" class="form-control" type="text" ng-model="$ctrl.newTemplateName">
          <br> <br> <br>
     </div>
         <div class="modal-footer">
@@ -208,6 +208,34 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+    </div>
+
+    </div>
+</div>
+
+
+
+<!-- Save As  modal -->
+<div ng-class="{'saveDefaultModalData': $ctrl.isAnalysis=='false', 'saveDefaultModalAnalysis': $ctrl.isAnalysis=='true'}" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+<!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Are you sure you want to overwrite the default template?</h4>
+        </div>
+        <div class="modal-body">
+
+        By overwriting the default template you will change the columns that first show when displaying data.
+
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button ng-click="$ctrl.OverwriteTemplate($ctrl.columns, $ctrl.newTemplateName)" type="button" class="btn btn-default" data-dismiss="modal">Overwrite
+            </button>
+
         </div>
     </div>
 

@@ -85,7 +85,6 @@ angular.module('columnTemplateDropdownModule')
 
 
             this.$onChanges = function(changes){
-                console.log("Change");
                 if(changes.columns){
 
                     this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns));
@@ -416,8 +415,7 @@ angular.module('columnTemplateDropdownModule')
                 // Check to make sure template is not named default or name is already taken
                 if(this.newTemplateName == "Default"){
                     // console.log("Cant have a template named Default");
-                    this.errorMessage = "We're sorry but you can not have a template named Default";
-                    this.ShowErrorModal();
+                    this.ShowSaveDefaultModal();
                     return;
                 }
                 if(this.newTemplateName == ""){
@@ -524,10 +522,7 @@ angular.module('columnTemplateDropdownModule')
                         break;
                     }
                 }
-                console.log("BEFORE ",template);
                 template.colObj = templateCols;
-                console.log(template);
-
                 $http({
                     method: 'POST',
                     url: '/templatesUpdate',
@@ -620,9 +615,18 @@ angular.module('columnTemplateDropdownModule')
                 }
             }
 
+            this.ShowSaveDefaultModal = function(){
+                if(this.isAnalysis == "true"){
+                    $(".saveDefaultModalAnalysis").modal();
+                }
+                else{
+                    $(".saveDefaultModalData").modal();
+                }
+            }
+
             this.ClearTemplateNameInput = function(){
-                this.newTemplateName = "";
-                $("#templateInput").val(''); // clear the inputbox
+                // this.newTemplateName = "";
+                // $("#templateInput").val(''); // clear the inputbox
             }
 
             $(document).on('click', '.dropdown-menu', function (e) {

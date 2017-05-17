@@ -34,7 +34,7 @@ angular.module('columnTemplateDropdownModule')
             var numInnerColumns = 0;
             this.currentTemplate = {};
             this.filteredColumns = [];
-
+            this.search = {};
 
             this.unalteredCurrentTemplate = {};
 
@@ -55,15 +55,12 @@ angular.module('columnTemplateDropdownModule')
 
 
                 this.determineType();
-            }
-
+            };
 
             // A watcher for the current template
             $scope.$watch('$ctrl.currentTemplate', function(newVal, oldVal){
-
                 if(angular.equals(self.unalteredCurrentTemplate, newVal.colObj)){
                     if(self.isAnalysis == "true"){
-
                         $('.saveTemplateButtonAnalysis').css({'color': 'green'});
                     }
                     else{
@@ -71,9 +68,7 @@ angular.module('columnTemplateDropdownModule')
                     }
                 }
                 else{
-
                     if(self.isAnalysis == "true"){
-
                         $('.saveTemplateButtonAnalysis').css({'color': 'red'});
                     }
                     else{
@@ -82,10 +77,12 @@ angular.module('columnTemplateDropdownModule')
                 }
             }, true);
 
+            this.toggleColumn = function(column){
+                column.isChecked = column.isChecked ? false: true;
+            };
 
             this.$onChanges = function(changes){
                 if(changes.columns){
-
                     this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns))
 
                     if(this.isAnalysis == "true"){
@@ -121,7 +118,6 @@ angular.module('columnTemplateDropdownModule')
                     }
                 }
 
-
                 // User clicked on something of same type
                 else if(this.curType != "" && this.currentTemplate.name != undefined){
                     // Make template persist
@@ -153,9 +149,13 @@ angular.module('columnTemplateDropdownModule')
                 if(this.templates.length > 0){
                     this.filteredTemplates = typeFilter(this.templates, self.curType);
                 }
-            }
+            };
 
-
+            this.toggleColCheckedFilter = function(){
+                console.log('checked check sofilter is checked');
+                this.search.isChecked = this.search.isChecked == { isChecked: 'true'} ? {}: { isChecked: 'true'};
+                console.log(this.search.isChecked);
+            };
 
             // Generate default, push it to templates, and post to server
             this.generateDefault = function(){

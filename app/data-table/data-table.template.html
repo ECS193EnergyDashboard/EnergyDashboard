@@ -14,11 +14,6 @@
         <th  ng-repeat="column in $ctrl.columnNamesObjs" ng-style="{'max-width': $ctrl.columnWidths[column], 'min-width': $ctrl.columnWidths[column]}" ng-if="column.isChecked" st-sort="$ctrl.getters.value.bind(null, column.name)" lr-drag-src="header" lr-drop-target="header">
 
             {{column.units === "" ? column.name : column.name + " (" + column.units + ")"}}
-            <!-- Remove Column Button on Column Name
-            <div id="itemBtn">
-                <span class="glyphicon glyphicon-remove pointer" ng-click="column.isChecked = false;$event.stopPropagation()"></span>
-            </div>
-            -->
         </th>
 
     </tr>
@@ -130,20 +125,6 @@
 
     </div>
 </div>
-
-
-
-
-
-<!--                 <label for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.name}}: </label>
-                <input ng-if="!$ctrl.isUndefined(currentFormattingSettingsCol.max)" class="form-control" id="maxInput" value="{{$ctrl.currentFormattingSettingsCol.max}}">
-                <input ng-if="$ctrl.isUndefined(currentFormattingSettingsCol.max)" class="form-control" id="maxInput" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].max}}">
-
-
-                <label for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.name}}: </label>
-                <input ng-if="!$ctrl.isUndefined(currentFormattingSettingsCol.min)" class="form-control" id="minInput" value="{{$ctrl.currentFormattingSettingsCol.min}}">
-                <input ng-if="$ctrl.isUndefined(currentFormattingSettingsCol.min)" class="form-control" id="minInput" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].min}}"> -->
-
 <script>
     var dataTableWidths = $('#dataTableBody tr td').width();
     var onTableWidthChange = function () {

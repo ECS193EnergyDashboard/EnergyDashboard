@@ -36,3 +36,30 @@
 #columnBtnThrash {
 
 }
+
+.dropdownelm{
+    border: 1px solid gray;
+}
+
+.colSelected{
+    background-color: rgba(33, 137, 195, 0.32);
+}
+
+.dropdownelm:hover{
+    background-color: #66afe9;
+    border: 1px solid black;
+}
+
+.dropdownFilters{
+    position: relative;
+    flex-shrink: 0;
+}
+.dropdownList{
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.open > #menuDropdownContent {
+    display: flex;
+    flex-direction: column;
+}

@@ -151,9 +151,27 @@ angular.module('columnTemplateDropdownModule')
                 }
             };
 
+            var temp = {isChecked: 'true'};
+
+            this.colCheckedFilter = function(){
+                return this.search.isChecked == temp;
+            };
+
             this.toggleColCheckedFilter = function(){
+
+
                 console.log('checked check sofilter is checked');
-                this.search.isChecked = this.search.isChecked == { isChecked: 'true'} ? {}: { isChecked: 'true'};
+                console.log(this.search.isChecked);
+                console.log(this.search);
+                if(this.search.isChecked != temp){
+                    console.log('this.search.isChecked != temp')
+                    this.search.isChecked = temp;
+                }
+                else{
+                    console.log('this.search.isChecked == temp')
+                    this.search.isChecked = {};
+                }
+                console.log(this.search);
                 console.log(this.search.isChecked);
             };
 

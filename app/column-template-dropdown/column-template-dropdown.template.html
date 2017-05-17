@@ -9,30 +9,24 @@
 
             <div class="dropdown-menu dropdown-content" id="menuDropdownContent">
                 <div class="dropdownFilters">
-                    <!--- START: From columnDropwdownSearch-->
+                    <div class="btn-group" style="width: 100%;">
+                        <button ng-class="{colCheckedFilterBtn: $ctrl.colCheckedFilter()}"  ng-click="$ctrl.toggleColCheckedFilter(); $event.stopPropagation();" type="button" class="btn btn-primary">
+                            Selected
+                            <span class="glyphicon glyphicon-ok-circle pointer" ng-click="$ctrl.search.isChecked = { isChecked: 'true'} ;$event.stopPropagation()"></span>
+                            <span class="glyphicon glyphicon-ban-circle pointer" ng-click="$ctrl.search.isChecked = { } ;$event.stopPropagation()"></span>
 
-                    <button id="colCheckedFilterBtn" ng-click="$ctrl.toggleColCheckedFilter(); $event.stopPropagation();" type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false" autocomplete="off">
-                        Selected
-
-                        <span class="glyphicon glyphicon-ok-circle pointer" ng-click="$ctrl.search.isChecked = { isChecked: 'true'} ;$event.stopPropagation()"></span>
-                        <span class="glyphicon glyphicon-ban-circle pointer" ng-click="$ctrl.search.isChecked = { } ;$event.stopPropagation()"></span>
-
-                    </button>
-                    <br>
-
-                    <div class="btn-group">
+                        </button>
                         <button ng-click="$ctrl.clearAll();$event.stopPropagation()" type="button" class="btn btn-primary">
-                            Trash Shown
+                            Clear
                             <span class="glyphicon glyphicon-remove pointer" ></span>
                         </button>
                         <button ng-click="$ctrl.selectAll();$event.stopPropagation()" type="button" class="btn btn-primary">
-                            Select Shown
+                            Select
                             <span class="glyphicon glyphicon-ok pointer" ></span>
                         </button>
 
                     </div>
                     <input ng-model="$ctrl.search.columnName" class="form-control" type="text" placeholder="Search For Column...">
-                    <!--- END: From columnDropwdownSearch-->
                 </div>
                 <div class="dropdownList">
                     <div ng-click="$ctrl.toggleColumn(column); $event.stopPropagation()"  ng-repeat="column in ($ctrl.filteredColumns = ($ctrl.columns | orderBy:'name' | filter: $ctrl.search.columnName| filter: $ctrl.search.isChecked))  ">

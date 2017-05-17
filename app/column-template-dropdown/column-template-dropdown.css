@@ -36,3 +36,12 @@
 #columnBtnThrash {
 
 }
+
+.columnChecked{
+  background-color: rgba(91,192,222,0.4);
+}
+
+.dropdownelm{
+  border-style: solid;
+  border-width: 1px;
+}

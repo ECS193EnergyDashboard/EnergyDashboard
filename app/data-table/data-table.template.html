@@ -4,10 +4,10 @@
         <column-template-dropdown columns="$ctrl.columnNamesObjs" update-col-obj= "$ctrl.updateCol(cols)"  row-data="$ctrl.data" is-analysis="'false'" elem-name="$ctrl.elemName"></column-template-dropdown>
     </div>
 
-
-<table id="dataTable" ng-if="$ctrl.displayed" st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped">
-    <img ng-if="!$ctrl.displayed" id="mainLogo" src="../img/ecoMainLogo.png">
-    <thead id="dataTableHead">
+<!-- ng-if="$ctrl.columnNamesObjs.length != 0" -->
+<img ng-if="$ctrl.data.length == 0" id="mainLogo" src="../img/ecoMainLogo.png">
+<table id="dataTable" ng-if="$ctrl.data.length != 0" st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped">
+    <thead id="dataTableHead" ng-if="$ctrl.data.length != 0">
     <tr>
         <th st-sort="building">Building</th>
         <th st-sort="name">Name</th>
@@ -35,7 +35,7 @@
     </tr>
     </thead>
 
-    <tbody id="dataTableBody">
+    <tbody id="dataTableBody" ng-if="$ctrl.data.length != 0">
     <!-- Row for Conditional Formatting settings-->
     <tr ng-if="$ctrl.showFormattingSettingsButtons">
         <!-- 2 blank spaces for building and name -->

@@ -124,3 +124,12 @@ column-template-dropdown {
 .tableMenus{
     float: right;
 }
+
+.conditionalFormattingInput{
+    max-width: 250px;
+}
+
+.conditionalFormattingButton{
+    min-width: 1000px;
+    min-height: 100px;
+}

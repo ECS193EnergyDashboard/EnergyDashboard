@@ -92,13 +92,14 @@
             <form class="form-horizontal" id="conditionalFormatForm">
                 <label ng-if="!$ctrl.isUndefined($ctrl.currentFormattingSettingsCol.max)" for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.name}}: (Currently set at {{$ctrl.currentFormattingSettingsCol.max}})</label>
                 <label ng-if="$ctrl.isUndefined($ctrl.currentFormattingSettingsCol.max)" for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.name}}: </label>
-                <input class="form-control" id="maxInput" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].max}}">
+                <input class="form-control conditionalFormattingInput" id="maxInput" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].max}}">
+                <button type="button conditionalFormattingButton" class="btn btn-default" style="float: right">Set to Current Max</button>
 
 
                 <label ng-if="!$ctrl.isUndefined($ctrl.currentFormattingSettingsCol.min)" for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.name}}: (Currently set at {{$ctrl.currentFormattingSettingsCol.min}})</label>
                 <label ng-if="$ctrl.isUndefined($ctrl.currentFormattingSettingsCol.min)" for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.name}}: </label>
-                <input class="form-control" id="minInput" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].min}}">
-
+                <input class="form-control conditionalFormattingInput" id="minInput" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].min}}">
+                <button type="button conditionalFormattingButton" class="btn btn-default" style="float: right">Set to Current Min</button>
 
                 <label for="maxColor">Color for Max: (Currently set at {{$ctrl.currentFormattingSettingsCol.maxColor}})</label>
                 <select class="form-control" id="maxColor">
@@ -134,15 +135,6 @@
 
 
 
-
-<!--                 <label for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.name}}: </label>
-                <input ng-if="!$ctrl.isUndefined(currentFormattingSettingsCol.max)" class="form-control" id="maxInput" value="{{$ctrl.currentFormattingSettingsCol.max}}">
-                <input ng-if="$ctrl.isUndefined(currentFormattingSettingsCol.max)" class="form-control" id="maxInput" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].max}}">
-
-
-                <label for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.name}}: </label>
-                <input ng-if="!$ctrl.isUndefined(currentFormattingSettingsCol.min)" class="form-control" id="minInput" value="{{$ctrl.currentFormattingSettingsCol.min}}">
-                <input ng-if="$ctrl.isUndefined(currentFormattingSettingsCol.min)" class="form-control" id="minInput" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].min}}"> -->
 
 <script>
     var dataTableWidths = $('#dataTableBody tr td').width();

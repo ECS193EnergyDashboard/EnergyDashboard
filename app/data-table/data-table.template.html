@@ -27,16 +27,13 @@
         <th colspan="4">
             <input st-search="name" placeholder="search for name..." class="input-sm form-control" type="search"/>
         </th>
-        <th>
+        <!-- Show/Hide Conditional formatting button-->
+<!--         <th>
             <button ng-if="$ctrl.columnNamesObjs.length != 0" ng-click="$ctrl.showHideSettingsButtons()" type="button" class="btn btn-default">
             Conditional Formatting
             </button>
-        </th>
+        </th> -->
     </tr>
-    </thead>
-
-    <tbody id="dataTableBody" ng-if="$ctrl.data.length != 0">
-    <!-- Row for Conditional Formatting settings-->
     <tr ng-if="$ctrl.showFormattingSettingsButtons">
         <!-- 2 blank spaces for building and name -->
         <td> </td>
@@ -50,6 +47,10 @@
         </td>
     </tr>
 
+
+    </thead>
+
+    <tbody id="dataTableBody" ng-if="$ctrl.data.length != 0">
     <tr ng-repeat="element in $ctrl.displayed">
         <td class="bold">{{element.building}}</td>
         <td class="bold">{{element.name}}</td>

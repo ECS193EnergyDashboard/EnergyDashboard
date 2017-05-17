@@ -35,9 +35,10 @@ angular.module('columnTemplateDropdownModule')
             this.currentTemplate = {};
             this.filteredColumns = [];
 
-            this.newTemplateName = "";
 
             this.unalteredCurrentTemplate = {};
+
+            this.newTemplateName = "";
 
 
             // Default file name for downloading to CSV
@@ -411,10 +412,19 @@ angular.module('columnTemplateDropdownModule')
             // Save template/profile for cols
             // Called in html with $ctrl.columns
             this.saveTemplate = function(columnObjs) {
+                if(this.isAnalysis == "true"){
+                    console.log("IS analysis");
+                    this.newTemplateName = $(".newTemplateNameAnalysis").val();
+                }
+                else{
+                    this.newTemplateName = $(".newTemplateNameData").val();
+                    console.log("is DATA");
+                    // newTemplateName = document.getElementsById("templateNameInput").value;
+                }
+                console.log(this.newTemplateName);
 
                 // Check to make sure template is not named default or name is already taken
                 if(this.newTemplateName == "Default"){
-                    // console.log("Cant have a template named Default");
                     this.ShowSaveDefaultModal();
                     return;
                 }
@@ -625,7 +635,7 @@ angular.module('columnTemplateDropdownModule')
             }
 
             this.ClearTemplateNameInput = function(){
-                // this.newTemplateName = "";
+                this.newTemplateName = "";
                 // $("#templateInput").val(''); // clear the inputbox
             }
 

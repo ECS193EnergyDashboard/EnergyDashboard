@@ -68,30 +68,24 @@
 @media(min-width:768px) {
     #side-bar {
         flex: 1 1 auto;
-        transition: all .5s ease;
     }
     #wrapper.toggled #side-bar {
         flex: 0 1 auto;
-        transition: all 0.5s ease;
     }
 
     #side-bar-selector {
         flex: 1 1 auto;
-        transition: all .5s ease;
     }
     #wrapper.toggledSelector #side-bar-selector {
         flex: 0 1 auto;
-        transition: all 0.5s ease;
     }
 
     #side-bar-chart {
         flex: 1 1 auto;
-        transition: all .5s ease;
     }
 
     #wrapper.toggledChart #side-bar-chart {
         flex: 0 1 auto;
-        transition: all 0.5s ease;
     }
 }
 

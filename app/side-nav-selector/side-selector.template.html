@@ -24,7 +24,7 @@
             <div ng-repeat="element in $ctrl.selected | filter: search" class="selectItem" custom-drop-target="side-selector" custom-drop-success="$ctrl.onDropSuccess(item)" ng-class="{hiddenListItem: $ctrl.isDummyItem(element)}">
                 <span class="sidebar-item list-group-item selectorItem">
                     <div id="itemText">
-                        <h6 id="buildingName">{{element.building}}</h6>
+                        <h6 id="buildingName">{{element.building}} | {{element.template}}</h6>
                         <br>
                         {{element.name}}
                     </div>

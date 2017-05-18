@@ -9,18 +9,16 @@
 
             <div class="dropdown-menu dropdown-content" id="menuDropdownContent">
                 <div class="dropdownFilters">
-                    <div class="btn-group" style="width: 100%;">
-                        <button ng-class="{colCheckedFilterBtn: $ctrl.colCheckedFilter()}"  ng-click="$ctrl.toggleColCheckedFilter(); $event.stopPropagation();" type="button" class="btn btn-primary">
+                    <div class="btn-group" style="width: 100%; display: flex;">
+                        <button style="flex: 1 1" ng-class="{colCheckedFilterBtn: $ctrl.colCheckedFilter()}"  ng-click="$ctrl.toggleColCheckedFilter(); $event.stopPropagation();" type="button" class="btn btn-primary">
                             Selected
                             <span class="glyphicon glyphicon-ok-circle pointer" ng-click="$ctrl.search.isChecked = { isChecked: 'true'} ;$event.stopPropagation()"></span>
-                            <span class="glyphicon glyphicon-ban-circle pointer" ng-click="$ctrl.search.isChecked = { } ;$event.stopPropagation()"></span>
-
                         </button>
-                        <button ng-click="$ctrl.clearAll();$event.stopPropagation()" type="button" class="btn btn-primary">
+                        <button style="flex: 1 1" ng-click="$ctrl.clearAll();$event.stopPropagation()" type="button" class="btn btn-primary">
                             Clear
                             <span class="glyphicon glyphicon-remove pointer" ></span>
                         </button>
-                        <button ng-click="$ctrl.selectAll();$event.stopPropagation()" type="button" class="btn btn-primary">
+                        <button style="flex: 1 1" ng-click="$ctrl.selectAll();$event.stopPropagation()" type="button" class="btn btn-primary">
                             Select
                             <span class="glyphicon glyphicon-ok pointer" ></span>
                         </button>

@@ -85,10 +85,12 @@ angular.module('dashboardModule').component('dashboard',{
 
         this.showAnalyzeTab = function() {
             this.show = 1;
+            this.dataTable.update();
         };
 
         this.showGraphTab = function() {
             this.show = 2;
+            this.dataTable.update();
         };
 
         this.isDataTabShown = function() {
@@ -106,13 +108,17 @@ angular.module('dashboardModule').component('dashboard',{
 
         this.toggleMenu = function(){
             $("#wrapper").toggleClass("toggled");
+            this.dataTable.update();
         };
         this.toggleSelectorMenu = function(){
             $("#wrapper").toggleClass("toggledSelector");
+            this.dataTable.update();
         };
         this.toggleChartMenu = function(){
             $("#wrapper").toggleClass("toggledChart");
+            this.dataTable.update();
         };
+
 
 
         /* @Note: not sure e.pageX will work in IE8 */

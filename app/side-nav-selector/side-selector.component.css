@@ -41,6 +41,7 @@
     flex-direction: row;
 }
 #selectionHolder{
+    overflow-x: hidden;
     display: flex;
     /*position: absolute;*/
     flex-direction: column;
@@ -175,7 +176,7 @@
 #itemBtn{
     display: inline-block;
     position: absolute;
-    right: 2%;
+    right: 5%;
     top: 2%;
     font-size: small;
 }

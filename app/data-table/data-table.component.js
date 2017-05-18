@@ -180,8 +180,6 @@ angular.module('dataTableModule').component('datatable', {
             }
         };
 
-
-
         this.updateCalculations = function() {
             this.sums = {};
             this.averages = {};
@@ -265,8 +263,29 @@ angular.module('dataTableModule').component('datatable', {
             $(".formattingSettingsModal").modal();
         };
 
+
+        var timeoutPromise2;
+        var delayInMs2 = 1000;
+
         this.showHideSettingsButtons = function(){
+
             this.showFormattingSettingsButtons = !this.showFormattingSettingsButtons;
+
+
+
+            $timeout.cancel(timeoutPromise2);  //does nothing, if timeout already done
+            timeoutPromise = $timeout(function() {   //Set timeout
+                var tableRef = document.getElementById('dataTable');
+                var fixedHeader = document.getElementById('dataTableHead');
+                if (fixedHeader != null) {
+                    var headerHeight = document.getElementById('dataTableHead').offsetHeight;
+                    //console.log('header height: '+headerHeight);
+                    tableRef.style.top = headerHeight + "px";
+
+                    //console.log('data table top: '+tableRef.style.top)
+                }
+            }, delayInMs2);
+
             //console.log(this.showFormattingSettingsButtons);
         };
 
@@ -394,8 +413,8 @@ angular.module('dataTableModule').component('datatable', {
 
                         if (row === 3) {
                             if (true) {
-                                tableRef.rows[0].cells[col].style.maxWidth = tableCell.offsetWidth + 'px';
-                                tableRef.rows[0].cells[col].style.minWidth = tableCell.offsetWidth + 'px';
+                                tableRef.rows[1].cells[col].style.maxWidth = tableCell.offsetWidth + 'px';
+                                tableRef.rows[1].cells[col].style.minWidth = tableCell.offsetWidth + 'px';
                             }
                             else { /* For debugging purposes */
                                 colObj = self.columnNamesObjs[c];

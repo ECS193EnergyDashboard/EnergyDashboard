@@ -30,14 +30,6 @@
     flex-direction: row;
 }
 
-#selectionHolder{
-    display: flex;
-    /*position: absolute;*/
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-}
-
 
 #sidebar-chart-wrapper {
     z-index: 1000;

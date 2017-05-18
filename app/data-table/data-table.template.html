@@ -5,18 +5,9 @@
     </div>
 
 
-<table id="dataTable" ng-if="$ctrl.displayed" st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped">
+<table id="dataTable" ng-if="$ctrl.displayed && $ctrl.selection.length > 0" st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped">
     <img ng-if="!$ctrl.displayed" id="mainLogo" src="../img/ecoMainLogo.png">
     <thead id="dataTableHead">
-    <tr>
-        <th st-sort="building">Building</th>
-        <th st-sort="name">Name</th>
-        <th  ng-repeat="column in $ctrl.columnNamesObjs" ng-style="{'max-width': $ctrl.columnWidths[column], 'min-width': $ctrl.columnWidths[column]}" ng-if="column.isChecked" st-sort="$ctrl.getters.value.bind(null, column.name)" lr-drag-src="header" lr-drop-target="header">
-
-            {{column.units === "" ? column.name : column.name + " (" + column.units + ")"}}
-        </th>
-
-    </tr>
 
     <tr>
         <th colspan="4">
@@ -24,13 +15,20 @@
         </th>
         <th>
             <button ng-if="$ctrl.columnNamesObjs.length != 0" ng-click="$ctrl.showHideSettingsButtons()" type="button" class="btn btn-default">
-            Conditional Formatting
+                Conditional Formatting
             </button>
         </th>
     </tr>
-    </thead>
+    <tr>
+        <th st-sort="building">Building</th>
+        <th st-sort="name">Name</th>
+        <th  ng-repeat="column in $ctrl.columnNamesObjs" ng-style="{'max-width': $ctrl.columnWidths[column], 'min-width': $ctrl.columnWidths[column]}" ng-if="column.isChecked" st-sort="$ctrl.getters.value.bind(null, column.name)" lr-drag-src="header" lr-drop-target="header">
+            {{column.units === "" ? column.name : column.name + " (" + column.units + ")"}}
+        </th>
 
-    <tbody id="dataTableBody">
+    </tr>
+
+
     <!-- Row for Conditional Formatting settings-->
     <tr ng-if="$ctrl.showFormattingSettingsButtons">
         <!-- 2 blank spaces for building and name -->
@@ -44,6 +42,11 @@
             </div>
         </td>
     </tr>
+
+
+    </thead>
+
+    <tbody id="dataTableBody">
 
     <tr ng-repeat="element in $ctrl.displayed">
         <td class="bold">{{element.building}}</td>

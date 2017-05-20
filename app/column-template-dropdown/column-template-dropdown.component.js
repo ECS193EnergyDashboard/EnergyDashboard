@@ -86,6 +86,10 @@ angular.module('columnTemplateDropdownModule')
 
 
             this.$onChanges = function(changes){
+                if(this.isAnalysis == "false"){
+                    console.log("columns ", this.columns);
+                    console.log("CHANGES ", changes);
+                }  
                 if(changes.columns){
 
                     this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns));
@@ -127,7 +131,7 @@ angular.module('columnTemplateDropdownModule')
                 // User clicked on something of same type
                 else if(this.curType != "" && this.currentTemplate.name != undefined){
                     // Make template persist
-                    this.ApplyTemplate(this.currentTemplate);
+                    // this.ApplyTemplate(this.currentTemplate);
                 }
                 this.updateFiltered();
 

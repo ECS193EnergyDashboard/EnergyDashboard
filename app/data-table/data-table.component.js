@@ -8,7 +8,7 @@ angular.module('dataTableModule').component('datatable', {
         selection:      '=',
         api:            '='
     },
-    controller: ['$filter', '$scope', '$timeout', function TableController($filter, $scope, $timeout) {
+    controller: ['$filter', '$scope', '$timeout', function TableController($filter, $scope, $timeout){
         var self = this;
         this.data = [];
         this.sums = {};
@@ -105,6 +105,7 @@ angular.module('dataTableModule').component('datatable', {
         };
 
         this.$onChanges = function() {
+            console.log("data-table change!!");
 
             if (this.searchEnabled === undefined) {
                 this.searchEnabled = true;
@@ -169,7 +170,8 @@ angular.module('dataTableModule').component('datatable', {
                     Object.assign(element[name], { parentName: element.name, buildingName: element.building });
                 }
             }
-            // console.log(this.columnNamesObjs);
+            console.log("column Name objs", this.columnNamesObjs);
+            console.log("columnsobjects length ", this.columnNamesObjs.length);
 
             this.displayed = this.data = this.tableSrc;
         }; //end $onChanges
@@ -359,7 +361,6 @@ angular.module('dataTableModule').component('datatable', {
         // Whenever the displayed data is changed, recalculate sum and average of the shown rows only
         $scope.$watch('$ctrl.displayed', function(newValue, oldValue) {
             // if nothing in data remove elms in columnNamesObjs to hide buttons/columns
-            console.log(newValue);
             if(!(angular.isUndefined(newValue)) && newValue.length == 0){
                 self.columnNamesObjs.length = 0;
             }
@@ -395,7 +396,7 @@ angular.module('dataTableModule').component('datatable', {
                     for (var col = 0; col < tableRow.cells.length; col++) {
                         var tableCell = tableRow.cells[col]; //get cell at position col
                         var print = '#' + row + ',' + col + ': ' + tableCell.offsetWidth + " px";
-                        console.log(print);
+                        // console.log(print);
 
                         if (row === 3) {
                             if (true) {

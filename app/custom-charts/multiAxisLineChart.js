@@ -89,7 +89,14 @@ nv.models.multiAxisLineChart = function() {
             x   .domain(d3.extent(d3.merge(series1.concat(series2)), function(d) { return d.x }))
                 .range([0, availableWidth]);
 
-            var wrap = container.selectAll('g.wrap.multiAxisLineChart').data([data]);
+            container
+                .attr('width', width)
+                .attr('height', height)
+                .style('width', width)
+                .style('height', height);
+
+            
+            var wrap = container.selectAll('g.wrap.multiAxisLineChart').data([data])
             var gEnter = wrap.enter().append('g').attr('class', 'wrap nvd3 multiAxisLineChart').append('g');
 
             gEnter.append('g').attr('class', 'nv-x nv-axis');

@@ -1,6 +1,6 @@
 angular.module('chartViewModule').component('chartView', {
         templateUrl: 'chart-view/chart-view.template.html',
-        controller: [ 'pi', '$q', '$location', '$window', function(pi, $q, $location, $window) {
+        controller: [ 'pi', '$q', '$location', '$window', '$scope', function(pi, $q, $location, $window, $scope) {
             var self = this;
 
             this.isLoading = false;
@@ -52,25 +52,90 @@ angular.module('chartViewModule').component('chartView', {
                 return d === null ? 'Bad' : yTickFormat(d);
             }
 
+            $scope.$on('angular-resizable.resizing', function(event, args) {
+                if (args.height) {
+                    var index = event.targetScope.$parent.$index;
+                    var chart = charts[index];
+                    if (args.height <= 10 && !chart.disabled) {
+                        $scope.$apply(function() {
+                            chart.disabled = true;
+                            chart.closedByDragging = true;
+                        });
+                    } else {
+                        chart.height(args.height);
+                        chart.update();
+                    }
+                }
+            });
+
             var graphWidth = $window.innerWidth;
             var lrMargin = 80;
+
+            var tooltipContentGenerator = function(d, elem) {
+                    if (d === null) {
+                        return '';
+                    }
+
+                    var table = d3.select(document.createElement("table"));
+                    var theadEnter = table.selectAll("thead")
+                        .data([d])
+                        .enter().append("thead");
+
+                    theadEnter.append("tr")
+                        .append("td")
+                        .attr("colspan", 3)
+                        .append("strong")
+                        .classed("x-value", true)
+                        .html(xTickFormat(d.value));
+
+                    var tbodyEnter = table.selectAll("tbody")
+                        .data([d])
+                        .enter().append("tbody");
+
+                    var trowEnter = tbodyEnter.selectAll("tr")
+                            .data(function(p) { return p.series })
+                            .enter()
+                            .append("tr")
+                            .style('border-bottom', function(p) { return p === 'SEP' ? '1px solid rgba(0,0,0,0.2)' : 'none'; });
+
+                    trowEnter.append("td")
+                        .classed("legend-color-guide", function(p) { return p !== 'SEP'; })
+                        .append("div")
+                        .style("background-color", function(p) { return p.color});
+
+                    trowEnter.append("td")
+                        .classed("key",true)
+                        .html(function(p, i) { return p.key });
+
+                    trowEnter.append("td")
+                        .classed("value",true)
+                        .html(function(p, i) { return p === 'SEP' ? '' : tooltipValueFormat(p.value, i, p) });
+
+                    var html = table.node().outerHTML;
+                    if (d.footer !== undefined)
+                        html += "<div class='footer'>" + d.footer + "</div>";
+                    return html;
+
+            };
 
             var tooltip = nv.models.tooltip()
                 .duration(0)
                 .hideDelay(0)
-                .headerFormatter(xTickFormat)
-                .valueFormatter(tooltipValueFormat);
+                .contentGenerator(tooltipContentGenerator);
 
             var onChartMouseMove = function(e) {
                 var tooltipData = { series: [] };
 
-                for (var chart of charts) {
+                var filteredCharts = charts.filter(function(c) { return !c.disabled; });
+
+                for (var chart of filteredCharts) {
                     chart.dispatch.onChartHover(e);
 
-                    tooltipData.series = tooltipData.series.concat(chart.interactiveLayer.tooltip.data().series);
+                    tooltipData.series = tooltipData.series.concat(chart.interactiveLayer.tooltip.data().series).concat('SEP');
                 }
+                tooltipData.series.pop();
 
-                if (charts.length) {
+                if (filteredCharts.length) {
                     tooltipData.value = charts[0].interactiveLayer.tooltip.data().value;
                 }
 
@@ -81,7 +146,8 @@ angular.module('chartViewModule').component('chartView', {
             }
 
             var onChartMouseOut = function(e) {
-                for (var chart of charts) {
+                var filteredCharts = charts.filter(function(c) { return !c.disabled; });
+                for (var chart of filteredCharts) {
                     chart.dispatch.onChartHoverOut(e);
                 }
                 tooltip.hidden(true);
@@ -97,6 +163,34 @@ angular.module('chartViewModule').component('chartView', {
                     var len = self.dataset[i].length;
                     charts[i].color(colorArray.slice(colorIdx, colorIdx + len));
                     colorIdx += len;
+                }
+            }
+
+            this.isChartEnabled = function(index) {
+                return charts[index] && !charts[index].disabled;
+            }
+
+            this.toggleChartEnabled = function(index) {
+                var chart = charts[index];
+                var disabled = !chart.disabled;
+                chart.disabled = disabled;
+
+                if (!disabled && chart.closedByDragging) {
+                    chart.height(200);
+                    chart.update();
+                    $('#chart' + index).height(200);
+                }
+
+                for (var series of this.dataset[index]) {
+                    series.disabled = disabled;
+                }
+            }
+
+            this.buttonClass = function(index) {
+                if (charts[index] && charts[index].disabled) {
+                    return 'glyphicon glyphicon-eye-close';
+                } else {
+                    return 'glyphicon glyphicon-eye-open';
                 }
             }
 
@@ -143,7 +237,13 @@ angular.module('chartViewModule').component('chartView', {
                             elementMouseout: onChartMouseOut
                         }
                     },
-                    showLegend: false
+                    legend: {
+                        align: false,
+                        keyFormatter: function(d) { return ''; },
+                        margin: {
+                            top: 2
+                        }
+                    }
                 }
             };
 
@@ -322,8 +422,7 @@ angular.module('chartViewModule').component('chartView', {
 
                         var series = self.dataset[chart][attribIdx];
                         series.values = replaceBadValues(responses[i + 1]);
-                        series.originalKey = attrib.element.building + ": " + attrib.element.name + " | " + attrib.name;
-                        series.key = series.originalKey + (series.yAxis == 1 ? '' : ' (right axis)');
+                        series.key = attrib.element.building + ": " + attrib.element.name + " | " + attrib.name;
                     }
 
                     self.datasetFlat = d3.merge(self.dataset);

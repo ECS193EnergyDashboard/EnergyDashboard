@@ -20,7 +20,8 @@
     "bootstrap": "^3.3.7",
     "angular-daterangepicker": "^0.2.2",
     "nvd3": "1.8.2",
-    "angular-nvd3": "^1.0.9"
+    "angular-nvd3": "^1.0.9",
+    "angular-resizable": "latest"
   },
   "resolutions": {
     "angular": "~1.2.25"

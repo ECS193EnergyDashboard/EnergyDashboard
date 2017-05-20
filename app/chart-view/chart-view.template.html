@@ -55,6 +55,9 @@
 </div>
 
 
-<div  ng-hide="$ctrl.isLoading"  ng-repeat="data in $ctrl.dataset">
-    <nvd3 options="$ctrl.lineOptions" data="data" on-ready="$ctrl.onChartReady"><nvd3>
+<div class="chart-section"  ng-repeat="data in $ctrl.dataset" ng-hide="$ctrl.isLoading">
+    <button style="border: none; background: transparent" ng-class="$ctrl.buttonClass($index)" ng-click="$ctrl.toggleChartEnabled($index)"></button>
+    <div resizable r-directions="['bottom']" ng-show="$ctrl.isChartEnabled($index)" id="{{'chart' + $index}}">
+        <nvd3 options="$ctrl.lineOptions" data="data" on-ready="$ctrl.onChartReady"><nvd3>
+    </div>
 </div>

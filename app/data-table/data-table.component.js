@@ -20,6 +20,7 @@ angular.module('dataTableModule').component('datatable', {
         this.showFormattingSettingsButtons = true;
         this.columnWidths = {};
         this.columNumWidths = [];
+        this.errorMessage = "";
 
 
         this.$onInit = function(){
@@ -268,16 +269,31 @@ angular.module('dataTableModule').component('datatable', {
 
         this.showHideSettingsButtons = function(){
             this.showFormattingSettingsButtons = !this.showFormattingSettingsButtons;
-            //console.log(this.showFormattingSettingsButtons);
         };
 
+
         this.submitFormattingSettings = function(col){
-            // this.maxAndMin[colName.name].max = document.getElementById("maxInput").value;
-            // this.maxAndMin[colName.name].min = document.getElementById("minInput").value;
-            col.max = document.getElementById("maxInput").value;
-            col.min = document.getElementById("minInput").value;
+            var submittedMax = document.getElementById("maxInput").value;
+            var submittedMin = document.getElementById("minInput").value;
+
+            if(submittedMax.length != 0)
+                col.max = submittedMax;
+            else{
+                col.max = null
+            }
+            if(submittedMin.length != 0)
+                col.min = submittedMin;
+            else{
+                col.min = null
+            }
             col.maxColor = document.getElementById("maxColor").value;
             col.minColor = document.getElementById("minColor").value;
+
+            this.resetConditionalFormatForm();
+        };
+
+        // Resets the condtionial formatting form (used in HTML as well)
+        this.resetConditionalFormatForm = function(){
             document.getElementById("conditionalFormatForm").reset();
         };
 
@@ -293,22 +309,27 @@ angular.module('dataTableModule').component('datatable', {
                 return {"background-color": "white"}
             }
             // Check is there is a user submitted max and min else use the max/ min of current data.
+            // It starts as undefined but if a user wants to use the current max then it becomes null
+            // Hence why we have to check both.
             var max, min;
-            if(angular.isUndefined(col.max)){
+            if(angular.isUndefined(col.max) || col.max == null){
                 max = this.maxAndMin[value.name].max;
             }
             else{
                 max = Number(col.max)
             }
-            if(angular.isUndefined(col.min)){
+
+            if(angular.isUndefined(col.min) || col.min == null){
                 min = this.maxAndMin[value.name].min;
             }
             else{
                 min = Number(col.min)
             }
+
+
             if(max == min){
                 return {};
-            }
+            }  
 
             // Check if user submitted color, if not default to red and blue for max and min respectivly.
             var maxColor, minColor;
@@ -457,3 +478,11 @@ angular.module('dataTableModule').component('datatable', {
 
     }]
 });
+
+    // Checks to make sure that input only takes in numbers (used for conditonal formatting)
+    function isNumberKey(evt){
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }   

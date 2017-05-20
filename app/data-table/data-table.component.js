@@ -21,6 +21,7 @@ angular.module('dataTableModule')
         this.showFormattingSettingsButtons = true;
         this.columnWidths = {};
         this.columNumWidths = [];
+        $scope.cf = cf; //Give html access to cf service
 
 
         this.$onInit = function(){

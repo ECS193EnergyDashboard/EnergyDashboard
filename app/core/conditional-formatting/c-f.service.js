@@ -27,7 +27,7 @@ angular.module('core.cf').
                 return angular.isUndefined(thing);
             }
 
-            cf.switchShowConditionalFormat = function(col){
+            cf.toggleConditionalFormatting = function(col){
                 col.showConditionalFormat = !col.showConditionalFormat;
             };
 
@@ -36,14 +36,14 @@ angular.module('core.cf').
                 $(".formattingSettingsModal").modal();
             };
 
-            cf.showHideSettingsButtons = function(){
+            /*cf.showHideSettingsButtons = function(){
                 cf.showFormattingSettingsButtons = !cf.showFormattingSettingsButtons;
                 //console.log(cf.showFormattingSettingsButtons);
-            };
+            };*/
 
             cf.submitFormattingSettings = function(col){
-                // cf.maxAndMin[colName.name].max = document.getElementById("maxInput").value;
-                // cf.maxAndMin[colName.name].min = document.getElementById("minInput").value;
+                // maxAndMin[colName.name].max = document.getElementById("maxInput").value;
+                // maxAndMin[colName.name].min = document.getElementById("minInput").value;
                 col.max = document.getElementById("maxInput").value;
                 col.min = document.getElementById("minInput").value;
                 col.maxColor = document.getElementById("maxColor").value;
@@ -52,9 +52,9 @@ angular.module('core.cf').
             };
 
 
-            cf.conditionalFormat = function(value, col){
+            cf.conditionalFormat = function(value, col, maxAndMin){
                 // Do nothing on bad/undef values
-                if(value == undefined || !value.good || cf.maxAndMin[value.name] == undefined){
+                if(value == undefined || !value.good || maxAndMin[value.name] == undefined){
                     return {};
                 }
 
@@ -65,13 +65,13 @@ angular.module('core.cf').
                 // Check is there is a user submitted max and min else use the max/ min of current data.
                 var max, min;
                 if(angular.isUndefined(col.max)){
-                    max = cf.maxAndMin[value.name].max;
+                    max = maxAndMin[value.name].max;
                 }
                 else{
                     max = Number(col.max)
                 }
                 if(angular.isUndefined(col.min)){
-                    min = cf.maxAndMin[value.name].min;
+                    min = maxAndMin[value.name].min;
                 }
                 else{
                     min = Number(col.min)

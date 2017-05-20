@@ -21,7 +21,8 @@ nv.models.multiAxisLineChart = function() {
         interactiveLayer = nv.interactiveGuideline(),
         useInteractiveGuideline = false,
         legendRightAxisHint = ' (right axis)',
-        duration = 250
+        duration = 250,
+        brushExtent = null
         ;
 
     //============================================================
@@ -235,6 +236,10 @@ nv.models.multiAxisLineChart = function() {
                 wrap.select(".nv-interactive").call(interactiveLayer);
             }
 
+            if (brushExtent !== null) {
+                onBrush(brushExtent);
+            }
+
             //============================================================
             // Event Handling/Dispatching
             //------------------------------------------------------------
@@ -356,6 +361,7 @@ nv.models.multiAxisLineChart = function() {
 
             function onBrush(extent) {
                 if (dataLines1 && dataLines2 && lines1Wrap && lines2Wrap && x && yScale1 && yScale2 && lines1 && lines2) {
+                    brushExtent = extent;
                     var extentFilter = function(lines,d,i) {
                         return {
                             key: d.key,
@@ -435,6 +441,7 @@ nv.models.multiAxisLineChart = function() {
         noData:    {get: function(){return noData;}, set: function(_){noData=_;}},
         interpolate:    {get: function(){return interpolate;}, set: function(_){interpolate=_;}},
         legendRightAxisHint:    {get: function(){return legendRightAxisHint;}, set: function(_){legendRightAxisHint=_;}},
+        brushExtent:    {get: function(){return brushExtent;}, set: function(_){brushExtent=_;}},
 
         // options that require extra logic in the setter
         margin: {get: function(){return margin;}, set: function(_){

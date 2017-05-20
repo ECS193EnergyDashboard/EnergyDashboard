@@ -6,6 +6,8 @@ angular.module('chartViewModule').component('chartView', {
             this.isLoading = false;
             this.dataset = [];
             this.datasetFlat = [];
+            
+            var charts = [];
 
             var collectAttributes = function(params) {
                 var attributes = [];
@@ -38,8 +40,6 @@ angular.module('chartViewModule').component('chartView', {
                 endTime: urlParams.end
             };
 
-            var chart;
-
             var xTickFormat = function(time) {
                 return d3.time.format('%m/%d %H:%M')(new Date(time));
             }
@@ -58,18 +58,58 @@ angular.module('chartViewModule').component('chartView', {
             var tooltip = nv.models.tooltip()
                 .duration(0)
                 .hideDelay(0)
-                .hidden(false)
                 .headerFormatter(xTickFormat)
                 .valueFormatter(tooltipValueFormat);
 
-            this.lineConfig = {
-                visible: true,
-                disabled: true
+            var onChartMouseMove = function(e) {
+                var tooltipData = { series: [] };
+
+                for (var chart of charts) {
+                    chart.dispatch.onChartHover(e);
+
+                    tooltipData.series = tooltipData.series.concat(chart.interactiveLayer.tooltip.data().series);
+                }
+
+                if (charts.length) {
+                    tooltipData.value = charts[0].interactiveLayer.tooltip.data().value;
+                }
+
+                tooltip
+                    .hidden(false)
+                    .data(tooltipData)
+                    ();
+            }
+
+            var onChartMouseOut = function(e) {
+                for (var chart of charts) {
+                    chart.dispatch.onChartHoverOut(e);
+                }
+                tooltip.hidden(true);
+            }
+
+            var setupChartColor = function() {
+                var color = nv.utils.defaultColor();
+                var colorArray = self.datasetFlat.map(function(d, i) {
+                    return color(d, i);
+                })
+                var colorIdx = 0;
+                for (var i = 0; i < charts.length; i++) {
+                    var len = self.dataset[i].length;
+                    charts[i].color(colorArray.slice(colorIdx, colorIdx + len));
+                    colorIdx += len;
+                }
+            }
+
+
+            this.onChartReady = function(scope, element) {
+                var index = scope.$parent.$index;
+                var chart = scope.chart;
+                charts[index] = chart;
             }
 
             this.lineOptions = {
                 chart: {
-                    type: 'multiLineChart',
+                    type: 'multiAxisLineChart',
                     height: 200,
                     width: graphWidth,
                     margin: {
@@ -80,7 +120,7 @@ angular.module('chartViewModule').component('chartView', {
                     },
                     x: function(d) { return new Date(d.timestamp).getTime(); },
                     y: function(d) { return d.value; },
-                    useInteractiveGuideline: true, // if false use tooltipContent
+                    useInteractiveGuideline: true,
                     showXAxis: true,
                     xAxis: {
                         axisLabel: '',
@@ -94,24 +134,23 @@ angular.module('chartViewModule').component('chartView', {
                         axisLabel: '',
                         tickFormat: yTickFormat,
                     },
-                    callback: function(ch) {
-                        chart = ch;
-                    }
+                    interactiveLayer: {
+                        tooltip: {
+                            enabled: false
+                        },
+                        dispatch: {
+                            elementMousemove: onChartMouseMove,
+                            elementMouseout: onChartMouseOut
+                        }
+                    },
+                    showLegend: false
                 }
             };
 
             var onChangeFocus = function(extent) {
-                if (chart) {
-                    self.extent = extent;
-
-                    chart.brushExtent(extent);
-                    chart.update();
-                }    
-            }
-
-            this.focusConfig = {
-                visible: true,
-                disabled: true
+                for (var chart of charts) {
+                    chart.dispatch.onBrush(extent);
+                }
             }
 
             var focus = undefined;
@@ -228,6 +267,7 @@ angular.module('chartViewModule').component('chartView', {
 
             this.generateChart = function() {
                 this.isLoading = true;
+
                 this.numRequests = this.config.attributes.reduce(function(acc, attrib) {
                     return acc + attrib.length;
                 }, 0);
@@ -279,13 +319,17 @@ angular.module('chartViewModule').component('chartView', {
                         var idx = Math.floor(i / 2);
                         var chart = chartMap[idx];
                         var attribIdx = idxMap[idx];
-                        self.dataset[chart][attribIdx].values = replaceBadValues(responses[i + 1]);
-                        self.dataset[chart][attribIdx].key = attrib.element.building + ": " + attrib.element.name + " | " + attrib.name; 
+
+                        var series = self.dataset[chart][attribIdx];
+                        series.values = replaceBadValues(responses[i + 1]);
+                        series.originalKey = attrib.element.building + ": " + attrib.element.name + " | " + attrib.name;
+                        series.key = series.originalKey + (series.yAxis == 1 ? '' : ' (right axis)');
                     }
+
                     self.datasetFlat = d3.merge(self.dataset);
                     self.isLoading = false;
-                    self.lineConfig.disabled = false;
-                    self.focusConfig.disabled = false;
+
+                    setupChartColor();
                 });
             };
 

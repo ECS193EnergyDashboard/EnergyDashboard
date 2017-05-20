@@ -12,8 +12,6 @@ nv.models.multiAxisLineChart = function() {
         height = null,
         showLegend = true,
         noData = null,
-        showXAxis = true,
-        showYAxis = true,
         yDomain1,
         yDomain2,
         getX = function(d) { return d.x },
@@ -23,8 +21,7 @@ nv.models.multiAxisLineChart = function() {
         interactiveLayer = nv.interactiveGuideline(),
         useInteractiveGuideline = false,
         legendRightAxisHint = ' (right axis)',
-        duration = 250,
-        api = { }
+        duration = 250
         ;
 
     //============================================================
@@ -35,9 +32,8 @@ nv.models.multiAxisLineChart = function() {
         yScale1 = d3.scale.linear(),
         yScale2 = d3.scale.linear(),
 
-        // Clip edges so they don't pass x/y axes
-        lines1 = nv.models.line().yScale(yScale1).duration(0).clipEdge(true),
-        lines2 = nv.models.line().yScale(yScale2).duration(0).clipEdge(true),
+        lines1 = nv.models.line().yScale(yScale1).duration(duration),
+        lines2 = nv.models.line().yScale(yScale2).duration(duration),
 
         xAxis = nv.models.axis().scale(x).orient('bottom').tickPadding(5).duration(duration),
         yAxis1 = nv.models.axis().scale(yScale1).orient('left').duration(duration),
@@ -45,15 +41,12 @@ nv.models.multiAxisLineChart = function() {
 
         legend = nv.models.legend().height(30),
         tooltip = nv.models.tooltip(),
-        dispatch = d3.dispatch(),
-
-        brushExtent = null;
+        dispatch = d3.dispatch('onBrush', 'onChartHover', 'onChartHoverOut');
 
     var charts = [lines1, lines2];
 
     function chart(selection) {
         selection.each(function(data) {
-
             var container = d3.select(this),
                 that = this;
             nv.utils.initSVG(container);
@@ -63,6 +56,10 @@ nv.models.multiAxisLineChart = function() {
 
             var availableWidth = nv.utils.availableWidth(width, container, margin),
                 availableHeight = nv.utils.availableHeight(height, container, margin);
+
+            dispatch.on('onBrush', function(extent) {
+                onBrush(extent);
+            });
 
             var dataLines1 = data.filter(function(d) {return d.yAxis == 1});
             var dataLines2 = data.filter(function(d) {return d.yAxis == 2});
@@ -90,7 +87,7 @@ nv.models.multiAxisLineChart = function() {
                 });
 
             x   .domain(d3.extent(d3.merge(series1.concat(series2)), function(d) { return d.x }))
-                .range([0, availableWidth ]);
+                .range([0, availableWidth]);
 
             var wrap = container.selectAll('g.wrap.multiAxisLineChart').data([data]);
             var gEnter = wrap.enter().append('g').attr('class', 'wrap nvd3 multiAxisLineChart').append('g');
@@ -129,13 +126,12 @@ nv.models.multiAxisLineChart = function() {
 
                 if (!marginTop && legend.height() !== margin.top) {
                     margin.top = legend.height();
-                    availableHeight = nv.utils.availableHeight(height, container, margin) - (focusEnable ? focus.height() : 0);;
+                    availableHeight = nv.utils.availableHeight(height, container, margin);
                 }
 
                 g.select('.legendWrap')
                     .attr('transform', 'translate(' + legendXPosition + ',' + (-margin.top) +')');
             }
-
 
             lines1
                 .width(availableWidth)
@@ -154,75 +150,73 @@ nv.models.multiAxisLineChart = function() {
                 .datum(dataLines1.filter(function(d){return !d.disabled}));
             var lines2Wrap = g.select('.lines2Wrap')
                 .datum(dataLines2.filter(function(d){return !d.disabled}));
-
-
+            
             yScale1 .domain(yDomain1 || d3.extent(d3.merge(series1), function(d) { return d.y } ))
                 .range([0, availableHeight]);
 
             yScale2 .domain(yDomain2 || d3.extent(d3.merge(series2), function(d) { return d.y } ))
                 .range([0, availableHeight]);
 
-            //if(dataLines1.length){d3.transition(lines1Wrap).call(lines1);}
-            //if(dataLines2.length){d3.transition(lines2Wrap).call(lines2);}
+            lines1.yDomain(yScale1.domain());
+            lines2.yDomain(yScale2.domain());
 
-            if (showXAxis) {
-                xAxis
-                    ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
-                    .tickSize(-availableHeight, 0);
+            if(dataLines1.length){d3.transition(lines1Wrap).call(lines1);}
+            if(dataLines2.length){d3.transition(lines2Wrap).call(lines2);}
 
+
+            function updateXAxis() {
                 g.select('.nv-x.nv-axis')
-                    .attr('transform', 'translate(0,' + availableHeight + ')');
+                    .transition()
+                    .duration(duration)
+                    .call(xAxis);
             }
 
-            if (showYAxis) {
-                yAxis1
-                    ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
-                    .tickSize( -availableWidth, 0);
-
-                yAxis2
-                    ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
-                    .tickSize( -availableWidth, 0);
-
+            function updateYAxis() {
                 g.select('.nv-y1.nv-axis')
-                    .classed('nv-disabled', series1.length ? false : true)
-                    .attr('transform', 'translate(' + x.range()[0] + ',0)');
-
+                    .transition()
+                    .duration(duration)
+                    .call(yAxis1);
                 g.select('.nv-y2.nv-axis')
-                    .classed('nv-disabled', series2.length ? false : true)
-                    .attr('transform', 'translate(' + x.range()[1] + ',0)');
+                    .transition()
+                    .duration(duration)
+                    .call(yAxis2);
             }
+
+            xAxis
+                ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                .tickSize(-availableHeight, 0);
+
+            g.select('.nv-x.nv-axis')
+                .attr('transform', 'translate(0,' + availableHeight + ')');
+            d3.transition(g.select('.nv-x.nv-axis'))
+                .call(xAxis);
+
+            yAxis1
+                ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
+                .tickSize( -availableWidth, 0);
+
+
+            d3.transition(g.select('.nv-y1.nv-axis'))
+                .call(yAxis1);
+
+            yAxis2
+                ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
+                .tickSize( -availableWidth, 0);
+
+            d3.transition(g.select('.nv-y2.nv-axis'))
+                .call(yAxis2);
+
+            g.select('.nv-y1.nv-axis')
+                .classed('nv-disabled', series1.length ? false : true)
+                .attr('transform', 'translate(' + x.range()[0] + ',0)');
+
+            g.select('.nv-y2.nv-axis')
+                .classed('nv-disabled', series2.length ? false : true)
+                .attr('transform', 'translate(' + x.range()[1] + ',0)');
 
             legend.dispatch.on('stateChange', function(newState) {
                 chart.update();
             });
-
-            //============================================================
-            // Update Axes
-            //============================================================
-            function updateXAxis() {
-                if (showXAxis) {
-                    d3.transition(g.select('.nv-x.nv-axis')).call(xAxis);
-                }
-            }
-
-            function updateYAxis() {
-                if (showYAxis) {
-                    d3.transition(g.select('.nv-y1.nv-axis')).call(yAxis1);
-                    d3.transition(g.select('.nv-y2.nv-axis')).call(yAxis2);
-                }
-            }
-
-            //============================================================
-            // Update Focus
-            //============================================================
-            if (brushExtent === null) {
-                lines1Wrap.call(lines1);
-                lines2Wrap.call(lines2);
-                updateXAxis();
-                updateYAxis();
-            } else {
-                onBrush(brushExtent);
-            }
 
             if(useInteractiveGuideline){
                 interactiveLayer
@@ -239,7 +233,7 @@ nv.models.multiAxisLineChart = function() {
             //------------------------------------------------------------
 
             function mouseover_line(evt) {
-                var yaxis = data[evt.seriesIndex].yAxis === 2 ? yAxis2 : yAxis1;
+                var yaxis = evt.series.yAxis === 2 ? yAxis2 : yAxis1;
                 evt.value = evt.point.x;
                 evt.series = {
                     value: evt.point.y,
@@ -276,99 +270,72 @@ nv.models.multiAxisLineChart = function() {
               }
             }
 
-            var getDataAt = function(pointXValue) {
-                var allData = [], xValue;
-                data
-                .filter(function(series, i) {
-                    return !series.disabled && !series.disableTooltip;
-                })
-                .forEach(function(series, i) {
-                    var pointIndex = nv.interactiveBisect(series.values, pointXValue, chart.x());
-                    var point = series.values[pointIndex];
-                    xValue = chart.x()(point);
-                    var pointYValue = chart.y()(point, pointIndex);
-
-                    allData.push({
-                        key: series.key,
-                        value: pointYValue,
-                        color: color(series,series.seriesIndex),
-                        data: point,
-                        yAxis: series.yAxis == 2 ? yAxis2 : yAxis1
-                    });
-                });
-
-                return {
-                    xValue: xValue,
-                    series: allData
-                };
-            }
-
-            var onElementMousemove = function(pointXValue) {
-                clearHighlights();
-                var singlePoint, pointIndex, pointXLocation, allData = [];
-                data
-                .filter(function(series, i) {
-                    series.seriesIndex = i;
-                    return !series.disabled && !series.disableTooltip;
-                })
-                .forEach(function(series,i) {
-                    var extent = brushExtent !== null ? brushExtent : x.domain();
-                    var currentValues = series.values.filter(function(d,i) {
-                        //return chart.x()(d,i) >= extent[0] && chart.x()(d,i) <= extent[1];
-                        if(extent[0] <= extent[1]) {
-                            return chart.x()(d,i) >= extent[0] && chart.x()(d,i) <= extent[1];
-                        } else {
-                            return chart.x()(d,i) >= extent[1] && chart.x()(d,i) <= extent[0];
-                        }
-                    });
-                    pointIndex = nv.interactiveBisect(currentValues, pointXValue, chart.x());
-                    var point = currentValues[pointIndex];
-                    var pointYValue = chart.y()(point, pointIndex);
-                    if (pointYValue !== null) {
-                        highlightPoint(i, pointIndex, true);
-                    }
-                    if (point === undefined) return;
-                    if (singlePoint === undefined) singlePoint = point;
-                    if (pointXLocation === undefined) pointXLocation = x(chart.x()(point,pointIndex));
-                    allData.push({
-                        key: series.key,
-                        value: pointYValue,
-                        color: color(series,series.seriesIndex),
-                        data: point,
-                        yAxis: series.yAxis == 2 ? yAxis2 : yAxis1
-                    });
-                });
-
-                var defaultValueFormatter = function(d,i) {
-                    var yAxis = allData[i].yAxis;
-                    return d == null ? "N/A" : yAxis.tickFormat()(d);
-                };
-
-                interactiveLayer.tooltip
-                    .headerFormatter(function(d, i) {
-                        return xAxis.tickFormat()(d, i);
+            function onElementMousemove(e) {
+                    clearHighlights();
+                    var singlePoint, pointIndex, pointXLocation, allData = [];
+                    data
+                    .filter(function(series, i) {
+                        series.seriesIndex = i;
+                        return !series.disabled;
                     })
-                    .valueFormatter(interactiveLayer.tooltip.valueFormatter() || defaultValueFormatter)
-                    .data({
-                        value: chart.x()( singlePoint,pointIndex ),
-                        index: pointIndex,
-                        series: allData
-                    })();
+                    .forEach(function(series,i) {
+                        var extent = x.domain();
+                        var currentValues = series.values.filter(function(d,i) {
+                            return chart.x()(d,i) >= extent[0] && chart.x()(d,i) <= extent[1];
+                        });
 
-                
-                interactiveLayer.renderGuideLine(pointXLocation);
-            }
+                        pointIndex = nv.interactiveBisect(currentValues, e.pointXValue, chart.x());
+                        var point = currentValues[pointIndex];
+                        var pointYValue = chart.y()(point, pointIndex);
+                        if (pointYValue !== null) {
+                            highlightPoint(i, pointIndex, true);
+                        }
+                        if (point === undefined) return;
+                        if (singlePoint === undefined) singlePoint = point;
+                        if (pointXLocation === undefined) pointXLocation = x(chart.x()(point,pointIndex));
+                        allData.push({
+                            key: series.key,
+                            value: pointYValue,
+                            color: color(series,series.seriesIndex),
+                            data: point,
+                            yAxis: series.yAxis == 2 ? yAxis2 : yAxis1
+                        });
+                    });
 
-            var onElementMouseout = function(e) {
+                    var defaultValueFormatter = function(d,i) {
+                        var yAxis = allData[i].yAxis;
+                        return d == null ? "N/A" : yAxis.tickFormat()(d);
+                    };
+
+                    var tooltipData = {
+                            value: chart.x()( singlePoint,pointIndex ),
+                            index: pointIndex,
+                            series: allData
+                    };
+
+                    interactiveLayer.tooltip
+                        .headerFormatter(function(d, i) {
+                            return xAxis.tickFormat()(d, i);
+                        })
+                        .valueFormatter(interactiveLayer.tooltip.valueFormatter() || defaultValueFormatter)
+                        .data(tooltipData)
+                        ();
+
+                    interactiveLayer.renderGuideLine(pointXLocation);
+                };
+
+            dispatch.on('onChartHover', onElementMousemove);
+            dispatch.on('onChartHoverOut', function(e) {
                 clearHighlights();
-            }
+                interactiveLayer.renderGuideLine(null);
+            });
 
             if(useInteractiveGuideline){
-                interactiveLayer.dispatch.on('elementMousemove', function(e) { 
-                    onElementMousemove(e.pointXValue);
-                });
+                interactiveLayer.dispatch.on('elementMousemove', onElementMousemove);
 
-                interactiveLayer.dispatch.on("elementMouseout", onElementMouseout);
+                interactiveLayer.dispatch.on("elementMouseout",function(e) {
+                    clearHighlights();
+                });
             } else {
                 lines1.dispatch.on('elementMouseover.tooltip', mouseover_line);
                 lines2.dispatch.on('elementMouseover.tooltip', mouseover_line);
@@ -381,67 +348,55 @@ nv.models.multiAxisLineChart = function() {
             }
 
             function onBrush(extent) {
-                // Update Main (Focus)
-                var data1 = 
-                    dataLines1.filter(function(d) { return !d.disabled; })
-                        .map(function(d,i) {
-                            return {
-                                key: d.key,
-                                axis: d.axis,
-                                area: d.area,
-                                classed: d.classed,
-                                values: d.values.filter(function(d,i) {
-                                    return lines1.x()(d,i) >= extent[0] && lines1.x()(d,i) <= extent[1];
-                                }),
-                                disableTooltip: d.disableTooltip
-                            };
+                if (dataLines1 && dataLines2 && lines1Wrap && lines2Wrap && x && yScale1 && yScale2 && lines1 && lines2) {
+                    var extentFilter = function(lines,d,i) {
+                        return {
+                            key: d.key,
+                            area: d.area,
+                            classed: d.classed,
+                            values: d.values.filter(function(d,i) {
+                                return lines.x()(d,i) >= extent[0] && lines.x()(d,i) <= extent[1];
+                            }),
+                            disableTooltip: d.disableTooltip
+                        };
+                    }
+
+                    var datum1 = dataLines1.filter(function(d) { return !d.disabled; }).map(extentFilter.bind(null, lines1));
+                    var datum2 = dataLines2.filter(function(d) { return !d.disabled; }).map(extentFilter.bind(null, lines2));
+
+                    lines1Wrap.datum(datum1);
+                    lines1Wrap.transition().duration(duration).call(lines1);
+
+                    lines2Wrap.datum(datum2);
+                    lines2Wrap.transition().duration(duration).call(lines2);
+
+                    series1 = datum1
+                        .map(function(d) {
+                            return d.values.map(function(d,i) {
+                                return { x: getX(d), y: getY(d) }
+                            })
                         });
-                var data2 =
-                    dataLines2.filter(function(d) { return !d.disabled; })
-                        .map(function(d,i) {
-                            return {
-                                key: d.key,
-                                axis: d.axis,
-                                area: d.area,
-                                classed: d.classed,
-                                values: d.values.filter(function(d,i) {
-                                    return lines2.x()(d,i) >= extent[0] && lines2.x()(d,i) <= extent[1];
-                                }),
-                                disableTooltip: d.disableTooltip
-                            };
+
+                    series2 = datum2
+                        .map(function(d) {
+                            return d.values.map(function(d,i) {
+                                return { x: getX(d), y: getY(d) }
+                            })
                         });
-                lines1Wrap.datum(data1).transition().duration(duration).call(lines1);
-                lines2Wrap.datum(data2).transition().duration(duration).call(lines2);
 
-                var series1 = data1.filter(function(d) {return !d.disabled})
-                    .map(function(d) {
-                        return d.values.map(function(d,i) {
-                            return { x: getX(d), y: getY(d) }
-                        })
-                    });
 
-                var series2 = data2.filter(function(d) {return !d.disabled})
-                    .map(function(d) {
-                        return d.values.map(function(d,i) {
-                            return { x: getX(d), y: getY(d) }
-                        })
-                    });
+                    x.domain(d3.extent(d3.merge(series1.concat(series2)), function(d) { return d.x }));
+                    yScale1.domain(d3.extent(d3.merge(series1), function(d) { return d.y }));
+                    yScale2.domain(d3.extent(d3.merge(series2), function(d) { return d.y }));
 
-                x.domain(d3.extent(d3.merge(series1.concat(series2)), function(d) { return d.x }));
+                    lines1.yDomain(yScale1.domain());
+                    lines2.yDomain(yScale2.domain());
 
-                // Update Main (Focus) Axes
-                updateXAxis();
-                updateYAxis();
+                    // Update Main (Focus) Axes
+                    updateXAxis();
+                    updateYAxis();
+                }
             }
-
-            api.updateExtent = function(extent) {
-                brushExtent = extent === null ? x.domain() : extent;
-                onBrush(brushExtent);
-            }
-
-            api.showGuidelineAt = onElementMousemove;
-            api.hideGuideline = onElementMouseout;
-            api.getDataAt = getDataAt;
         });
 
         return chart;
@@ -460,7 +415,6 @@ nv.models.multiAxisLineChart = function() {
     chart.yAxis2 = yAxis2;
     chart.tooltip = tooltip;
     chart.interactiveLayer = interactiveLayer;
-    chart.api = api;
 
     chart.options = nv.utils.optionsFunc.bind(chart);
 
@@ -472,12 +426,10 @@ nv.models.multiAxisLineChart = function() {
         yDomain1:      {get: function(){return yDomain1;}, set: function(_){yDomain1=_;}},
         yDomain2:    {get: function(){return yDomain2;}, set: function(_){yDomain2=_;}},
         noData:    {get: function(){return noData;}, set: function(_){noData=_;}},
-        showXAxis:    {get: function(){return showXAxis;}, set: function(_){showXAxis=_;}},
-        showYAxis:    {get: function(){return showYAxis;}, set: function(_){showYAxis=_;}},
         interpolate:    {get: function(){return interpolate;}, set: function(_){interpolate=_;}},
         legendRightAxisHint:    {get: function(){return legendRightAxisHint;}, set: function(_){legendRightAxisHint=_;}},
 
-        // options that require extra logic in the 
+        // options that require extra logic in the setter
         margin: {get: function(){return margin;}, set: function(_){
             if (_.top !== undefined) {
                 margin.top = _.top;
@@ -518,9 +470,8 @@ nv.models.multiAxisLineChart = function() {
 
         duration: {get: function(){return duration;}, set: function(_) {
             duration = _;
-            [lines1, lines2].forEach(function(model){
-              model.duration(duration);
-            });
+            lines1.duration(duration);
+            lines2.duration(duration);
         }}
     });
 

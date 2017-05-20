@@ -1,10 +1,10 @@
 angular.module('analysisModule').component('analysis', {
     templateUrl: 'analysis/analysis.template.html',
     bindings: {
-        webIds:      '<',
-        elemName:    '<', // passed to columnTemplate component to determine template type
-        onStartLoad: '&',
-        onEndLoad:   '&'
+        webIds:     '<',
+        elemName:   '<', // passed to columnTemplate component to determine template type
+        onStartLoad:'&',
+        onEndLoad:  '&'
     },
     controller: [
         '$filter',
@@ -102,14 +102,6 @@ angular.module('analysisModule').component('analysis', {
                     for (var element of Object.keys(columnSet)) {
                         var column = {};
                         column.name = element;
-
-                        /*
-                    try {
-                        column.units = this.data[0][column.name].unitsAbbreviation;
-                    } catch(e) {
-                        column.units = "";
-                    }
-                    */
 
                         if (firstValues < 10) {
                             column.isChecked = true;

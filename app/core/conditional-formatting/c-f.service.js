@@ -31,9 +31,8 @@ angular.module('core.cf').
                 col.showConditionalFormat = !col.showConditionalFormat;
             };
 
-            cf.showFormattingSettings = function(col){
-                cf.currentFormattingSettingsCol = col
-                $(".formattingSettingsModal").modal();
+            cf.showFormattingSettings = function(col, modalClass){
+                $("."+ modalClass).modal();
             };
 
             /*cf.showHideSettingsButtons = function(){

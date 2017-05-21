@@ -22,13 +22,14 @@
                     <input st-search="name" placeholder="search for name..." class="input-sm form-control" type="search" />
                 </th>
             </tr>
+            <!-- Conditional Formatting Settings Row  -->
             <tr ng-if="$ctrl.showFormattingSettingsButtons">
                 <!-- 2 blank spaces for building and name -->
                 <td> </td>
                 <td> </td>
                 <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked">
                     <div class="btn-group-xs" role="group" aria-label="...">
-                        <button ng-click="$ctrl.showFormattingSettings(column)" type="button" class="btn btn-default glyphicon glyphicon-cog"></button>
+                        <button ng-click= "$ctrl.openCogModal(column)" type="button" class="btn btn-default glyphicon glyphicon-cog"></button>
                         <button ng-click="cf.toggleConditionalFormatting(column)" type="button" class="btn btn-default  glyphicon glyphicon-pencil"></button>
                         <button ng-click="column.isChecked=false" type="button" class="btn btn-default glyphicon glyphicon-trash"></button>
                     </div>

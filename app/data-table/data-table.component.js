@@ -93,6 +93,11 @@ angular.module('dataTableModule')
             }
         };
 
+        this.openCogModal = function(col){
+            this.currentFormattingSettingsCol = col;
+            cf.showFormattingSettings(col, 'formattingSettingsModal');
+        }
+
         this.$onChanges = function() {
 
             if (this.searchEnabled === undefined) {

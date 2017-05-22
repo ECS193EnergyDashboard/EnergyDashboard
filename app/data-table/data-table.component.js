@@ -183,7 +183,9 @@ angular.module('dataTableModule')
             this.averages = {};
             this.maxAndMin = {};
             for (var column of this.columnNamesObjs) {
-                var col = rc.getColumn(this.displayed, column.name);
+                var col = this.displayed.map(function(row) {
+                    return row[column.name];
+                });
                 this.sums[column.name] = rc.sum(col);
                 this.averages[column.name] = rc.average(col);
                 this.maxAndMin[column.name] = {

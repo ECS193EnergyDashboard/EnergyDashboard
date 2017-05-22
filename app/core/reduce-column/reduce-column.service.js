@@ -3,16 +3,12 @@ angular.module('core.reduceColumn').
         function() {
             var rc = { };
 
-            rc.getColumn = function(tableData, columnName) {
-                return tableData.map(function(row) {
-                    return row[columnName];
-                }).filter(function(column) {
-                    return column && column.good && column.value;
-                });
+            function isValid(column) {
+                return column && column.good && column.value;
             }
 
             rc.reduce = function(column, func, initialValue) {
-                return column.map(function(c) {
+                return column.filter(isValid).map(function(c) {
                     return c.value;
                 }).reduce(func, initialValue);
             }
@@ -24,28 +20,22 @@ angular.module('core.reduceColumn').
             }
 
             rc.average = function(column) {
-                if (column.length === 0) {
-                    return 0;
-                }
-                return rc.sum(column) / column.length;
+                var good = column.filter(isValid);
+                return good.length === 0 ? 0 : rc.sum(column) / good.length;
             }
 
             rc.min = function(column) {
-                if (column.length === 0) {
-                    return 0;
-                }
-                return rc.reduce(column, function(acc, val) { 
+                result =  rc.reduce(column, function(acc, val) { 
                     return Math.min(acc, val);
                 }, Infinity);
+                return result === Infinity ? 0 : result;
             }
 
             rc.max = function(column) {
-                if (column.length === 0) {
-                    return 0;
-                }
-                return rc.reduce(column, function(acc, val) { 
+                var result = rc.reduce(column, function(acc, val) { 
                     return Math.max(acc, val);
                 }, -Infinity);
+                return result === -Infinity ? 0 : result;
             }
 
             return rc;

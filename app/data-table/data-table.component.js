@@ -17,7 +17,7 @@ angular.module('dataTableModule')
         this.columnNames = [];
         this.columnNamesObjs = [];
         this.maxAndMin = {};
-        this.currentFormattingSettingsCol = {};
+        this.currentFormattingSettingsCol = {};  //Current col for CF settings
         this.showFormattingSettingsButtons = true;
         this.columnWidths = {};
         this.columNumWidths = [];
@@ -249,7 +249,7 @@ angular.module('dataTableModule')
         // Whenever the displayed data is changed, recalculate sum and average of the shown rows only
         $scope.$watch('$ctrl.displayed', function(newValue, oldValue) {
             // if nothing in data remove elms in columnNamesObjs to hide buttons/columns
-            console.log(newValue);
+            //console.log(newValue);
             if(!(angular.isUndefined(newValue)) && newValue.length == 0){
                 self.columnNamesObjs.length = 0;
             }
@@ -262,10 +262,10 @@ angular.module('dataTableModule')
 
 
         this.onColObjUpdate = function(newValue, oldValue){
-            console.log("watch fired");
+            //console.log("watch fired");
             $timeout.cancel(timeoutPromise);  //does nothing, if timeout already done
             timeoutPromise = $timeout(function() {   //Set timeout
-                console.log("timeout fired");
+                //console.log("timeout fired");
 
                 var tableRef = document.getElementById('dataTable');
                 if(tableRef == null){
@@ -317,13 +317,13 @@ angular.module('dataTableModule')
                     }
                 }
                 var headerHeight = document.getElementById('dataTableHead').offsetHeight;
-                console.log('Timeout: header height: '+headerHeight);
+                //console.log('Timeout: header height: '+headerHeight);
                 tableRef.style.top = headerHeight + "px";
 
                 $scope.$apply(function (){
                     tableRef.style.top = headerHeight + "px";
                 });
-                console.log('Timeout: data table top: '+tableRef.style.top)
+                //console.log('Timeout: data table top: '+tableRef.style.top)
             }, delayInMs);
 
             var tableRef = document.getElementById('dataTable');

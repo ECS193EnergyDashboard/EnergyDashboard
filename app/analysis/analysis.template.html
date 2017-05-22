@@ -15,7 +15,7 @@
 
 
 
-
+<!-- Avg, Max, Min StdDev Checkboxes -->
 <div>
     <button class="btn btn-primary" ng-click="$ctrl.startAnalysis()">Start Analysis</button>
     <div>
@@ -30,11 +30,25 @@
 
 <table st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped">
     <thead>
+        <!-- Outer Columns -->
         <tr>
             <th></th>
             <th ng-repeat="outerColumn in $ctrl.outerColumnNames" ng-if="outerColumn.isChecked" lr-drag-src="header" lr-drop-target="header">
                 {{outerColumn.name}}
             </th>
+        </tr>
+
+        <!-- Conditional Formatting Settings Row  -->
+        <tr ng-if="$ctrl.showFormattingSettingsButtons">
+            <!-- 1 blank space for building and name (takes up 1 td) -->
+            <td> </td>
+            <td ng-repeat="column in $ctrl.outerColumnNames" ng-if="column.isChecked">
+                <div class="btn-group-xs" role="group" aria-label="...">
+                    <button ng-click="$ctrl.openCogModal(column)" type="button" class="btn btn-default glyphicon glyphicon-cog"></button>
+                    <button ng-click="cf.toggleConditionalFormatting(column)" type="button" class="btn btn-default  glyphicon glyphicon-pencil"></button>
+                    <button ng-click="column.isChecked=false" type="button" class="btn btn-default glyphicon glyphicon-trash"></button>
+                </div>
+            </td>
         </tr>
     </thead>
     <tbody>
@@ -55,7 +69,7 @@
                         {{innerColumn.name}}
                     </th>
                     <tr ng-repeat="element in $ctrl.displayed">
-                        <td ng-repeat="innerColumn in $ctrl.innerColumnNames" ng-if="innerColumn.isChecked" ng-class="$ctrl.valueStyle(element[outerColumn.name][innerColumn.name])">
+                        <td ng-repeat="innerColumn in $ctrl.innerColumnNames" ng-if="innerColumn.isChecked" ng-class="$ctrl.valueStyle(element[outerColumn.name][innerColumn.name])" ng-style="cf.conditionalFormat(element[outerColumn.name], outerColumn, $ctrl.maxAndMin)">
                             {{$ctrl.formatValue(element[outerColumn.name][innerColumn.name])}}
                         </td>
                     </tr>
@@ -64,3 +78,56 @@
         </tr>
     </tbody>
 </table>
+
+
+<!-- CF Settings Modal -->
+<div ng-class="" class="modal fade formattingSettingsModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Conditional Formatting Settings for Column "{{$ctrl.currentFormattingSettingsCol.name}}"</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="conditionalFormatForm">
+                    <label ng-if="!$ctrl.isUndefined($ctrl.currentFormattingSettingsCol.max)" for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.name}}: (Currently set at {{$ctrl.currentFormattingSettingsCol.max}})</label>
+                    <label ng-if="$ctrl.isUndefined($ctrl.currentFormattingSettingsCol.max)" for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.name}}: </label>
+                    <input class="form-control" id="maxInput" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].max}}">
+
+
+                    <label ng-if="!$ctrl.isUndefined($ctrl.currentFormattingSettingsCol.min)" for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.name}}: (Currently set at {{$ctrl.currentFormattingSettingsCol.min}})</label>
+                    <label ng-if="$ctrl.isUndefined($ctrl.currentFormattingSettingsCol.min)" for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.name}}: </label>
+                    <input class="form-control" id="minInput" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].min}}">
+
+
+                    <label for="maxColor">Color for Max: (Currently set at {{$ctrl.currentFormattingSettingsCol.maxColor}})</label>
+                    <select class="form-control" id="maxColor">
+                <option>Red</option>
+                <option>Blue</option>
+                <option>Green</option>
+                <option>Purple</option>
+            </select>
+
+                    <label for="minColor">Color for Min: (Currently set at {{$ctrl.currentFormattingSettingsCol.minColor}})</label>
+                    <select class="form-control" id="minColor">
+                <option>Blue</option>
+                <option>Red</option>
+                <option>Green</option>
+                <option>Purple</option>
+            </select>
+
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button ng-click="cf.submitFormattingSettings($ctrl.currentFormattingSettingsCol)" type="button" class="btn btn-default" data-dismiss="modal">Save
+        </button>
+
+            </div>
+        </div>
+
+    </div>
+</div>

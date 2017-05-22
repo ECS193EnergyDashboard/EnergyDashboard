@@ -86,10 +86,6 @@ angular.module('columnTemplateDropdownModule')
 
 
             this.$onChanges = function(changes){
-                if(this.isAnalysis == "false"){
-                    console.log("columns ", this.columns);
-                    console.log("CHANGES ", changes);
-                }  
                 if(changes.columns){
 
                     this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns));

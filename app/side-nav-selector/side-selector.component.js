@@ -7,9 +7,10 @@ angular.module('sideNavSelectorModule').component('sideBarSelector', {
         onClear: '&',
         loading: '<',
         onClick: '&',
-        selection: '<'
+        selection: '<',
+        passSelected: '&'
     },
-    controller: [ 'pi', function TableController(pi) {
+    controller: [ '$scope', 'pi', function TableController($scope, pi) {
         var self = this;
         var dummyItem = {
             building: '',
@@ -62,7 +63,14 @@ angular.module('sideNavSelectorModule').component('sideBarSelector', {
                     }
                 }
             }
-        }
+        }   
+
+        
+        $scope.$watch('$ctrl.selected', function(newVal, oldVal){
+            self.passSelected({selected: self.selected});
+        }, true);
+
+
 
     }]
 });

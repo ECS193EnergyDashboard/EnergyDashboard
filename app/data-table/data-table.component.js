@@ -6,7 +6,8 @@ angular.module('dataTableModule').component('datatable', {
         reorderEnabled: '<',
         elemName:       '<',   // passed to columnTemplate component to determine template type
         selection:      '=',
-        api:            '='
+        api:            '=',
+        sideSelectorItems:          '<'
     },
     controller: ['$filter', '$scope', '$timeout', function TableController($filter, $scope, $timeout){
         var self = this;
@@ -20,6 +21,7 @@ angular.module('dataTableModule').component('datatable', {
         this.showFormattingSettingsButtons = true;
         this.columnWidths = {};
         this.columNumWidths = [];
+        this.sideBarSelected = [];
 
 
         this.$onInit = function(){
@@ -105,7 +107,7 @@ angular.module('dataTableModule').component('datatable', {
         };
 
         this.$onChanges = function() {
-            console.log("data-table change!!");
+            console.log("sideSelectorItems", this.sideSelectorItems);
 
             if (this.searchEnabled === undefined) {
                 this.searchEnabled = true;
@@ -170,8 +172,6 @@ angular.module('dataTableModule').component('datatable', {
                     Object.assign(element[name], { parentName: element.name, buildingName: element.building });
                 }
             }
-            console.log("column Name objs", this.columnNamesObjs);
-            console.log("columnsobjects length ", this.columnNamesObjs.length);
 
             this.displayed = this.data = this.tableSrc;
         }; //end $onChanges

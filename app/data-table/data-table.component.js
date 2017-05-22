@@ -9,7 +9,7 @@ angular.module('dataTableModule')
         selection:      '=',
         api:            '='
     },
-    controller: ['$filter', '$scope', '$timeout', 'cf', function TableController($filter, $scope, $timeout, cf) {
+    controller: ['$filter', '$scope', '$timeout', 'conditionalFormatting', function TableController($filter, $scope, $timeout, cf) {
         var self = this;
         this.data = [];
         this.sums = {};

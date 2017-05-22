@@ -1,5 +1,5 @@
-angular.module('core.cf').
-    factory('cf', [
+angular.module('core.conditionalFormatting').
+    factory('conditionalFormatting', [
         function() {
             var cf = {};
 

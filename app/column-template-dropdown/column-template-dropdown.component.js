@@ -21,7 +21,8 @@ angular.module('columnTemplateDropdownModule')
         innerColumns:   '<', // Min, max, avg, st - this is needed for CSV
         updateColObj:   '&', // Output binding to update the table
         dateRange:      '<', // The date range to print on the csv
-        elemName:       '<'  // Element name to determine template type (from side-nav)
+        elemName:       '<',  // Element name to determine template type (from side-nav)
+        sideSelectorItems: '<'
     },
     controller: [
         '$scope', '$http', 'typeFilter',
@@ -35,6 +36,7 @@ angular.module('columnTemplateDropdownModule')
             this.currentTemplate = {};
             this.filteredColumns = [];
 
+            this.piTemplatesInUse = []
 
             this.unalteredCurrentTemplate = {};
 
@@ -45,18 +47,14 @@ angular.module('columnTemplateDropdownModule')
             this.fileName = "Data.csv";
             // an error message for the modal. Always set the error message before showing modal
             this.errorMessage = "";
-            // Determine the type of current element
-            this.curType = "";
-            // Keep track of the prev type
-            this.prevType = "";
+
+
             if(this.elemName === undefined){
                 this.elemName = "";
             }
 
             this.$onInit = function(){
-
-
-                this.determineType();
+                // this.determineType();
             }
 
 
@@ -98,58 +96,75 @@ angular.module('columnTemplateDropdownModule')
                     }
                 }
 
-                this.prevType = this.currentTemplate.type;
-                this.determineType();
-
-                // Get templates from server
+                this.getPiTemplates();
                 this.getTemplates();
 
-                // If we changed type after clicking something
-                if(this.prevType != this.curType){  // do default stuff
-                    // If default doesnt exists yet
-                    if(self.templates.find(self.isDefault) == undefined && self.columns != undefined && self.columns.length > 0){
-                        console.log("Generating default");
-                        self.generateDefault();
-                    }
-                    else{
-                        // Set default when changing types
-                        if(self.currentTemplate.name != "" && self.currentTemplate.type != self.curType){
-                            for(var template of self.templates){
-                                if(template.name == "Default" && template.type == self.curType){
-                                    self.currentTemplate = template;
-                                }
-                            }
+                console.log("sideSelectorItems", this.sideSelectorItems);
+                console.log("current templaes", this.piTemplatesInUse);
+
+
+                // If there is only one thing in there then use the default for the specific template
+                if(this.piTemplatesInUse.length == 1){
+                    console.log(this.templates)
+                    var defaultTemplate;
+                    for(temp of this.templates){
+                        if(temp.type == this.piTemplatesInUse[0] && temp.name == "Default"){
+                            console.log("FOUND DEFAULT");
+                            defaultTemplate = temp;
+                            this.currentTemplate = temp;
                         }
                     }
+                    // If no default template was found need to create it
+                    if(angular.isUndefined(defaultTemplate)){
+                        console.log("Generating default");
+                        self.generateDefault(this.piTemplatesInUse[0]);
+                    }
+
                 }
 
+                // There is more than one pi template.
+                else{
 
-                // User clicked on something of same type
-                else if(this.curType != "" && this.currentTemplate.name != undefined){
-                    // Make template persist
-                    // this.ApplyTemplate(this.currentTemplate);
                 }
+
                 this.updateFiltered();
 
             };
 
-            this.determineType = function(){
-                var regexpAHU = /ahu/gi;
-                var regexpRM = /ahu\d/gi;
-                // Check if name is undef
-                if(this.elemName === undefined){
-                    this.elemName = "";
-                }
-//                console.log("col template elemName: ", this.elemName);
-                if(self.elemName.match(regexpRM)){
-                    self.curType = "room";
-//                    console.log("ROOM TYPE");
-                }
-                else if (self.elemName.match(regexpAHU)) {
-                    self.curType = "ahu";
-//                    console.log("AHU TYPE");
+            this.getPiTemplates = function(){
+                var piTemplates = [];
+                if(!angular.isUndefined(this.sideSelectorItems)){
+                    for(item of this.sideSelectorItems){
+                        if(!piTemplates.includes(item.template))
+                            piTemplates.push(item.template)
+                    }
+                    this.piTemplatesInUse = piTemplates;
+                    // Remove "" from array
+                    for(var i = this.piTemplatesInUse.length - 1; i >= 0; i--) {
+                        if(this.piTemplatesInUse[i] === "") {
+                            this.piTemplatesInUse.splice(i, 1);
+                        }
+                    }
                 }
             };
+
+//             this.determineType = function(){
+//                 var regexpAHU = /ahu/gi;
+//                 var regexpRM = /ahu\d/gi;
+//                 // Check if name is undef
+//                 if(this.elemName === undefined){
+//                     this.elemName = "";
+//                 }
+// //                console.log("col template elemName: ", this.elemName);
+//                 if(self.elemName.match(regexpRM)){
+//                     self.curType = "room";
+// //                    console.log("ROOM TYPE");
+//                 }
+//                 else if (self.elemName.match(regexpAHU)) {
+//                     self.curType = "ahu";
+// //                    console.log("AHU TYPE");
+//                 }
+//             };
 
             this.updateFiltered = function(){
                 if(this.templates.length > 0){
@@ -160,7 +175,7 @@ angular.module('columnTemplateDropdownModule')
 
 
             // Generate default, push it to templates, and post to server
-            this.generateDefault = function(){
+            this.generateDefault = function(piTemplate){
                 // console.log("generating default...");
                 var firstValues = 0;
                 for(var col of self.columns){
@@ -174,10 +189,13 @@ angular.module('columnTemplateDropdownModule')
 
                 // Make clone, otherwise they are same reference
                 var colObjToAdd = JSON.parse(angular.toJson(self.columns));
+                if(colObjToAdd.length == 0){
+                    return;   
+                }
                 var template = {
                     "name": "Default",
                     "colObj": colObjToAdd,
-                    "type": self.curType,
+                    "type": piTemplate,
                     "isDefault": "true"
                 };
                 self.currentTemplate = template;
@@ -206,7 +224,7 @@ angular.module('columnTemplateDropdownModule')
                     self.templates = response.data;
                     self.updateFiltered();
 
-                    self.determineType();
+                    // self.determineType();
 
 
                 }, function errorCallback(response) {

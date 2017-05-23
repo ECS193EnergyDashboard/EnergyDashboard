@@ -106,8 +106,9 @@ angular.module('dataTableModule').component('datatable', {
             }
         };
 
-        this.$onChanges = function() {
-            console.log("sideSelectorItems", this.sideSelectorItems);
+
+
+        this.$onChanges = function(changes) {
 
             if (this.searchEnabled === undefined) {
                 this.searchEnabled = true;

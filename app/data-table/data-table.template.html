@@ -1,7 +1,8 @@
 <!--NOTE: for this we use the  columnNamesObjs however in the actual table we use columnNames -->
 <div class="tableParent">
     <div class="tableMenus">
-        <column-template-dropdown columns="$ctrl.columnNamesObjs" update-col-obj= "$ctrl.updateCol(cols)"  row-data="$ctrl.data" is-analysis="'false'" elem-name="$ctrl.elemName"></column-template-dropdown>
+        <column-template-dropdown columns="$ctrl.columnNamesObjs" update-col-obj= "$ctrl.updateCol(cols)"  row-data="$ctrl.data" is-analysis="'false'" elem-name="$ctrl.elemName"
+        side-selector-items="$ctrl.sideSelectorItems"></column-template-dropdown>
     </div>
 
 <!-- ng-if="$ctrl.columnNamesObjs.length != 0" -->

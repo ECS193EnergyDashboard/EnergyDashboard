@@ -41,6 +41,7 @@ angular.module('columnTemplateDropdownModule')
             this.unalteredCurrentTemplate = {};
 
             this.newTemplateName = "";
+            this.curType == "";
 
 
             // Default file name for downloading to CSV
@@ -82,10 +83,14 @@ angular.module('columnTemplateDropdownModule')
                 }
             }, true);
 
+            $scope.$watch('$ctrl.rowData', function(newVal, oldVal){
+                if(newVal.length == 0)
+                    this.curType == "";
+            }, true);
+
 
             this.$onChanges = function(changes){
                 if(changes.columns){
-
                     this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns));
 
                     if(this.isAnalysis == "true"){
@@ -96,36 +101,53 @@ angular.module('columnTemplateDropdownModule')
                     }
                 }
 
-                this.getPiTemplates();
-                this.getTemplates();
+                if(!angular.isUndefined(this.sideSelectorItems)){
+                    // Check to see if there is no data - if not reset curtemplate
+                    if(this.sideSelectorItems.length == 1 && this.sideSelectorItems[0].building == "dummyItem"){
+                        this.currentTemplate = {};
+                    }
 
-                console.log("sideSelectorItems", this.sideSelectorItems);
-                console.log("current templaes", this.piTemplatesInUse);
+
+                    this.getPiTemplates();
+                    this.getTemplates();
+
+                    console.log("sideSelectorItems", this.sideSelectorItems);
+                    console.log("current templaes", this.piTemplatesInUse);
 
 
-                // If there is only one thing in there then use the default for the specific template
-                if(this.piTemplatesInUse.length == 1){
-                    console.log(this.templates)
-                    var defaultTemplate;
-                    for(temp of this.templates){
-                        if(temp.type == this.piTemplatesInUse[0] && temp.name == "Default"){
-                            console.log("FOUND DEFAULT");
-                            defaultTemplate = temp;
-                            this.currentTemplate = temp;
+                    // If there is only one thing in there then use the default for the specific template
+                    if(angular.equals(this.currentTemplate, {}) && this.sideSelectorItems.length != 0){
+                        if(this.piTemplatesInUse.length == 1){
+                            console.log
+                            var defaultTemplate;
+                            this.curType = this.piTemplatesInUse[0]
+                            for(temp of this.templates){
+                                if(temp.type == this.piTemplatesInUse[0] && temp.name == "Default"){
+                                    console.log("Found default template");
+                                    defaultTemplate = temp;
+                                    this.currentTemplate = temp;
+                                }
+                            }
+                            // If no default template was found need to create it
+                            if(angular.isUndefined(defaultTemplate)){
+                                console.log("Generating default");
+                                self.generateDefault(this.piTemplatesInUse[0]);
+                            }
+
                         }
-                    }
-                    // If no default template was found need to create it
-                    if(angular.isUndefined(defaultTemplate)){
-                        console.log("Generating default");
-                        self.generateDefault(this.piTemplatesInUse[0]);
+
+                        // There is more than one pi template.
+                        else{
+
+                        }
+
+                    } // end if(this.curType)...
+                    else{
+                        console.log("Never", this.currentTemplate);
                     }
 
                 }
 
-                // There is more than one pi template.
-                else{
-
-                }
 
                 this.updateFiltered();
 
@@ -148,23 +170,6 @@ angular.module('columnTemplateDropdownModule')
                 }
             };
 
-//             this.determineType = function(){
-//                 var regexpAHU = /ahu/gi;
-//                 var regexpRM = /ahu\d/gi;
-//                 // Check if name is undef
-//                 if(this.elemName === undefined){
-//                     this.elemName = "";
-//                 }
-// //                console.log("col template elemName: ", this.elemName);
-//                 if(self.elemName.match(regexpRM)){
-//                     self.curType = "room";
-// //                    console.log("ROOM TYPE");
-//                 }
-//                 else if (self.elemName.match(regexpAHU)) {
-//                     self.curType = "ahu";
-// //                    console.log("AHU TYPE");
-//                 }
-//             };
 
             this.updateFiltered = function(){
                 if(this.templates.length > 0){
@@ -199,6 +204,7 @@ angular.module('columnTemplateDropdownModule')
                     "isDefault": "true"
                 };
                 self.currentTemplate = template;
+                self.curType = template.type;
 
                 // Push to templates
                 self.templates.push(template);
@@ -208,18 +214,10 @@ angular.module('columnTemplateDropdownModule')
                 self.postTemplate(template);
             }
 
-            this.isDefault = function(template){
-                if(template.name == "Default" || template.name == "default"){
-                    if(template.isDefault == "true" && template.type == self.curType){
-                        return true;
-                    }
-                }
-                return false;
-            };
 
             this.getTemplates = function(){
                 // Get templates from server
-                $http({method: 'GET', url: '/getTemplates'}).then(function successCallback(response) {
+                $http({method: 'GET', url: '/getTemplates'}).then(function successCallback(response){
                     //console.log("get templates success", response.data);
                     self.templates = response.data;
                     self.updateFiltered();
@@ -431,15 +429,11 @@ angular.module('columnTemplateDropdownModule')
             // Called in html with $ctrl.columns
             this.saveTemplate = function(columnObjs) {
                 if(this.isAnalysis == "true"){
-                    console.log("IS analysis");
                     this.newTemplateName = $(".newTemplateNameAnalysis").val();
                 }
                 else{
                     this.newTemplateName = $(".newTemplateNameData").val();
-                    console.log("is DATA");
-                    // newTemplateName = document.getElementsById("templateNameInput").value;
                 }
-                console.log(this.newTemplateName);
 
                 // Check to make sure template is not named default or name is already taken
                 if(this.newTemplateName == "Default"){

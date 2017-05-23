@@ -13,7 +13,6 @@ angular.module('dashboardModule').component('dashboard',{
         this.chartSelection = [];
         this.elemName = "";
 
-        this.piTemplatesInUse = [];
         this.sideSelectorItems = [];
 
         // Increments and decrements the loading binding, like a semaphore
@@ -79,6 +78,7 @@ angular.module('dashboardModule').component('dashboard',{
                 this.cancelAysnc = true;
                 this.asyncData = [];
             }
+            this.sideSelectorItems = [];
         };
 
         this.showDataTab = function() {

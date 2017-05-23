@@ -13,7 +13,7 @@ angular.module('sideNavSelectorModule').component('sideBarSelector', {
     controller: [ '$scope', 'pi', function TableController($scope, pi) {
         var self = this;
         var dummyItem = {
-            building: '',
+            building: "dummyItem",
             hasChildren: false,
             name: '',
             numId: -1,

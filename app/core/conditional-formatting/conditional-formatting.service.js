@@ -55,7 +55,8 @@ angular.module('core.conditionalFormatting').
              * @param maxAndMin - max and min array
              * @return css style
              */
-            cf.conditionalFormat = function(value, col, maxAndMin){
+            cf.conditionalFormat = function(value, col, maxAndMin, isAnalysis){
+                //console.log("isAnalysis: ", isAnalysis);
                 // Do nothing on bad/undef values
                 if(value == undefined || !value.good || maxAndMin[value.name] == undefined){
                     return {};
@@ -84,7 +85,7 @@ angular.module('core.conditionalFormatting').
                 }
 
                 // Check if user submitted color, if not default to red and blue for max and min respectivly.
-                var maxColor, minColor;
+                var maxColor = cf.red, minColor = cf.blue;
                 if(col.maxColor == "Red"){
                     maxColor = cf.red;
                 }
@@ -110,13 +111,29 @@ angular.module('core.conditionalFormatting').
                 else if(col.minColor == "Purple"){
                     minColor = cf.purple;
                 }
-                cf.colsPoints[value.name] = [
-                    { value: min, color: minColor},
-                    { value: (max+min)/2, color: cf.white },
-                    { value: max, color: maxColor},
-                ]
 
-                var color = gradient(cf.colsPoints[value.name])(value.value);
+
+                var color;
+                if(isAnalysis == 'true')
+                {
+                    cf.colsPoints[col.name][value.name] =  [
+                        { value: min, color: minColor},
+                        { value: (max+min)/2, color: cf.white },
+                        { value: max, color: maxColor},
+                    ];
+
+                    color = gradient(cf.colsPoints[col.name][[value.name]])(value.value);
+                }
+                // Is data table
+                else{
+                    cf.colsPoints[value.name] = [
+                        { value: min, color: minColor},
+                        { value: (max+min)/2, color: cf.white },
+                        { value: max, color: maxColor},
+                    ];
+
+                    color = gradient(cf.colsPoints[col.name])(value.value);
+                }
 
                 var textColor = "white";
                 // Calculate overall intensity of color to determine text color

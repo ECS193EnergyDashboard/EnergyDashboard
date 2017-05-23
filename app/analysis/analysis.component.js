@@ -1,19 +1,20 @@
 angular.module('analysisModule').component('analysis', {
     templateUrl: 'analysis/analysis.template.html',
     bindings: {
-        webIds: '<',
-        elemName: '<', // passed to columnTemplate component to determine template type
+        webIds:      '<',
+        elemName:    '<', // passed to columnTemplate component to determine template type
         onStartLoad: '&',
-        onEndLoad: '&'
+        onEndLoad:   '&'
     },
     controller: ['$filter', '$scope', 'pi', 'conditionalFormatting', 'reduceColumn',
-        function AnalysisController($filter, $scope, pi, cf, rc) {
+        function AnalysisController($filter, $scope, pi, cf, rc) { console.log(cf);
             var self = this;
             this.sums = {};
             this.averages = {};
             this.maxAndMin = {};
             this.currentFormattingSettingsCol = {}; //Current col for CF settings
             this.showFormattingSettingsButtons = true;
+            $scope.cf = cf; //Give html access to cf service
             this.datePicker = {};
             this.datePicker.date = {
                 startDate: moment().startOf('day'),
@@ -221,7 +222,6 @@ angular.module('analysisModule').component('analysis', {
                             min: rc.min(innerStdDev),
                             max: rc.max(innerStdDev)
                         }
-
                     };
                 }
             };

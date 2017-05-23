@@ -69,8 +69,11 @@
                         {{innerColumn.name}}
                     </th>
                     <tr ng-repeat="element in $ctrl.displayed">
-                        <td ng-repeat="innerColumn in $ctrl.innerColumnNames" ng-if="innerColumn.isChecked" ng-class="$ctrl.valueStyle(element[outerColumn.name][innerColumn.name])" ng-style="cf.conditionalFormat(element[outerColumn.name][innerColumn.name], outerColumn, $ctrl.maxAndMin[outerColumn.name])">
-                            {{$ctrl.formatValue(element[outerColumn.name][innerColumn.name])}}
+                        <td ng-repeat="innerColumn in $ctrl.innerColumnNames"
+                            ng-if="innerColumn.isChecked"
+                            ng-class="$ctrl.valueStyle(element[outerColumn.name][innerColumn.name])"
+                            ng-style="cf.conditionalFormat(element[outerColumn.name][innerColumn.name], outerColumn, $ctrl.maxAndMin[outerColumn.name], 'true')">
+                                {{$ctrl.formatValue(element[outerColumn.name][innerColumn.name])}}
                         </td>
                     </tr>
                 </table>

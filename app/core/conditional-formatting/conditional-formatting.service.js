@@ -41,8 +41,6 @@ angular.module('core.conditionalFormatting').
             };*/
 
             cf.submitFormattingSettings = function(col){
-                // maxAndMin[colName.name].max = document.getElementById("maxInput").value;
-                // maxAndMin[colName.name].min = document.getElementById("minInput").value;
                 col.max = document.getElementById("maxInput").value;
                 col.min = document.getElementById("minInput").value;
                 col.maxColor = document.getElementById("maxColor").value;
@@ -50,7 +48,13 @@ angular.module('core.conditionalFormatting').
                 document.getElementById("conditionalFormatForm").reset();
             };
 
-
+            /**
+             * Returns style for conditional formatting
+             * @param value
+             * @param col
+             * @param maxAndMin - max and min array
+             * @return css style
+             */
             cf.conditionalFormat = function(value, col, maxAndMin){
                 // Do nothing on bad/undef values
                 if(value == undefined || !value.good || maxAndMin[value.name] == undefined){

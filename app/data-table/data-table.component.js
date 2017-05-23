@@ -93,6 +93,7 @@ angular.module('dataTableModule')
             }
         };
 
+        // Called in html to open the CF settings modal
         this.openCogModal = function(col){
             this.currentFormattingSettingsCol = col;
             cf.showFormattingSettings(col, 'formattingSettingsModal');

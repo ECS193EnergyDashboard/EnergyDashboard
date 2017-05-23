@@ -1,18 +1,18 @@
 angular.module('analysisModule').component('analysis', {
     templateUrl: 'analysis/analysis.template.html',
     bindings: {
-        webIds:     '<',
-        elemName:   '<', // passed to columnTemplate component to determine template type
-        onStartLoad:'&',
-        onEndLoad:  '&'
+        webIds: '<',
+        elemName: '<', // passed to columnTemplate component to determine template type
+        onStartLoad: '&',
+        onEndLoad: '&'
     },
-    controller: ['$filter', '$scope', 'pi',
-        function AnalysisController($filter,$scope, pi) {
+    controller: ['$filter', '$scope', 'pi', 'conditionalFormatting', 'reduceColumn',
+        function AnalysisController($filter, $scope, pi, cf, rc) {
             var self = this;
             this.sums = {};
             this.averages = {};
             this.maxAndMin = {};
-            this.currentFormattingSettingsCol = {};  //Current col for CF settings
+            this.currentFormattingSettingsCol = {}; //Current col for CF settings
             this.showFormattingSettingsButtons = true;
             this.datePicker = {};
             this.datePicker.date = {
@@ -49,21 +49,19 @@ angular.module('analysisModule').component('analysis', {
             this.data = [];
 
             this.outerColumnNames = [];
-            this.innerColumnNames = [
-                {
-                    name: "Average",
-                    isChecked: true
-                }, {
-                    name: "Maximum",
-                    isChecked: true
-                }, {
-                    name: "Minimum",
-                    isChecked: true
-                }, {
-                    name: "StdDev",
-                    isChecked: true
-                }
-            ];
+            this.innerColumnNames = [{
+                name: "Average",
+                isChecked: true
+            }, {
+                name: "Maximum",
+                isChecked: true
+            }, {
+                name: "Minimum",
+                isChecked: true
+            }, {
+                name: "StdDev",
+                isChecked: true
+            }];
 
             this.startAnalysis = function() {
                 this.onStartLoad();
@@ -127,6 +125,12 @@ angular.module('analysisModule').component('analysis', {
                 }
             };
 
+            // Called in html to open the CF settings modal
+            this.openCogModal = function(col) {
+                this.currentFormattingSettingsCol = col;
+                cf.showFormattingSettings(col, 'formattingSettingsModalAnalysis');
+            }
+
             this.formatValue = function(value) {
                 if (value === undefined) {
                     return "N/A";
@@ -153,7 +157,7 @@ angular.module('analysisModule').component('analysis', {
             }
 
 
-            this.updateCalculations = function() {
+            /*this.updateCalculations = function() {
                 this.sums = {};
                 this.averages = {};
                 this.maxAndMin = {};
@@ -162,51 +166,64 @@ angular.module('analysisModule').component('analysis', {
                     this.averages[column.name] = this.averageColumn(column.name);
                     this.maxAndMin[column.name] = this.maxMinColumn(column.name);
                 }
-            };
+            };*/
 
-            this.sumColumn = function(columnName) {
-                var acc = this.reduceColumn(columnName, { sum: 0 }, function(val, acc) { acc.sum += val; });
-                return acc.sum;
-            };
+            this.updateCalculations = function() {
+                this.sums = {};
+                this.averages = {};
+                this.maxAndMin = {};
+                for (var column of this.outerColumnNames) {
+                    var innerAverages = this.data.map(function(row) {
+                        var avg = {};
+                        if(!angular.isUndefined(row[column.name])){
+                            return row[column.name].Average;
+                        }
+                        return avg;
+                    });
+                    var innerMaxs = this.data.map(function(row) {
+                        var max = {};
+                        if(!angular.isUndefined(row[column.name])){
+                            return row[column.name].Maximum;
+                        }
+                        return max;
+                    });
+                    var innerMins = this.data.map(function(row) {
+                        var min = {};
+                        if(!angular.isUndefined(row[column.name])){
+                            return row[column.name].Minimum;
+                        }
+                        return min;
+                    });
+                    var innerStdDev = this.data.map(function(row) {
+                        var sd = {};
+                        if(!angular.isUndefined(row[column.name])){
+                            return row[column.name].StdDev;
+                        }
+                        return sd;
+                    });
 
-            this.averageColumn = function(columnName) {
-                var acc = this.reduceColumn(columnName, { sum: 0, len: 0 }, function(val, acc) {
-                    acc.sum += val;
-                    acc.len++;
-                });
-                return acc.len > 0 ? acc.sum / acc.len : 0;
-            };
+                    // this.sums[column.name] = rc.sum(col);
+                    // this.averages[column.name] = rc.average(col);
+                    this.maxAndMin[column.name] = {
+                        Average: {
+                            min: rc.min(innerAverages),
+                            max: rc.max(innerAverages)
+                        },
+                        Maximum: {
+                            min: rc.min(innerMaxs),
+                            max: rc.max(innerMaxs)
+                        },
+                        Minimum: {
+                            min: rc.min(innerMins),
+                            max: rc.max(innerMins)
+                        },
+                        StdDev: {
+                            min: rc.min(innerStdDev),
+                            max: rc.max(innerStdDev)
+                        }
 
-            this.maxMinColumn = function(columnName){
-                var acc = this.reduceColumn(columnName, {max: null, min: null}, function(val, acc){
-                    if(acc.max == null){
-                        acc.max = val;
-                    }
-                    else if(val > acc.max){
-                        acc.max = val;
-                    }
-
-                    if(acc.min == null){
-                        acc.min = val;
-                    }
-                    else if(val < acc.min){
-                        acc.min = val;
-                    }
-                });
-                return acc;
-            }
-
-            // For every currently displayed row in column 'columnName', applies the function 'opFunc' to the cell's value and the accumulator object 'accumulator'.
-            // Returns the accumulated value object.
-            this.reduceColumn = function(columnName, accumulator, opFunc) {
-                var a = accumulator;
-                for (var element of this.data) {
-                    var colVal = element[columnName];
-                    if (colVal && colVal.good && colVal.value != undefined) {
-                        opFunc(colVal.value, a);
-                    }
+                    };
                 }
-                return a;
             };
 
             $scope.$watch('$ctrl.data', function(newValue, oldValue) {

@@ -64,7 +64,6 @@ angular.module('columnTemplateDropdownModule')
                 // console.log("Watch");
                 if(angular.equals(self.unalteredCurrentTemplate, newVal.colObj)){
                     if(self.isAnalysis == "true"){
-
                         $('.saveTemplateButtonAnalysis').css({'color': 'green'});
                     }
                     else{
@@ -83,10 +82,6 @@ angular.module('columnTemplateDropdownModule')
                 }
             }, true);
 
-            $scope.$watch('$ctrl.rowData', function(newVal, oldVal){
-                if(newVal.length == 0)
-                    this.curType == "";
-            }, true);
 
 
             this.$onChanges = function(changes){
@@ -111,9 +106,6 @@ angular.module('columnTemplateDropdownModule')
                     this.getPiTemplates();
                     this.getTemplates();
 
-                    console.log("sideSelectorItems", this.sideSelectorItems);
-                    console.log("current templaes", this.piTemplatesInUse);
-
 
                     // If there is only one thing in there then use the default for the specific template
                     if(angular.equals(this.currentTemplate, {}) && this.sideSelectorItems.length != 0){
@@ -125,7 +117,7 @@ angular.module('columnTemplateDropdownModule')
                                 if(temp.type == this.piTemplatesInUse[0] && temp.name == "Default"){
                                     console.log("Found default template");
                                     defaultTemplate = temp;
-                                    this.currentTemplate = temp;
+                                    this.ApplyTemplate(temp);
                                 }
                             }
                             // If no default template was found need to create it
@@ -134,19 +126,25 @@ angular.module('columnTemplateDropdownModule')
                                 self.generateDefault(this.piTemplatesInUse[0]);
                             }
 
-                        }
 
+
+                        }
                         // There is more than one pi template.
                         else{
+
 
                         }
 
                     } // end if(this.curType)...
-                    else{
-                        console.log("Never", this.currentTemplate);
-                    }
 
                 }
+
+                    if(this.isAnalysis == "true"){
+                        $('.saveTemplateButtonAnalysis').css({'color': 'green'});
+                    }
+                    else{
+                        $('.saveTemplateButtonData').css({'color': 'green'});
+                    }
 
 
                 this.updateFiltered();
@@ -201,7 +199,8 @@ angular.module('columnTemplateDropdownModule')
                     "name": "Default",
                     "colObj": colObjToAdd,
                     "type": piTemplate,
-                    "isDefault": "true"
+                    "isDefault": "true",
+                    // "test": {"t1":'x', 't2': 'y'}
                 };
                 self.currentTemplate = template;
                 self.curType = template.type;

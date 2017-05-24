@@ -168,7 +168,6 @@ angular.module('columnTemplateDropdownModule')
                     "colObj": this.columns,
                     "type": "",
                     "isDefault": "true",
-                    // "test": {"t1":'x', 't2': 'y'}
                 };
 
                 // this.currentTemplate = template; 
@@ -196,9 +195,7 @@ angular.module('columnTemplateDropdownModule')
 
 
             this.updateFiltered = function(){
-                if(this.templates.length > 0){
-                    this.filteredTemplates = typeFilter(this.templates, self.piTemplatesInUse);
-                }
+                this.filteredTemplates = typeFilter(this.templates, self.piTemplatesInUse);
             }
 
 
@@ -245,6 +242,7 @@ angular.module('columnTemplateDropdownModule')
                 $http({method: 'GET', url: '/getTemplates'}).then(function successCallback(response){
                     //console.log("get templates success", response.data);
                     self.templates = response.data;
+                    console.log("updating filtered");
                     self.updateFiltered();
 
                     // self.determineType();
@@ -530,13 +528,12 @@ angular.module('columnTemplateDropdownModule')
                 this.updateColObj({cols: template.colObj});  //output binding
                 $('.menuDropdown.open').removeClass('open'); // close dropdown if it is open
                 this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns));
-
+                this.getTemplates();
                 if(this.isAnalysis == "true"){
                     $('.saveTemplateButtonAnalysis').css({'color': 'green'});
                 }
                 else{
                     $('.saveTemplateButtonData').css({'color': 'green'});
-                    console.log("setting green");
                 }
 
 
@@ -556,13 +553,18 @@ angular.module('columnTemplateDropdownModule')
                     // Update templates
                     self.getTemplates();
 
-                    // Update currentTemplate
-                    for(var template of self.templates){
-                        // Is default of current type
-                        if(template.name == "Default" && template.isDefault == "true" && template.type == self.curType){
-                            self.currentTemplate = template;
-                        }
+                    // Apply default template
+                    // for(var template of self.templates){
+                    //     // Is default of current type
+                    //     if(template.name == "Default" && template.isDefault == "true" && template.type == self.curType){
+                    //         self.currentTemplate = template;
+                    //     }
+                    // }
+                    if(self.templates.length == 1){
+                        console.log("true");
+                        self.templates = [];
                     }
+                    self.restoreDefault();
                     console.log("POST Templates Success");
                     document.getElementById("templateInput").value = "";
                 }, function errorCallback(response) {

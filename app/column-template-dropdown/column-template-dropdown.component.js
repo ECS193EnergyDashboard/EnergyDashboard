@@ -1,11 +1,12 @@
 angular.module('columnTemplateDropdownModule')
     .filter('type', function(){
-        return function(templates, type){
+        return function(templates, types){
             var filteredTemplates = [];
-            for(var template of templates)
-            {
-                if(template.type == type){
-                    filteredTemplates.push(template);
+            for(var template of templates){
+                for(piTemplate of template.type){
+                    if(types.includes(piTemplate) && !(filteredTemplates.includes(template) )){
+                        filteredTemplates.push(template);
+                    }
                 }
             }
             return filteredTemplates;
@@ -196,7 +197,7 @@ angular.module('columnTemplateDropdownModule')
 
             this.updateFiltered = function(){
                 if(this.templates.length > 0){
-                    this.filteredTemplates = typeFilter(this.templates, self.curType);
+                    this.filteredTemplates = typeFilter(this.templates, self.piTemplatesInUse);
                 }
             }
 
@@ -461,7 +462,10 @@ angular.module('columnTemplateDropdownModule')
 
                 // Check to make sure template is not named default or name is already taken
                 if(this.newTemplateName == "Default"){
-                    this.ShowSaveDefaultModal();
+
+                    this.errorMessage = "You can not save over the default template";
+                    this.ShowErrorModal();
+                    // this.ShowSaveDefaultModal();
                     return;
                 }
                 if(this.newTemplateName == ""){
@@ -471,7 +475,7 @@ angular.module('columnTemplateDropdownModule')
                 }
                 for(templ of this.templates){
                     // New template name already exists and its type is the current type
-                    if(this.newTemplateName == templ.name && templ.type == self.curType){
+                    if(this.newTemplateName == templ.name){
                         this.ShowSaveAsModal();
                         return;
                     }
@@ -482,7 +486,7 @@ angular.module('columnTemplateDropdownModule')
                 var template = {
                     "name": this.newTemplateName,
                     "colObj": colObjToAdd,
-                    "type": this.curType,
+                    "type": this.piTemplatesInUse,
                     "isDefault": "false"
                 };
                 this.templates.push(template);
@@ -516,6 +520,7 @@ angular.module('columnTemplateDropdownModule')
                     console.error("POST templates Failed ", response);
                 });
             }
+
 
             // A function to apply a template to the data table
             this.ApplyTemplate = function(template){

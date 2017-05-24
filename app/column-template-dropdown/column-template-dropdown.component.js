@@ -108,8 +108,13 @@ angular.module('columnTemplateDropdownModule')
                     this.getTemplates();
 
                     if(angular.equals(this.currentTemplate, {}) || angular.isUndefined(this.currentTemplate)){
-                        console.log("setting default");
-                        this.restoreDefault();
+                        if(this.rowData.length != 0){
+                            this.restoreDefault();
+                            console.log("restoring default");
+                        }
+                    }
+                    else if(currentTemplate.name == "Default"){
+                        console.log("current temp", this.currentTemplate);
                     }
 
 
@@ -160,6 +165,7 @@ angular.module('columnTemplateDropdownModule')
                     else{
                         col.isChecked = false;
                     }
+                    count++;
                 }
 
                 // Dummy template
@@ -488,7 +494,6 @@ angular.module('columnTemplateDropdownModule')
                     "isDefault": "false"
                 };
                 this.templates.push(template);
-                this.updateFiltered();
 
                 this.postTemplate(template);
                 $("#templateInput").val(''); // clear the inputbox
@@ -534,8 +539,8 @@ angular.module('columnTemplateDropdownModule')
                 }
                 else{
                     $('.saveTemplateButtonData').css({'color': 'green'});
+                    console.log("making green");
                 }
-
 
             };
 
@@ -582,7 +587,7 @@ angular.module('columnTemplateDropdownModule')
                 // Find template by name and type
                 for(template of self.templates){
                     // Is default of current type
-                    if(template.name == overWriteTemplateName && template.type == self.curType){
+                    if(template.name == overWriteTemplateName){
                         break;
                     }
                 }
@@ -600,12 +605,6 @@ angular.module('columnTemplateDropdownModule')
                 // Close both modals
                 $(".saveModalData").modal('hide');
                 $(".saveModalAnalysis").modal('hide');
-
-                if(this.isAnalysis == "true")
-                    $('.saveTemplateButtonAnalysis').css({'color': 'green'});
-                else{
-                    $('.saveTemplateButtonData').css({'color': 'green'});
-                }
 
                 this.getTemplates();
                 // console.log(this.templates);

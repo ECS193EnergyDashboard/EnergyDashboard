@@ -46,7 +46,7 @@
                 <td ng-repeat="column in $ctrl.columnNamesObjs"
                     ng-if="column.isChecked"
                     ng-class="$ctrl.valueStyle(element[column.name])"
-                    ng-style="cf.conditionalFormat(element[column.name], column, $ctrl.maxAndMin, 'false')" 
+                    ng-style="cf.conditionalFormat(element[column.name], column, $ctrl.maxAndMin, 'false')"
                     ng-click="$ctrl.toggleCellSelected(element[column.name])">
                         {{$ctrl.formatValue(element[column.name])}}
                 </td>
@@ -116,7 +116,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button ng-click="cf.submitFormattingSettings($ctrl.currentFormattingSettingsCol)" type="button" class="btn btn-default" data-dismiss="modal">Save
+                    <button ng-click="$ctrl.submitFormattingSettings($ctrl.currentFormattingSettingsCol)" type="button" class="btn btn-default" data-dismiss="modal">Save
             </button>
 
                 </div>

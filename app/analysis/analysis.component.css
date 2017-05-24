@@ -24,3 +24,6 @@
     top: 20%;
     padding-left: 2%;
 }
+.inline-div{
+    display: inline-flex;
+}

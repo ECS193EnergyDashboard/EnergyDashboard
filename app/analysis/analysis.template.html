@@ -38,25 +38,19 @@
             </th>
         </tr>
 
-        <!-- Conditional Formatting Settings Row  -->
-        <tr ng-if="$ctrl.showFormattingSettingsButtons">
-            <!-- 1 blank space for building and name (takes up 1 td) -->
-            <td> </td>
-            <td ng-repeat="column in $ctrl.outerColumnNames" ng-if="column.isChecked">
-                <div class="btn-group-xs" role="group" aria-label="...">
-                    <button ng-click="$ctrl.openCogModal(column)" type="button" class="btn btn-default glyphicon glyphicon-cog"></button>
-                    <button ng-click="cf.toggleConditionalFormatting(column)" type="button" class="btn btn-default  glyphicon glyphicon-pencil"></button>
-                    <button ng-click="column.isChecked=false" type="button" class="btn btn-default glyphicon glyphicon-trash"></button>
-                </div>
-            </td>
-        </tr>
+
     </thead>
     <tbody>
         <tr>
             <td>
                 <table class="table table-striped">
-                    <th st-sort="name">Name</th>
-                    <th st-sort="building">Building</th>
+                    <thead>
+                        <tr>
+                            <th st-sort="name">Name</th>
+                            <th st-sort="building">Building</th>
+                        </tr>
+                    </thead>
+                    <tr><td><br/></td></tr>
                     <tr ng-repeat="element in $ctrl.displayed">
                         <td>{{element.name}}</td>
                         <td>{{element.building}}</td>
@@ -68,7 +62,19 @@
                     <th ng-repeat="innerColumn in $ctrl.innerColumnNames" ng-if="innerColumn.isChecked" st-sort="$ctrl.getters.value.bind(null, outerColumn.name, innerColumn.name)">
                         {{innerColumn.name}}
                     </th>
+                    <!-- Conditional Formatting Settings Row  -->
+                    <tr ng-if="$ctrl.showFormattingSettingsButtons">
+                        <td ng-repeat="innerColumn in $ctrl.innerColumnNames" ng-if="innerColumn.isChecked">
+                            <div class="btn-group-xs inline-div" role="group" aria-label="...">
+                                <button ng-click="$ctrl.openCogModal(outerColumn, innerColumn)" type="button" class="btn btn-default glyphicon glyphicon-cog"></button>
+                                <button ng-click="cf.toggleConditionalFormatting(outerColumn)" type="button" class="btn btn-default  glyphicon glyphicon-pencil"></button>
+                                <button ng-click="outerColumn.isChecked=false" type="button" class="btn btn-default glyphicon glyphicon-trash"></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- For each AHU01, AHU02 ... -->
                     <tr ng-repeat="element in $ctrl.displayed">
+                        <!-- For each "sensor" -->
                         <td ng-repeat="innerColumn in $ctrl.innerColumnNames"
                             ng-if="innerColumn.isChecked"
                             ng-class="$ctrl.valueStyle(element[outerColumn.name][innerColumn.name])"
@@ -126,7 +132,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button ng-click="cf.submitFormattingSettings($ctrl.currentFormattingSettingsCol)" type="button" class="btn btn-default" data-dismiss="modal">Save
+                <button ng-click="$ctrl.submitFormattingSettings($ctrl.currentFormattingSettingsCol)" type="button" class="btn btn-default" data-dismiss="modal">Save
         </button>
 
             </div>

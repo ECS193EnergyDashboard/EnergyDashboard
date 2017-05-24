@@ -127,17 +127,19 @@ angular.module('analysisModule').component('analysis', {
             };
 
             // Called in html to open the CF settings modal
-            this.openCogModal = function(col) {
-                this.currentFormattingSettingsCol = col;
-                cf.showFormattingSettings(col, 'formattingSettingsModalAnalysis');
+            this.openCogModal = function(outerCol, innerCol) {
+                this.currentFormattingSettingsCol = outerCol;
+                this.currentFormattingSettingsCol.currInner = innerCol;
+                cf.showFormattingSettings(outerCol, 'formattingSettingsModalAnalysis');
             }
 
             // Called in html to apply the CF settings
-            this.submitFormattingSettings = function(col){
-                col.max = document.getElementById("maxInputAnalysis").value;
-                col.min = document.getElementById("minInputAnalysis").value;
-                col.maxColor = document.getElementById("maxColorAnalysis").value;
-                col.minColor = document.getElementById("minColorAnalysis").value;
+            this.submitFormattingSettings = function(outerCol){
+                outerCol[outerCol.currInner.name] = {};
+                outerCol[outerCol.currInner.name].max = document.getElementById("maxInputAnalysis").value;
+                outerCol[outerCol.currInner.name].min = document.getElementById("minInputAnalysis").value;
+                outerCol[outerCol.currInner.name].maxColor = document.getElementById("maxColorAnalysis").value;
+                outerCol[outerCol.currInner.name].minColor = document.getElementById("minColorAnalysis").value;
                 document.getElementById("conditionalFormatFormAnalysis").reset();
             };
 

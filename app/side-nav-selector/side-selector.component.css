@@ -77,7 +77,7 @@
     width: 0;
     height: 100%;
     margin-left: -250px;
-    /* overflow-y: auto;*/
+    overflow-y: hidden;
     background: white;
     /* Closing animation */
     -webkit-transition: all 2s ease;
@@ -97,10 +97,6 @@
 
 /* Sidebar Styles */
 
-.sidebar-item {
-    cursor: pointer;
-    z-index: 2;
-}
 
 #side-bar-selector .list-group.list-group-root {
     padding: 1px;
@@ -134,36 +130,6 @@
     }
 }
 
-/*-----------For hierarchy----------*/
-.just-padding {
-    padding: 0;
-    height: 100%;
-}
-
-.list-group .list-group{
-    padding-left: 20px;
-    margin-bottom: 20px;
-}
-
-.sidebar-item .list-group-item{
-    display: flex;
-}
-
-.selectorItem {
-    padding-top: 0;
-    padding-bottom: 0;
-    cursor: default;
-}
-
-.selectorItem:hover{
-    background-color: white;
-}
-
-.pointer{
-    display: inline-block;
-    cursor: pointer;
-    vertical-align: top;
-}
 
 #buildingName {
     margin-bottom: 0;

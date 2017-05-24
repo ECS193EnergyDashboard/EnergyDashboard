@@ -5,9 +5,7 @@
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
  */
 
- body {
-    /*overflow-x: hidden;*/
- }
+/* {padding:10px}
 
 /* Toggle Styles */
 
@@ -24,6 +22,7 @@
 .fixedButtons{
    overflow: hidden;
     flex-shrink: 0;
+    border-bottom: 2px solid #e4e2e2;
 }
 .fixedButtons .form-group{
     overflow: hidden;
@@ -38,6 +37,24 @@
 
 .fixedButtons .btn {
     flex: 1;
+    border-radius: 0px;
+    margin-bottom: 1px;
+}
+.fixedButtons input {
+    border-radius: 0px;
+}
+
+#inside {
+    display: flex;
+    flex-direction: column;
+    flex: 30 1;
+    overflow: hidden;
+}
+#sidebar-border{
+    flex: 1 1;
+    background-color: white;
+    border-right: 1px solid #dadada;
+    border-left: 1px solid #dadada;
 }
 
 #wrapper {
@@ -62,7 +79,7 @@
     width: 0;
     flex-grow: 1;
     overflow-y: auto;
-    background: white;
+    background: rgb(231, 237, 241);
     /* Closing animation */
     -webkit-transition: all 2s ease;
     -moz-transition: all 2s ease;
@@ -70,12 +87,34 @@
     transition: all 2s ease;
 }
 
+
 #sidebar-wrapper .btn-group {
     display: flex;
 }
 #sidebar-wrapper .btn-group .btn{
     flex: 1;
 }
+#sidebar-wrapper .well {
+    background-color: inherit;
+    background-image: inherit;
+    overflow: visible;
+}
+
+#sidebar-wrapper .glyphicon-triangle-right {
+    font-size: .8em;
+    color: gray;
+    vertical-align: text-top;
+}
+#sidebar-wrapper .glyphicon-triangle-bottom {
+    font-size: .8em;
+    color: gray;
+    vertical-align: text-top;
+}
+
+#sidebar-wrapper .glyphicon-asterisk {
+    opacity: 0;
+}
+
 
 #wrapper.toggled #sidebar-wrapper {
     width: 100%;
@@ -107,10 +146,15 @@
 
 .sidebar-item {
     cursor: pointer;
+    z-index: 2;
+    white-space: nowrap;
+    background-color: inherit;
 }
 
 .sidebar-item:hover {
-    background-color: #5bc0de;
+    background-color: rgb(156, 233, 241);
+    outline: 2px solid #42899e;
+    margin-bottom: 2px;
 }
 
 .sidebar-nav {
@@ -188,7 +232,10 @@
 
 /*-----------For hierarchy----------*/
 .just-padding {
-  padding: 0;
+    padding: 0;
+    height:100%;
+    position: absolute;
+    width: 100%;
 }
 
 .list-group .list-group{
@@ -200,10 +247,12 @@
     padding: 1px;
     padding-bottom: 0px;
     border: none;
-    overflow-x: hidden;
-    overflow-y: auto;
     flex: 1 1;
     margin-bottom: 0;
+}
+#sidebar-wrapper .list-group {
+    box-shadow: none;
+    border-left: 1px inset rgba(128, 128, 128, 0.12);
 }
 
 /* Applies when item is selected and not loading */

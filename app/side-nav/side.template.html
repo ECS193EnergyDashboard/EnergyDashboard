@@ -1,4 +1,5 @@
 <!-- Sidebar -->
+<div id="inside">
 <div class="fixedButtons">
     <div class="btn-group" role="group" aria-label="...">
         <button ng-click="$ctrl.searchNames()" type="button" class="btn btn-default glyphicon glyphicon-home"></button>
@@ -21,9 +22,14 @@
         <div class="list-group list-group-root well" >
             <div dummy="$ctrl.search.name.length" index="$index" custom-drag-src-safe="side-selector" ng-repeat="element in $ctrl.filteredItems" >
                 <div ng-click="$ctrl.clickedItem(element);$event.stopPropagation()"  ng-dblclick="$ctrl.dblClickedItem(element);$event.stopPropagation()" class="sidebar-item list-group-item" ng-class="{selected: $ctrl.isSelectedElem(element), loading: $ctrl.elemIsLoading(element)}" >
-                    <span ng-show="$ctrl.showClosedIcon(element)" class="glyphicon glyphicon-chevron-right pointer" ng-click="$ctrl.clickElem(element);$event.stopPropagation()"></span>
-                    <span ng-show="$ctrl.showOpenIcon(element)" class="glyphicon glyphicon-chevron-down pointer" ng-click="$ctrl.clickElem(element);$event.stopPropagation()"></span>
+
+                    <span ng-show="$ctrl.showClosedIcon(element)" class="glyphicon glyphicon-triangle-right pointer" ng-click="$ctrl.clickElem(element);$event.stopPropagation()"></span>
+                    <span ng-show="$ctrl.showOpenIcon(element)" class="glyphicon glyphicon-triangle-bottom pointer" ng-click="$ctrl.clickElem(element);$event.stopPropagation()"></span>
+                    <span ng-show="$ctrl.showLeafNodeIcon(element)" class="glyphicon glyphicon-asterisk" ></span>
                     <span ng-show="$ctrl.showLeafNodeIcon(element)" class="glyphicon glyphicon-modal-window" ></span>
+
+                    <span ng-show="!$ctrl.showLeafNodeIcon(element) && $ctrl.showClosedIcon(element)" class="glyphicon glyphicon glyphicon-folder-close" ></span>
+                    <span ng-show="!$ctrl.showLeafNodeIcon(element) && $ctrl.showOpenIcon(element)" class="glyphicon glyphicon glyphicon-folder-open" ></span>
                     <span class="">{{element.name}} </span>
                 </div>
                 <div class="list-group" ng-include="'side-nav/side-heirarchy-template.html'" ng-if="element.show">
@@ -34,5 +40,9 @@
         </div>
 
     </div>
+</div>
+</div>
+<div id="sidebar-border" ng-click="$ctrl.toggleMenu()">
+
 </div>
 <!-- /#sidebar-wrapper -->

@@ -206,5 +206,9 @@ angular.module('sideNavModule').component('sideBar', {
             return self.loadingElems;
         };
 
+        this.toggleMenu = function(){
+            $("#wrapper").toggleClass("toggled");
+        };
+
     }]
 });

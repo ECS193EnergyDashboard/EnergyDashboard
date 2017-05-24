@@ -27,9 +27,7 @@ angular.module('core.conditionalFormatting').
                 return angular.isUndefined(thing);
             }
 
-            cf.toggleConditionalFormatting = function(col){
-                col.showConditionalFormat = !col.showConditionalFormat;
-            };
+
 
             cf.showFormattingSettings = function(col, modalClass){
                 $("."+ modalClass).modal();
@@ -49,8 +47,12 @@ angular.module('core.conditionalFormatting').
                     return {};
                 }
 
-                // Remove conditional formatting
+                // Remove conditional formatting for data tab
                 if(col.showConditionalFormat == false){
+                    return {"background-color": "white"}
+                }
+                // Remove conditional formatting for analysis tab
+                if(!angular.isUndefined(col[value.name]) && col[value.name].showConditionalFormat == false){
                     return {"background-color": "white"}
                 }
                 // Check is there is a user submitted max and min else use the max/ min of current data.

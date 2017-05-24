@@ -7,7 +7,7 @@ angular.module('analysisModule').component('analysis', {
         onEndLoad:   '&'
     },
     controller: ['$filter', '$scope', 'pi', 'conditionalFormatting', 'reduceColumn',
-        function AnalysisController($filter, $scope, pi, cf, rc) { console.log(cf);
+        function AnalysisController($filter, $scope, pi, cf, rc) {
             var self = this;
             this.sums = {};
             this.averages = {};
@@ -114,7 +114,17 @@ angular.module('analysisModule').component('analysis', {
                     }
 
                     self.outerColumnNames = colNames;
-                    console.log(self.outerColumnNames);
+
+                    // Give outerColumnNames some inner cols with default vals
+                    self.outerColumnNames.forEach(function(currOuter, index, array){
+                        self.innerColumnNames.forEach(function(currInner, indexInner, array){
+                            if(currOuter[currInner.name] == undefined){
+                                currOuter[currInner.name] = {};
+                            }
+                            // Set conditionalFormatting to true initially
+                            cf.init(currOuter[currInner.name]);
+                        })
+                    })
 
                     self.onEndLoad();
                 });
@@ -132,6 +142,11 @@ angular.module('analysisModule').component('analysis', {
                 this.currentFormattingSettingsCol.currInner = innerCol;
                 cf.showFormattingSettings(outerCol, 'formattingSettingsModalAnalysis');
             }
+
+            // Called in html to toggle CF
+            this.toggleConditionalFormatting = function(outerCol, innerCol){
+                outerCol[innerCol.name].showConditionalFormat = !outerCol[innerCol.name].showConditionalFormat;
+            };
 
             // Called in html to apply the CF settings
             this.submitFormattingSettings = function(outerCol){
@@ -167,18 +182,6 @@ angular.module('analysisModule').component('analysis', {
             this.updateCol = function(cols) {
                 this.outerColumnNames = cols;
             }
-
-
-            /*this.updateCalculations = function() {
-                this.sums = {};
-                this.averages = {};
-                this.maxAndMin = {};
-                for (var column of this.data) {
-                    this.sums[column.name] = this.sumColumn(column.name);
-                    this.averages[column.name] = this.averageColumn(column.name);
-                    this.maxAndMin[column.name] = this.maxMinColumn(column.name);
-                }
-            };*/
 
             this.updateCalculations = function() {
                 this.sums = {};

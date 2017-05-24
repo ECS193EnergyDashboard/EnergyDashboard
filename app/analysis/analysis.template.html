@@ -67,8 +67,8 @@
                         <td ng-repeat="innerColumn in $ctrl.innerColumnNames" ng-if="innerColumn.isChecked">
                             <div class="btn-group-xs inline-div" role="group" aria-label="...">
                                 <button ng-click="$ctrl.openCogModal(outerColumn, innerColumn)" type="button" class="btn btn-default glyphicon glyphicon-cog"></button>
-                                <button ng-click="cf.toggleConditionalFormatting(outerColumn)" type="button" class="btn btn-default  glyphicon glyphicon-pencil"></button>
-                                <button ng-click="outerColumn.isChecked=false" type="button" class="btn btn-default glyphicon glyphicon-trash"></button>
+                                <button ng-click="$ctrl.toggleConditionalFormatting(outerColumn, innerColumn)" type="button" class="btn btn-default  glyphicon glyphicon-pencil"></button>
+                                <!-- <button ng-click="outerColumn.isChecked=false" type="button" class="btn btn-default glyphicon glyphicon-trash"></button>  -->
                             </div>
                         </td>
                     </tr>

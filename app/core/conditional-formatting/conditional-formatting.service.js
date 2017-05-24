@@ -35,24 +35,11 @@ angular.module('core.conditionalFormatting').
                 $("."+ modalClass).modal();
             };
 
-            /*cf.showHideSettingsButtons = function(){
-                cf.showFormattingSettingsButtons = !cf.showFormattingSettingsButtons;
-                //console.log(cf.showFormattingSettingsButtons);
-            };*/
-
-            cf.submitFormattingSettings = function(col){
-                col.max = document.getElementById("maxInput").value;
-                col.min = document.getElementById("minInput").value;
-                col.maxColor = document.getElementById("maxColor").value;
-                col.minColor = document.getElementById("minColor").value;
-                document.getElementById("conditionalFormatForm").reset();
-            };
-
             /**
              * Returns style for conditional formatting
-             * @param value
-             * @param col
-             * @param maxAndMin - max and min array
+             * @param value - numeric value used to determine color
+             * @param col - column that the value is part of
+             * @param maxAndMin - max and min array containing col
              * @return css style
              */
             cf.conditionalFormat = function(value, col, maxAndMin, isAnalysis){

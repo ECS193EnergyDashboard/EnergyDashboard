@@ -132,6 +132,15 @@ angular.module('analysisModule').component('analysis', {
                 cf.showFormattingSettings(col, 'formattingSettingsModalAnalysis');
             }
 
+            // Called in html to apply the CF settings
+            this.submitFormattingSettings = function(col){
+                col.max = document.getElementById("maxInputAnalysis").value;
+                col.min = document.getElementById("minInputAnalysis").value;
+                col.maxColor = document.getElementById("maxColorAnalysis").value;
+                col.minColor = document.getElementById("minColorAnalysis").value;
+                document.getElementById("conditionalFormatFormAnalysis").reset();
+            };
+
             this.formatValue = function(value) {
                 if (value === undefined) {
                     return "N/A";

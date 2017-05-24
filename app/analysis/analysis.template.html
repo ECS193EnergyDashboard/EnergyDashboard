@@ -83,7 +83,7 @@
 </table>
 
 
-<!-- CF Settings Modal -->
+<!-- Conditional Formatting Settings Modal (cog button)-->
 <div ng-class="" class="modal fade formattingSettingsModalAnalysis" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
@@ -93,19 +93,19 @@
                 <h4 class="modal-title">Conditional Formatting Settings for Column "{{$ctrl.currentFormattingSettingsCol.name}}"</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" id="conditionalFormatForm">
-                    <label ng-if="!$ctrl.isUndefined($ctrl.currentFormattingSettingsCol.max)" for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.name}}: (Currently set at {{$ctrl.currentFormattingSettingsCol.max}})</label>
-                    <label ng-if="$ctrl.isUndefined($ctrl.currentFormattingSettingsCol.max)" for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.name}}: </label>
-                    <input class="form-control" id="maxInput" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].max}}">
+                <form class="form-horizontal" id="conditionalFormatFormAnalysis">
+                    <label ng-if="!cf.isUndefined($ctrl.currentFormattingSettingsCol.max)" for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.name}}: (Currently set at {{$ctrl.currentFormattingSettingsCol.max}})</label>
+                    <label ng-if="cf.isUndefined($ctrl.currentFormattingSettingsCol.max)" for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.name}}: </label>
+                    <input class="form-control" id="maxInputAnalysis" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].max}}">
 
 
-                    <label ng-if="!$ctrl.isUndefined($ctrl.currentFormattingSettingsCol.min)" for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.name}}: (Currently set at {{$ctrl.currentFormattingSettingsCol.min}})</label>
-                    <label ng-if="$ctrl.isUndefined($ctrl.currentFormattingSettingsCol.min)" for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.name}}: </label>
-                    <input class="form-control" id="minInput" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].min}}">
+                    <label ng-if="!cf.isUndefined($ctrl.currentFormattingSettingsCol.min)" for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.name}}: (Currently set at {{$ctrl.currentFormattingSettingsCol.min}})</label>
+                    <label ng-if="cf.isUndefined($ctrl.currentFormattingSettingsCol.min)" for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.name}}: </label>
+                    <input class="form-control" id="minInputAnalysis" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].min}}">
 
 
                     <label for="maxColor">Color for Max: (Currently set at {{$ctrl.currentFormattingSettingsCol.maxColor}})</label>
-                    <select class="form-control" id="maxColor">
+                    <select class="form-control" id="maxColorAnalysis">
                 <option>Red</option>
                 <option>Blue</option>
                 <option>Green</option>
@@ -113,7 +113,7 @@
             </select>
 
                     <label for="minColor">Color for Min: (Currently set at {{$ctrl.currentFormattingSettingsCol.minColor}})</label>
-                    <select class="form-control" id="minColor">
+                    <select class="form-control" id="minColorAnalysis">
                 <option>Blue</option>
                 <option>Red</option>
                 <option>Green</option>

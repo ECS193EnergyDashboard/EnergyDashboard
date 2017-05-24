@@ -99,6 +99,15 @@ angular.module('dataTableModule')
             cf.showFormattingSettings(col, 'formattingSettingsModal');
         }
 
+        // Called in html to apply the CF settings
+        this.submitFormattingSettings = function(col){
+            col.max = document.getElementById("maxInput").value;
+            col.min = document.getElementById("minInput").value;
+            col.maxColor = document.getElementById("maxColor").value;
+            col.minColor = document.getElementById("minColor").value;
+            document.getElementById("conditionalFormatForm").reset();
+        };
+
         this.$onChanges = function() {
 
             if (this.searchEnabled === undefined) {

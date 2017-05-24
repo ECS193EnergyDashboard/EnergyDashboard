@@ -85,16 +85,16 @@ angular.module('columnTemplateDropdownModule')
 
 
             this.$onChanges = function(changes){
-                if(changes.columns){
-                    this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns));
+                // if(changes.columns){
+                //     this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns));
 
-                    if(this.isAnalysis == "true"){
-                        $('.saveTemplateButtonAnalysis').css({'color': 'green'});
-                    }
-                    else{
-                        $('.saveTemplateButtonData').css({'color': 'green'});
-                    }
-                }
+                //     if(this.isAnalysis == "true"){
+                //         $('.saveTemplateButtonAnalysis').css({'color': 'green'});
+                //     }
+                //     else{
+                //         $('.saveTemplateButtonData').css({'color': 'green'});
+                //     }
+                // }
 
                 if(!angular.isUndefined(this.sideSelectorItems)){
                     // Check to see if there is no data - if not reset curtemplate
@@ -106,50 +106,75 @@ angular.module('columnTemplateDropdownModule')
                     this.getPiTemplates();
                     this.getTemplates();
 
-
-                    // If there is only one thing in there then use the default for the specific template
-                    if(angular.equals(this.currentTemplate, {}) && this.sideSelectorItems.length != 0){
-                        if(this.piTemplatesInUse.length == 1){
-                            console.log
-                            var defaultTemplate;
-                            this.curType = this.piTemplatesInUse[0]
-                            for(temp of this.templates){
-                                if(temp.type == this.piTemplatesInUse[0] && temp.name == "Default"){
-                                    console.log("Found default template");
-                                    defaultTemplate = temp;
-                                    this.ApplyTemplate(temp);
-                                }
-                            }
-                            // If no default template was found need to create it
-                            if(angular.isUndefined(defaultTemplate)){
-                                console.log("Generating default");
-                                self.generateDefault(this.piTemplatesInUse[0]);
-                            }
+                    if(angular.equals(this.currentTemplate, {}) || angular.isUndefined(this.currentTemplate)){
+                        console.log("setting default");
+                        this.restoreDefault();
+                    }
 
 
+                    // // If there is only one thing in there then use the default for the specific template
+                    // if(angular.equals(this.currentTemplate, {}) && this.sideSelectorItems.length != 0){
+                    //     if(this.piTemplatesInUse.length == 1){
+                    //         console.log
+                    //         var defaultTemplate;
+                    //         this.curType = this.piTemplatesInUse[0]
+                    //         for(temp of this.templates){
+                    //             if(temp.type == this.piTemplatesInUse[0] && temp.name == "Default"){
+                    //                 console.log("Found default template");
+                    //                 defaultTemplate = temp;
+                    //                 this.ApplyTemplate(temp);
+                    //             }
+                    //         }
+                    //         // If no default template was found need to create it
+                    //         if(angular.isUndefined(defaultTemplate)){
+                    //             console.log("Generating default");
+                    //             self.generateDefault(this.piTemplatesInUse[0]);
+                    //         }
 
-                        }
-                        // There is more than one pi template.
-                        else{
 
 
-                        }
+                    //     }
+                    //     // There is more than one pi template.
+                    //     else{
 
-                    } // end if(this.curType)...
+
+                    //     }
+
+                    // } // end if(this.curType)...
 
                 }
 
-                    if(this.isAnalysis == "true"){
-                        $('.saveTemplateButtonAnalysis').css({'color': 'green'});
-                    }
-                    else{
-                        $('.saveTemplateButtonData').css({'color': 'green'});
-                    }
 
 
                 this.updateFiltered();
 
             };
+
+            this.restoreDefault = function(){
+                var count = 0;
+                for(col of this.columns){
+                    if(count < 10){
+                        col.isChecked = true;
+                    }
+                    else{
+                        col.isChecked = false;
+                    }
+                }
+
+                // Dummy template
+                var template = {
+                    "name": "Default",
+                    "colObj": this.columns,
+                    "type": "",
+                    "isDefault": "true",
+                    // "test": {"t1":'x', 't2': 'y'}
+                };
+
+                // this.currentTemplate = template; 
+                this.ApplyTemplate(template);   
+            }
+
+
 
             this.getPiTemplates = function(){
                 var piTemplates = [];
@@ -499,6 +524,17 @@ angular.module('columnTemplateDropdownModule')
                 this.columns = template.colObj;
                 this.updateColObj({cols: template.colObj});  //output binding
                 $('.menuDropdown.open').removeClass('open'); // close dropdown if it is open
+                this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns));
+
+                if(this.isAnalysis == "true"){
+                    $('.saveTemplateButtonAnalysis').css({'color': 'green'});
+                }
+                else{
+                    $('.saveTemplateButtonData').css({'color': 'green'});
+                    console.log("setting green");
+                }
+
+
             };
 
 

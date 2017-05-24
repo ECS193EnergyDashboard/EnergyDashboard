@@ -42,6 +42,7 @@
             </button>
             <ul class="dropdown-menu dropdown-content">
                 <input ng-model="templateFilter" class="form-control" type="text" placeholder="Search For Template...">
+                <li><a ng-click="$ctrl.restoreDefault()"> Default </a> </li>
                 <li ng-repeat="template in $ctrl.filteredTemplates | filter:templateFilter">
                     <a class="dropdownelm" ng-class="{'columnChecked': template.name == $ctrl.currentTemplate.name}" href="" ng-click="$ctrl.ApplyTemplate(template)">{{template.name}}</a>
                 </li>

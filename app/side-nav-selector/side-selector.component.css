@@ -9,7 +9,8 @@
 }
 
 .selectItem {
-   border-top: 2px solid ghostwhite;
+    border-top: 1px solid #d4d4d4;
+    border-bottom: 1px solid #d4d4d4;
 }
 
 .hiddenListItem {
@@ -43,7 +44,7 @@
 #selectionHolder{
     overflow-x: hidden;
     display: flex;
-    /*position: absolute;*/
+    position: absolute;
     flex-direction: column;
     height: 100%;
     width: 100%;
@@ -86,6 +87,10 @@
     transition: all 2s ease;
 }
 
+
+#sidebar-selector-wrapper .sidebar-item {
+    padding: 4px 2px;
+}
 
 #wrapper.toggledSelector #sidebar-selector-wrapper {
     width: 100%;

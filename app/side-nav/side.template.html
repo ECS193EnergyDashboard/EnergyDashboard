@@ -30,7 +30,15 @@
 
                     <span ng-show="!$ctrl.showLeafNodeIcon(element) && $ctrl.showClosedIcon(element)" class="glyphicon glyphicon glyphicon-folder-close" ></span>
                     <span ng-show="!$ctrl.showLeafNodeIcon(element) && $ctrl.showOpenIcon(element)" class="glyphicon glyphicon glyphicon-folder-open" ></span>
-                    <span class="">{{element.name}} </span>
+                    <div id="itemText">
+                        <span ng-if="$ctrl.isFiltered">
+                            <h6 id="buildingName">{{element.building}} | {{element.template}}</h6>
+                            <br>
+                        </span>
+                        {{element.name}}
+                    </div>
+
+
                 </div>
                 <div class="list-group" ng-include="'side-nav/side-heirarchy-template.html'" ng-if="element.show">
                 </div>
@@ -43,6 +51,16 @@
 </div>
 </div>
 <div id="sidebar-border" ng-click="$ctrl.toggleMenu()">
+    <div id="btnBorder">
+    <span class="glyphicon glyphicon-chevron-left pointer" ></span>
+        <span class="glyphicon glyphicon-chevron-left pointer" ></span>
+        <span class="glyphicon glyphicon-chevron-left pointer" ></span>
+    <span class="glyphicon glyphicon-chevron-right pointer" ></span>
+        <span class="glyphicon glyphicon-chevron-right pointer" ></span>
+        <span class="glyphicon glyphicon-chevron-right pointer" ></span>
+
+    </div>
+
 
 </div>
 <!-- /#sidebar-wrapper -->

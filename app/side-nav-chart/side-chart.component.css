@@ -20,17 +20,6 @@
     overflow: hidden;
 }
 
-
-#headerHere{
-    border: 0px solid grey;
-    border-radius: 0px;
-    text-align: center;
-    overflow: hidden;
-    display: flex;
-    flex-direction: row;
-}
-
-
 #sidebar-chart-wrapper {
     z-index: 1000;
     position: relative;
@@ -104,7 +93,7 @@
     margin-top: 0;
     display: inline-block;
     font-size: x-small;
-    color: #b9b9b9; /*Gray*/
+    color: #9b9b9b; /*Gray*/
 }
 
 #sideBarChart {

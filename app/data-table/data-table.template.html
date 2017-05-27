@@ -1,12 +1,11 @@
 <!--NOTE: for this we use the  columnNamesObjs however in the actual table we use columnNames -->
 <div class="tableParent">
-    <div class="tableMenus">
+    <div class="tableMenus" ng-if="$ctrl.displayed">
         <column-template-dropdown columns="$ctrl.columnNamesObjs" update-col-obj= "$ctrl.updateCol(cols)"  row-data="$ctrl.data" is-analysis="'false'" elem-name="$ctrl.elemName"></column-template-dropdown>
     </div>
 
 
 <table id="dataTable" ng-if="$ctrl.displayed" st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped">
-    <img ng-if="!$ctrl.displayed" id="mainLogo" src="../img/ecoMainLogo.png">
     <thead id="dataTableHead">
 
     <tr>

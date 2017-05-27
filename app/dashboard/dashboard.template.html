@@ -8,16 +8,7 @@
     <side-bar-chart id="side-bar-chart" selection="$ctrl.chartSelection" ></side-bar-chart>
 
     <!-- Page Content -->
-    <div id="page-content-wrapper">
-
-        <!-- Loading Bar
-        <div ng-show="$ctrl.isLoading['data']" class="progress" >
-            <div class="progress-bar progress-bar-striped active" role="progressbar"
-                 aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
-                Loading...
-            </div>
-        </div>
-        -->
+    <div id="page-content-wrapper" ng-if="$ctrl.isDataTabShown() && $ctrl.data.length < 1">
         <!--Tab buttons-->
         <div id="dashboardBtns" class="btn-group menuButtons" role="group" aria-label="...">
             <a ng-click="$ctrl.toggleMenu()" class="btn btn-default " id="menu-toggle">
@@ -39,6 +30,8 @@
                 Graph
             </button>
         </div>
+
+        <img ng-if="$ctrl.isDataTabShown() && $ctrl.data.length < 1" id="mainLogo" src="../img/ecoMainLogo.png">
 
         <!-- Table modules -->
         <datatable ng-show="$ctrl.isDataTabShown()" table-src="$ctrl.data" selection="$ctrl.chartSelection" search-enabled="true" elem-name="$ctrl.elemName" api="$ctrl.dataTable"></datatable>

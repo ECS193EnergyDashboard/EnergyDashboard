@@ -51,16 +51,21 @@ angular.module('analysisModule').component('analysis', {
 
             this.outerColumnNames = [];
             this.innerColumnNames = [{
+                // Names must match this exactly from pi service
                 name: "Average",
+                display: "Avg",
                 isChecked: true
             }, {
                 name: "Maximum",
+                display: "Max",
                 isChecked: true
             }, {
                 name: "Minimum",
+                display: "Min",
                 isChecked: true
             }, {
                 name: "StdDev",
+                display: "SD",
                 isChecked: true
             }];
 

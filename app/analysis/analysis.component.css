@@ -1,3 +1,11 @@
+/*Keep the */
+.analysis th{
+    min-width: 4.6em;
+}
+.analysis td{
+    text-align: center;
+}
+
 .drp-contain {
     display: flex;
     display: -webkit-flex;

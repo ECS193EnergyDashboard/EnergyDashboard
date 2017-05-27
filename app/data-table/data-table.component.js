@@ -4,7 +4,6 @@ angular.module('dataTableModule').component('datatable', {
         tableSrc:       '<',
         searchEnabled:  '<',
         reorderEnabled: '<',
-        elemName:       '<',   // passed to columnTemplate component to determine template type
         selection:      '=',
         api:            '=',
         sideSelectorItems:          '<'
@@ -109,7 +108,7 @@ angular.module('dataTableModule').component('datatable', {
 
 
         this.$onChanges = function(changes) {
-            console.log("sideSelectorItems CHANGE CHANGE", this.sideSelectorItems);
+            // console.log("sideSelectorItems CHANGE CHANGE", this.sideSelectorItems);
 
             if (this.searchEnabled === undefined) {
                 this.searchEnabled = true;
@@ -375,7 +374,7 @@ angular.module('dataTableModule').component('datatable', {
 
 
         this.onColObjUpdate = function(newValue, oldValue){
-            console.log("watch fired");
+            // console.log("watch fired");
             $timeout.cancel(timeoutPromise);  //does nothing, if timeout already done
             timeoutPromise = $timeout(function() {   //Set timeout
                 console.log("timeout fired");

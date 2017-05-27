@@ -22,7 +22,6 @@ angular.module('columnTemplateDropdownModule')
         innerColumns:   '<', // Min, max, avg, st - this is needed for CSV
         updateColObj:   '&', // Output binding to update the table
         dateRange:      '<', // The date range to print on the csv
-        elemName:       '<',  // Element name to determine template type (from side-nav)
         sideSelectorItems: '<'
     },
     controller: [
@@ -50,10 +49,6 @@ angular.module('columnTemplateDropdownModule')
             // an error message for the modal. Always set the error message before showing modal
             this.errorMessage = "";
 
-
-            if(this.elemName === undefined){
-                this.elemName = "";
-            }
 
             this.$onInit = function(){
                 // this.determineType();
@@ -86,6 +81,7 @@ angular.module('columnTemplateDropdownModule')
 
 
             this.$onChanges = function(changes){
+                console.log("changes", changes);
                 // if(changes.columns){
                 //     this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns));
 
@@ -97,23 +93,33 @@ angular.module('columnTemplateDropdownModule')
                 //     }
                 // }
 
+
                 if(!angular.isUndefined(this.sideSelectorItems)){
                     // Check to see if there is no data - if not reset curtemplate
                     if(this.sideSelectorItems.length == 1 && this.sideSelectorItems[0].building == "dummyItem"){
                         this.currentTemplate = {};
+                        console.log("Current template is now empty");
                     }
 
 
                     this.getPiTemplates();
                     this.getTemplates();
 
+                    // Debugging
+
+                    console.log("SideselectorItems: ", this.sideSelectorItems);
+                    console.log("currentPiTemplates: ", this.piTemplatesInUse);
+                    
+
+
+
+                    // If there is no current template we need to set to default, after checking to make sure there is data
                     if(angular.equals(this.currentTemplate, {}) || angular.isUndefined(this.currentTemplate)){
                         if(this.rowData.length != 0){
                             this.restoreDefault();
-                            console.log("restoring default");
                         }
                     }
-                    else if(currentTemplate.name == "Default"){
+                    else if(this.currentTemplate.name == "Default"){
                         console.log("current temp", this.currentTemplate);
                     }
 

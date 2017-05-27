@@ -11,7 +11,6 @@ angular.module('dashboardModule').component('dashboard',{
         this.itemsToAdd = [];
 		this.loading = { sidebar: 0, data: 0, analysis: 0 };
         this.chartSelection = [];
-        this.elemName = "";
 
         this.sideSelectorItems = [];
 

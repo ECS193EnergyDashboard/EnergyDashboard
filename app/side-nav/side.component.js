@@ -73,7 +73,7 @@ angular.module('sideNavModule').component('sideBar', {
             //console.log(self.filterType);
             //console.log(self.searchInput);
             //console.log(self.filteredItems);
-            self.filteredItems = treeFilterFilter(self.buildings, self.searchInput, self.filterType);
+            self.filteredItems = treeFilterFilter(self.buildings, self.searchInput[self.filterType], self.filterType);
             self.isFiltered = 1;
             // console.log("Copying search");
             //this.search.name = this.searchInput.name;

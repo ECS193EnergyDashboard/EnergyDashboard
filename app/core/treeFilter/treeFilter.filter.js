@@ -1,48 +1,71 @@
 angular.module('core.treeFilter').filter('treeFilter', function() {
-    return function (input, optional1, optional2) {
-        var searchType = optional2;
-        //console.log(searchType);
-        //console.log(optional1);
-        if(optional1[searchType] == null){
-            //console.log(optional2);
-            var searchString = optional1[searchType].toLowerCase();;
-        }
-        else {
-            var searchString = optional1[searchType].toLowerCase();
-        }
-
+    return function(input, searchString, key) {
         //Check if filter is disabled
         if(searchString.length == 0){
-            //console.log("treeFilter: disabled input: ");
-            //console.log(input);
             return input;
         }
 
-        //console.log("Filter enabled looking for:"+optional1.name+" "+optional2+" in: ");
-        //console.log(input);
+        function buildRegex(query) {
+            if (query.includes('*')) {
+                // Match with wildcards, case-insensitive
+                query = '^' + query + '$';
+                return new RegExp(query.replace(/\*/g, '.*'), 'i');
+
+            } else {
+                // Match any with this substring, case-insensitive
+                return new RegExp('.*' + query + '.*', 'i');
+            }
+        }
+
+        function splitQuery(query) {
+            // Split and remove leading and trailing whitespace from each token
+            return query.split('>').map(function(s) { return s.trim(); });
+        }
+
+        function queryToRegex(query) {
+            return splitQuery(query).map(buildRegex);
+        }
+
+        var regexes = queryToRegex(searchString);
+
         //Var to hold search results
         var out = [];
-        //Clone input array into queue
-        var list = input.slice(0);
+        var list = input.map(function(e) { 
+            return { element: e, searchLevel: 0 };
+        });
         //Iterate while queue not empty
         while(0 < list.length){
             //Get top element
-            var frontElem = list.shift();
-            var elemAttr = frontElem[ searchType ].toLowerCase();
-            //console.log("has "+optional2+" attr: "+elemAttr);
+            var pair = list.shift();
+            var elem = pair.element;
+            var searchLevel = pair.searchLevel;
 
-            //Check if search matches
-            if(elemAttr.includes( searchString )){
-                //console.log("Filter adding: "+frontElem.name);
-                //Add element to output
-                out.push(frontElem);
-            }
-            //Check if element has children
-            if(frontElem.hasChildren && frontElem.elements){
-                //Push all children onto queue
-                frontElem.elements.forEach(function(e){
-                    list.push(e);
-                })
+            var regex = regexes[searchLevel];
+
+            if (regex.exec(elem[key])) {
+                if (searchLevel === regexes.length - 1) {
+                    // Case 1: elem matches last regex, so add to output and add children to list with same search level (if they have any)
+                    out.push(elem);
+                    if (elem.hasChildren && elem.elements) {
+                        for (var e of elem.elements) {
+                            list.push({ element: e, searchLevel: searchLevel });
+                        }
+                    }
+                } else { 
+                    // Case 2: elem matches non-last regex, so add children to list and increment their search level (if they have any)
+                    if (elem.hasChildren && elem.elements) {
+                        for (var e of elem.elements) {
+                            list.push({ element: e, searchLevel: searchLevel + 1 });
+                        }
+                    }
+                }
+            } else {
+                // Case 3: elem does not match, so add children to list with same search level (if they have any)
+                if (elem.hasChildren && elem.elements) {
+                    for (var e of elem.elements) {
+                        list.push({ element: e, searchLevel: searchLevel });
+                    }
+                }
             }
         }
         return out;

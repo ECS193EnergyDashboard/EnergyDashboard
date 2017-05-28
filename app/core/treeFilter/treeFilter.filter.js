@@ -44,8 +44,13 @@ angular.module('core.treeFilter').filter('treeFilter', function() {
 
             if (regex.exec(elem[key])) {
                 if (searchLevel === regexes.length - 1) {
-                    // Case 1: elem matches last regex, so add to output
+                    // Case 1: elem matches last regex, so add to output and add children to list with same search level (if they have any)
                     out.push(elem);
+                    if (elem.hasChildren && elem.elements) {
+                        for (var e of elem.elements) {
+                            list.push({ element: e, searchLevel: searchLevel });
+                        }
+                    }
                 } else { 
                     // Case 2: elem matches non-last regex, so add children to list and increment their search level (if they have any)
                     if (elem.hasChildren && elem.elements) {

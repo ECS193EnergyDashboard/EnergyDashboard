@@ -5,42 +5,40 @@
 
 <!--Date Range Picker-->
 <div class="drp-contain">
-    <div>
-        <!--This div for border-->
+    <div class="border"> <!--This div for border-->
         <span class="glyphicon glyphicon-calendar"></span>
         <input date-range-picker class="form-control date-picker" type="text" ng-model="$ctrl.datePicker.date" options="$ctrl.DRPOptions" />
     </div>
 
-</div>
-
-
-
-<!-- Avg, Max, Min StdDev Checkboxes -->
-<div>
     <button class="btn btn-primary" ng-click="$ctrl.startAnalysis()">Start Analysis</button>
-    <div>
-        <h3>
+    <!-- Avg, Max, Min StdDev Checkboxes -->
+    <span>
+        <p>
             <span ng-repeat="innerCol in $ctrl.innerColumnNames">
                 <input ng-model="innerCol.isChecked" type="checkbox">
                 {{innerCol.display}}
             </span>
-        </h3>
-    </div>
+        </p>
+    </span>
+
 </div>
 
-<table st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped">
+
+
+
+
+<table st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped" ng-hide="$ctrl.data == undefined || $ctrl.data.length == 0" >
     <thead>
         <!-- Outer Columns -->
         <tr>
             <th></th>
             <th ng-repeat="outerColumn in $ctrl.outerColumnNames" ng-if="outerColumn.isChecked" lr-drag-src="header" lr-drop-target="header">
                 {{outerColumn.name}}
-                <button ng-click="outerColumn.isChecked=false" type="button" class="btn btn-default glyphicon glyphicon-trash"></button> 
+                <button ng-click="outerColumn.isChecked=false" type="button" class="btn btn-default glyphicon glyphicon-trash"></button>
             </th>
         </tr>
-
-
     </thead>
+
     <tbody>
         <tr>
             <td>

@@ -12,15 +12,15 @@
     flex-direction: row;
     -webkit-flex-direction: row;
     justify-content: flex-start;
-    width:50%;
+    width:100%;
     padding-top: 1%
 }
-.drp-contain div{
+.drp-contain .border{
     border: 1px solid #4099FF;
     border-radius: 5px;
     display: inline-flex;
 }
-.drp-contain div input, .drp-contain div p {
+.drp-contain div input {
     margin-top: 1%;
 }
 .drp-contain div input{
@@ -31,6 +31,19 @@
     font-size: 150%;
     top: 20%;
     padding-left: 2%;
+}
+
+.drp-contain span p{
+    font-size: 1.6em;
+}
+/* All elements in drp-contain*/
+.drp-contain div, .drp-contain button, .drp-contain span{
+    margin-right: 1em;
+}
+/* Checkboxes for inner cols*/
+.drp-contain span p{
+    margin: 0 0 0 0;
+    padding-top: 0.8%;
 }
 .inline-div{
     display: inline-flex;

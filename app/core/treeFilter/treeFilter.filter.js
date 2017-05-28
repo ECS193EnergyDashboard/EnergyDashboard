@@ -8,7 +8,9 @@ angular.module('core.treeFilter').filter('treeFilter', function() {
         function buildRegex(query) {
             if (query.includes('*')) {
                 // Match with wildcards, case-insensitive
-                return new RegExp(query.replace('*', '.*'), 'i');
+                query = '^' + query + '$';
+                return new RegExp(query.replace(/\*/g, '.*'), 'i');
+
             } else {
                 // Match any with this substring, case-insensitive
                 return new RegExp('.*' + query + '.*', 'i');

@@ -230,7 +230,15 @@
         </div>
         <div class="modal-body">
 
-        By overwriting the default template you will change the columns that first show when displaying this data for all users.
+        By overwriting the default template you will change the columns that first show when displaying these piTemplates:
+
+        <ul>
+            <li ng-repeat="piTemplate in $ctrl.piTemplatesInUse">
+                <div> {{piTemplate}}</div>
+            </li>
+        </ul>
+
+
 
         </div>
 

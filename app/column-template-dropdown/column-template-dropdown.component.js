@@ -57,7 +57,7 @@ angular.module('columnTemplateDropdownModule')
             this.currentTemplate = {};
             this.filteredColumns = [];
 
-            this.piTemplatesInUse = []
+            this.piTemplatesInUse = [];
 
             this.unalteredCurrentTemplate = {};
 
@@ -487,10 +487,7 @@ angular.module('columnTemplateDropdownModule')
 
                 // Check to make sure template is not named default or name is already taken
                 if(this.newTemplateName == "Default"){
-
-                    this.errorMessage = "You can not save over the default template";
-                    this.ShowErrorModal();
-                    // this.ShowSaveDefaultModal();
+                    this.ShowSaveDefaultModal();
                     return;
                 }
                 if(this.newTemplateName == ""){
@@ -527,6 +524,7 @@ angular.module('columnTemplateDropdownModule')
                 // this.ShowSaveModal();
                 this.ClearTemplateNameInput();
             };
+
 
             // POST template/profile to server
             this.postTemplate = function(template){

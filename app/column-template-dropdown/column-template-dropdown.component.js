@@ -1,14 +1,35 @@
+/* How templates currently work:
+    1. The first time you add something to the table - it will look for the default template with the exact match
+        of current piTemplates. If none exists then it will create one for those piTemplates. For example when you put in
+        AHU, 2 piTemplaes are in use so the default will be for both of those templates. 
+    2. 
+
+*/
+
 angular.module('columnTemplateDropdownModule')
     .filter('type', function(){
         return function(templates, types){
+            // console.log("types:", types);
             var filteredTemplates = [];
             for(var template of templates){
-                for(piTemplate of template.type){
-                    if(types.includes(piTemplate) && !(filteredTemplates.includes(template) )){
+                // there can be only one default so make sure it has an exact match with the type
+                if(template.name == "Default"){
+                    // console.log("this should be default", template);
+                    if(angular.equals(template.type, types)){
                         filteredTemplates.push(template);
                     }
                 }
+                // else show everything else with at least on of the piTemplates in use
+                else{
+                    for(piTemplate of template.type){
+                        if(types.includes(piTemplate) && !(filteredTemplates.includes(template))){
+                            filteredTemplates.push(template);
+                        }
+                    }
+
+                }
             }
+            console.log("filtered temps", filteredTemplates);
             return filteredTemplates;
         }
     }
@@ -81,18 +102,6 @@ angular.module('columnTemplateDropdownModule')
 
 
             this.$onChanges = function(changes){
-                console.log("changes", changes);
-                // if(changes.columns){
-                //     this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns));
-
-                //     if(this.isAnalysis == "true"){
-                //         $('.saveTemplateButtonAnalysis').css({'color': 'green'});
-                //     }
-                //     else{
-                //         $('.saveTemplateButtonData').css({'color': 'green'});
-                //     }
-                // }
-
 
                 if(!angular.isUndefined(this.sideSelectorItems)){
                     // Check to see if there is no data - if not reset curtemplate
@@ -106,9 +115,8 @@ angular.module('columnTemplateDropdownModule')
                     this.getTemplates();
 
                     // Debugging
-
-                    console.log("SideselectorItems: ", this.sideSelectorItems);
-                    console.log("currentPiTemplates: ", this.piTemplatesInUse);
+                    // console.log("SideselectorItems: ", this.sideSelectorItems);
+                    // console.log("currentPiTemplates: ", this.piTemplatesInUse);
                     
 
 
@@ -116,12 +124,12 @@ angular.module('columnTemplateDropdownModule')
                     // If there is no current template we need to set to default, after checking to make sure there is data
                     if(angular.equals(this.currentTemplate, {}) || angular.isUndefined(this.currentTemplate)){
                         if(this.rowData.length != 0){
-                            this.restoreDefault();
+                            this.restoreDefault(); // if no default is found this will call generateDefault()
                         }
                     }
-                    else if(this.currentTemplate.name == "Default"){
-                        console.log("current temp", this.currentTemplate);
-                    }
+                    // else if(this.currentTemplate.name == "Default"){
+                    //     console.log("current temp", this.currentTemplate);
+                    // }
 
 
                     // // If there is only one thing in there then use the default for the specific template
@@ -156,34 +164,77 @@ angular.module('columnTemplateDropdownModule')
 
                 }
 
-
-
                 this.updateFiltered();
 
             };
 
-            this.restoreDefault = function(){
-                var count = 0;
-                for(col of this.columns){
-                    if(count < 10){
-                        col.isChecked = true;
-                    }
-                    else{
-                        col.isChecked = false;
-                    }
-                    count++;
+
+            // A function to apply a template to the data table
+            this.ApplyTemplate = function(template){
+                this.currentTemplate = template;
+                var colObjToAdd = JSON.parse(angular.toJson(template.colObj)); // Make clone
+                this.columns = template.colObj;
+                this.updateColObj({cols: template.colObj});  //output binding
+                $('.menuDropdown.open').removeClass('open'); // close dropdown if it is open
+                this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns));
+                this.getTemplates();
+                if(this.isAnalysis == "true"){
+                    $('.saveTemplateButtonAnalysis').css({'color': 'green'});
+                }
+                else{
+                    $('.saveTemplateButtonData').css({'color': 'green'});
+                    console.log("making green");
                 }
 
-                // Dummy template
+            };
+
+            this.restoreDefault = function(){
+                for(var temp of this.templates){
+                    if(angular.equals(temp.type, this.piTemplatesInUse) && temp.name == "Default"){
+                        this.ApplyTemplate(temp);
+                        return;
+                    }
+                }
+                // If we did not return from finding the default we need to create it
+                console.log("generating default");
+                this.generateDefault();
+
+            }
+
+
+            // Generate default, push it to templates, and post to server
+            this.generateDefault = function(piTemplate){
+                // console.log("generating default...");
+                var firstValues = 0;
+                for(var col of self.columns){
+                   if (firstValues < 10) {
+                        col.isChecked = true;
+                    } else {
+                        col.isChecked = false;
+                    }
+                    firstValues++;
+                }
+
+                // Make clone, otherwise they are same reference
+                var colObjToAdd = JSON.parse(angular.toJson(self.columns));
+                if(colObjToAdd.length == 0){
+                    return;   
+                }
                 var template = {
                     "name": "Default",
-                    "colObj": this.columns,
-                    "type": "",
+                    "colObj": colObjToAdd,
+                    "type": this.piTemplatesInUse,
                     "isDefault": "true",
                 };
+                self.ApplyTemplate(template);
+                self.curType = template.type;
 
-                // this.currentTemplate = template; 
-                this.ApplyTemplate(template);   
+                // Push to templates
+                self.templates.push(template);
+                self.updateFiltered();
+
+                // Post the default
+                self.postTemplate(template);
             }
 
 
@@ -211,42 +262,6 @@ angular.module('columnTemplateDropdownModule')
             }
 
 
-
-            // Generate default, push it to templates, and post to server
-            this.generateDefault = function(piTemplate){
-                // console.log("generating default...");
-                var firstValues = 0;
-                for(var col of self.columns){
-                   if (firstValues < 10) {
-                        col.isChecked = true;
-                    } else {
-                        col.isChecked = false;
-                    }
-                    firstValues++;
-                }
-
-                // Make clone, otherwise they are same reference
-                var colObjToAdd = JSON.parse(angular.toJson(self.columns));
-                if(colObjToAdd.length == 0){
-                    return;   
-                }
-                var template = {
-                    "name": "Default",
-                    "colObj": colObjToAdd,
-                    "type": piTemplate,
-                    "isDefault": "true",
-                    // "test": {"t1":'x', 't2': 'y'}
-                };
-                self.currentTemplate = template;
-                self.curType = template.type;
-
-                // Push to templates
-                self.templates.push(template);
-                self.updateFiltered();
-
-                // Post the default
-                self.postTemplate(template);
-            }
 
 
             this.getTemplates = function(){
@@ -530,25 +545,6 @@ angular.module('columnTemplateDropdownModule')
                 });
             }
 
-
-            // A function to apply a template to the data table
-            this.ApplyTemplate = function(template){
-                this.currentTemplate = template;
-                var colObjToAdd = JSON.parse(angular.toJson(template.colObj)); // Make clone
-                this.columns = template.colObj;
-                this.updateColObj({cols: template.colObj});  //output binding
-                $('.menuDropdown.open').removeClass('open'); // close dropdown if it is open
-                this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns));
-                this.getTemplates();
-                if(this.isAnalysis == "true"){
-                    $('.saveTemplateButtonAnalysis').css({'color': 'green'});
-                }
-                else{
-                    $('.saveTemplateButtonData').css({'color': 'green'});
-                    console.log("making green");
-                }
-
-            };
 
 
 

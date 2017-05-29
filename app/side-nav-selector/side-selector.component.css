@@ -55,18 +55,6 @@
     background-color: gainsboro;
 }
 
-#wrapper {
-    /*padding-left: 0;*/
-    -webkit-transition: all 0.1s ease;
-    -moz-transition: all 0.1s ease;
-    -o-transition: all 0.1s ease;
-    transition: all 0.1s ease;
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    /*border: 4px solid rebeccapurple;*/
-}
-
 #wrapper.toggledSelector {
     /*padding-left: 250px;*/
 }

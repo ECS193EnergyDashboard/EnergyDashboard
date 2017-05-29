@@ -1,12 +1,19 @@
 .tableSettingsButtons{
-    /* float: right; */
-    position: fixed;
+    /*float: right; */
+    /* position: fixed; */
     /* display: inline-block; */
     z-index: 999;
-    transform: translate(0%, -100%);
+    /* transform: translate(0%, -100%); */
     right: 0px;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
 }
 
+.tableSettingsButtons .menuDropdown .dropdown-menu{
+    right: 0px;
+    left: inherit;
+}
 /*.dropdownPullRight {
   float: right !important;
   right: 0;
@@ -14,8 +21,14 @@
 }*/
 
 .tableButton{
-	/*padding: 14px 40px;*/
-	min-width: 100px;
+    /* padding: 14px 40px; */
+    /* min-width: 100px; */
+    height: 100%;
+    width: 100%;
+    padding: 0px;
+    background-color: #4a5571;
+    color: #c6cdd9;
+    text-shadow: initial;
 }
 
 .saveTemplateButton{
@@ -24,11 +37,22 @@
 
 /* Has same CSS as Bootstrap dropdown class except for floar: right;*/
 .menuDropdown{
-	/*float: right;*/
     position: relative;
-    display: inline-block;
+    display: inline-flex;
+    padding: 0px;
+    margin: 0px;
+    /* margin-left: -2px; */
+    /* margin-right: -2px; */
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1;
+    max-width: 80px;
 }
 
+.menuDropdownIcon{
+    max-width: 40px;
+}
 #columnBtnSelected {
 
 }

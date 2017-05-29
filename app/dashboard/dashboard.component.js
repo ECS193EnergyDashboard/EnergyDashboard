@@ -1,8 +1,11 @@
 angular.module('dashboardModule').component('dashboard',{
 	templateUrl: 'dashboard/dashboard.template.html',
+    bindings: {
+        showSidebar: '=',
+        show: '='
+    },
 	controller: ['pi', function TableController(pi){
 		var self = this;
-        this.show = 0;
 		this.data = [];
 		this.showData = true;
 		this.asyncData = [];
@@ -79,30 +82,33 @@ angular.module('dashboardModule').component('dashboard',{
         };
 
         this.showDataTab = function() {
-            this.show = 0;
-            this.dataTable.update();
+            self.show = 0;
+            // this.dataTable.update();
         };
 
         this.showAnalyzeTab = function() {
-            this.show = 1;
-            this.dataTable.update();
+            self.show = 1;
+            // this.dataTable.update();
         };
 
         this.showGraphTab = function() {
-            this.show = 2;
-            this.dataTable.update();
+            self.show = 2;
+            // this.dataTable.update();
         };
 
         this.isDataTabShown = function() {
-            return this.show === 0;
+            return self.show === 0;
+            // this.dataTable.update();
         };
 
         this.isAnalyzeTabShown = function() {
-            return this.show === 1;
+            return self.show === 1;
+            // this.dataTable.update();
         };
 
         this.isGraphTabShown = function() {
-            return this.show === 2;
+            return self.show === 2;
+            // this.dataTable.update();
         };
 
 

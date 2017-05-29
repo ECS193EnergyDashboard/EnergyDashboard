@@ -1,4 +1,4 @@
-<div class="columnTemplateParent" ng-if="$ctrl.columns.length != 0">
+<div class="columnTemplateParent" >
 <!-- <div class="columnTemplateParent"> -->
     <div class="tableSettingsButtons">
         <!-- Columns show/hide dropdown -->
@@ -6,7 +6,6 @@
             <button type="button" class="btn btn-default dropdown-toggle tableButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Columns <span class="caret"></span>
             </button>
-
             <div class="dropdown-menu dropdown-content" id="menuDropdownContent">
                 <div class="dropdownFilters">
                     <div class="btn-group" style="width: 100%; display: flex;">
@@ -36,7 +35,6 @@
             </div>
         </div>
 
-
         <!-- Templates dropdown -->
         <div class="menuDropdown">
             <button type="button" class="btn btn-default dropdown-toggle tableButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -50,26 +48,20 @@
             </ul>
         </div>
 
-
         <!--Save Template button for Data Tab-->
-        <button ng-class="{'saveTemplateButtonData': $ctrl.isAnalysis=='false', 'saveTemplateButtonAnalysis': $ctrl.isAnalysis=='true'}" ng-click="$ctrl.ShowSaveModal()" data-toggle="modal" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false">
-            Save Template
-        </button>
-
+        <div ng-class="{'saveTemplateButtonData': $ctrl.isAnalysis=='false', 'saveTemplateButtonAnalysis': $ctrl.isAnalysis=='true'}" ng-click="$ctrl.ShowSaveModal()" class="menuDropdown menuDropdownIcon" >
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+        </div>
 
         <!-- Delete Template button for Data Tab -->
-        <button ng-click="$ctrl.ShowDeleteModal()" ng-class="{'disabled': $ctrl.currentTemplate.name=='Default'}" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false">
-            Delete Template
-        </button>
-
+        <div ng-click="$ctrl.ShowDeleteModal()" class="menuDropdown menuDropdownIcon">
+            <span class="glyphicon glyphicon-trash"></span>
+        </div>
 
         <!--Download CSV button for Data Tab-->
-        <button ng-click="$ctrl.ShowDownloadModal()" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false" data-toggle="modal" >
-            Download As CSV
+        <div ng-click="$ctrl.ShowDownloadModal()" class="menuDropdown menuDropdownIcon">
             <span class="glyphicon glyphicon-save-file"></span>
-        </button>
-
-
+        </div>
     </div> <!--end tableSettingsButtons -->
 
 

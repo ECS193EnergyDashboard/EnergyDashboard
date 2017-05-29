@@ -1,100 +1,109 @@
-<column-template-dropdown columns="$ctrl.outerColumnNames" update-col-obj="$ctrl.updateCol(cols)" row-data="$ctrl.data" is-analysis="'true'" inner-columns="$ctrl.innerColumnNames" elem-name="$ctrl.elemName" date-range="$ctrl.datePicker.date">
-</column-template-dropdown>
-
-<h3>Data from {{$ctrl.datePicker.date.startDate}} until  {{$ctrl.datePicker.date.endDate}}</h3>
-
-<!--Date Range Picker-->
-<div class = "drp-contain">
-    <div> <!--This div for border-->
-        <span class="glyphicon glyphicon-calendar"></span>
-        <input date-range-picker class="form-control date-picker" type="text" ng-model="$ctrl.datePicker.date" options = "$ctrl.DRPOptions" />
+<div id="tableParent">
+    <div id="tableMenus" >
+        <div  class="tableMenuItem" id="tableMenuDatePicker">
+            <!--Date Range Picker-->
+            <div class = "drp-contain">
+                <div> <!--This div for border-->
+                    <span class="glyphicon glyphicon-calendar"></span>
+                    <input date-range-picker class="form-control date-picker" type="text" ng-model="$ctrl.datePicker.date" options = "$ctrl.DRPOptions" />
+                </div>
+            </div>
+        </div>
+        <div class="tableMenuRange tableMenuItem " >
+            <div class="tableMenuRangeText">FROM : </div>
+            {{$ctrl.datePicker.date.startDate}}
+        </div>
+        <div  class="tableMenuItem tableMenuRange" >
+            <div class="tableMenuRangeText">UNTIL : </div>
+            {{$ctrl.datePicker.date.endDate}}
+        </div>
+        <div class="tableMenuItem" id="tableMenuBtn2">
+            <column-template-dropdown columns="$ctrl.outerColumnNames" update-col-obj="$ctrl.updateCol(cols)" row-data="$ctrl.data" is-analysis="'true'" inner-columns="$ctrl.innerColumnNames" elem-name="$ctrl.elemName" date-range="$ctrl.datePicker.date">
+            </column-template-dropdown>
+        </div>
     </div>
+    <div id="analysisTable">
+        <div id="analysisTableButtons">
+            <button class="btn btn-primary" ng-click="$ctrl.startAnalysis()">Start Analysis</button>
+            <div>
 
-</div>
+                    <span ng-repeat="column in $ctrl.innerColumnNames">
+                        <input ng-model="column.isChecked" type="checkbox">
+                        {{column.name}}
+                    </span>
 
-
-
-
-<div>
-    <button class="btn btn-primary" ng-click="$ctrl.startAnalysis()">Start Analysis</button>
-    <div>
-        <h3>
-            <span ng-repeat="column in $ctrl.innerColumnNames">
-                <input ng-model="column.isChecked" type="checkbox">
-                {{column.name}}
-            </span>
-        </h3>
-    </div>
-</div>
-
-<table st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped">
-    <thead>
-        <!--
-        <col>
-        <colgroup ng-repeat="outerColumn in $ctrl.outerColumnNames" span="4"></colgroup>
-        -->
-        <tr>
-            <th></th>
-            <th ng-repeat="outerColumn in $ctrl.outerColumnNames" ng-if="outerColumn.isChecked" lr-drag-src="header" lr-drop-target="header">
-                {{outerColumn.name}}
-            </th>
-        </tr>
-        <!--
-        <tr>
-            <th></th>
-            <th ng-repeat-start="outerColumn in $ctrl.outerColumnNames" scope="col" ng-if="outerColumn.isChecked"
-                st-sort="$ctrl.getters.value.bind(null, outerColumn.name, 'Average')">Average</th>
-            <th scope="col" ng-if="outerColumn.isChecked"
-                st-sort="$ctrl.getters.value.bind(null, outerColumn.name, 'Minimum')">Minimum</th>
-            <th scope="col" ng-if="outerColumn.isChecked"
-                st-sort="$ctrl.getters.value.bind(null, outerColumn.name, 'Maximum')">Maximum</th>
-            <th ng-repeat-end scope="col" ng-if="outerColumn.isChecked"
-                st-sort="$ctrl.getters.value.bind(null, outerColumn.name, 'StdDev')">StdDev</th>
-        </tr>
-        -->
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                <table class="table table-striped">
-                    <th st-sort="name">Name</th>
-                    <th st-sort="building">Building</th>
-                    <tr ng-repeat="element in $ctrl.displayed">
-                        <td>{{element.name}}</td>
-                        <td>{{element.building}}</td>
-                    </tr>
-                </table>
-            </td>
-            <td ng-repeat="outerColumn in $ctrl.outerColumnNames" ng-if="outerColumn.isChecked">
-                <table class="table table-striped">
-                    <th ng-repeat="innerColumn in $ctrl.innerColumnNames" ng-if="innerColumn.isChecked" st-sort="$ctrl.getters.value.bind(null, outerColumn.name, innerColumn.name)">
-                        {{innerColumn.name}}
+            </div>
+        </div>
+        <table st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped">
+            <thead>
+                <!--
+                <col>
+                <colgroup ng-repeat="outerColumn in $ctrl.outerColumnNames" span="4"></colgroup>
+                -->
+                <tr>
+                    <th></th>
+                    <th ng-repeat="outerColumn in $ctrl.outerColumnNames" ng-if="outerColumn.isChecked" lr-drag-src="header" lr-drop-target="header">
+                        {{outerColumn.name}}
                     </th>
-                    <tr ng-repeat="element in $ctrl.displayed">
-                        <td ng-repeat="innerColumn in $ctrl.innerColumnNames" ng-if="innerColumn.isChecked" ng-class="$ctrl.valueStyle(element[outerColumn.name][innerColumn.name])">
-                            {{$ctrl.formatValue(element[outerColumn.name][innerColumn.name])}}
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
+                </tr>
+                <!--
+                <tr>
+                    <th></th>
+                    <th ng-repeat-start="outerColumn in $ctrl.outerColumnNames" scope="col" ng-if="outerColumn.isChecked"
+                        st-sort="$ctrl.getters.value.bind(null, outerColumn.name, 'Average')">Average</th>
+                    <th scope="col" ng-if="outerColumn.isChecked"
+                        st-sort="$ctrl.getters.value.bind(null, outerColumn.name, 'Minimum')">Minimum</th>
+                    <th scope="col" ng-if="outerColumn.isChecked"
+                        st-sort="$ctrl.getters.value.bind(null, outerColumn.name, 'Maximum')">Maximum</th>
+                    <th ng-repeat-end scope="col" ng-if="outerColumn.isChecked"
+                        st-sort="$ctrl.getters.value.bind(null, outerColumn.name, 'StdDev')">StdDev</th>
+                </tr>
+                -->
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <table class="table table-striped">
+                            <th st-sort="name">Name</th>
+                            <th st-sort="building">Building</th>
+                            <tr ng-repeat="element in $ctrl.displayed">
+                                <td>{{element.name}}</td>
+                                <td>{{element.building}}</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td ng-repeat="outerColumn in $ctrl.outerColumnNames" ng-if="outerColumn.isChecked">
+                        <table class="table table-striped">
+                            <th ng-repeat="innerColumn in $ctrl.innerColumnNames" ng-if="innerColumn.isChecked" st-sort="$ctrl.getters.value.bind(null, outerColumn.name, innerColumn.name)">
+                                {{innerColumn.name}}
+                            </th>
+                            <tr ng-repeat="element in $ctrl.displayed">
+                                <td ng-repeat="innerColumn in $ctrl.innerColumnNames" ng-if="innerColumn.isChecked" ng-class="$ctrl.valueStyle(element[outerColumn.name][innerColumn.name])">
+                                    {{$ctrl.formatValue(element[outerColumn.name][innerColumn.name])}}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
 
-        <!--
-        <tr ng-repeat="element in $ctrl.displayed">
-            <td scope="col">{{element.name}}</td>
-            <td ng-repeat-start="outerColumn in $ctrl.outerColumnNames" scope="col" ng-if="outerColumn.isChecked">
-                {{element[outerColumn.name].Average.value}}
-            </td>
-            <td scope="col" ng-if="outerColumn.isChecked">
-                {{element[outerColumn.name].Minimum.value}}
-            </td>
-            <td scope="col" ng-if="outerColumn.isChecked">
-                {{element[outerColumn.name].Maximum.value}}
-            </td>
-            <td ng-repeat-end scope="col" ng-if="outerColumn.isChecked">
-                {{element[outerColumn.name].StdDev.value}}
-            </td>
-        </tr>
-        -->
-    </tbody>
-</table>
+                <!--
+                <tr ng-repeat="element in $ctrl.displayed">
+                    <td scope="col">{{element.name}}</td>
+                    <td ng-repeat-start="outerColumn in $ctrl.outerColumnNames" scope="col" ng-if="outerColumn.isChecked">
+                        {{element[outerColumn.name].Average.value}}
+                    </td>
+                    <td scope="col" ng-if="outerColumn.isChecked">
+                        {{element[outerColumn.name].Minimum.value}}
+                    </td>
+                    <td scope="col" ng-if="outerColumn.isChecked">
+                        {{element[outerColumn.name].Maximum.value}}
+                    </td>
+                    <td ng-repeat-end scope="col" ng-if="outerColumn.isChecked">
+                        {{element[outerColumn.name].StdDev.value}}
+                    </td>
+                </tr>
+                -->
+            </tbody>
+        </table>
+    </div>
+</div>

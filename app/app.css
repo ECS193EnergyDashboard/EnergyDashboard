@@ -1,11 +1,3 @@
-body {
-    height: 100%;
-    width: 100%;
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-}
-
 .navbar {
     height: 100%;
 }
@@ -20,9 +12,9 @@ body {
 }
 
 #dashbboard {
-    height: 0;
-    flex: 1 1 93%;
-    /*border: 5px solid green;*/
+    height: 100%;
+    /*border: 5px solid pink;*/
+    /* width: 85%; */
 }
 
 .table tbody tr > td.dataCell {

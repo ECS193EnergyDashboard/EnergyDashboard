@@ -1,0 +1,103 @@
+html, body{
+    margin: 0;
+    height: 100%;
+    /*border: 5px dashed red;*/
+}
+
+/** {*/
+    /*z-index: 100;*/
+/*}*/
+
+#rBody {
+    display: flex;
+    height: 100%;
+    font-family: 'Roboto';
+}
+
+#rSidebar {
+    /*border: 5px solid red;*/
+    flex: 1 1;
+    background-color: #292d37;
+     min-width: 45px;
+    display: flex;
+    flex-direction: column;
+}
+
+#rEcoLogo{
+    position: static;
+    /*mix-blend-mode: multiply;*/
+    height: 20px;
+    transform: scale(4.5);
+    width: auto;
+    /* border: 5px solid purple; */
+}
+
+
+
+#rSidebarLogoBtn{
+    min-height: 50px;
+}
+#rSidebarLogoBtn:hover{
+    background-color: inherit;
+    color: inherit;
+}
+
+#rSidebarBreak{
+    min-height: 20px;
+}
+#rSidebarBreak:hover{
+    background-color: inherit;
+    color: inherit;
+}
+
+#rSidebarBreakHR{
+    margin: 0px;
+    width: 85%;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #2f4050;
+    padding: 0;
+}
+
+.rSidebarBtn{
+    /*border: 2px solid yellow;*/
+    /*background-color: #fffdfb;*/
+    min-height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #89af39;
+    font-size: 2em;
+    position: relative;
+}
+
+.rSidebarBtn:hover{
+    background-color: #13161d;
+    color: #2f4050;
+}
+
+.rightPtr {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    font-size: 0.4em;
+    color: white;
+    display: inherit;
+}
+
+.rSidebarBtn2{
+    /*border: 2px solid yellow;*/
+    /*background-color: #fffdfb;*/
+    min-height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #2f4050;
+    font-size: 2em;
+}
+
+.rSidebarBtn2:hover{
+    background-color: #13161d;
+    color: #89af39;
+}
+

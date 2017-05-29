@@ -20,6 +20,9 @@ angular.module('dataTableModule').component('datatable', {
         this.showFormattingSettingsButtons = true;
         this.columnWidths = {};
         this.columNumWidths = [];
+        this.rowName = "";
+        this.rowsDisplayed = [];
+
 
 
         this.$onInit = function(){
@@ -221,14 +224,17 @@ angular.module('dataTableModule').component('datatable', {
                 }
             });
             return acc;
-        }
+        };
 
         // For every currently displayed row in column 'columnName', applies the function 'opFunc' to the cell's value and the accumulator object 'accumulator'.
         // Returns the accumulated value object.
         this.reduceColumn = function(columnName, accumulator, opFunc) {
             var a = accumulator;
-            for (var element of this.displayed) {
+            for (var element of this.rowsDisplayed) {
+                // console.log(element);
                 var colVal = element[columnName];
+
+
                 if (colVal && colVal.good && colVal.value != undefined) {
                     opFunc(colVal.value, a);
                 }
@@ -271,20 +277,18 @@ angular.module('dataTableModule').component('datatable', {
 
             this.showFormattingSettingsButtons = !this.showFormattingSettingsButtons;
 
-
-
-            $timeout.cancel(timeoutPromise2);  //does nothing, if timeout already done
-            timeoutPromise = $timeout(function() {   //Set timeout
-                var tableRef = document.getElementById('dataTable');
-                var fixedHeader = document.getElementById('dataTableHead');
-                if (fixedHeader != null) {
-                    var headerHeight = document.getElementById('dataTableHead').offsetHeight;
-                    //console.log('header height: '+headerHeight);
-                    tableRef.style.top = headerHeight + "px";
-
-                    //console.log('data table top: '+tableRef.style.top)
-                }
-            }, delayInMs2);
+            // $timeout.cancel(timeoutPromise2);  //does nothing, if timeout already done
+            // timeoutPromise = $timeout(function() {   //Set timeout
+            //     var tableRef = document.getElementById('dataTable');
+            //     var fixedHeader = document.getElementById('dataTableHead');
+            //     if (fixedHeader != null) {
+            //         var headerHeight = document.getElementById('dataTableHead').offsetHeight;
+            //         //console.log('header height: '+headerHeight);
+            //         tableRef.style.top = headerHeight + "px";
+            //
+            //         //console.log('data table top: '+tableRef.style.top)
+            //     }
+            // }, delayInMs2);
 
             //console.log(this.showFormattingSettingsButtons);
         };
@@ -375,8 +379,20 @@ angular.module('dataTableModule').component('datatable', {
         }
 
         // Whenever the displayed data is changed, recalculate sum and average of the shown rows only
-        $scope.$watch('$ctrl.displayed', function(newValue, oldValue) {
-            console.log("Recalculating...");
+        // $scope.$watch('$ctrl.displayed', function(newValue, oldValue) {
+        //     // console.log("Recalculating...");
+        //     self.updateCalculations();
+        // });
+
+
+        // $scope.$watch('$ctrl.rowName', function(newValue, oldValue) {
+        //     console.log("rowname: Recalculating...");
+        //     console.log(self.rowsDisplayed);
+        //     self.updateCalculations();
+        // });
+
+        $scope.$watchCollection('$ctrl.rowsDisplayed', function(newValue, oldValue) {
+            console.log(self.rowsDisplayed);
             self.updateCalculations();
         });
 
@@ -385,87 +401,87 @@ angular.module('dataTableModule').component('datatable', {
         var newWatch  = true;
 
 
-        this.onColObjUpdate = function(newValue, oldValue){
-            console.log("watch fired");
-            $timeout.cancel(timeoutPromise);  //does nothing, if timeout already done
-            timeoutPromise = $timeout(function() {   //Set timeout
-                console.log("timeout fired");
-
-                var tableRef = document.getElementById('dataTable');
-                if(tableRef == null){
-                    return;
-                }
-                //console.log("table has this many rows");
-                //console.log(tableRef.rows.length);
-
-                //console.log(self.columnNamesObjs);
-                //For rows 1, 2 and 3
-                for (var row = 1; (row < 4) && (row < tableRef.rows.length); row++) {
-                    var colObj;
-                    var tableRow = tableRef.rows[row]; //Get reference to row of table
-                    var c = 0;
-
-                    //For every cell
-                    for (var col = 0; col < tableRow.cells.length; col++) {
-                        var tableCell = tableRow.cells[col]; //get cell at position col
-                        var print = '#' + row + ',' + col + ': ' + tableCell.offsetWidth + " px";
-                        console.log(print);
-
-                        if (row === 3) {
-                            if (true) {
-                                tableRef.rows[1].cells[col].style.maxWidth = tableCell.offsetWidth + 'px';
-                                tableRef.rows[1].cells[col].style.minWidth = tableCell.offsetWidth + 'px';
-                            }
-                            else { /* For debugging purposes */
-                                colObj = self.columnNamesObjs[c];
-                                console.log("Entering col: " + colObj.name +" isChecked: "+colObj.isChecked);
-
-                                if(typeof colObj == 'undefined'){
-                                    console.log('undefined col in timeout')
-                                    continue;
-                                }
-                                for (;c  <=  tableRow.cells.length && !colObj.isChecked; c++) {
-                                    console.log("skipping over: " + colObj.name+" isChecked: "+colObj.isChecked);
-                                    colObj = self.columnNamesObjs[c];
-                                }
-
-                                c++;
-                                console.log("Found: " + colObj.name)
-                                $scope.$apply(function (){
-                                    //self.columnWidths[col]  = tableCell.offsetWidth + 'px';
-                                    self.columNumWidths[col] = tableCell.offsetWidth + 'px';
-                                });
-                                console.log("changing width to: " + tableCell.offsetWidth);
-                            }
-                        }
-                    }
-                }
-                var headerHeight = document.getElementById('dataTableHead').offsetHeight;
-                console.log('Timeout: header height: '+headerHeight);
-                tableRef.style.top = headerHeight + "px";
-
-                $scope.$apply(function (){
-                    tableRef.style.top = headerHeight + "px";
-                });
-                console.log('Timeout: data table top: '+tableRef.style.top)
-            }, delayInMs);
-
-            var tableRef = document.getElementById('dataTable');
-            var fixedHeader = document.getElementById('dataTableHead');
-            if(fixedHeader != null) {
-                var headerHeight = document.getElementById('dataTableHead').offsetHeight;
-                //console.log('header height: '+headerHeight);
-                tableRef.style.top = headerHeight + "px";
-
-                //console.log('data table top: '+tableRef.style.top)
-            }
-        };
-
-        $scope.$watch('$ctrl.columnNamesObjs', self.onColObjUpdate, true);
-
-        this.colUpdate = function(column){
-            //console.log(column.name + " changed");
-        }
+        // this.onColObjUpdate = function(newValue, oldValue){
+        //     console.log("watch fired");
+        //     $timeout.cancel(timeoutPromise);  //does nothing, if timeout already done
+        //     timeoutPromise = $timeout(function() {   //Set timeout
+        //         console.log("timeout fired");
+        //
+        //         var tableRef = document.getElementById('dataTable');
+        //         if(tableRef == null){
+        //             return;
+        //         }
+        //         //console.log("table has this many rows");
+        //         //console.log(tableRef.rows.length);
+        //
+        //         //console.log(self.columnNamesObjs);
+        //         //For rows 1, 2 and 3
+        //         for (var row = 1; (row < 4) && (row < tableRef.rows.length); row++) {
+        //             var colObj;
+        //             var tableRow = tableRef.rows[row]; //Get reference to row of table
+        //             var c = 0;
+        //
+        //             //For every cell
+        //             for (var col = 0; col < tableRow.cells.length; col++) {
+        //                 var tableCell = tableRow.cells[col]; //get cell at position col
+        //                 var print = '#' + row + ',' + col + ': ' + tableCell.offsetWidth + " px";
+        //                 console.log(print);
+        //
+        //                 if (row === 3) {
+        //                     if (true) {
+        //                         tableRef.rows[1].cells[col].style.maxWidth = tableCell.offsetWidth + 'px';
+        //                         tableRef.rows[1].cells[col].style.minWidth = tableCell.offsetWidth + 'px';
+        //                     }
+        //                     else { /* For debugging purposes */
+        //                         colObj = self.columnNamesObjs[c];
+        //                         console.log("Entering col: " + colObj.name +" isChecked: "+colObj.isChecked);
+        //
+        //                         if(typeof colObj == 'undefined'){
+        //                             console.log('undefined col in timeout')
+        //                             continue;
+        //                         }
+        //                         for (;c  <=  tableRow.cells.length && !colObj.isChecked; c++) {
+        //                             console.log("skipping over: " + colObj.name+" isChecked: "+colObj.isChecked);
+        //                             colObj = self.columnNamesObjs[c];
+        //                         }
+        //
+        //                         c++;
+        //                         console.log("Found: " + colObj.name)
+        //                         $scope.$apply(function (){
+        //                             //self.columnWidths[col]  = tableCell.offsetWidth + 'px';
+        //                             self.columNumWidths[col] = tableCell.offsetWidth + 'px';
+        //                         });
+        //                         console.log("changing width to: " + tableCell.offsetWidth);
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //         var headerHeight = document.getElementById('dataTableHead').offsetHeight;
+        //         console.log('Timeout: header height: '+headerHeight);
+        //         tableRef.style.top = headerHeight + "px";
+        //
+        //         $scope.$apply(function (){
+        //             tableRef.style.top = headerHeight + "px";
+        //         });
+        //         console.log('Timeout: data table top: '+tableRef.style.top)
+        //     }, delayInMs);
+        //
+        //     var tableRef = document.getElementById('dataTable');
+        //     var fixedHeader = document.getElementById('dataTableHead');
+        //     if(fixedHeader != null) {
+        //         var headerHeight = document.getElementById('dataTableHead').offsetHeight;
+        //         //console.log('header height: '+headerHeight);
+        //         tableRef.style.top = headerHeight + "px";
+        //
+        //         //console.log('data table top: '+tableRef.style.top)
+        //     }
+        // };
+        //
+        // $scope.$watch('$ctrl.columnNamesObjs', self.onColObjUpdate, true);
+        //
+        // this.colUpdate = function(column){
+        //     //console.log(column.name + " changed");
+        // }
 
 
 

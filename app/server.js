@@ -82,8 +82,7 @@ app.post('/templatesUpdate', function(req, res) {
     // console.log("Got a POST request for the templatesUpdate");
     // console.log("req.body: ", req.body);
 
-    console.log(templates.length);
-    console.dir(templates);
+    // console.log(templates.length);
 
     // Find the template
     var index = 0;

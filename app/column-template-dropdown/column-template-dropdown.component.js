@@ -4,8 +4,19 @@
         AHU, 2 piTemplaes are in use so the default will be for both of those templates. 
     2. 
 
-*/
 
+    Notes:
+        There will always be a default template for if only a single piTemplate is in use. Whenever you
+        go from no data to data a default will be made. However, if you have data then add new data 
+        a default wont be made unless you make it.
+
+        However, in the case of AHU 2 piTemplates are in use so therefore there will be a default 
+        for that one.
+        The only times there is not a default template available is when you add multiple piTempaltes
+        and one has not been set yet.
+
+    
+*/
 angular.module('columnTemplateDropdownModule')
     .filter('type', function(){
         return function(templates, types){
@@ -29,7 +40,7 @@ angular.module('columnTemplateDropdownModule')
 
                 }
             }
-            console.log("filtered temps", filteredTemplates);
+
             return filteredTemplates;
         }
     }
@@ -62,7 +73,9 @@ angular.module('columnTemplateDropdownModule')
             this.unalteredCurrentTemplate = {};
 
             this.newTemplateName = "";
-            this.curType == "";
+
+            this.isAvailableDefaultTemplate = false;
+
 
 
             // Default file name for downloading to CSV
@@ -102,12 +115,12 @@ angular.module('columnTemplateDropdownModule')
 
 
             this.$onChanges = function(changes){
+                console.log("Current Template", this.currentTemplate);
 
                 if(!angular.isUndefined(this.sideSelectorItems)){
                     // Check to see if there is no data - if not reset curtemplate
                     if(this.sideSelectorItems.length == 1 && this.sideSelectorItems[0].building == "dummyItem"){
                         this.currentTemplate = {};
-                        console.log("Current template is now empty");
                     }
 
 
@@ -127,9 +140,19 @@ angular.module('columnTemplateDropdownModule')
                             this.restoreDefault(); // if no default is found this will call generateDefault()
                         }
                     }
-                    // else if(this.currentTemplate.name == "Default"){
-                    //     console.log("current temp", this.currentTemplate);
-                    // }
+
+                    else{
+                        var temp;
+                        for(temp of this.templates){
+                            if(temp.name == "Default" && temp.type == this.piTemplatesInUse){
+                                console.log("found default");
+                                this.ApplyTemplate(temp);
+                                break;
+                            }
+                        }
+                        console.log("we just added data to the table", this.currentTemplate);
+                        console.log("columns", this.columns);
+                    }
 
 
                     // // If there is only one thing in there then use the default for the specific template
@@ -183,9 +206,7 @@ angular.module('columnTemplateDropdownModule')
                 }
                 else{
                     $('.saveTemplateButtonData').css({'color': 'green'});
-                    console.log("making green");
                 }
-
             };
 
             this.restoreDefault = function(){
@@ -227,7 +248,6 @@ angular.module('columnTemplateDropdownModule')
                     "isDefault": "true",
                 };
                 self.ApplyTemplate(template);
-                self.curType = template.type;
 
                 // Push to templates
                 self.templates.push(template);
@@ -235,7 +255,53 @@ angular.module('columnTemplateDropdownModule')
 
                 // Post the default
                 self.postTemplate(template);
-            }
+            };
+
+
+            // This is called when the user creates a custom default for more than one
+            // pi template
+            this.createDefault = function(columnObjs){
+                var colObjToAdd = JSON.parse(angular.toJson(columnObjs)); // Make clone
+
+                var template = {
+                    "name": "Default",
+                    "colObj": colObjToAdd,
+                    "type": this.piTemplatesInUse,
+                    "isDefault": "true"
+                };
+                this.templates.push(template);
+
+                this.postTemplate(template);
+                this.ApplyTemplate(template);
+            };
+
+
+            // this should be show union
+            this.setToFirstTen = function(){
+                var firstValues = 0;
+                for(var column of this.columns){
+                   if (firstValues < 10) {
+                        column.isChecked = true;
+                    } else {
+                        column.isChecked = false;
+                    }
+                    firstValues++;
+                    column.max = undefined;
+                    column.min = undefined;
+                    column.maxColor = "Red";
+                    column.minColor = "Blue";
+                }
+                var colObjToAdd = JSON.parse(angular.toJson(this.columns));
+                var template = {
+                    "name": "Default",
+                    "colObj": colObjToAdd,
+                    "type": this.piTemplatesInUse,
+                    "isDefault": "true",
+                };
+                console.log("template ", template);
+                this.ApplyTemplate(template);
+
+            };
 
 
 
@@ -259,6 +325,14 @@ angular.module('columnTemplateDropdownModule')
 
             this.updateFiltered = function(){
                 this.filteredTemplates = typeFilter(this.templates, self.piTemplatesInUse);
+
+                // If we added piTemplates to the table need to check if there is a default
+                this.isAvailableDefaultTemplate = false;
+                for(var temp of this.filteredTemplates){
+                    if(temp.name == "Default")
+                        this.isAvailableDefaultTemplate = true;
+
+                }
             }
 
 
@@ -558,13 +632,6 @@ angular.module('columnTemplateDropdownModule')
                     // Update templates
                     self.getTemplates();
 
-                    // Apply default template
-                    // for(var template of self.templates){
-                    //     // Is default of current type
-                    //     if(template.name == "Default" && template.isDefault == "true" && template.type == self.curType){
-                    //         self.currentTemplate = template;
-                    //     }
-                    // }
                     if(self.templates.length == 1){
                         console.log("true");
                         self.templates = [];
@@ -607,19 +674,53 @@ angular.module('columnTemplateDropdownModule')
                 $(".saveModalAnalysis").modal('hide');
 
                 this.getTemplates();
-                // console.log(this.templates);
                 this.ApplyTemplate(template);
                 for(temp of self.templates){
-                    // Is default of current type
-                    if(temp.name == overWriteTemplateName && temp.type == self.curType){
+                    if(temp.name == overWriteTemplateName){
                         this.ApplyTemplate(temp);
-                        this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(temp.colObj));
                     }
                 }
-
                 this.ClearTemplateNameInput();
 
             };
+
+
+            // A function to overwrite the template on the server
+            this.OverwriteDefaultTemplate = function(templateCols){
+                var template;
+
+                // Find template by name and type
+                for(var temp of self.templates){
+                    // Is default of current type
+                    console.log(temp);
+                    if(temp.name == "Default" && angular.equals(temp.type, this.piTemplatesInUse)){
+                        template = temp;
+                        break;
+                    }
+                }
+                template.colObj = templateCols;
+                $http({
+                    method: 'POST',
+                    url: '/templatesUpdate',
+                    data: angular.toJson(template),
+                }).then(function successCallback(response) {
+                }, function errorCallback(response) {
+                    console.error("POST Failed ", response);
+                });
+
+                // Close both modals
+                $(".saveModalData").modal('hide');
+                $(".saveModalAnalysis").modal('hide');
+
+                this.getTemplates();
+                // console.log(this.templates);
+                this.ApplyTemplate(template);
+                this.ClearTemplateNameInput();
+                console.log("TEMPLATE OVERWRTING", template);
+                console.log(this.templates);
+
+            };
+
 
             this.switchColumnIsChecked = function(col){
                 if(angular.isUndefined(col))

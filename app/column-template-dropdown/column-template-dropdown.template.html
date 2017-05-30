@@ -28,7 +28,6 @@
 
                 <input ng-model="search.columnName" class="form-control" type="text" placeholder="Search For Column...">
                 <div class="dropdownelm" ng-repeat="column in ($ctrl.filteredColumns = ($ctrl.columns | orderBy:'name' | filter: search.columnName| filter: search.isChecked))  " ng-click="$ctrl.switchColumnIsChecked(column)" ng-class="{'columnChecked': column.isChecked}"> 
-<!--                     <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">  -->
                     {{column.name}}
                 </div>
             </div>
@@ -42,7 +41,10 @@
             </button>
             <ul class="dropdown-menu dropdown-content">
                 <input ng-model="templateFilter" class="form-control" type="text" placeholder="Search For Template...">
-                <!-- <li><a ng-click="$ctrl.restoreDefault()"> Default </a> </li> -->
+
+                <li ng-if="!$ctrl.isAvailableDefaultTemplate"><a ng-click="$ctrl.setToFirstTen()"> Default (no stored on server)
+                </a> </li>
+
                 <li ng-repeat="template in $ctrl.filteredTemplates | filter:templateFilter">
                     <a class="dropdownelm" ng-class="{'columnChecked': template.name == $ctrl.currentTemplate.name}" href="" ng-click="$ctrl.ApplyTemplate(template)">{{template.name}}</a>
                 </li>
@@ -238,13 +240,13 @@
             </li>
         </ul>
 
-
-
         </div>
 
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button ng-click="$ctrl.OverwriteTemplate($ctrl.columns, $ctrl.newTemplateName)" type="button" class="btn btn-default" data-dismiss="modal">Overwrite
+            <button ng-if="$ctrl.isAvailableDefaultTemplate" ng-click="$ctrl.OverwriteDefaultTemplate($ctrl.columns)" type="button" class="btn btn-default" data-dismiss="modal">Overwrite
+            </button>
+            <button ng-if="!$ctrl.isAvailableDefaultTemplate" ng-click="$ctrl.createDefault($ctrl.columns)" type="button" class="btn btn-default" data-dismiss="modal">Create Default
             </button>
 
         </div>

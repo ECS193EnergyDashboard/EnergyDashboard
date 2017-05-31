@@ -149,7 +149,10 @@ angular.module('analysisModule').component('analysis', {
                 }
                 else{
                     this.currentFormattingSettingsCol.currInner = outerCol[innerCol.name];
-                    this.currentFormattingSettingsCol.currInner.name = innerCol.name;
+                    if(this.currentFormattingSettingsCol.currInner.name == undefined)
+                    {
+                        this.currentFormattingSettingsCol.currInner.name = innerCol.name;
+                    }
                 }
                 this.currentFormattingSettingsCol.display = String(this.currentFormattingSettingsCol.name) + " [" + String(this.currentFormattingSettingsCol.currInner.name) + "]";
                 cf.showFormattingSettings(outerCol, 'formattingSettingsModalAnalysis');
@@ -164,7 +167,7 @@ angular.module('analysisModule').component('analysis', {
                 if(this.currentFormattingSettingsCol.currInner == undefined ||  this.currentFormattingSettingsCol.currInner[maxMin] == undefined){
                     return this.maxAndMin[this.currentFormattingSettingsCol.name][this.currentFormattingSettingsCol.currInner.name][maxMin];
                 }
-                // Otherwise ust the userdefined max/min
+                // Otherwise use the userdefined max/min
                 return this.currentFormattingSettingsCol.currInner[maxMin];
 
 

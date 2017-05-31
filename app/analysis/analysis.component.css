@@ -48,3 +48,6 @@
 .inline-div{
     display: inline-flex;
 }
+.formattingSettingsModalAnalysis div form label{
+    text-align: left !important;
+}

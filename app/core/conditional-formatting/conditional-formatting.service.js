@@ -52,6 +52,7 @@ angular.module('core.conditionalFormatting').
                     return {"background-color": "white"}
                 }
                 // Remove conditional formatting for analysis tab
+                // NOTE col[value.name] gets the inner col in analysis
                 if(!angular.isUndefined(col[value.name]) && col[value.name].showConditionalFormat == false){
                     return {"background-color": "white"}
                 }
@@ -82,29 +83,29 @@ angular.module('core.conditionalFormatting').
 
                 // Check if user submitted color, if not default to red and blue for max and min respectivly.
                 var maxColor = cf.red, minColor = cf.blue;
-                if(col.maxColor == "Red"){
+                if(col.maxColor == "Red" || (col[value.name] != undefined && col[value.name].maxColor == "Red")){
                     maxColor = cf.red;
                 }
-                else if(col.maxColor == "Blue"){
+                else if(col.maxColor == "Blue" || (col[value.name] != undefined && col[value.name].maxColor == "Blue")){
                     maxColor = cf.blue;
                 }
-                else if(col.maxColor == "Green"){
+                else if(col.maxColor == "Green" || (col[value.name] != undefined && col[value.name].maxColor == "Green")){
                     maxColor = cf.green;
                 }
-                else if(col.maxColor == "Purple"){
+                else if(col.maxColor == "Purple" || (col[value.name] != undefined && col[value.name].maxColor == "Purple")){
                     maxColor = cf.purple;
                 }
 
-                if(col.minColor == "Red"){
+                if(col.minColor == "Red" || (col[value.name] != undefined && col[value.name].minColor == "Red")){
                     minColor = cf.red;
                 }
-                else if(col.minColor == "Blue"){
+                else if(col.minColor == "Blue" || (col[value.name] != undefined && col[value.name].minColor == "Blue")){
                     minColor = cf.blue;
                 }
-                else if(col.minColor == "Green"){
+                else if(col.minColor == "Green" || (col[value.name] != undefined && col[value.name].minColor == "Green")){
                     minColor = cf.green;
                 }
-                else if(col.minColor == "Purple"){
+                else if(col.minColor == "Purple" || (col[value.name] != undefined && col[value.name].minColor == "Purple")){
                     minColor = cf.purple;
                 }
 

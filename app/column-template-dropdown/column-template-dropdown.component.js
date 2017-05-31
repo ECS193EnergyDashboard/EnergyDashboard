@@ -115,18 +115,9 @@ angular.module('columnTemplateDropdownModule')
 
 
             this.$onChanges = function(changes){
-                console.log("changes", changes);
-
-                // if( !angular.isUndefined( this.sideSelectorItems ))
-                //     var filteredItems = treeFilterFilter(this.sideSelectorItems, "", "template");
-
-                // console.log("changes");
 
                 if(!angular.isUndefined(this.sideSelectorItems)){
 
-                    // console.log(changes.columns.currentValue, changes.columns.previousValue);
-                    // console.log(angular.equals(changes.columns.currentValue, 
-                    // changes.columns.previousValue));
 
                     // Check to see if there is no data - if not reset curtemplate
                     if(this.sideSelectorItems.length == 1 && this.sideSelectorItems[0].building == "dummyItem"){
@@ -137,20 +128,22 @@ angular.module('columnTemplateDropdownModule')
                     this.getPiTemplates();
                     this.getTemplates();
 
-
                     // if there was no changes to the columns do not do anything else.
-                    if(angular.isUndefined(changes.columns) || angular.isUndefined(changes.columns))
+                    if(angular.isUndefined(changes.columns) || angular.isUndefined(changes.columns)){
                         return;
-                    if(angular.equals(changes.columns.currentValue, changes.columns.previousValue))
-                        return;
+                    }
+                    // if(angular.equals(changes.columns.currentValue, changes.columns.previousValue)){
+                    //     console.log("changes", changes.columns)
+                    //     console.log("same");
+                    //     return;
+                    // }
                     
-
 
 
                     // If there is no current template we need to set to default, after checking to make sure there is data
                     if(angular.equals(this.currentTemplate, {}) || angular.isUndefined(this.currentTemplate)){
                         if(this.rowData.length != 0){
-                            console.log("lengh does not equal 0, using default")
+                            // console.log("lengh does not equal 0, using default")
                             this.restoreDefault(); // if no default is found this will call generateDefault()
                         }
 
@@ -159,7 +152,6 @@ angular.module('columnTemplateDropdownModule')
                     // Else we have just added to the table (with data already showing)
                     // Is it possible that the lengths are the same but we still added things to the tabel?
                     else if(changes.columns.currentValue.length != changes.columns.previousValue.length){
-                        console.log("we just added stuff to the table finding new default")
                         var temp;
                         // Find an exact match of piTemplate types that is a default
                         var found = false;
@@ -172,7 +164,6 @@ angular.module('columnTemplateDropdownModule')
                             }
                         }
                         if(!found){
-                            console.log("No default template found, using intersection");
                             this.showIntersection();
                             this.updateFiltered();
                         }
@@ -293,7 +284,6 @@ angular.module('columnTemplateDropdownModule')
                         intersection.push(col.name);
                     }
                 }
-                // console.log(intersection);
 
 
 
@@ -308,8 +298,6 @@ angular.module('columnTemplateDropdownModule')
                     intersection = intersection.diff(difference);
                 });
 
-
-                // console.log(intersection);
 
 
                 for(var column of this.columns){
@@ -330,11 +318,7 @@ angular.module('columnTemplateDropdownModule')
                     "type": this.piTemplatesInUse,
                     "isDefault": "false",
                 };
-                console.log("template ", template);
                 this.ApplyTemplate(template);
-
-
-
 
 
             };
@@ -676,7 +660,6 @@ angular.module('columnTemplateDropdownModule')
                     self.getTemplates();
 
                     if(self.templates.length == 1){
-                        console.log("true");
                         self.templates = [];
                     }
                     self.restoreDefault();
@@ -735,7 +718,6 @@ angular.module('columnTemplateDropdownModule')
                 // Find template by name and type
                 for(var temp of self.templates){
                     // Is default of current type
-                    console.log(temp);
                     if(temp.name == "Default" && angular.equals(temp.type, this.piTemplatesInUse)){
                         template = temp;
                         break;

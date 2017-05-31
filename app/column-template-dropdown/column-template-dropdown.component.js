@@ -115,12 +115,11 @@ angular.module('columnTemplateDropdownModule')
 
 
             this.$onChanges = function(changes){
-                console.log("Current Template", this.currentTemplate);
+                console.log("changes", changes);
 
                 // if( !angular.isUndefined( this.sideSelectorItems ))
                 //     var filteredItems = treeFilterFilter(this.sideSelectorItems, "", "template");
 
-                console.log("lookl", this.sideSelectorItems);
                 // console.log("changes");
 
                 if(!angular.isUndefined(this.sideSelectorItems)){
@@ -158,7 +157,8 @@ angular.module('columnTemplateDropdownModule')
                     }
 
                     // Else we have just added to the table (with data already showing)
-                    else{
+                    // Is it possible that the lengths are the same but we still added things to the tabel?
+                    else if(changes.columns.currentValue.length != changes.columns.previousValue.length){
                         console.log("we just added stuff to the table finding new default")
                         var temp;
                         // Find an exact match of piTemplate types that is a default
@@ -177,38 +177,6 @@ angular.module('columnTemplateDropdownModule')
                             this.updateFiltered();
                         }
                     }
-
-
-
-                    // // If there is only one thing in there then use the default for the specific template
-                    // if(angular.equals(this.currentTemplate, {}) && this.sideSelectorItems.length != 0){
-                    //     if(this.piTemplatesInUse.length == 1){
-                    //         console.log
-                    //         var defaultTemplate;
-                    //         this.curType = this.piTemplatesInUse[0]
-                    //         for(temp of this.templates){
-                    //             if(temp.type == this.piTemplatesInUse[0] && temp.name == "Default"){
-                    //                 console.log("Found default template");
-                    //                 defaultTemplate = temp;
-                    //                 this.ApplyTemplate(temp);
-                    //             }
-                    //         }
-                    //         // If no default template was found need to create it
-                    //         if(angular.isUndefined(defaultTemplate)){
-                    //             console.log("Generating default");
-                    //             self.generateDefault(this.piTemplatesInUse[0]);
-                    //         }
-
-
-
-                    //     }
-                    //     // There is more than one pi template.
-                    //     else{
-
-
-                    //     }
-
-                    // } // end if(this.curType)...
 
                 }
 
@@ -305,16 +273,51 @@ angular.module('columnTemplateDropdownModule')
             };
 
 
-            // this should be show union
+
+            Array.prototype.diff = function(a) {
+                return this.filter(function(i) {return a.indexOf(i) < 0;});
+            };
+
             this.showIntersection = function(){
-                var firstValues = 0;
+                var intersection = [];
+                // console.log("rowData", this.rowData);
+
+                if(angular.isUndefined(this.rowData))
+                    return;
+
+
+                
+                // Get all of the columns into an array
+                for(var col of this.columns){
+                    if(!intersection.includes(col.name)){
+                        intersection.push(col.name);
+                    }
+                }
+                // console.log(intersection);
+
+
+
+                this.rowData.forEach(function(row){ 
+                    // console.log(row);  
+                    var rowColumns = [] 
+                    Object.keys(row).forEach(function(key){
+                        rowColumns.push(row[key].name)
+                    });
+
+                    var difference = intersection.diff(rowColumns);
+                    intersection = intersection.diff(difference);
+                });
+
+
+                // console.log(intersection);
+
+
                 for(var column of this.columns){
-                   if (firstValues < 10) {
+                   if (intersection.includes(column.name)) {
                         column.isChecked = true;
                     } else {
                         column.isChecked = false;
                     }
-                    firstValues++;
                     column.max = undefined;
                     column.min = undefined;
                     column.maxColor = "Red";
@@ -329,6 +332,10 @@ angular.module('columnTemplateDropdownModule')
                 };
                 console.log("template ", template);
                 this.ApplyTemplate(template);
+
+
+
+
 
             };
 

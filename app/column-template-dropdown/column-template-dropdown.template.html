@@ -230,17 +230,27 @@
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             <h4 class="modal-title">Are you sure you want to overwrite the default template?</h4>
         </div>
-        <div class="modal-body">
 
+        <div ng-if="$ctrl.isAvailableDefaultTemplate" class="modal-body">
         By overwriting the default template you will change the columns that first show when displaying these piTemplates:
-
         <ul>
             <li ng-repeat="piTemplate in $ctrl.piTemplatesInUse">
                 <div> {{piTemplate}}</div>
             </li>
         </ul>
-
         </div>
+
+        <div ng-if="!$ctrl.isAvailableDefaultTemplate" class="modal-body">
+        You are creating a default template which will appear first for all users when displaying these piTemplates: 
+        <ul>
+            <li ng-repeat="piTemplate in $ctrl.piTemplatesInUse">
+                <div> {{piTemplate}}</div>
+            </li>
+        </ul>
+        </div>
+
+
+
 
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

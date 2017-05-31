@@ -116,8 +116,14 @@ angular.module('columnTemplateDropdownModule')
 
             this.$onChanges = function(changes){
                 console.log("Current Template", this.currentTemplate);
+                // console.log("changes");
 
                 if(!angular.isUndefined(this.sideSelectorItems)){
+
+                    // console.log(changes.columns.currentValue, changes.columns.previousValue);
+                    // console.log(angular.equals(changes.columns.currentValue, 
+                    // changes.columns.previousValue));
+
                     // Check to see if there is no data - if not reset curtemplate
                     if(this.sideSelectorItems.length == 1 && this.sideSelectorItems[0].building == "dummyItem"){
                         this.currentTemplate = {};
@@ -127,9 +133,12 @@ angular.module('columnTemplateDropdownModule')
                     this.getPiTemplates();
                     this.getTemplates();
 
-                    // Debugging
-                    // console.log("SideselectorItems: ", this.sideSelectorItems);
-                    // console.log("currentPiTemplates: ", this.piTemplatesInUse);
+
+                    // if there was no changes to the columns do not do anything else.
+                    if(angular.isUndefined(changes.columns) || angular.isUndefined(changes.columns))
+                        return;
+                    if(angular.equals(changes.columns.currentValue, changes.columns.previousValue))
+                        return;
                     
 
 
@@ -137,22 +146,33 @@ angular.module('columnTemplateDropdownModule')
                     // If there is no current template we need to set to default, after checking to make sure there is data
                     if(angular.equals(this.currentTemplate, {}) || angular.isUndefined(this.currentTemplate)){
                         if(this.rowData.length != 0){
+                            console.log("lengh does not equal 0, using default")
                             this.restoreDefault(); // if no default is found this will call generateDefault()
                         }
+
                     }
 
+                    // Else we have just added to the table (with data already showing)
                     else{
+                        console.log("we just added stuff to the table finding new default")
                         var temp;
+                        // Find an exact match of piTemplate types that is a default
+                        var found = false;
                         for(temp of this.templates){
-                            if(temp.name == "Default" && temp.type == this.piTemplatesInUse){
+                            if(temp.name == "Default" && angular.equals(temp.type, this.piTemplatesInUse)){
                                 console.log("found default");
                                 this.ApplyTemplate(temp);
+                                found = true;
                                 break;
                             }
                         }
-                        console.log("we just added data to the table", this.currentTemplate);
-                        console.log("columns", this.columns);
+                        if(!found){
+                            console.log("No default template found, using intersection");
+                            this.setToFirstTen();
+                            this.updateFiltered();
+                        }
                     }
+
 
 
                     // // If there is only one thing in there then use the default for the specific template
@@ -320,6 +340,7 @@ angular.module('columnTemplateDropdownModule')
                         }
                     }
                 }
+                return this.piTemplatesInUse;
             };
 
 

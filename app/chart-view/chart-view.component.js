@@ -8,6 +8,7 @@ angular.module('chartViewModule').component('chartView', {
             this.datasetFlat = [];
             
             var charts = [];
+            var focus = undefined;
 
             var collectAttributes = function(params) {
                 var attributes = [];
@@ -70,6 +71,17 @@ angular.module('chartViewModule').component('chartView', {
 
             var graphWidth = $window.innerWidth;
             var lrMargin = 80;
+
+            $window.onresize = function(e) {
+                var width = $window.innerWidth;
+                var svg = $('svg.nvd3-svg');
+                svg.css('width', width);
+                svg.attr('width', width);
+                focus.width(innerWidth);
+                for (var chart of charts) {
+                    chart.width(width);
+                }
+            };
 
             var tooltipContentGenerator = function(d, elem) {
                     if (d === null) {
@@ -252,8 +264,6 @@ angular.module('chartViewModule').component('chartView', {
                     chart.dispatch.onBrush(extent);
                 }
             }
-
-            var focus = undefined;
 
             this.focusOptions = {
                 chart: {

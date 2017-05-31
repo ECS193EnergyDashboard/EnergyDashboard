@@ -5,7 +5,8 @@
 
 <!--Date Range Picker-->
 <div class="drp-contain">
-    <div class="border"> <!--This div for border-->
+    <div class="border">
+        <!--This div for border-->
         <span class="glyphicon glyphicon-calendar"></span>
         <input date-range-picker class="form-control date-picker" type="text" ng-model="$ctrl.datePicker.date" options="$ctrl.DRPOptions" />
     </div>
@@ -18,16 +19,14 @@
                 <input ng-model="innerCol.isChecked" type="checkbox">
                 {{innerCol.display}}
             </span>
-        </p>
+    </p>
     </span>
 
 </div>
 
 
-
-
-
-<table st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped" ng-hide="$ctrl.data == undefined || $ctrl.data.length == 0" >
+<!-- Analysis Table -->
+<table st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped" ng-hide="$ctrl.data == undefined || $ctrl.data.length == 0">
     <thead>
         <!-- Outer Columns -->
         <tr>
@@ -49,7 +48,9 @@
                             <th st-sort="building">Building</th>
                         </tr>
                     </thead>
-                    <tr><td><br/></td></tr>
+                    <tr>
+                        <td><br/></td>
+                    </tr>
                     <tr ng-repeat="element in $ctrl.displayed">
                         <td>{{element.name}}</td>
                         <td>{{element.building}}</td>
@@ -73,11 +74,8 @@
                     <!-- For each AHU01, AHU02 ... -->
                     <tr ng-repeat="element in $ctrl.displayed">
                         <!-- For each "sensor" -->
-                        <td ng-repeat="innerColumn in $ctrl.innerColumnNames"
-                            ng-if="innerColumn.isChecked"
-                            ng-class="$ctrl.valueStyle(element[outerColumn.name][innerColumn.name])"
-                            ng-style="cf.conditionalFormat(element[outerColumn.name][innerColumn.name], outerColumn, $ctrl.maxAndMin[outerColumn.name], 'true')">
-                                {{$ctrl.formatValue(element[outerColumn.name][innerColumn.name])}}
+                        <td ng-repeat="innerColumn in $ctrl.innerColumnNames" ng-if="innerColumn.isChecked" ng-class="$ctrl.valueStyle(element[outerColumn.name][innerColumn.name])" ng-style="cf.conditionalFormat(element[outerColumn.name][innerColumn.name], outerColumn, $ctrl.maxAndMin[outerColumn.name], 'true')">
+                            {{$ctrl.formatValue(element[outerColumn.name][innerColumn.name])}}
                         </td>
                     </tr>
                 </table>
@@ -94,18 +92,18 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Conditional Formatting Settings for Column "{{$ctrl.currentFormattingSettingsCol.name}}"</h4>
+                <h4 class="modal-title">Conditional Formatting Settings for Column "{{$ctrl.currentFormattingSettingsCol.display}}"</h4>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" id="conditionalFormatFormAnalysis">
-                    <label ng-if="!cf.isUndefined($ctrl.currentFormattingSettingsCol.max)" for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.name}}: (Currently set at {{$ctrl.currentFormattingSettingsCol.max}})</label>
-                    <label ng-if="cf.isUndefined($ctrl.currentFormattingSettingsCol.max)" for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.name}}: </label>
-                    <input class="form-control" id="maxInputAnalysis" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].max}}">
+                    <label ng-if="!cf.isUndefined($ctrl.currentFormattingSettingsCol.max)" for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.display}}: (Currently set at {{$ctrl.currentFormattingSettingsCol.max}})</label>
+                    <label ng-if="cf.isUndefined($ctrl.currentFormattingSettingsCol.max)" for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.display}}: </label>
+                    <input class="form-control" id="maxInputAnalysis" value="{{$ctrl.printMaxOrMin('max')}}">
 
 
-                    <label ng-if="!cf.isUndefined($ctrl.currentFormattingSettingsCol.min)" for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.name}}: (Currently set at {{$ctrl.currentFormattingSettingsCol.min}})</label>
-                    <label ng-if="cf.isUndefined($ctrl.currentFormattingSettingsCol.min)" for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.name}}: </label>
-                    <input class="form-control" id="minInputAnalysis" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].min}}">
+                    <label ng-if="!cf.isUndefined($ctrl.currentFormattingSettingsCol.min)" for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.display}}: (Currently set at {{$ctrl.currentFormattingSettingsCol.min}})</label>
+                    <label ng-if="cf.isUndefined($ctrl.currentFormattingSettingsCol.min)" for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.display}}: </label>
+                    <input class="form-control" id="minInputAnalysis" value="{{$ctrl.printMaxOrMin('min')}}">
 
 
                     <label for="maxColor">Color for Max: (Currently set at {{$ctrl.currentFormattingSettingsCol.maxColor}})</label>

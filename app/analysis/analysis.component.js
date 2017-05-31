@@ -90,7 +90,7 @@ angular.module('analysisModule').component('analysis', {
 
                     self.data = data;
 
-                    console.log(self.data);
+                    //console.log(self.data);
 
                     var colNames = [];
                     var columnSet = {};
@@ -144,8 +144,30 @@ angular.module('analysisModule').component('analysis', {
             // Called in html to open the CF settings modal
             this.openCogModal = function(outerCol, innerCol) {
                 this.currentFormattingSettingsCol = outerCol;
-                this.currentFormattingSettingsCol.currInner = innerCol;
+                if(outerCol[innerCol.name] == undefined){
+                    this.currentFormattingSettingsCol.currInner = innerCol;
+                }
+                else{
+                    this.currentFormattingSettingsCol.currInner = outerCol[innerCol.name];
+                    this.currentFormattingSettingsCol.currInner.name = innerCol.name;
+                }
+                this.currentFormattingSettingsCol.display = String(this.currentFormattingSettingsCol.name) + " [" + String(this.currentFormattingSettingsCol.currInner.name) + "]";
                 cf.showFormattingSettings(outerCol, 'formattingSettingsModalAnalysis');
+            }
+
+            this.printMaxOrMin = function(maxMin){
+                // Avoid erorr in console (when this runs before we have data)
+                if(this.currentFormattingSettingsCol == undefined || this.currentFormattingSettingsCol.name == undefined){
+                    return;
+                }
+                // No user defined max/min
+                if(this.currentFormattingSettingsCol.currInner == undefined ||  this.currentFormattingSettingsCol.currInner[maxMin] == undefined){
+                    return this.maxAndMin[this.currentFormattingSettingsCol.name][this.currentFormattingSettingsCol.currInner.name][maxMin];
+                }
+                // Otherwise ust the userdefined max/min
+                return this.currentFormattingSettingsCol.currInner[maxMin];
+
+
             }
 
             // Called in html to toggle CF

@@ -599,6 +599,12 @@ angular.module('columnTemplateDropdownModule')
                     this.ShowErrorModal();
                     return;                   
                 }
+                if(this.newTemplateName == "Intersection" || this.newTemplateName == "intersection" || 
+                        this.newTemplateName == "default"){
+                    this.errorMessage = "Please pick another name for the template";
+                    this.ShowErrorModal();
+                    return;                      
+                }
                 for(templ of this.templates){
                     // New template name already exists and its type is the current type
                     if(this.newTemplateName == templ.name){

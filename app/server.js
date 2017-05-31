@@ -20,7 +20,7 @@ jsonfile.readFile(templatesLocation, function(err, obj) {
 
 //This responds on the homepage
 app.get('/', function(req, res) {
-    console.log("Got a GET request for the homepage -- here");
+    // console.log("Got a GET request for the homepage -- here");
 
     var options = {
         root: __dirname,
@@ -53,8 +53,8 @@ app.post('/templatesDelete', function(req, res) {
     // console.log("Got a POST request for the templatesDelete");
     // console.log("req.body: ", req.body);
 
-    console.log(templates.length);
-    console.dir(templates);
+    // console.log(templates.length);
+    // console.dir(templates);
 
     // Remove the template
     var index = 0;
@@ -80,14 +80,15 @@ app.post('/templatesDelete', function(req, res) {
 //This responds a POST request to /templatesDelete that updates
 app.post('/templatesUpdate', function(req, res) {
     // console.log("Got a POST request for the templatesUpdate");
-    // console.log("req.body: ", req.body);
+    console.log("req.body: ", req.body);
 
     // console.log(templates.length);
 
     // Find the template
     var index = 0;
     for(var template of templates){
-        if(template.name == req.body.name && template.type == req.body.type){
+        if(template.name == req.body.name && arraysEqual(template.type, req.body.type)){
+            console.log("FOUND");
             break;
         }
         index++;
@@ -95,8 +96,10 @@ app.post('/templatesUpdate', function(req, res) {
     // Update the template
     template.colObj = req.body.colObj;
 
+    // JSON.stringify(template.type)==JSON.stringify(req.body.type)
 
-    console.dir(templates);
+
+    console.dir("template ", template);
     res.status(200).send('template updated on server');
     // save to file
     jsonfile.writeFile(templatesLocation, templates, function (err) {
@@ -146,7 +149,30 @@ function shutdown() {
     })
 }
 
+
+function arraysEqual(a,b) {
+    /*
+        Array-aware equality checker:
+        Returns whether arguments a and b are == to each other;
+        however if they are equal-lengthed arrays, returns whether their 
+        elements are pairwise == to each other recursively under this
+        definition.
+    */
+    if (a instanceof Array && b instanceof Array) {
+        if (a.length!=b.length)  // assert same length
+            return false;
+        for(var i=0; i<a.length; i++)  // assert each element equal
+            if (!arraysEqual(a[i],b[i]))
+                return false;
+        return true;
+    } else {
+        return a==b;  // if not both arrays, should be the same
+    }
+}
+
 process.on('SIGTERM', shutdown);
+
+
 
 /*
 To start the server: node server.js

@@ -5,7 +5,7 @@ angular.module('core.treeFilter').filter('treeFilter', function() {
         //console.log(optional1);
         if(optional1[searchType] == null){
             //console.log(optional2);
-            var searchString = optional1[searchType].toLowerCase();;
+            var searchString = optional1[searchType].toLowerCase();
         }
         else {
             var searchString = optional1[searchType].toLowerCase();

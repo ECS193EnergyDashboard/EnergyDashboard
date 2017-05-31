@@ -42,7 +42,8 @@
             <ul class="dropdown-menu dropdown-content">
                 <input ng-model="templateFilter" class="form-control" type="text" placeholder="Search For Template...">
 
-                <li ng-if="!$ctrl.isAvailableDefaultTemplate"><a ng-click="$ctrl.setToFirstTen()"> Default (no stored on server)
+                <li ng-if="$ctrl.piTemplatesInUse.length > 1"><a ng-click="$ctrl.showIntersection()"> 
+                    Show Intersection
                 </a> </li>
 
                 <li ng-repeat="template in $ctrl.filteredTemplates | filter:templateFilter">
@@ -248,9 +249,6 @@
             </li>
         </ul>
         </div>
-
-
-
 
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

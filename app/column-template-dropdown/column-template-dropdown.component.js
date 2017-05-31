@@ -116,6 +116,11 @@ angular.module('columnTemplateDropdownModule')
 
             this.$onChanges = function(changes){
                 console.log("Current Template", this.currentTemplate);
+
+                // if( !angular.isUndefined( this.sideSelectorItems ))
+                //     var filteredItems = treeFilterFilter(this.sideSelectorItems, "", "template");
+
+                console.log("lookl", this.sideSelectorItems);
                 // console.log("changes");
 
                 if(!angular.isUndefined(this.sideSelectorItems)){
@@ -168,7 +173,7 @@ angular.module('columnTemplateDropdownModule')
                         }
                         if(!found){
                             console.log("No default template found, using intersection");
-                            this.setToFirstTen();
+                            this.showIntersection();
                             this.updateFiltered();
                         }
                     }
@@ -291,13 +296,17 @@ angular.module('columnTemplateDropdownModule')
                 };
                 this.templates.push(template);
 
+                // Close both modals
+                $(".saveModalData").modal('hide');
+                $(".saveModalAnalysis").modal('hide');
+
                 this.postTemplate(template);
                 this.ApplyTemplate(template);
             };
 
 
             // this should be show union
-            this.setToFirstTen = function(){
+            this.showIntersection = function(){
                 var firstValues = 0;
                 for(var column of this.columns){
                    if (firstValues < 10) {
@@ -313,10 +322,10 @@ angular.module('columnTemplateDropdownModule')
                 }
                 var colObjToAdd = JSON.parse(angular.toJson(this.columns));
                 var template = {
-                    "name": "Default",
+                    "name": "Intersection",
                     "colObj": colObjToAdd,
                     "type": this.piTemplatesInUse,
-                    "isDefault": "true",
+                    "isDefault": "false",
                 };
                 console.log("template ", template);
                 this.ApplyTemplate(template);
@@ -737,9 +746,6 @@ angular.module('columnTemplateDropdownModule')
                 // console.log(this.templates);
                 this.ApplyTemplate(template);
                 this.ClearTemplateNameInput();
-                console.log("TEMPLATE OVERWRTING", template);
-                console.log(this.templates);
-
             };
 
 

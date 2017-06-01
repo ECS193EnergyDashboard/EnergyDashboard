@@ -22,7 +22,6 @@
 .fixedButtons{
    overflow: hidden;
     flex-shrink: 0;
-    border-bottom: 2px solid #e4e2e2;
 }
 .fixedButtons .form-group{
     overflow: hidden;
@@ -38,17 +37,24 @@
 .fixedButtons .btn {
     flex: 1;
     border-radius: 0px;
-    margin-bottom: 1px;
+    margin: 0px;
+    border-color: #e1e8ed;
+    background-color: #f1f6fa;
 }
 .fixedButtons input {
     border-radius: 0px;
+    border-color: #e1e8ed;
+    box-shadow: none;
 }
+
 
 #inside {
     display: flex;
     flex-direction: column;
     flex: 30 1;
     overflow: hidden;
+    border-right: 1px solid #e1e8ed;
+    /*background-image: linear-gradient(to bottom, #f8f9fd 0, #f8f9fd 100%);*/
 }
 #sidebar-border{
     display: none;
@@ -85,6 +91,42 @@
 #sidebar-wrapper .btn-group .btn{
     flex: 1;
 }
+
+.rMainSidebar .well {
+    /*background-image: linear-gradient(to bottom, #d7dde3 0, #d7dde3 100%);*/
+    background-image: inherit;
+    background-color: #f8f9fd;
+    /*color: #888ea4;*/
+}
+
+.rSidebarSearchToggle{
+    font-size: 1em;
+    background-color: #e2e8ee;
+    padding: 5px 0px 5px 0px;
+    flex: 1 1;
+    border: 1px solid #e1e8ed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 45px;
+}
+
+.rSidebarRegSearch{
+    background-color: #f8f9fd;
+    border: none;
+}
+
+.rSidebarTemSearch{
+    background-color: #f8f9fd;
+    border: none;
+}
+
+.rSidebarSearchText{
+    font-size: 0.8em;
+    color: #2d333d;
+    padding: 0px 10px 10px 10px;
+}
+
 #sidebar-wrapper .well {
     /*background-color: inherit;
     background-image: inherit;
@@ -211,8 +253,8 @@
 }
 
 .sidebar-item:hover {
-    background-color: rgb(156, 233, 241);
-    outline: 2px solid #42899e;
+    background-color: rgb(136, 140, 162);
+    outline: 2px solid #a6acba;
     margin-bottom: 2px;
 }
 
@@ -391,13 +433,29 @@
 }
 
 /* Form wrapper styling */
-.form-wrapper {
+.form-wrapper{
+    padding: 16px 16px 16px 16px;
+}
+
+.form-wrapper form{
     display: flex;
+    align-items: center;
+    border: 1px solid #e1e8ed;
+    background-color: white;
+    position: relative;
+    color: #e1e8ed
+}
+
+.form-wrapper div{
+    position: absolute;
+    right: 4px;
 }
 
 /* Form text input */
 .form-wrapper input {
     flex: 1 1;
+    border: none;
+    text-indent: 1em;
 }
 .form-wrapper button#clearFilterButton {
     flex: initial;
@@ -628,7 +686,7 @@
 }
 
 .filterBtn {
-    color: #cea045;
+    color: #2d333d;
 }
 
 

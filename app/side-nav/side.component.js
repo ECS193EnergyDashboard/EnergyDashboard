@@ -73,6 +73,16 @@ angular.module('sideNavModule').component('sideBar', {
             //console.log(self.filterType);
             //console.log(self.searchInput);
             //console.log(self.filteredItems);
+            if(self.searchInput[self.filterType] === "") {
+                self.isFiltered = 0;
+                if(self.filterType === "name"){
+                    self.filteredItems = self.buildings;
+                }
+                else{
+                    self.filteredItems = self.templateList;
+                }
+                return;
+            }
             self.filteredItems = treeFilterFilter(self.buildings, self.searchInput[self.filterType], self.filterType);
             self.isFiltered = 1;
             // console.log("Copying search");
@@ -170,9 +180,15 @@ angular.module('sideNavModule').component('sideBar', {
             self.filterType = "template";
             self.searchPlaceHolder = "Search Templates...";
             // console.log(Array.from(new set(self.templateList)));
-
-
             self.filteredItems = self.templateList;
+        };
+
+        this.isRegularSearch = function(){
+            return self.filterType === "name";
+        };
+
+        this.isTemplateSearch = function(){
+            return self.filterType === "template";
         };
 
         var timer = 0;

@@ -69,10 +69,12 @@
 }
 
 .rMainSidebar{
-    flex: 1 1;
-    min-width: 250px;
+    flex: initial;
+    min-width: 0px;
+    width: 0px;
     background-color: #f8f9fd;
     transition: 1s ease;
+    border-right: 1px solid #e1e8ed;
 }
 
 #rMainContentView{
@@ -84,13 +86,12 @@
 
 
 
-
-.hideSidebar{
-    flex: initial;
-    width: 0px;
-    min-width: 0px;
-    transition: 2s ease;
-}
+.showSidebar{
+    flex: 1 1;
+    min-width: 250px;
+    background-color: #f8f9fd;
+    transition: 1s ease;
+};
 
 .form-group {
     margin-bottom: 1px;

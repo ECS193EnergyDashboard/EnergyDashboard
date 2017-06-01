@@ -2,14 +2,19 @@
 <div id="inside">
 <div class="fixedButtons">
     <div class="btn-group" role="group" aria-label="...">
-        <button ng-click="$ctrl.searchNames()" type="button" class="btn btn-default glyphicon glyphicon-home"></button>
-        <button ng-click="$ctrl.searchTemplates()" type="button" class="btn btn-default glyphicon glyphicon-book"></button>
-        <button ng-click="$ctrl.applyFilter()" ng-class="{filterBtn: $ctrl.isFiltered}" type="button" class="btn btn-default glyphicon glyphicon-filter"></button>
+        <div ng-click="$ctrl.searchNames()" type="button" class="rSidebarSearchToggle" ng-class="{'rSidebarRegSearch': $ctrl.isRegularSearch()}"><span class="glyphicon glyphicon-home"></span> </div>
+        <div ng-click="$ctrl.searchTemplates()" type="button" class="rSidebarSearchToggle" ng-class="{'rSidebarTemSearch': $ctrl.isTemplateSearch()}"><span class="glyphicon glyphicon-book"></span> </div>
     </div>
-    <form ng-submit="$ctrl.applyFilter()" class="form-wrapper">
-        <input type="text" class="form-control" id="usr" placeholder="{{$ctrl.searchPlaceHolder}}" ng-model="$ctrl.searchInput[$ctrl.filterType]">
-        <button id="clearFilterButton" ng-click="$ctrl.clearFilter()" type="button" class="btn btn-default glyphicon glyphicon-trash"></button>
-    </form>
+    <div class="form-wrapper">
+        <form ng-submit="$ctrl.applyFilter()"  >
+            <input type="text" class="form-control" id="usr" placeholder="{{$ctrl.searchPlaceHolder}}" ng-model="$ctrl.searchInput[$ctrl.filterType]">
+            <div ng-click="$ctrl.applyFilter()" ng-class="{filterBtn: $ctrl.isFiltered}" type="button" class=""><span class="glyphicon glyphicon-search"></span></div>
+            <!--<button id="clearFilterButton" ng-click="$ctrl.clearFilter()" type="button" class="btn btn-default "><span class="glyphicon glyphicon-trash"></span></button>-->
+        </form>
+    </div>
+    <div ng-if="$ctrl.isFiltered && $ctrl.searchInput[$ctrl.filterType]"  class="rSidebarSearchText">
+        {{$ctrl.filteredItems.length}} results found for "{{$ctrl.searchInput[$ctrl.filterType]}}"
+    </div>
 </div>
 
 <p ng-if="$ctrl.loadingList()" id="loadingText">
@@ -30,7 +35,7 @@
                     <span ng-show="!$ctrl.showLeafNodeIcon(element) && $ctrl.showClosedIcon(element)" class="glyphicon glyphicon glyphicon-folder-close" ></span>
                     <span ng-show="!$ctrl.showLeafNodeIcon(element) && $ctrl.showOpenIcon(element)" class="glyphicon glyphicon glyphicon-folder-open" ></span>
                     <div id="itemText">
-                        <span ng-if="$ctrl.isFiltered">
+                        <span ng-if="$ctrl.isFiltered && $ctrl.searchInput[$ctrl.filterType]">
                             <h6 id="buildingName">{{element.building}} | {{element.template}}</h6>
                             <br>
                         </span>

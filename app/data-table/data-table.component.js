@@ -107,6 +107,10 @@ angular.module('dataTableModule')
             col.showConditionalFormat = !col.showConditionalFormat;
         };
 
+        this.showHideSettingsButtons = function(){
+          this.showFormattingSettingsButtons =   !this.showFormattingSettingsButtons;
+        };
+
         // Called in html to apply the CF settings
         this.submitFormattingSettings = function(col){
             col.max = document.getElementById("maxInput").value;

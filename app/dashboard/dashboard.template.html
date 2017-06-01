@@ -12,13 +12,13 @@
         </div>
     </div>
     <div id="rMainContent">
-        <div class="rMainSidebar" id="rMainSidebar1" ng-class="{'hideSidebar': !$ctrl.showSidebar['sidebar1']}">
+        <div class="rMainSidebar" id="rMainSidebar1" ng-class="{'showSidebar': $ctrl.showSidebar['sidebar1']}">
             <side-bar id="side-bar" is-loading="$ctrl.isLoading" on-click="$ctrl.addChildElements(element)"></side-bar>
         </div>
-        <div class="rMainSidebar" id="rMainSidebar2" ng-class="{'hideSidebar': !$ctrl.showSidebar['sidebar2']}">
+        <div class="rMainSidebar" id="rMainSidebar2 hideSidebar" ng-class="{'showSidebar': $ctrl.showSidebar['sidebar2']}">
             <side-bar-selector id="side-bar-selector" on-select="$ctrl.addElement(item)"  on-deselect="$ctrl.removeElement(item)" on-clear="$ctrl.clearElements()" items-to-add="$ctrl.itemsToAdd"></side-bar-selector>
         </div>
-        <div class="rMainSidebar" id="rMainSidebar3" ng-class="{'hideSidebar': !$ctrl.showSidebar['sidebar3']}">
+        <div class="rMainSidebar" id="rMainSidebar3 hideSidebar" ng-class="{'showSidebar': $ctrl.showSidebar['sidebar3']}">
             <side-bar-chart id="side-bar-chart" selection="$ctrl.chartSelection" ></side-bar-chart>
         </div>
 

@@ -259,6 +259,9 @@ angular.module('columnTemplateDropdownModule')
                 $(".saveModalData").modal('hide');
                 $(".saveModalAnalysis").modal('hide');
 
+                $(".saveDefaultModalData").modal('hide');
+                $(".saveDefaultModalAnalysis").modal('hide');
+
                 this.postTemplate(template);
                 this.ApplyTemplate(template);
             };

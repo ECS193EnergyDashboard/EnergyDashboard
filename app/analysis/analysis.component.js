@@ -1,10 +1,11 @@
 angular.module('analysisModule').component('analysis', {
     templateUrl: 'analysis/analysis.template.html',
     bindings: {
-        webIds:      '<',
-        elemName:    '<', // passed to columnTemplate component to determine template type
-        onStartLoad: '&',
-        onEndLoad:   '&'
+        webIds:            '<',
+        elemName:          '<', // passed to columnTemplate component to determine template type
+        onStartLoad:       '&',
+        onEndLoad:         '&',
+        sideSelectorItems: '<'
     },
     controller: ['$filter', '$scope', 'pi', 'conditionalFormatting', 'reduceColumn',
         function AnalysisController($filter, $scope, pi, cf, rc) {

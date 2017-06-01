@@ -47,13 +47,13 @@ angular.module('columnTemplateDropdownModule')
 ).component('columnTemplateDropdown', {
     templateUrl: 'column-template-dropdown/column-template-dropdown.template.html',
     bindings: {
-        columns:        '<', //columnNamesObjs passed in (col order maintained),  current set of cols
-        rowData:        '<', //row order not maintained, has units
-        isAnalysis:     '<',
-        templateSets:   '<',
-        innerColumns:   '<', // Min, max, avg, st - this is needed for CSV
-        updateColObj:   '&', // Output binding to update the table
-        dateRange:      '<', // The date range to print on the csv
+        columns:           '<', //columnNamesObjs passed in (col order maintained),  current set of cols
+        rowData:           '<', //row order not maintained, has units
+        isAnalysis:        '<',
+        templateSets:      '<',
+        innerColumns:      '<', // Min, max, avg, st - this is needed for CSV
+        updateColObj:      '&', // Output binding to update the table
+        dateRange:         '<', // The date range to print on the csv
         sideSelectorItems: '<'
     },
     controller: [
@@ -70,7 +70,7 @@ angular.module('columnTemplateDropdownModule')
 
             this.piTemplatesInUse = [];
 
-            this.unalteredCurrentTemplate = {};
+            this.unalteredCurrentTemplate = {}; // For the watcher
 
             this.newTemplateName = "";
 
@@ -82,11 +82,6 @@ angular.module('columnTemplateDropdownModule')
             this.fileName = "Data.csv";
             // an error message for the modal. Always set the error message before showing modal
             this.errorMessage = "";
-
-
-            this.$onInit = function(){
-                // this.determineType();
-            }
 
 
             // A watcher for the current template used to set the color of the Save button
@@ -132,12 +127,6 @@ angular.module('columnTemplateDropdownModule')
                     if(angular.isUndefined(changes.columns) || angular.isUndefined(changes.columns)){
                         return;
                     }
-                    // if(angular.equals(changes.columns.currentValue, changes.columns.previousValue)){
-                    //     console.log("changes", changes.columns)
-                    //     console.log("same");
-                    //     return;
-                    // }
-                    
 
 
                     // If there is no current template we need to set to default, after checking to make sure there is data

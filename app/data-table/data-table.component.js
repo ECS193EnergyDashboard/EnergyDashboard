@@ -2,12 +2,12 @@ angular.module('dataTableModule')
 .component('datatable', {
     templateUrl: 'data-table/data-table.template.html',
     bindings: {
-        tableSrc:       '<',
-        searchEnabled:  '<',
-        reorderEnabled: '<',
-        selection:      '=',
-        api:            '=',
-        sideSelectorItems:          '<'
+        tableSrc:          '<',
+        searchEnabled:     '<',
+        reorderEnabled:    '<',
+        selection:         '=',
+        api:               '=',
+        sideSelectorItems: '<'
     },
 
     controller: ['$filter', '$scope', '$timeout', 'conditionalFormatting', 'reduceColumn', function TableController($filter, $scope, $timeout, cf, rc) {

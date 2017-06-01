@@ -60,7 +60,7 @@
 
 
         <!-- Delete Template button for Data Tab -->
-        <button ng-click="$ctrl.ShowDeleteModal()" ng-class="{'disabled': $ctrl.currentTemplate.name=='Default'}" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false">
+        <button ng-click="$ctrl.ShowDeleteModal()" ng-class="{'disabled': $ctrl.currentTemplate.name=='Default' || $ctrl.currentTemplate.name=='Intersection'}" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false">
             Delete Template
         </button>
 

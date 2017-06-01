@@ -111,6 +111,29 @@
     min-height: 45px;
 }
 
+#sideBarAddBtn{
+    position: absolute;
+    right: 0px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 5px 5px 5px 5px;
+    cursor: cell;
+    color: #f3f3f3;
+}
+#sideBarAddBtn:hover{
+    color: #d5dae2;
+}
+
+#sidebarLoadingBar{
+    /*position: fixed;*/
+    margin: auto;
+    top: 10px;
+    z-index: 99999;
+}
+
+
 .rSidebarRegSearch{
     background-color: #f8f9fd;
     border: none;

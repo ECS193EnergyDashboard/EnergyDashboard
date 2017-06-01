@@ -10,8 +10,7 @@
         <span ng-show="!$ctrl.showLeafNodeIcon(e) && $ctrl.showClosedIcon(e)" class="glyphicon glyphicon glyphicon-folder-close" ></span>
         <span ng-show="!$ctrl.showLeafNodeIcon(e) && $ctrl.showOpenIcon(e)" class="glyphicon glyphicon glyphicon-folder-open" ></span>
 
-
-
+        <span id="sideBarAddBtn" ng-click="$ctrl.onSelectElem(e);$event.stopPropagation()" class="glyphicon glyphicon-ok"></span>
         <span  class="" >{{e.name}}</span>
     </div>
     <div class="list-group" ng-if="e.elements && e.show" ng-include="'side-nav/side-heirarchy-template.html'" ng-init="element=e"></div>

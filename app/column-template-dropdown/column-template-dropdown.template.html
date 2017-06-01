@@ -1,9 +1,23 @@
 <div class="columnTemplateParent" >
 <!-- <div class="columnTemplateParent"> -->
     <div class="tableSettingsButtons">
+        <!--Save Template button for Data Tab-->
+        <div ng-class="{'saveTemplateButtonData': $ctrl.isAnalysis=='false', 'saveTemplateButtonAnalysis': $ctrl.isAnalysis=='true'}" ng-click="$ctrl.ShowSaveModal()" class="topMenuItem chartMenuIcon" >
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+        </div>
+
+        <!-- Delete Template button for Data Tab -->
+        <div ng-click="$ctrl.ShowDeleteModal()" class="topMenuItem topMenuIcon">
+            <span class="glyphicon glyphicon-trash"></span>
+        </div>
+
+        <!--Download CSV button for Data Tab-->
+        <div ng-click="$ctrl.ShowDownloadModal()" class="topMenuItem topMenuIcon">
+            <span class="glyphicon glyphicon-save-file"></span>
+        </div>
         <!-- Columns show/hide dropdown -->
-        <div class="menuDropdown">
-            <button type="button" class="btn btn-default dropdown-toggle tableButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <div class="topMenuItem ">
+            <button type="button" class="btn btn-default dropdown-toggle topMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Columns <span class="caret"></span>
             </button>
             <div class="dropdown-menu dropdown-content" id="menuDropdownContent">
@@ -36,8 +50,8 @@
         </div>
 
         <!-- Templates dropdown -->
-        <div class="menuDropdown">
-            <button type="button" class="btn btn-default dropdown-toggle tableButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <div class="topMenuItem ">
+            <button type="button" class="btn btn-default dropdown-toggle topMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{$ctrl.currentTemplate.name}} <span class="caret"></span>
             </button>
             <ul class="dropdown-menu dropdown-content">
@@ -46,21 +60,6 @@
                     <a href="" ng-click="$ctrl.ApplyTemplate(template)">{{template.name}}</a>
                 </li>
             </ul>
-        </div>
-
-        <!--Save Template button for Data Tab-->
-        <div ng-class="{'saveTemplateButtonData': $ctrl.isAnalysis=='false', 'saveTemplateButtonAnalysis': $ctrl.isAnalysis=='true'}" ng-click="$ctrl.ShowSaveModal()" class="menuDropdown menuDropdownIcon" >
-            <span class="glyphicon glyphicon-floppy-disk"></span>
-        </div>
-
-        <!-- Delete Template button for Data Tab -->
-        <div ng-click="$ctrl.ShowDeleteModal()" class="menuDropdown menuDropdownIcon">
-            <span class="glyphicon glyphicon-trash"></span>
-        </div>
-
-        <!--Download CSV button for Data Tab-->
-        <div ng-click="$ctrl.ShowDownloadModal()" class="menuDropdown menuDropdownIcon">
-            <span class="glyphicon glyphicon-save-file"></span>
         </div>
     </div> <!--end tableSettingsButtons -->
 

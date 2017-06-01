@@ -66,22 +66,26 @@ html, body{
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #89af39;
+    /*color: #89af39;*/
+    /*color: #c1d78f;*/
+    color: #93c030;
     font-size: 2em;
     position: relative;
 }
 
 .rSidebarBtn:hover{
     background-color: #13161d;
-    color: #2f4050;
+    /*color: #2f4050;*/
+    /*color: #c1d78f;*/
+    /*color: #89af39;*/
 }
 
 .rightPtr {
     position: absolute;
-    right: 0px;
-    top: 0px;
-    font-size: 0.4em;
-    color: white;
+    right: 4px;
+    top: 4px;
+    font-size: 0.5em;
+    color: #eaeaea;
     display: inherit;
 }
 
@@ -92,12 +96,12 @@ html, body{
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #2f4050;
+    /*color: #2f4050;*/
+    color: #c1d890;
     font-size: 2em;
 }
 
 .rSidebarBtn2:hover{
     background-color: #13161d;
-    color: #89af39;
+    /*color: #89af39;*/
 }
-

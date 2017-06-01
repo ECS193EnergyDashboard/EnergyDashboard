@@ -72,7 +72,7 @@
     flex: 1 1;
     min-width: 250px;
     background-color: #f8f9fd;
-    transition: 2s ease;
+    transition: 1s ease;
 }
 
 #rMainContentView{

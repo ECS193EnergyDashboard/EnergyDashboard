@@ -20,13 +20,13 @@ angular.module('dashboardModule').component('dashboard',{
         // Example: multiple async requests, each one UPs when sent, each one DOWNs when done, 0 signals loading is done
         this.loadingUp = function(name) {
             this.loading[name]++;
-        }
+        };
 
         this.loadingDown = function(name) {
             if (this.loading[name] > 0) {
                 this.loading[name]--;
             }
-        }
+        };
 
         this.isLoading = function(name) {
             return this.loading[name] > 0;
@@ -35,7 +35,7 @@ angular.module('dashboardModule').component('dashboard',{
         this.addChildElements = function(parent) {
             this.itemsToAdd = parent.elements;
             this.elemName = parent.name;
-        }
+        };
 
         this.addElement = function(element) {
             this.loadingUp('data');

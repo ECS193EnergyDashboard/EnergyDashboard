@@ -10,22 +10,17 @@
     justify-content: flex-end;
 }
 
-.tableSettingsButtons .menuDropdown .dropdown-menu{
+.tableSettingsButtons .topMenuItem .dropdown-menu{
     right: 0px;
     left: inherit;
 }
-/*.dropdownPullRight {
-  float: right !important;
-  right: 0;
-  left: auto;
-}*/
 
-.tableButton{
+.topMenuButton{
     /* padding: 14px 40px; */
     /* min-width: 100px; */
     height: 100%;
     width: 100%;
-    padding: 0px;
+    padding: 0px 8px 0px 8px;
     background-color: #4a5571;
     color: #c6cdd9;
     text-shadow: initial;
@@ -35,24 +30,6 @@
   color: red;
 }
 
-/* Has same CSS as Bootstrap dropdown class except for floar: right;*/
-.menuDropdown{
-    position: relative;
-    display: inline-flex;
-    padding: 0px;
-    margin: 0px;
-    /* margin-left: -2px; */
-    /* margin-right: -2px; */
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-    flex: 1 1;
-    max-width: 80px;
-}
-
-.menuDropdownIcon{
-    max-width: 40px;
-}
 #columnBtnSelected {
 
 }
@@ -65,13 +42,13 @@
     border: 1px solid gray;
 }
 
-.colSelected{
-    background-color: rgba(33, 137, 195, 0.32);
-}
-
 .dropdownelm:hover{
     background-color: #66afe9;
     border: 1px solid black;
+}
+
+.colSelected{
+    background-color: rgba(33, 137, 195, 0.32);
 }
 
 .dropdownFilters{
@@ -86,6 +63,8 @@
 .open > #menuDropdownContent {
     display: flex;
     flex-direction: column;
+    left: inherit;
+    right: 0px;
 }
 
 .colCheckedFilterBtn {

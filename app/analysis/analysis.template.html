@@ -4,53 +4,61 @@
 <h3>Data from {{$ctrl.datePicker.date.startDate}} until  {{$ctrl.datePicker.date.endDate}}</h3>
 
 <!--Date Range Picker-->
-<div class="drp-contain">
-    <div class="border">
-        <!--This div for border-->
+<div class = "drp-contain">
+    <div> <!--This div for border-->
         <span class="glyphicon glyphicon-calendar"></span>
-        <input date-range-picker class="form-control date-picker" type="text" ng-model="$ctrl.datePicker.date" options="$ctrl.DRPOptions" />
+        <input date-range-picker class="form-control date-picker" type="text" ng-model="$ctrl.datePicker.date" options = "$ctrl.DRPOptions" />
     </div>
-
-    <button class="btn btn-primary" ng-click="$ctrl.startAnalysis()">Start Analysis</button>
-    <!-- Avg, Max, Min StdDev Checkboxes -->
-    <span>
-        <p>
-            <span ng-repeat="innerCol in $ctrl.innerColumnNames">
-                <input ng-model="innerCol.isChecked" type="checkbox">
-                {{innerCol.display}}
-            </span>
-    </p>
-    </span>
 
 </div>
 
 
-<!-- Analysis Table -->
-<table st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped" ng-hide="$ctrl.data == undefined || $ctrl.data.length == 0">
+
+
+<div>
+    <button class="btn btn-primary" ng-click="$ctrl.startAnalysis()">Start Analysis</button>
+    <div>
+        <h3>
+            <span ng-repeat="column in $ctrl.innerColumnNames">
+                <input ng-model="column.isChecked" type="checkbox">
+                {{column.name}}
+            </span>
+        </h3>
+    </div>
+</div>
+
+<table st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped">
     <thead>
-        <!-- Outer Columns -->
+        <!--
+        <col>
+        <colgroup ng-repeat="outerColumn in $ctrl.outerColumnNames" span="4"></colgroup>
+        -->
         <tr>
             <th></th>
             <th ng-repeat="outerColumn in $ctrl.outerColumnNames" ng-if="outerColumn.isChecked" lr-drag-src="header" lr-drop-target="header">
                 {{outerColumn.name}}
-                <button ng-click="outerColumn.isChecked=false" type="button" class="btn btn-default glyphicon glyphicon-trash"></button>
             </th>
         </tr>
+        <!--
+        <tr>
+            <th></th>
+            <th ng-repeat-start="outerColumn in $ctrl.outerColumnNames" scope="col" ng-if="outerColumn.isChecked"
+                st-sort="$ctrl.getters.value.bind(null, outerColumn.name, 'Average')">Average</th>
+            <th scope="col" ng-if="outerColumn.isChecked"
+                st-sort="$ctrl.getters.value.bind(null, outerColumn.name, 'Minimum')">Minimum</th>
+            <th scope="col" ng-if="outerColumn.isChecked"
+                st-sort="$ctrl.getters.value.bind(null, outerColumn.name, 'Maximum')">Maximum</th>
+            <th ng-repeat-end scope="col" ng-if="outerColumn.isChecked"
+                st-sort="$ctrl.getters.value.bind(null, outerColumn.name, 'StdDev')">StdDev</th>
+        </tr>
+        -->
     </thead>
-
     <tbody>
         <tr>
             <td>
                 <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th st-sort="name">Name</th>
-                            <th st-sort="building">Building</th>
-                        </tr>
-                    </thead>
-                    <tr>
-                        <td><br/></td>
-                    </tr>
+                    <th st-sort="name">Name</th>
+                    <th st-sort="building">Building</th>
                     <tr ng-repeat="element in $ctrl.displayed">
                         <td>{{element.name}}</td>
                         <td>{{element.building}}</td>
@@ -58,81 +66,35 @@
                 </table>
             </td>
             <td ng-repeat="outerColumn in $ctrl.outerColumnNames" ng-if="outerColumn.isChecked">
-                <table class="table table-striped analysis">
+                <table class="table table-striped">
                     <th ng-repeat="innerColumn in $ctrl.innerColumnNames" ng-if="innerColumn.isChecked" st-sort="$ctrl.getters.value.bind(null, outerColumn.name, innerColumn.name)">
-                        {{innerColumn.display}}
+                        {{innerColumn.name}}
                     </th>
-                    <!-- Conditional Formatting Settings Row  -->
-                    <tr ng-if="$ctrl.showFormattingSettingsButtons">
-                        <td ng-repeat="innerColumn in $ctrl.innerColumnNames" ng-if="innerColumn.isChecked">
-                            <div class="btn-group-xs inline-div" role="group" aria-label="...">
-                                <button ng-click="$ctrl.openCogModal(outerColumn, innerColumn)" type="button" class="btn btn-default glyphicon glyphicon-cog"></button>
-                                <button ng-click="$ctrl.toggleConditionalFormatting(outerColumn, innerColumn)" type="button" class="btn btn-default  glyphicon glyphicon-pencil"></button>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- For each AHU01, AHU02 ... -->
                     <tr ng-repeat="element in $ctrl.displayed">
-                        <!-- For each "sensor" -->
-                        <td ng-repeat="innerColumn in $ctrl.innerColumnNames" ng-if="innerColumn.isChecked" ng-class="$ctrl.valueStyle(element[outerColumn.name][innerColumn.name])" ng-style="cf.conditionalFormat(element[outerColumn.name][innerColumn.name], outerColumn, $ctrl.maxAndMin[outerColumn.name], 'true')">
+                        <td ng-repeat="innerColumn in $ctrl.innerColumnNames" ng-if="innerColumn.isChecked" ng-class="$ctrl.valueStyle(element[outerColumn.name][innerColumn.name])">
                             {{$ctrl.formatValue(element[outerColumn.name][innerColumn.name])}}
                         </td>
                     </tr>
                 </table>
             </td>
         </tr>
+
+        <!--
+        <tr ng-repeat="element in $ctrl.displayed">
+            <td scope="col">{{element.name}}</td>
+            <td ng-repeat-start="outerColumn in $ctrl.outerColumnNames" scope="col" ng-if="outerColumn.isChecked">
+                {{element[outerColumn.name].Average.value}}
+            </td>
+            <td scope="col" ng-if="outerColumn.isChecked">
+                {{element[outerColumn.name].Minimum.value}}
+            </td>
+            <td scope="col" ng-if="outerColumn.isChecked">
+                {{element[outerColumn.name].Maximum.value}}
+            </td>
+            <td ng-repeat-end scope="col" ng-if="outerColumn.isChecked">
+                {{element[outerColumn.name].StdDev.value}}
+            </td>
+        </tr>
+        -->
     </tbody>
 </table>
-
-
-<!-- Conditional Formatting Settings Modal (cog button)-->
-<div ng-class="" class="modal fade formattingSettingsModalAnalysis" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Conditional Formatting Settings for Column "{{$ctrl.currentFormattingSettingsCol.display}}"</h4>
-            </div>
-            <div class="modal-body">
-                <form class="form-horizontal" id="conditionalFormatFormAnalysis">
-                    <label ng-if="!cf.isUndefined($ctrl.currentFormattingSettingsCol.currInner.max)" for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.display}}: (Currently set at {{$ctrl.printMaxOrMin('max')}})</label>
-                    <label ng-if="cf.isUndefined($ctrl.currentFormattingSettingsCol.currInner.max)" for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.display}}: </label>
-                    <input class="form-control" id="maxInputAnalysis" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name][$ctrl.currentFormattingSettingsCol.currInner.name].max}}">
-
-
-                    <label ng-if="!cf.isUndefined($ctrl.currentFormattingSettingsCol.currInner.min)" for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.display}}: (Currently set at {{$ctrl.printMaxOrMin('min')}})</label>
-                    <label ng-if="cf.isUndefined($ctrl.currentFormattingSettingsCol.currInner.min)" for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.display}}: </label>
-                    <input class="form-control" id="minInputAnalysis" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name][$ctrl.currentFormattingSettingsCol.currInner.name].min}}">
-
-
-                    <label for="maxColor">Color for Max: (Currently set at {{$ctrl.currentFormattingSettingsCol[$ctrl.currentFormattingSettingsCol.currInner.name].maxColor}})</label>
-                    <select class="form-control" id="maxColorAnalysis">
-                <option>Red</option>
-                <option>Blue</option>
-                <option>Green</option>
-                <option>Purple</option>
-            </select>
-
-                    <label for="minColor">Color for Min: (Currently set at {{$ctrl.currentFormattingSettingsCol[$ctrl.currentFormattingSettingsCol.currInner.name].minColor}})</label>
-                    <select class="form-control" id="minColorAnalysis">
-                <option>Blue</option>
-                <option>Red</option>
-                <option>Green</option>
-                <option>Purple</option>
-            </select>
-
-
-                </form>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button ng-click="$ctrl.submitFormattingSettings($ctrl.currentFormattingSettingsCol)" type="button" class="btn btn-default" data-dismiss="modal">Save
-        </button>
-
-            </div>
-        </div>
-
-    </div>
-</div>

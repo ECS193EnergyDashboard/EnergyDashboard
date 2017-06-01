@@ -1,5 +1,4 @@
-angular.module('dataTableModule')
-.component('datatable', {
+angular.module('dataTableModule').component('datatable', {
     templateUrl: 'data-table/data-table.template.html',
     bindings: {
         tableSrc:       '<',
@@ -9,7 +8,7 @@ angular.module('dataTableModule')
         selection:      '=',
         api:            '='
     },
-    controller: ['$filter', '$scope', '$timeout', 'conditionalFormatting', 'reduceColumn', function TableController($filter, $scope, $timeout, cf, rc) {
+    controller: ['$filter', '$scope', '$timeout', function TableController($filter, $scope, $timeout) {
         var self = this;
         this.data = [];
         this.sums = {};
@@ -17,11 +16,10 @@ angular.module('dataTableModule')
         this.columnNames = [];
         this.columnNamesObjs = [];
         this.maxAndMin = {};
-        this.currentFormattingSettingsCol = {};  //Current col for CF settings
+        this.currentFormattingSettingsCol = {};
         this.showFormattingSettingsButtons = true;
         this.columnWidths = {};
         this.columNumWidths = [];
-        $scope.cf = cf; //Give html access to cf service
 
 
         this.$onInit = function(){
@@ -32,6 +30,19 @@ angular.module('dataTableModule')
         function onDataTableUpdate(){
             self.onColObjUpdate(null, null);
         };
+
+        // Conditional Formatting Points
+        this.colsPoints = {};
+        function rgb(r, g, b) {
+            return { r: r, g: g, b: b };
+        }
+
+        this.white = rgb(255, 255, 255);
+        this.blue = rgb(0, 0, 255);
+        this.red = rgb(255, 0, 0);
+        this.green = rgb(0,100,0);
+        this.purple = rgb(160,32,240);
+
 
         var selectionIndexOf = function(obj) {
             for (var i = 0; i < self.selection.length; i++) {
@@ -93,26 +104,6 @@ angular.module('dataTableModule')
             }
         };
 
-        // Called in html to open the CF settings modal
-        this.openCogModal = function(col){
-            this.currentFormattingSettingsCol = col;
-            cf.showFormattingSettings(col, 'formattingSettingsModal');
-        }
-
-        // Called in html to toggle CF
-        this.toggleConditionalFormatting = function(col){
-            col.showConditionalFormat = !col.showConditionalFormat;
-        };
-
-        // Called in html to apply the CF settings
-        this.submitFormattingSettings = function(col){
-            col.max = document.getElementById("maxInput").value;
-            col.min = document.getElementById("minInput").value;
-            col.maxColor = document.getElementById("maxColor").value;
-            col.minColor = document.getElementById("minColor").value;
-            document.getElementById("conditionalFormatForm").reset();
-        };
-
         this.$onChanges = function() {
 
             if (this.searchEnabled === undefined) {
@@ -127,6 +118,9 @@ angular.module('dataTableModule')
             if (this.tableSrc.length == 0) {
                 return;
             }
+
+            //console.log(this.tableSrc);
+//            console.log("Datatable elemName", this.elemName);
 
             var columnSet = {};
 
@@ -147,10 +141,8 @@ angular.module('dataTableModule')
                 var column = {};
 
                 column.name = columnName;
-
                 //All columns start showing conditional formating
-                cf.init(column);
-
+                column.showConditionalFormat = true;
                 column.max;
                 column.min;
                 column.maxColor = "Red";
@@ -180,8 +172,6 @@ angular.module('dataTableModule')
             // console.log(this.columnNamesObjs);
 
             this.displayed = this.data = this.tableSrc;
-
-            gTable = this.data;
         }; //end $onChanges
 
         this.ShowColumnList = function(columnsNames) {
@@ -198,15 +188,55 @@ angular.module('dataTableModule')
             this.averages = {};
             this.maxAndMin = {};
             for (var column of this.columnNamesObjs) {
-                var col = this.displayed.map(function(row) {
-                    return row[column.name];
-                });
-                this.sums[column.name] = rc.sum(col);
-                this.averages[column.name] = rc.average(col);
-                this.maxAndMin[column.name] = {
-                    min: rc.min(col), max: rc.max(col)
-                };
+                this.sums[column.name] = this.sumColumn(column.name);
+                this.averages[column.name] = this.averageColumn(column.name);
+                this.maxAndMin[column.name] = this.maxMinColumn(column.name);
             }
+        };
+
+        this.sumColumn = function(columnName) {
+            var acc = this.reduceColumn(columnName, { sum: 0 }, function(val, acc) { acc.sum += val; });
+            return acc.sum;
+        };
+
+        this.averageColumn = function(columnName) {
+            var acc = this.reduceColumn(columnName, { sum: 0, len: 0 }, function(val, acc) {
+                acc.sum += val;
+                acc.len++;
+            });
+            return acc.len > 0 ? acc.sum / acc.len : 0;
+        };
+
+        this.maxMinColumn = function(columnName){
+            var acc = this.reduceColumn(columnName, {max: null, min: null}, function(val, acc){
+                if(acc.max == null){
+                    acc.max = val;
+                }
+                else if(val > acc.max){
+                    acc.max = val;
+                }
+
+                if(acc.min == null){
+                    acc.min = val;
+                }
+                else if(val < acc.min){
+                    acc.min = val;
+                }
+            });
+            return acc;
+        }
+
+        // For every currently displayed row in column 'columnName', applies the function 'opFunc' to the cell's value and the accumulator object 'accumulator'.
+        // Returns the accumulated value object.
+        this.reduceColumn = function(columnName, accumulator, opFunc) {
+            var a = accumulator;
+            for (var element of this.displayed) {
+                var colVal = element[columnName];
+                if (colVal && colVal.good && colVal.value != undefined) {
+                    opFunc(colVal.value, a);
+                }
+            }
+            return a;
         };
 
         this.updateCol = function(cols){
@@ -221,12 +251,115 @@ angular.module('dataTableModule')
             }
         };
 
+        // =====--- CONDITIONAL FORMATTING ---===== //
 
+        this.isUndefined = function(thing) {
+            return angular.isUndefined(thing);
+        }
+
+        this.switchShowConditionalFormat = function(col){
+            col.showConditionalFormat = !col.showConditionalFormat;
+        };
+
+        this.showFormattingSettings = function(col){
+            this.currentFormattingSettingsCol = col
+            $(".formattingSettingsModal").modal();
+        };
+
+        this.showHideSettingsButtons = function(){
+            this.showFormattingSettingsButtons = !this.showFormattingSettingsButtons;
+            //console.log(this.showFormattingSettingsButtons);
+        };
+
+        this.submitFormattingSettings = function(col){
+            // this.maxAndMin[colName.name].max = document.getElementById("maxInput").value;
+            // this.maxAndMin[colName.name].min = document.getElementById("minInput").value;
+            col.max = document.getElementById("maxInput").value;
+            col.min = document.getElementById("minInput").value;
+            col.maxColor = document.getElementById("maxColor").value;
+            col.minColor = document.getElementById("minColor").value;
+            document.getElementById("conditionalFormatForm").reset();
+        };
+
+
+        this.conditionalFormat = function(value, col){
+            // Do nothing on bad/undef values
+            if(value == undefined || !value.good || this.maxAndMin[value.name] == undefined){
+                return {};
+            }
+
+            // Remove conditional formatting
+            if(col.showConditionalFormat == false){
+                return {"background-color": "white"}
+            }
+            // Check is there is a user submitted max and min else use the max/ min of current data.
+            var max, min;
+            if(angular.isUndefined(col.max)){
+                max = this.maxAndMin[value.name].max;
+            }
+            else{
+                max = Number(col.max)
+            }
+            if(angular.isUndefined(col.min)){
+                min = this.maxAndMin[value.name].min;
+            }
+            else{
+                min = Number(col.min)
+            }
+            if(max == min){
+                return {};
+            }
+
+            // Check if user submitted color, if not default to red and blue for max and min respectivly.
+            var maxColor, minColor;
+            if(col.maxColor == "Red"){
+                maxColor = this.red;
+            }
+            else if(col.maxColor == "Blue"){
+                maxColor = this.blue;
+            }
+            else if(col.maxColor == "Green"){
+                maxColor = this.green;
+            }
+            else if(col.maxColor == "Purple"){
+                maxColor = this.purple;
+            }
+
+            if(col.minColor == "Red"){
+                minColor = this.red;
+            }
+            else if(col.minColor == "Blue"){
+                minColor = this.blue;
+            }
+            else if(col.minColor == "Green"){
+                minColor = this.green;
+            }
+            else if(col.minColor == "Purple"){
+                minColor = this.purple;
+            }
+            this.colsPoints[value.name] = [
+                { value: min, color: minColor},
+                { value: (max+min)/2, color: this.white },
+                { value: max, color: maxColor},
+            ]
+
+            var color = gradient(this.colsPoints[value.name])(value.value);
+
+            var textColor = "white";
+            // Calculate overall intensity of color to determine text color
+            var intensity = color.r * 0.299 + color.g * 0.597 + color.b * 0.114;
+            if (intensity > 186) {
+                textColor = "black";
+            }
+
+            return { "background-color": "rgb(" +color.r+ "," +color.g+ "," +color.b+ ")",
+                    "color": textColor };
+        }
 
         // Whenever the displayed data is changed, recalculate sum and average of the shown rows only
         $scope.$watch('$ctrl.displayed', function(newValue, oldValue) {
             // if nothing in data remove elms in columnNamesObjs to hide buttons/columns
-            //console.log(newValue);
+            console.log(newValue);
             if(!(angular.isUndefined(newValue)) && newValue.length == 0){
                 self.columnNamesObjs.length = 0;
             }
@@ -239,10 +372,10 @@ angular.module('dataTableModule')
 
 
         this.onColObjUpdate = function(newValue, oldValue){
-            //console.log("watch fired");
+            console.log("watch fired");
             $timeout.cancel(timeoutPromise);  //does nothing, if timeout already done
             timeoutPromise = $timeout(function() {   //Set timeout
-                //console.log("timeout fired");
+                console.log("timeout fired");
 
                 var tableRef = document.getElementById('dataTable');
                 if(tableRef == null){
@@ -262,7 +395,7 @@ angular.module('dataTableModule')
                     for (var col = 0; col < tableRow.cells.length; col++) {
                         var tableCell = tableRow.cells[col]; //get cell at position col
                         var print = '#' + row + ',' + col + ': ' + tableCell.offsetWidth + " px";
-                        // console.log(print);
+                        console.log(print);
 
                         if (row === 3) {
                             if (true) {
@@ -294,13 +427,13 @@ angular.module('dataTableModule')
                     }
                 }
                 var headerHeight = document.getElementById('dataTableHead').offsetHeight;
-                //console.log('Timeout: header height: '+headerHeight);
+                console.log('Timeout: header height: '+headerHeight);
                 tableRef.style.top = headerHeight + "px";
 
                 $scope.$apply(function (){
                     tableRef.style.top = headerHeight + "px";
                 });
-                //console.log('Timeout: data table top: '+tableRef.style.top)
+                console.log('Timeout: data table top: '+tableRef.style.top)
             }, delayInMs);
 
             var tableRef = document.getElementById('dataTable');

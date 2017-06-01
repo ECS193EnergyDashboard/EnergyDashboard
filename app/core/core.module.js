@@ -1,1 +1,1 @@
-angular.module('core', [ 'core.pi', 'core.treeFilter', 'core.conditionalFormatting', 'core.reduceColumn']);
+angular.module('core', [ 'core.pi', 'core.treeFilter' ]);

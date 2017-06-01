@@ -38,6 +38,8 @@ angular.module('columnTemplateDropdownModule')
 
             this.unalteredCurrentTemplate = {};
 
+            this.newTemplateName = "";
+
 
             // Default file name for downloading to CSV
             this.fileName = "Data.csv";
@@ -57,8 +59,9 @@ angular.module('columnTemplateDropdownModule')
                 this.determineType();
             };
 
-            // A watcher for the current template
+            // A watcher for the current template used to set the color of the Save button
             $scope.$watch('$ctrl.currentTemplate', function(newVal, oldVal){
+                // console.log("Watch");
                 if(angular.equals(self.unalteredCurrentTemplate, newVal.colObj)){
                     if(self.isAnalysis == "true"){
                         $('.saveTemplateButtonAnalysis').css({'color': 'green'});
@@ -83,7 +86,8 @@ angular.module('columnTemplateDropdownModule')
 
             this.$onChanges = function(changes){
                 if(changes.columns){
-                    this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns))
+
+                    this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns));
 
                     if(this.isAnalysis == "true"){
                         $('.saveTemplateButtonAnalysis').css({'color': 'green'});
@@ -177,7 +181,7 @@ angular.module('columnTemplateDropdownModule')
 
             // Generate default, push it to templates, and post to server
             this.generateDefault = function(){
-                console.log("generating default...");
+                // console.log("generating default...");
                 var firstValues = 0;
                 for(var col of self.columns){
                    if (firstValues < 10) {
@@ -428,11 +432,24 @@ angular.module('columnTemplateDropdownModule')
             // Save template/profile for cols
             // Called in html with $ctrl.columns
             this.saveTemplate = function(columnObjs) {
+                if(this.isAnalysis == "true"){
+                    console.log("IS analysis");
+                    this.newTemplateName = $(".newTemplateNameAnalysis").val();
+                }
+                else{
+                    this.newTemplateName = $(".newTemplateNameData").val();
+                    console.log("is DATA");
+                    // newTemplateName = document.getElementsById("templateNameInput").value;
+                }
+                console.log(this.newTemplateName);
 
                 // Check to make sure template is not named default or name is already taken
                 if(this.newTemplateName == "Default"){
-                    // console.log("Cant have a template named Default");
-                    this.errorMessage = "We're sorry but you can not have a template named Default";
+                    this.ShowSaveDefaultModal();
+                    return;
+                }
+                if(this.newTemplateName == ""){
+                    this.errorMessage = "Please enter a name for the template";
                     this.ShowErrorModal();
                     return;
                 }
@@ -490,6 +507,7 @@ angular.module('columnTemplateDropdownModule')
                 var colObjToAdd = JSON.parse(angular.toJson(template.colObj)); // Make clone
                 this.columns = template.colObj;
                 this.updateColObj({cols: template.colObj});  //output binding
+                $('.menuDropdown.open').removeClass('open'); // close dropdown if it is open
             };
 
 
@@ -535,13 +553,11 @@ angular.module('columnTemplateDropdownModule')
                     }
                 }
                 template.colObj = templateCols;
-
                 $http({
                     method: 'POST',
                     url: '/templatesUpdate',
                     data: angular.toJson(template),
                 }).then(function successCallback(response) {
-
                     document.getElementById("templateInput").value = "";
                 }, function errorCallback(response) {
                     console.error("POST Failed ", response);
@@ -551,8 +567,31 @@ angular.module('columnTemplateDropdownModule')
                 $(".saveModalData").modal('hide');
                 $(".saveModalAnalysis").modal('hide');
 
+                if(this.isAnalysis == "true")
+                    $('.saveTemplateButtonAnalysis').css({'color': 'green'});
+                else{
+                    $('.saveTemplateButtonData').css({'color': 'green'});
+                }
+
+                this.getTemplates();
+                // console.log(this.templates);
+                this.ApplyTemplate(template);
+                for(temp of self.templates){
+                    // Is default of current type
+                    if(temp.name == overWriteTemplateName && temp.type == self.curType){
+                        this.ApplyTemplate(temp);
+                        this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(temp.colObj));
+                    }
+                }
+
                 this.ClearTemplateNameInput();
 
+            };
+
+            this.switchColumnIsChecked = function(col){
+                if(angular.isUndefined(col))
+                    return;
+                col.isChecked = !col.isChecked;
             };
 
 
@@ -606,9 +645,23 @@ angular.module('columnTemplateDropdownModule')
                 }
             }
 
-            this.ClearTemplateNameInput = function(){
-                $("#templateInput").val(''); // clear the inputbox
+            this.ShowSaveDefaultModal = function(){
+                if(this.isAnalysis == "true"){
+                    $(".saveDefaultModalAnalysis").modal();
+                }
+                else{
+                    $(".saveDefaultModalData").modal();
+                }
             }
+
+            this.ClearTemplateNameInput = function(){
+                this.newTemplateName = "";
+                // $("#templateInput").val(''); // clear the inputbox
+            }
+
+            $(document).on('click', '.dropdown-menu', function (e) {
+                e.stopPropagation();
+            });
 
 
         } //end controller

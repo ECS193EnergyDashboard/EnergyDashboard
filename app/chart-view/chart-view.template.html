@@ -50,12 +50,14 @@
     </div>
 </div>
 
-<div>
-    <nvd3 ng-hide="$ctrl.isLoading" config="$ctrl.focusConfig" options="$ctrl.focusOptions" data="$ctrl.datasetFlat"><nvd3>
+<div ng-hide="$ctrl.isLoading">
+    <nvd3 options="$ctrl.focusOptions" data="$ctrl.datasetFlat"><nvd3>
 </div>
 
-<!--
-Time Range: {{ ($ctrl.extent[0] | date:'MM/dd HH:mm') + ' to ' + ($ctrl.extent[1] | date:'MM/dd HH:mm') }}
--->
 
-<nvd3 ng-hide="$ctrl.isLoading" config="$ctrl.lineConfig" options="$ctrl.lineOptions" data="$ctrl.dataset"><nvd3>
+<div class="chart-section"  ng-repeat="data in $ctrl.dataset" ng-hide="$ctrl.isLoading">
+    <button style="border: none; background: transparent" ng-class="$ctrl.buttonClass($index)" ng-click="$ctrl.toggleChartEnabled($index)"></button>
+    <div resizable r-directions="['bottom']" ng-show="$ctrl.isChartEnabled($index)" id="{{'chart' + $index}}">
+        <nvd3 options="$ctrl.lineOptions" data="data" on-ready="$ctrl.onChartReady"><nvd3>
+    </div>
+</div>

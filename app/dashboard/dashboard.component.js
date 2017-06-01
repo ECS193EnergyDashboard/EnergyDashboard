@@ -67,11 +67,11 @@ angular.module('dashboardModule').component('dashboard',{
             var index = this.webIds.indexOf(element.webId);
             this.webIds.splice(index, 1);
             this.data.splice(index, 1);
-
             this.data = this.data.slice();
         }
 
         this.clearElements = function() {
+            console.log("Clearning elements");
             this.webIds.length = 0;
             this.data.length = 0;
 

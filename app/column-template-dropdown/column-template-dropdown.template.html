@@ -57,7 +57,7 @@
             <ul class="dropdown-menu dropdown-content">
                 <input ng-model="templateFilter" class="form-control" type="text" placeholder="Search For Template...">
                 <li ng-repeat="template in $ctrl.filteredTemplates | filter:templateFilter">
-                    <a href="" ng-click="$ctrl.ApplyTemplate(template)">{{template.name}}</a>
+                    <a class="dropdownelm" ng-class="{'columnChecked': template.name == $ctrl.currentTemplate.name}" href="" ng-click="$ctrl.ApplyTemplate(template)">{{template.name}}</a>
                 </li>
             </ul>
         </div>
@@ -111,7 +111,7 @@
 
 
 
-<!-- Template Save Modal for data tab -->
+<!-- Template Save Modal -->
 <div ng-class="{'saveModalData': $ctrl.isAnalysis=='false', 'saveModalAnalysis': $ctrl.isAnalysis=='true'}" class="modal fade" id="templateNameModalData" role="dialog">
     <div class="modal-dialog">
 <!-- Modal content-->
@@ -122,7 +122,9 @@
         </div>
     <div class="modal-body">
 
-        <input autofocus="autofocus" id="templateInput" class="form-control" type="text" ng-init="$ctrl.newTemplateName" ng-model="$ctrl.newTemplateName" placeholder="My Template Name...">
+   <!--      <input id="templateNameInput"  autofocus="autofocus" class="form-control" type="text"> -->
+
+        <input ng-class="{'newTemplateNameData': $ctrl.isAnalysis=='false', 'newTemplateNameAnalysis': $ctrl.isAnalysis=='true'}"  autofocus="autofocus" class="form-control" type="text" value="{{$ctrl.currentTemplate.name}}">
          <br> <br> <br>
     </div>
         <div class="modal-footer">
@@ -201,6 +203,34 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+    </div>
+
+    </div>
+</div>
+
+
+
+<!-- Save Over Default modal -->
+<div ng-class="{'saveDefaultModalData': $ctrl.isAnalysis=='false', 'saveDefaultModalAnalysis': $ctrl.isAnalysis=='true'}" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+<!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Are you sure you want to overwrite the default template?</h4>
+        </div>
+        <div class="modal-body">
+
+        By overwriting the default template you will change the columns that first show when displaying this data for all users.
+
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button ng-click="$ctrl.OverwriteTemplate($ctrl.columns, $ctrl.newTemplateName)" type="button" class="btn btn-default" data-dismiss="modal">Overwrite
+            </button>
+
         </div>
     </div>
 

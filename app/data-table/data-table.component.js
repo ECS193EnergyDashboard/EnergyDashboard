@@ -108,6 +108,7 @@ angular.module('dataTableModule').component('datatable', {
         };
 
         this.$onChanges = function() {
+
             if (this.searchEnabled === undefined) {
                 this.searchEnabled = true;
             }
@@ -182,6 +183,8 @@ angular.module('dataTableModule').component('datatable', {
                 document.getElementById("myDropdown").classList.toggle("show");
             }
         };
+
+
 
         this.updateCalculations = function() {
             this.sums = {};
@@ -393,6 +396,11 @@ angular.module('dataTableModule').component('datatable', {
 
         $scope.$watchCollection('$ctrl.rowsDisplayed', function(newValue, oldValue) {
             console.log(self.rowsDisplayed);
+            // if nothing in data remove elms in columnNamesObjs to hide buttons/columns
+            console.log(newValue);
+            if(!(angular.isUndefined(newValue)) && newValue.length == 0){
+                self.columnNamesObjs.length = 0;
+            }
             self.updateCalculations();
         });
 

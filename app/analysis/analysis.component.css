@@ -94,3 +94,8 @@
     display: flex;
     font-size: 2em;
 }
+
+.checkTableMenu{
+    padding: 0px 10px 0px 10px; !important;
+
+}

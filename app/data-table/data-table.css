@@ -159,7 +159,7 @@ column-template-dropdown {
     padding-right: .2%;
 }
 
-.tableMenuItem input{
+.tableMenuItem #dataTableSearch{
     padding: 0px;
     height: 100%;
     text-indent: 10px;

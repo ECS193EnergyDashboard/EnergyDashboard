@@ -5,7 +5,7 @@
             <div id="tableMenuSearchText">
                 SEARCH:
             </div>
-            <input ng-model="$ctrl.rowName" placeholder="Enter row name..." class="input-sm form-control" type="search"/>
+            <input id="dataTableSearch" ng-model="$ctrl.rowName" placeholder="Enter row name..." class="input-sm form-control" type="search"/>
         </div>
         <div ng-if="$ctrl.columnNamesObjs.length != 0" ng-click="$ctrl.showHideSettingsButtons()" class="tableMenuItem" id="tableMenuBtn1">
             Conditional

@@ -22,16 +22,20 @@
             </column-template-dropdown>
         </div>
     </div>
-    <div id="analysisTable">
+
+    <div id="tableMenus" >
         <div id="analysisTableButtons">
             <button class="btn btn-primary" ng-click="$ctrl.startAnalysis()">Start Analysis</button>
-            <div>
-                <span ng-repeat="innerCol in $ctrl.innerColumnNames">
-                    <input ng-model="innerCol.isChecked" type="checkbox">
+                <div ng-repeat="innerCol in $ctrl.innerColumnNames" class="tableMenuItem checkTableMenu">
+                    <input class="checkboxesTableMenu" ng-model="innerCol.isChecked" type="checkbox">
                     {{innerCol.display}}
-                </span>
-            </div>
+                </div>
         </div>
+    </div>
+
+
+    <div id="analysisTable">
+
         <table st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped" ng-hide="$ctrl.data == undefined || $ctrl.data.length == 0">
             <thead>
                 <!--

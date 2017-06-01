@@ -176,6 +176,9 @@ angular.module('analysisModule').component('analysis', {
 
             // Called in html to toggle CF
             this.toggleConditionalFormatting = function(outerCol, innerCol){
+                if(outerCol[innerCol.name] == undefined && outerCol != undefined){
+                    outerCol[innerCol.name] = {};
+                }
                 outerCol[innerCol.name].showConditionalFormat = !outerCol[innerCol.name].showConditionalFormat;
             };
 

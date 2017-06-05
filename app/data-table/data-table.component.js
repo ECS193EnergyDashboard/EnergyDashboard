@@ -108,14 +108,40 @@ angular.module('dataTableModule')
             col.showConditionalFormat = !col.showConditionalFormat;
         };
 
-        // Called in html to apply the CF settings
+        // // Called in html to apply the CF settings
+        // this.submitFormattingSettings = function(col){
+        //     col.max = document.getElementById("maxInput").value;
+        //     col.min = document.getElementById("minInput").value;
+        //     col.maxColor = document.getElementById("maxColor").value;
+        //     col.minColor = document.getElementById("minColor").value;
+        //     document.getElementById("conditionalFormatForm").reset();
+        // };
+
+
         this.submitFormattingSettings = function(col){
-            col.max = document.getElementById("maxInput").value;
-            col.min = document.getElementById("minInput").value;
+            var submittedMax = document.getElementById("maxInput").value;
+            var submittedMin = document.getElementById("minInput").value;
+  
+            if(submittedMax.length != 0)
+                col.max = submittedMax;
+            else{
+                col.max = null
+            }
+            if(submittedMin.length != 0)
+                col.min = submittedMin;
+            else{
+                col.min = null
+            }
             col.maxColor = document.getElementById("maxColor").value;
             col.minColor = document.getElementById("minColor").value;
+  
+            this.resetConditionalFormatForm();
+          };
+  
+  
+        this.resetConditionalFormatForm = function(){
             document.getElementById("conditionalFormatForm").reset();
-        };
+         };
 
         this.$onChanges = function() {
 
@@ -326,3 +352,12 @@ angular.module('dataTableModule')
 
     }]
 });
+
+
+
+    function isNumberKey(evt){
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    } 

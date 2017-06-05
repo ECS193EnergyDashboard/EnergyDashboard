@@ -58,17 +58,20 @@ angular.module('core.conditionalFormatting').
                 }
                 // Check is there is a user submitted max and min else use the max/ min of current data.
                 var max, min;
-                if(!angular.isUndefined(col.max)){
+                if(!angular.isUndefined(col.max) && col.max != null){
+                    console.log('1');
                     max = Number(col.max)
                 }
                 else if(!angular.isUndefined(col[value.name]) && !angular.isUndefined(col[value.name].max)){
+                    console.log('2');
                     max = Number(col[value.name].max);
                 }
                 else{
+                    console.log('3');
                     max = maxAndMin[value.name].max;
                 }
 
-                if(!angular.isUndefined(col.min)){
+                if(!angular.isUndefined(col.min) && col.min != null){
                     min = Number(col.min)
                 }
                 else if(!angular.isUndefined(col[value.name]) && !angular.isUndefined(col[value.name].min)){

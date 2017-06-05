@@ -55,9 +55,8 @@ angular.module('columnTemplateDropdownModule')
             dateRange: '<', // The date range to print on the csv
             sideSelectorItems: '<'
         },
-        controller: [
-            '$scope', '$http', 'typeFilter',
-            function colTemplateController($scope, $http, typeFilter) {
+        controller: ['$scope', '$http', '$q', 'typeFilter',
+            function colTemplateController($scope, $http, $q, typeFilter) {
                 var self = this;
                 this.templates = [];
                 this.filteredTemplates = [];
@@ -70,13 +69,8 @@ angular.module('columnTemplateDropdownModule')
                 this.unalteredCurrentTemplate = {}; // For the watcher
                 this.newTemplateName = "";
                 this.isAvailableDefaultTemplate = false;
-
-
-
-                // Default file name for downloading to CSV
-                this.fileName = "Data.csv";
-                // an error message for the modal. Always set the error message before showing modal
-                this.errorMessage = "";
+                this.fileName = "Data.csv"; // Default file name for downloading to CSV
+                this.errorMessage = ""; // an error message for the modal. Always set the error message before showing modal
 
 
                 // A watcher for the current template used to set the color of the Save button
@@ -118,48 +112,48 @@ angular.module('columnTemplateDropdownModule')
                         }
 
                         this.getPiTemplates();
-                        this.getTemplates();
-
-                        // If there was no changes to the columns do not do anything else.
-                        if (angular.isUndefined(changes.columns) || angular.isUndefined(changes.columns)) {
-                            return;
-                        }
-
-
-                        // If there is no current template we need to set to default, after checking to make sure there is data
-                        if (angular.equals(this.currentTemplate, {}) || angular.isUndefined(this.currentTemplate)) {
-                            if (this.rowData.length != 0) {
-                                // console.log("lengh does not equal 0, using default")
-                                this.restoreDefault(); // if no default is found this will call generateDefault()
+                        this.getTemplates().then(function(){
+                            // If there was no changes to the columns do not do anything else.
+                            if (angular.isUndefined(changes.columns) || angular.isUndefined(changes.columns)) {
+                                return;
                             }
-                        }
-
-                        // we didnt add or take anything out of the side bar, so no need to change template
-                        if (angular.isUndefined(changes.rowData)) {
-                            return;
-                        }
 
 
-                        // Else we have just added to the table (with data already showing)
-                        // Is it possible that the lengths are the same but we still added things to the table?
-                        if (changes.columns.currentValue.length != changes.columns.previousValue.length) {
-                            var temp;
-                            // Find an exact match of piTemplate types that is a default
-                            var found = false;
-                            for (temp of this.templates) {
-                                if (temp.name == "Default" && angular.equals(temp.type, this.piTemplatesInUse)) {
-                                    console.log("found default");
-                                    this.ApplyTemplate(temp);
-                                    found = true;
-                                    break;
+                            // If there is no current template we need to set to default, after checking to make sure there is data
+                            if (angular.equals(self.currentTemplate, {}) || angular.isUndefined(self.currentTemplate)) {
+                                if (self.rowData.length != 0) {
+                                    // console.log("lengh does not equal 0, using default")
+                                    self.restoreDefault(); // if no default is found this will call generateDefault()
                                 }
                             }
-                            if (!found) {
-                                this.showIntersection();
-                                this.updateFiltered();
-                            }
-                        }
 
+                            // we didnt add or take anything out of the side bar, so no need to change template
+                            if (angular.isUndefined(changes.rowData)) {
+                                return;
+                            }
+
+
+                            // Else we have just added to the table (with data already showing)
+                            // Is it possible that the lengths are the same but we still added things to the table?
+                            if (changes.columns.currentValue.length != changes.columns.previousValue.length) {
+                                var temp;
+                                // Find an exact match of piTemplate types that is a default
+                                var found = false;
+                                for (temp of self.templates) {
+                                    if (temp.name == "Default" && angular.equals(temp.type, self.piTemplatesInUse)) {
+                                        console.log("found default");
+                                        self.ApplyTemplate(temp);
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if (!found) {
+                                    self.showIntersection();
+                                    self.updateFiltered();
+                                }
+                            }
+
+                        }); // End getTemplates promise
                     }
 
                     this.updateFiltered();
@@ -177,16 +171,17 @@ angular.module('columnTemplateDropdownModule')
                     }); //output binding
                     $('.menuDropdown.open').removeClass('open'); // close dropdown if it is open
                     this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns));
-                    this.getTemplates();
-                    if (this.isAnalysis == "true") {
-                        $('.saveTemplateButtonAnalysis').css({
-                            'color': 'green'
-                        });
-                    } else {
-                        $('.saveTemplateButtonData').css({
-                            'color': 'green'
-                        });
-                    }
+                    this.getTemplates().then(function(){
+                        if (self.isAnalysis == "true") {
+                            $('.saveTemplateButtonAnalysis').css({
+                                'color': 'green'
+                            });
+                        } else {
+                            $('.saveTemplateButtonData').css({
+                                'color': 'green'
+                            });
+                        }
+                    });
                 };
 
                 this.restoreDefault = function() {
@@ -356,18 +351,23 @@ angular.module('columnTemplateDropdownModule')
 
 
                 this.getTemplates = function() {
-                    // Get templates from server
-                    $http({
-                        method: 'GET',
-                        url: '/getTemplates'
-                    }).then(function successCallback(response) {
-                        //console.log("get templates success", response.data);
-                        self.templates = response.data;
-                        //console.log("updating filtered");
-                        self.updateFiltered();
-                    }, function errorCallback(response) {
-                        console.error("get templates failed ", response);
+                    return $q(function(resolve, reject){
+                        // Get templates from server
+                        $http({
+                            method: 'GET',
+                            url: '/getTemplates'
+                        }).then(function successCallback(response) {
+                            //console.log("get templates success", response.data);
+                            self.templates = response.data;
+                            //console.log("updating filtered");
+                            self.updateFiltered();
+                            resolve();
+                        }, function errorCallback(response) {
+                            console.error("get templates failed ", response);
+                            reject();
+                        });
                     });
+
                 };
 
                 this.clearAll = function() {
@@ -646,14 +646,16 @@ angular.module('columnTemplateDropdownModule')
                         data: angular.toJson(template),
                     }).then(function successCallback(response) {
                         // Update templates
-                        self.getTemplates();
+                        self.getTemplates().then(function(){
+                            if (self.templates.length == 1) {
+                                self.templates = [];
+                            }
+                            self.restoreDefault();
+                            console.log("POST Templates Success");
+                            document.getElementById("templateInput").value = "";
+                        });
 
-                        if (self.templates.length == 1) {
-                            self.templates = [];
-                        }
-                        self.restoreDefault();
-                        console.log("POST Templates Success");
-                        document.getElementById("templateInput").value = "";
+
                     }, function errorCallback(response) {
                         console.error("POST Failed ", response);
                     });
@@ -688,14 +690,15 @@ angular.module('columnTemplateDropdownModule')
                     $(".saveModalData").modal('hide');
                     $(".saveModalAnalysis").modal('hide');
 
-                    this.getTemplates();
-                    this.ApplyTemplate(template);
-                    for (temp of self.templates) {
-                        if (temp.name == overWriteTemplateName) {
-                            this.ApplyTemplate(temp);
+                    this.getTemplates().then(function(){
+                        self.ApplyTemplate(template);
+                        for (templ of self.templates) {
+                            if (templ.name == overWriteTemplateName) {
+                                self.ApplyTemplate(templ);
+                            }
                         }
-                    }
-                    this.ClearTemplateNameInput();
+                        this.ClearTemplateNameInput();
+                    });
 
                 };
 
@@ -725,10 +728,11 @@ angular.module('columnTemplateDropdownModule')
                     $(".saveModalData").modal('hide');
                     $(".saveModalAnalysis").modal('hide');
 
-                    this.getTemplates();
-                    // console.log(this.templates);
-                    this.ApplyTemplate(template);
-                    this.ClearTemplateNameInput();
+                    this.getTemplates().then(function(){
+                        // console.log(this.templates);
+                        self.ApplyTemplate(template);
+                        self.ClearTemplateNameInput();
+                    });
                 };
 
 

@@ -190,7 +190,7 @@ angular.module('columnTemplateDropdownModule')
                     }
                 }
                 // If we did not return from finding the default we need to create it
-                console.log("generating default");
+                //console.log("generating default");
                 this.generateDefault();
 
             }
@@ -356,7 +356,7 @@ angular.module('columnTemplateDropdownModule')
                 $http({method: 'GET', url: '/getTemplates'}).then(function successCallback(response){
                     //console.log("get templates success", response.data);
                     self.templates = response.data;
-                    console.log("updating filtered");
+                    //console.log("updating filtered");
                     self.updateFiltered();
 
                     // self.determineType();

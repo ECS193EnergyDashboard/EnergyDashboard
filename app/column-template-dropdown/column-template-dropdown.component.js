@@ -112,6 +112,10 @@ angular.module('columnTemplateDropdownModule')
             this.$onChanges = function(changes){
 
                 if(!angular.isUndefined(this.sideSelectorItems)){
+                                        console.log(changes);
+
+                        // console.log(changes.columns.currentValue, "and ", changes.columns.previousValue);
+                        // console.log(changes.columns.currentValue === changes.columns.previousValue);
 
 
                     // Check to see if there is no data - if not reset curtemplate
@@ -129,18 +133,24 @@ angular.module('columnTemplateDropdownModule')
                     }
 
 
+
                     // If there is no current template we need to set to default, after checking to make sure there is data
                     if(angular.equals(this.currentTemplate, {}) || angular.isUndefined(this.currentTemplate)){
                         if(this.rowData.length != 0){
                             // console.log("lengh does not equal 0, using default")
                             this.restoreDefault(); // if no default is found this will call generateDefault()
                         }
-
                     }
 
+                    // we didnt add or take anything out of the side bar, so no need to change template
+                    if(angular.isUndefined(changes.rowData)){
+                        return;
+                    }
+
+
                     // Else we have just added to the table (with data already showing)
-                    // Is it possible that the lengths are the same but we still added things to the tabel?
-                    else if(changes.columns.currentValue.length != changes.columns.previousValue.length){
+                    // Is it possible that the lengths are the same but we still added things to the table?
+                    if(changes.columns.currentValue.length != changes.columns.previousValue.length){
                         var temp;
                         // Find an exact match of piTemplate types that is a default
                         var found = false;

@@ -21,6 +21,7 @@ angular.module('dataTableModule').component('datatable', {
         this.columnWidths = {};
         this.columNumWidths = [];
 
+        this.errorMessage = "";
 
         this.$onInit = function(){
             this.api = {};
@@ -271,16 +272,42 @@ angular.module('dataTableModule').component('datatable', {
             //console.log(this.showFormattingSettingsButtons);
         };
 
+        // this.submitFormattingSettings = function(col){
+        //     // this.maxAndMin[colName.name].max = document.getElementById("maxInput").value;
+        //     // this.maxAndMin[colName.name].min = document.getElementById("minInput").value;
+        //     col.max = document.getElementById("maxInput").value;
+        //     col.min = document.getElementById("minInput").value;
+        //     col.maxColor = document.getElementById("maxColor").value;
+        //     col.minColor = document.getElementById("minColor").value;
+        //     document.getElementById("conditionalFormatForm").reset();
+        // };
+
+
+
         this.submitFormattingSettings = function(col){
-            // this.maxAndMin[colName.name].max = document.getElementById("maxInput").value;
-            // this.maxAndMin[colName.name].min = document.getElementById("minInput").value;
-            col.max = document.getElementById("maxInput").value;
-            col.min = document.getElementById("minInput").value;
+            var submittedMax = document.getElementById("maxInput").value;
+            var submittedMin = document.getElementById("minInput").value;
+ 
+            if(submittedMax.length != 0)
+                col.max = submittedMax;
+            else{
+                col.max = null
+            }
+            if(submittedMin.length != 0)
+                col.min = submittedMin;
+            else{
+                col.min = null
+            }
             col.maxColor = document.getElementById("maxColor").value;
             col.minColor = document.getElementById("minColor").value;
-            document.getElementById("conditionalFormatForm").reset();
+ 
+            this.resetConditionalFormatForm();
         };
 
+
+        this.resetConditionalFormatForm = function(){
+            document.getElementById("conditionalFormatForm").reset();
+        };
 
         this.conditionalFormat = function(value, col){
             // Do nothing on bad/undef values
@@ -294,13 +321,13 @@ angular.module('dataTableModule').component('datatable', {
             }
             // Check is there is a user submitted max and min else use the max/ min of current data.
             var max, min;
-            if(angular.isUndefined(col.max)){
+            if(angular.isUndefined(col.max) || col.max == null){
                 max = this.maxAndMin[value.name].max;
             }
             else{
                 max = Number(col.max)
             }
-            if(angular.isUndefined(col.min)){
+            if(angular.isUndefined(col.min) || col.min == null){
                 min = this.maxAndMin[value.name].min;
             }
             else{
@@ -457,3 +484,13 @@ angular.module('dataTableModule').component('datatable', {
 
     }]
 });
+
+
+
+    // Checks to make sure that input only takes in numbers (used for conditonal formatting)
+    function isNumberKey(evt){
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }    

@@ -80,7 +80,7 @@
 
 
 
-<!-- Save As  modal -->
+<!-- CF options  modal -->
 <div ng-class="" class="modal fade formattingSettingsModal" role="dialog">
     <div class="modal-dialog">
 <!-- Modal content-->
@@ -91,15 +91,16 @@
         </div>
         <div class="modal-body">
             <form class="form-horizontal" id="conditionalFormatForm">
-                <label ng-if="!$ctrl.isUndefined($ctrl.currentFormattingSettingsCol.max)" for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.name}}: (Currently set at {{$ctrl.currentFormattingSettingsCol.max}})</label>
-                <label ng-if="$ctrl.isUndefined($ctrl.currentFormattingSettingsCol.max)" for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.name}}: </label>
-                <input class="form-control" id="maxInput" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].max}}">
+                <h5> Note: If max/min are left blank, it will default to current max and min. </h5>
+                <div>
+                    <label for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.name}}</label>
+                    <input class="form-control conditionalFormattingInput" id="maxInput" value="{{$ctrl.currentFormattingSettingsCol.max}}" onkeypress="return isNumberKey(event)">
+                </div>
 
-
-                <label ng-if="!$ctrl.isUndefined($ctrl.currentFormattingSettingsCol.min)" for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.name}}: (Currently set at {{$ctrl.currentFormattingSettingsCol.min}})</label>
-                <label ng-if="$ctrl.isUndefined($ctrl.currentFormattingSettingsCol.min)" for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.name}}: </label>
-                <input class="form-control" id="minInput" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].min}}">
-
+                <div>
+                    <label for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.name}}</label>
+                    <input class="form-control conditionalFormattingInput" id="minInput" value="{{$ctrl.currentFormattingSettingsCol.min}}" onkeypress="return isNumberKey(event)">
+                </div>
 
                 <label for="maxColor">Color for Max: (Currently set at {{$ctrl.currentFormattingSettingsCol.maxColor}})</label>
                 <select class="form-control" id="maxColor">
@@ -122,7 +123,7 @@
         </div>
 
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button ng-click="$ctrl.resetConditionalFormatForm()" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             <button ng-click="$ctrl.submitFormattingSettings($ctrl.currentFormattingSettingsCol)" type="button" class="btn btn-default" data-dismiss="modal">Save
             </button>
 
@@ -135,15 +136,6 @@
 
 
 
-
-<!--                 <label for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.name}}: </label>
-                <input ng-if="!$ctrl.isUndefined(currentFormattingSettingsCol.max)" class="form-control" id="maxInput" value="{{$ctrl.currentFormattingSettingsCol.max}}">
-                <input ng-if="$ctrl.isUndefined(currentFormattingSettingsCol.max)" class="form-control" id="maxInput" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].max}}">
-
-
-                <label for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.name}}: </label>
-                <input ng-if="!$ctrl.isUndefined(currentFormattingSettingsCol.min)" class="form-control" id="minInput" value="{{$ctrl.currentFormattingSettingsCol.min}}">
-                <input ng-if="$ctrl.isUndefined(currentFormattingSettingsCol.min)" class="form-control" id="minInput" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name].min}}"> -->
 
 <script>
     var dataTableWidths = $('#dataTableBody tr td').width();

@@ -1,4 +1,4 @@
-<div class="columnTemplateParent" ng-if="$ctrl.rowData.length != 0">
+<div class="columnTemplateParent" ng-hide="$ctrl.rowData.length == 0">
 <!-- <div class="columnTemplateParent"> -->
     <div class="tableSettingsButtons">
 
@@ -27,8 +27,7 @@
                 <!--- END: From columnDropwdownSearch-->
 
                 <input ng-model="search.columnName" class="form-control" type="text" placeholder="Search For Column...">
-                <div class="dropdownelm" ng-repeat="column in ($ctrl.filteredColumns = ($ctrl.columns | orderBy:'name' | filter: search.columnName| filter: search.isChecked))  " ng-click="$ctrl.switchColumnIsChecked(column)" ng-class="{'columnChecked': column.isChecked}">
-<!--                     <input class="dropDownCheckBox" ng-checked="column.isChecked" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}">  -->
+                <div class="dropdownelm" ng-repeat="column in ($ctrl.filteredColumns = ($ctrl.columns | orderBy:'name' | filter: search.columnName| filter: search.isChecked))  " ng-click="$ctrl.switchColumnIsChecked(column)" ng-class="{'columnChecked': column.isChecked}"> 
                     {{column.name}}
                 </div>
             </div>
@@ -42,6 +41,11 @@
             </button>
             <ul class="dropdown-menu dropdown-content">
                 <input ng-model="templateFilter" class="form-control" type="text" placeholder="Search For Template...">
+
+                <li ng-if="$ctrl.piTemplatesInUse.length > 1"><a ng-click="$ctrl.showIntersection()"> 
+                    Show Intersection
+                </a> </li>
+
                 <li ng-repeat="template in $ctrl.filteredTemplates | filter:templateFilter">
                     <a class="dropdownelm" ng-class="{'columnChecked': template.name == $ctrl.currentTemplate.name}" href="" ng-click="$ctrl.ApplyTemplate(template)">{{template.name}}</a>
                 </li>
@@ -56,7 +60,7 @@
 
 
         <!-- Delete Template button for Data Tab -->
-        <button ng-click="$ctrl.ShowDeleteModal()" ng-class="{'disabled': $ctrl.currentTemplate.name=='Default'}" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false">
+        <button ng-click="$ctrl.ShowDeleteModal()" ng-class="{'disabled': $ctrl.currentTemplate.name=='Default' || $ctrl.currentTemplate.name=='Intersection'}" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false">
             Delete Template
         </button>
 
@@ -227,15 +231,30 @@
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             <h4 class="modal-title">Are you sure you want to overwrite the default template?</h4>
         </div>
-        <div class="modal-body">
 
-        By overwriting the default template you will change the columns that first show when displaying this data for all users.
+        <div ng-if="$ctrl.isAvailableDefaultTemplate" class="modal-body">
+        By overwriting the default template you will change the columns that first show when displaying these piTemplates:
+        <ul>
+            <li ng-repeat="piTemplate in $ctrl.piTemplatesInUse">
+                <div> {{piTemplate}}</div>
+            </li>
+        </ul>
+        </div>
 
+        <div ng-if="!$ctrl.isAvailableDefaultTemplate" class="modal-body">
+        You are creating a default template which will appear first for all users when displaying these piTemplates: 
+        <ul>
+            <li ng-repeat="piTemplate in $ctrl.piTemplatesInUse">
+                <div> {{piTemplate}}</div>
+            </li>
+        </ul>
         </div>
 
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button ng-click="$ctrl.OverwriteTemplate($ctrl.columns, $ctrl.newTemplateName)" type="button" class="btn btn-default" data-dismiss="modal">Overwrite
+            <button ng-if="$ctrl.isAvailableDefaultTemplate" ng-click="$ctrl.OverwriteDefaultTemplate($ctrl.columns)" type="button" class="btn btn-default" data-dismiss="modal">Overwrite
+            </button>
+            <button ng-if="!$ctrl.isAvailableDefaultTemplate" ng-click="$ctrl.createDefault($ctrl.columns)" type="button" class="btn btn-default" data-dismiss="modal">Create Default
             </button>
 
         </div>

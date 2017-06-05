@@ -100,14 +100,12 @@
                 <h5> Note: If max/min are left blank, it will default to current max and min. </h5>
 
                     <label for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.display}}: </label>
-                    <input class="form-control" id="maxInputAnalysis" value="{{$ctrl.currentFormattingSettingsCol.currInner.name.max}}" onkeypress="return isNumberKey(event)">
+                    <input class="form-control" id="maxInputAnalysis" value="{{$ctrl.currentFormattingSettingsCol.currInner.max}}" onkeypress="return isNumberKey(event)">
 
 
                     <label for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.display}}: </label>
-                    <input class="form-control" id="minInputAnalysis" value="" onkeypress="return isNumberKey(event)">
+                    <input class="form-control" id="minInputAnalysis" value="{{$ctrl.currentFormattingSettingsCol.currInner.min}}" onkeypress="return isNumberKey(event)">
 
-
-                    <!-- value="{{$ctrl.currentFormattingSettingsCol.min}}" onkeypress="return isNumberKey(event)" -->
 
                     <label for="maxColor">Color for Max: (Currently set at {{$ctrl.currentFormattingSettingsCol[$ctrl.currentFormattingSettingsCol.currInner.name].maxColor}})</label>
                     <select class="form-control" id="maxColorAnalysis">

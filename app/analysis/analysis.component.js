@@ -157,7 +157,6 @@ angular.module('analysisModule').component('analysis', {
                 }
                 this.currentFormattingSettingsCol.display = String(this.currentFormattingSettingsCol.name) + " [" + String(this.currentFormattingSettingsCol.currInner.name) + "]";
                 cf.showFormattingSettings(outerCol, 'formattingSettingsModalAnalysis');
-                console.log(this.currentFormattingSettingsCol);
             }
 
             this.printMaxOrMin = function(maxMin){

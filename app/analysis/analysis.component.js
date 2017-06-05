@@ -1,10 +1,10 @@
 angular.module('analysisModule').component('analysis', {
     templateUrl: 'analysis/analysis.template.html',
     bindings: {
-        webIds:            '<',
-        elemName:          '<', // passed to columnTemplate component to determine template type
-        onStartLoad:       '&',
-        onEndLoad:         '&',
+        webIds: '<',
+        elemName: '<', // passed to columnTemplate component to determine template type
+        onStartLoad: '&',
+        onEndLoad: '&',
         sideSelectorItems: '<'
     },
     controller: ['$filter', '$scope', 'pi', 'conditionalFormatting', 'reduceColumn',
@@ -122,9 +122,9 @@ angular.module('analysisModule').component('analysis', {
                     self.outerColumnNames = colNames;
 
                     // Give outerColumnNames some inner cols with default vals
-                    self.outerColumnNames.forEach(function(currOuter, index, array){
-                        self.innerColumnNames.forEach(function(currInner, indexInner, array){
-                            if(currOuter[currInner.name] == undefined){
+                    self.outerColumnNames.forEach(function(currOuter, index, array) {
+                        self.innerColumnNames.forEach(function(currInner, indexInner, array) {
+                            if (currOuter[currInner.name] == undefined) {
                                 currOuter[currInner.name] = {};
                             }
                             // Set conditionalFormatting to true initially
@@ -145,13 +145,11 @@ angular.module('analysisModule').component('analysis', {
             // Called in html to open the CF settings modal
             this.openCogModal = function(outerCol, innerCol) {
                 this.currentFormattingSettingsCol = outerCol;
-                if(outerCol[innerCol.name] == undefined){
+                if (outerCol[innerCol.name] == undefined) {
                     this.currentFormattingSettingsCol.currInner = innerCol;
-                }
-                else{
+                } else {
                     this.currentFormattingSettingsCol.currInner = outerCol[innerCol.name];
-                    if(this.currentFormattingSettingsCol.currInner.name == undefined)
-                    {
+                    if (this.currentFormattingSettingsCol.currInner.name == undefined) {
                         this.currentFormattingSettingsCol.currInner.name = innerCol.name;
                     }
                 }
@@ -160,13 +158,13 @@ angular.module('analysisModule').component('analysis', {
                 console.log(this.currentFormattingSettingsCol);
             }
 
-            this.printMaxOrMin = function(maxMin){
+            this.printMaxOrMin = function(maxMin) {
                 // Avoid erorr in console (when this runs before we have data)
-                if(this.currentFormattingSettingsCol == undefined || this.currentFormattingSettingsCol.name == undefined){
+                if (this.currentFormattingSettingsCol == undefined || this.currentFormattingSettingsCol.name == undefined) {
                     return;
                 }
                 // No user defined max/min
-                if(this.currentFormattingSettingsCol.currInner == undefined ||  this.currentFormattingSettingsCol.currInner[maxMin] == undefined){
+                if (this.currentFormattingSettingsCol.currInner == undefined || this.currentFormattingSettingsCol.currInner[maxMin] == undefined) {
                     return this.maxAndMin[this.currentFormattingSettingsCol.name][this.currentFormattingSettingsCol.currInner.name][maxMin];
                 }
                 // Otherwise use the userdefined max/min
@@ -176,44 +174,35 @@ angular.module('analysisModule').component('analysis', {
             }
 
             // Called in html to toggle CF
-            this.toggleConditionalFormatting = function(outerCol, innerCol){
-                if(outerCol[innerCol.name] == undefined && outerCol != undefined){
+            this.toggleConditionalFormatting = function(outerCol, innerCol) {
+                if (outerCol[innerCol.name] == undefined && outerCol != undefined) {
                     outerCol[innerCol.name] = {};
                 }
                 outerCol[innerCol.name].showConditionalFormat = !outerCol[innerCol.name].showConditionalFormat;
             };
 
-            // // Called in html to apply the CF settings
-            // this.submitFormattingSettings = function(outerCol){
-            //     outerCol[outerCol.currInner.name] = {};
-            //     outerCol[outerCol.currInner.name].max = document.getElementById("maxInputAnalysis").value;
-            //     outerCol[outerCol.currInner.name].min = document.getElementById("minInputAnalysis").value;
-            //     outerCol[outerCol.currInner.name].maxColor = document.getElementById("maxColorAnalysis").value;
-            //     outerCol[outerCol.currInner.name].minColor = document.getElementById("minColorAnalysis").value;
-            //     document.getElementById("conditionalFormatFormAnalysis").reset();
-            // };
 
-
-            this.submitFormattingSettings = function(outerCol){
+            this.submitFormattingSettings = function(outerCol) {
                 outerCol[outerCol.currInner.name] = {};
                 var submittedMax = document.getElementById("maxInputAnalysis").value;
                 var submittedMin = document.getElementById("minInputAnalysis").value;
-      
-                if(submittedMax.length != 0)
+
+                // If user left field blank, then set to null so that default max/min is used
+                if (submittedMax.length != 0)
                     outerCol[outerCol.currInner.name].max = submittedMax;
-                else{
+                else {
                     outerCol[outerCol.currInner.name].max = null
                 }
-                if(submittedMin.length != 0)
+                if (submittedMin.length != 0)
                     outerCol[outerCol.currInner.name].min = submittedMin;
-                else{
+                else {
                     outerCol[outerCol.currInner.name].min = null
                 }
                 outerCol[outerCol.currInner.name].maxColor = document.getElementById("maxColorAnalysis").value;
                 outerCol[outerCol.currInner.name].minColor = document.getElementById("minColorAnalysis").value;
-      
+
                 document.getElementById("conditionalFormatFormAnalysis").reset();
-              };
+            };
 
 
             this.formatValue = function(value) {
@@ -248,28 +237,28 @@ angular.module('analysisModule').component('analysis', {
                 for (var column of this.outerColumnNames) {
                     var innerAverages = this.data.map(function(row) {
                         var avg = {};
-                        if(!angular.isUndefined(row[column.name])){
+                        if (!angular.isUndefined(row[column.name])) {
                             return row[column.name].Average;
                         }
                         return avg;
                     });
                     var innerMaxs = this.data.map(function(row) {
                         var max = {};
-                        if(!angular.isUndefined(row[column.name])){
+                        if (!angular.isUndefined(row[column.name])) {
                             return row[column.name].Maximum;
                         }
                         return max;
                     });
                     var innerMins = this.data.map(function(row) {
                         var min = {};
-                        if(!angular.isUndefined(row[column.name])){
+                        if (!angular.isUndefined(row[column.name])) {
                             return row[column.name].Minimum;
                         }
                         return min;
                     });
                     var innerStdDev = this.data.map(function(row) {
                         var sd = {};
-                        if(!angular.isUndefined(row[column.name])){
+                        if (!angular.isUndefined(row[column.name])) {
                             return row[column.name].StdDev;
                         }
                         return sd;
@@ -308,9 +297,9 @@ angular.module('analysisModule').component('analysis', {
 });
 
 
-    function isNumberKey(evt){
-        var charCode = (evt.which) ? evt.which : event.keyCode
-        if (charCode > 31 && (charCode < 48 || charCode > 57))
-            return false;
-        return true;
-    } 
+function isNumberKey(evt) {
+    var charCode = (evt.which) ? evt.which : event.keyCode
+    if (charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+    return true;
+}

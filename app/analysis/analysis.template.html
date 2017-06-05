@@ -96,15 +96,18 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" id="conditionalFormatFormAnalysis">
-                    <label ng-if="!cf.isUndefined($ctrl.currentFormattingSettingsCol.currInner.max)" for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.display}}: (Currently set at {{$ctrl.printMaxOrMin('max')}})</label>
-                    <label ng-if="cf.isUndefined($ctrl.currentFormattingSettingsCol.currInner.max)" for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.display}}: </label>
-                    <input class="form-control" id="maxInputAnalysis" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name][$ctrl.currentFormattingSettingsCol.currInner.name].max}}">
+
+                <h5> Note: If max/min are left blank, it will default to current max and min. </h5>
+
+                    <label for="maxInput" class="control-label">Set Max for {{$ctrl.currentFormattingSettingsCol.display}}: </label>
+                    <input class="form-control" id="maxInputAnalysis" value="{{$ctrl.currentFormattingSettingsCol.currInner.name.max}}" onkeypress="return isNumberKey(event)">
 
 
-                    <label ng-if="!cf.isUndefined($ctrl.currentFormattingSettingsCol.currInner.min)" for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.display}}: (Currently set at {{$ctrl.printMaxOrMin('min')}})</label>
-                    <label ng-if="cf.isUndefined($ctrl.currentFormattingSettingsCol.currInner.min)" for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.display}}: </label>
-                    <input class="form-control" id="minInputAnalysis" value="{{$ctrl.maxAndMin[$ctrl.currentFormattingSettingsCol.name][$ctrl.currentFormattingSettingsCol.currInner.name].min}}">
+                    <label for="minInput" class="control-label">Set Min for {{$ctrl.currentFormattingSettingsCol.display}}: </label>
+                    <input class="form-control" id="minInputAnalysis" value="" onkeypress="return isNumberKey(event)">
 
+
+                    <!-- value="{{$ctrl.currentFormattingSettingsCol.min}}" onkeypress="return isNumberKey(event)" -->
 
                     <label for="maxColor">Color for Max: (Currently set at {{$ctrl.currentFormattingSettingsCol[$ctrl.currentFormattingSettingsCol.currInner.name].maxColor}})</label>
                     <select class="form-control" id="maxColorAnalysis">

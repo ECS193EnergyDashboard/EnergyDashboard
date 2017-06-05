@@ -157,6 +157,7 @@ angular.module('analysisModule').component('analysis', {
                 }
                 this.currentFormattingSettingsCol.display = String(this.currentFormattingSettingsCol.name) + " [" + String(this.currentFormattingSettingsCol.currInner.name) + "]";
                 cf.showFormattingSettings(outerCol, 'formattingSettingsModalAnalysis');
+                console.log(this.currentFormattingSettingsCol);
             }
 
             this.printMaxOrMin = function(maxMin){
@@ -182,15 +183,38 @@ angular.module('analysisModule').component('analysis', {
                 outerCol[innerCol.name].showConditionalFormat = !outerCol[innerCol.name].showConditionalFormat;
             };
 
-            // Called in html to apply the CF settings
+            // // Called in html to apply the CF settings
+            // this.submitFormattingSettings = function(outerCol){
+            //     outerCol[outerCol.currInner.name] = {};
+            //     outerCol[outerCol.currInner.name].max = document.getElementById("maxInputAnalysis").value;
+            //     outerCol[outerCol.currInner.name].min = document.getElementById("minInputAnalysis").value;
+            //     outerCol[outerCol.currInner.name].maxColor = document.getElementById("maxColorAnalysis").value;
+            //     outerCol[outerCol.currInner.name].minColor = document.getElementById("minColorAnalysis").value;
+            //     document.getElementById("conditionalFormatFormAnalysis").reset();
+            // };
+
+
             this.submitFormattingSettings = function(outerCol){
                 outerCol[outerCol.currInner.name] = {};
-                outerCol[outerCol.currInner.name].max = document.getElementById("maxInputAnalysis").value;
-                outerCol[outerCol.currInner.name].min = document.getElementById("minInputAnalysis").value;
+                var submittedMax = document.getElementById("maxInputAnalysis").value;
+                var submittedMin = document.getElementById("minInputAnalysis").value;
+      
+                if(submittedMax.length != 0)
+                    outerCol[outerCol.currInner.name].max = submittedMax;
+                else{
+                    outerCol[outerCol.currInner.name].max = null
+                }
+                if(submittedMin.length != 0)
+                    outerCol[outerCol.currInner.name].min = submittedMin;
+                else{
+                    outerCol[outerCol.currInner.name].min = null
+                }
                 outerCol[outerCol.currInner.name].maxColor = document.getElementById("maxColorAnalysis").value;
                 outerCol[outerCol.currInner.name].minColor = document.getElementById("minColorAnalysis").value;
+      
                 document.getElementById("conditionalFormatFormAnalysis").reset();
-            };
+              };
+
 
             this.formatValue = function(value) {
                 if (value === undefined) {
@@ -282,3 +306,11 @@ angular.module('analysisModule').component('analysis', {
         }
     ]
 });
+
+
+    function isNumberKey(evt){
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    } 

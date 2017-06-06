@@ -192,6 +192,7 @@ angular.module('chartViewModule').component('chartView', {
                     chart.height(200);
                     chart.update();
                     $('#chart' + index).height(200);
+                    chart.closedByDragging = false;
                 }
 
                 /*

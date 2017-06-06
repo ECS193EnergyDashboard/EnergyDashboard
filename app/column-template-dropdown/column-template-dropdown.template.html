@@ -27,7 +27,7 @@
                 <!--- END: From columnDropwdownSearch-->
 
                 <input ng-model="search.columnName" class="form-control" type="text" placeholder="Search For Column...">
-                <div class="dropdownelm" ng-repeat="column in ($ctrl.filteredColumns = ($ctrl.columns | orderBy:'name' | filter: search.columnName| filter: search.isChecked))  " ng-click="$ctrl.switchColumnIsChecked(column)" ng-class="{'columnChecked': column.isChecked}"> 
+                <div class="dropdownelm" ng-repeat="column in ($ctrl.filteredColumnsHTML = ($ctrl.filteredColumns | orderBy:'name' | filter: search.columnName| filter: search.isChecked))  " ng-click="$ctrl.switchColumnIsChecked(column)" ng-class="{'columnChecked': column.isChecked}"> 
                     {{column.name}}
                 </div>
             </div>

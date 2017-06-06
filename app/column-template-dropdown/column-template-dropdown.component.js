@@ -43,8 +43,7 @@ angular.module('columnTemplateDropdownModule')
 
             return filteredTemplates;
         }
-    }
-).component('columnTemplateDropdown', {
+    }).component('columnTemplateDropdown', {
     templateUrl: 'column-template-dropdown/column-template-dropdown.template.html',
     bindings: {
         columns:           '<', //columnNamesObjs passed in (col order maintained),  current set of cols
@@ -62,6 +61,7 @@ angular.module('columnTemplateDropdownModule')
             var self = this;
             this.templates = [];
             this.filteredTemplates = [];
+            this.filteredColumns = [];
             this.showTemplates = false;
             this.includeDR = false;
             var numInnerColumns = 0;
@@ -112,10 +112,10 @@ angular.module('columnTemplateDropdownModule')
             this.$onChanges = function(changes){
 
                 if(!angular.isUndefined(this.sideSelectorItems)){
-                                        console.log(changes);
 
-                        // console.log(changes.columns.currentValue, "and ", changes.columns.previousValue);
-                        // console.log(changes.columns.currentValue === changes.columns.previousValue);
+                    if(changes.columns){
+                        this.updateFilteredColumns();
+                    }
 
 
                     // Check to see if there is no data - if not reset curtemplate
@@ -359,7 +359,33 @@ angular.module('columnTemplateDropdownModule')
                         this.isAvailableDefaultTemplate = true;
 
                 }
-            }
+            };
+
+
+            this.updateFilteredColumns = function(){
+                this.filteredColumns = [];
+
+                var neededColumns = [];
+
+                this.rowData.forEach(function(row){ 
+                    // console.log(row);  
+                    Object.keys(row).forEach(function(key){
+                        if(!angular.isUndefined(row[key].name) && !neededColumns.includes(row[key].name))
+                            neededColumns.push(row[key].name)
+                    });
+                });
+
+
+                for(var col of this.columns){
+                    // console.log(col);
+                    if(neededColumns.includes(col.name)){
+                        this.filteredColumns.push(col);
+                    }
+                }
+
+                this.updateColObj({cols: template.colObj});  //output binding
+            };
+
 
 
 

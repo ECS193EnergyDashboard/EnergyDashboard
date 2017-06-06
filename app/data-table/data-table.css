@@ -142,6 +142,7 @@ column-template-dropdown {
     display: flex;
     background-color: #d6dde3;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .tableMenuItem{

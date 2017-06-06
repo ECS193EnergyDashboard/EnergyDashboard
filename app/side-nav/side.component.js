@@ -138,6 +138,7 @@ angular.module('sideNavModule').component('sideBar', {
 
 
         this.onSelectElem = function(element) {
+            // console.log("on sellect elem");
             if (element.hasChildren) {
                 self.onClick({ element: element });
 
@@ -212,7 +213,7 @@ angular.module('sideNavModule').component('sideBar', {
         };
 
         this.dblClickedItem = function (e){
-            //console.log("double clicked "+e.name);
+            console.log("double clicked "+e.name);
             clearTimeout(timer);
             prevent = true;
             //console.log("setting prevent true");

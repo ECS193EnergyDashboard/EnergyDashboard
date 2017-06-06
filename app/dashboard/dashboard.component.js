@@ -34,6 +34,7 @@ angular.module('dashboardModule').component('dashboard',{
         };
 
         this.addChildElements = function(parent) {
+            // console.log("add child elems")
             this.itemsToAdd = parent.elements;
             this.elemName = parent.name;
         };
@@ -72,7 +73,8 @@ angular.module('dashboardModule').component('dashboard',{
         }
 
         this.clearElements = function() {
-            console.log("Clearning elements");
+            // console.log("Clearning elements");
+            this.itemsToAdd = [];
             this.webIds.length = 0;
             this.data.length = 0;
 

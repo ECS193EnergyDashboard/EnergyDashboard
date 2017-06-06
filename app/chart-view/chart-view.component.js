@@ -135,6 +135,7 @@ angular.module('chartViewModule').component('chartView', {
                 .hideDelay(0)
                 .contentGenerator(tooltipContentGenerator);
 
+
             var onChartMouseMove = function(e) {
                 var tooltipData = { series: [] };
 

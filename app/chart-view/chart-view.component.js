@@ -149,7 +149,7 @@ angular.module('chartViewModule').component('chartView', {
                 tooltipData.series.pop();
 
                 if (filteredCharts.length) {
-                    tooltipData.value = charts[0].interactiveLayer.tooltip.data().value;
+                    tooltipData.value = filteredCharts[0].interactiveLayer.tooltip.data().value;
                 }
 
                 tooltip
@@ -194,9 +194,11 @@ angular.module('chartViewModule').component('chartView', {
                     $('#chart' + index).height(200);
                 }
 
+                /*
                 for (var series of this.dataset[index]) {
                     series.disabled = disabled;
                 }
+                */
             }
 
             this.buttonClass = function(index) {

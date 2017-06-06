@@ -247,9 +247,10 @@ angular.module('dataTableModule')
            // if nothing in data remove elms in columnNamesObjs to hide buttons/columns
            // console.log(newValue);
            //  console.log("Rows changed");
-           if(!(angular.isUndefined(newValue)) && newValue.length == 0){
+            //@TODO: find out purpose of these lines
+           /*if(!(angular.isUndefined(newValue)) && newValue.length == 0){
                self.columnNamesObjs.length = 0;
-           }
+           }*/
            self.updateCalculations();
         });
 

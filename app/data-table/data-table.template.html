@@ -50,38 +50,33 @@
                 </tr>
             </thead>
             <tbody id="dataTableBody">
-            <tr ng-repeat="element in $ctrl.rowsDisplayed = ($ctrl.displayed | filter: {name: $ctrl.rowName})">
-                <td class="bold">{{element.building}}</td>
-                <td class="bold">{{element.name}}</td>
-                <!--
-                <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" ng-class="$ctrl.valueStyle(element[column.name])" ng-style="$ctrl.conditionalFormat(element[column.name], column)" ng-click="$ctrl.toggleCellSelected(element[column.name])">
-                    {{$ctrl.formatValue(element[column.name])}}
-                </td>
-                -->
-                <td ng-repeat="column in $ctrl.columnNamesObjs"
-                    ng-if="column.isChecked"
-                    ng-class="$ctrl.valueStyle(element[column.name])"
-                    ng-style="cf.conditionalFormat(element[column.name], column, $ctrl.maxAndMin, 'false')"
-                    ng-click="$ctrl.toggleCellSelected(element[column.name])">
-                    {{$ctrl.formatValue(element[column.name])}}
-                </td>
-            </tr>
+                <tr ng-repeat="element in $ctrl.rowsDisplayed = ($ctrl.displayed | filter: {name: $ctrl.rowName} )">
+                    <td class="bold">{{element.building}}</td>
+                    <td class="bold">{{element.name}}</td>
+                    <td ng-repeat="column in $ctrl.columnNamesObjs"
+                        ng-if="column.isChecked"
+                        ng-class="$ctrl.valueStyle(element[column.name])"
+                        ng-style="cf.conditionalFormat(element[column.name], column, $ctrl.maxAndMin, 'false')"
+                        ng-click="$ctrl.toggleCellSelected(element[column.name])">
+                        {{$ctrl.formatValue(element[column.name])}}
+                    </td>
+                </tr>
             </tbody>
             <tbody ng-if="$ctrl.displayed.length > 0">
-            <tr>
-                <td></td>
-                <td class="bold">Total</td>
-                <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" class="bold goodValue">
-                    {{$ctrl.sums[column.name] | number:2}}
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td class="bold">Average</td>
-                <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" class="bold goodValue">
-                    {{$ctrl.averages[column.name] | number:2}}
-                </td>
-            </tr>
+                <tr>
+                    <td></td>
+                    <td class="bold">Total</td>
+                    <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" class="bold goodValue">
+                        {{$ctrl.sums[column.name] | number:2}}
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="bold">Average</td>
+                    <td ng-repeat="column in $ctrl.columnNamesObjs" ng-if="column.isChecked" class="bold goodValue">
+                        {{$ctrl.averages[column.name] | number:2}}
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>

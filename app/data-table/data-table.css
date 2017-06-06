@@ -136,13 +136,16 @@ column-template-dropdown {
     /* overflow: overlay; */
 }
 #tableMenus{
-    flex: 1 1;
+    /* flex: 1 1; */
+    flex-grow: 0;
+    flex-shrink: 0;
     /* float: right; */
     /*border: 5px solid red;*/
     display: flex;
     background-color: #d6dde3;
     align-items: center;
     flex-wrap: wrap;
+    min-height: 44px;
 }
 
 .tableMenuItem{
@@ -167,6 +170,7 @@ column-template-dropdown {
 }
 #tableMenuSearch{
     flex: 7 1;
+    min-width: 200px;
 }
 
 #tableMenuSearchText{

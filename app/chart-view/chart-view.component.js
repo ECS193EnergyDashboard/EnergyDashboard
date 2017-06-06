@@ -272,9 +272,10 @@ angular.module('chartViewModule').component('chartView', {
                 chart: {
                     type: 'focus',
                     width: graphWidth,
+                    height: 120,
                     margin: {
-                        top: 20,
-                        bottom: 20,
+                        top: 40,
+                        bottom: 40,
                         left: lrMargin,
                         right: lrMargin
                     },
@@ -282,7 +283,7 @@ angular.module('chartViewModule').component('chartView', {
                     y: function(d) { return d.value; },
                     xAxis: {
                         tickFormat: xTickFormat,
-                        rotateLabels: 30,
+                        rotateLabels: 0,
                     },
                     dispatch: {
                         onBrush: onChangeFocus,

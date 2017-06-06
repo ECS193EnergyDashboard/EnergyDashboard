@@ -125,48 +125,51 @@ angular.module('columnTemplateDropdownModule')
 
 
                     this.getPiTemplates();
-                    this.getTemplates();
+                    this.getTemplates().then(function(){
 
-                    // if there was no changes to the columns do not do anything else.
-                    if(angular.isUndefined(changes.columns) || angular.isUndefined(changes.columns)){
-                        return;
-                    }
-
-
-
-                    // If there is no current template we need to set to default, after checking to make sure there is data
-                    if(angular.equals(this.currentTemplate, {}) || angular.isUndefined(this.currentTemplate)){
-                        if(this.rowData.length != 0){
-                            // console.log("lengh does not equal 0, using default")
-                            this.restoreDefault(); // if no default is found this will call generateDefault()
+                        // if there was no changes to the columns do not do anything else.
+                        if(angular.isUndefined(changes.columns) || angular.isUndefined(changes.columns)){
+                            return;
                         }
-                    }
-
-                    // we didnt add or take anything out of the side bar, so no need to change template
-                    if(angular.isUndefined(changes.rowData)){
-                        return;
-                    }
 
 
-                    // Else we have just added to the table (with data already showing)
-                    // Is it possible that the lengths are the same but we still added things to the table?
-                    if(changes.columns.currentValue.length != changes.columns.previousValue.length){
-                        var temp;
-                        // Find an exact match of piTemplate types that is a default
-                        var found = false;
-                        for(temp of this.templates){
-                            if(temp.name == "Default" && angular.equals(temp.type, this.piTemplatesInUse)){
-                                console.log("found default");
-                                this.ApplyTemplate(temp);
-                                found = true;
-                                break;
+
+                        // If there is no current template we need to set to default, after checking to make sure there is data
+                        if(angular.equals(self.currentTemplate, {}) || angular.isUndefined(self.currentTemplate)){
+                            if(self.rowData.length != 0){
+                                // console.log("lengh does not equal 0, using default")
+                                self.restoreDefault(); // if no default is found this will call generateDefault()
                             }
                         }
-                        if(!found){
-                            this.showIntersection();
-                            this.updateFiltered();
+
+                        // we didnt add or take anything out of the side bar, so no need to change template
+                        if(angular.isUndefined(changes.rowData)){
+                            return;
                         }
-                    }
+
+
+                        // Else we have just added to the table (with data already showing)
+                        // Is it possible that the lengths are the same but we still added things to the table?
+                        if(changes.columns.currentValue.length != changes.columns.previousValue.length){
+                            var temp;
+                            // Find an exact match of piTemplate types that is a default
+                            var found = false;
+                            for(temp of self.templates){
+                                if(temp.name == "Default" && angular.equals(temp.type, self.piTemplatesInUse)){
+                                    console.log("found default");
+                                    self.ApplyTemplate(temp);
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            if(!found){
+                                self.showIntersection();
+                                self.updateFiltered();
+                            }
+                        }
+
+                    });
+
 
                 }
 
@@ -363,7 +366,7 @@ angular.module('columnTemplateDropdownModule')
 
             this.getTemplates = function(){
                 // Get templates from server
-                $http({method: 'GET', url: '/getTemplates'}).then(function successCallback(response){
+                var p = $http({method: 'GET', url: '/getTemplates'}).then(function successCallback(response){
                     //console.log("get templates success", response.data);
                     self.templates = response.data;
                     //console.log("updating filtered");
@@ -376,7 +379,7 @@ angular.module('columnTemplateDropdownModule')
                     console.error("get templates failed ", response);
                 });
 
-
+                return p;
             };
 
             this.clearAll = function() {

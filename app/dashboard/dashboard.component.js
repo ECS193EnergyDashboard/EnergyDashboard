@@ -14,7 +14,8 @@ angular.module('dashboardModule').component('dashboard',{
         this.itemsToAdd = [];
 		this.loading = { sidebar: 0, data: 0, analysis: 0 };
         this.chartSelection = [];
-        this.elemName = "";
+
+        this.sideSelectorItems = [];
 
         // Increments and decrements the loading binding, like a semaphore
         // Example: multiple async requests, each one UPs when sent, each one DOWNs when done, 0 signals loading is done
@@ -79,6 +80,7 @@ angular.module('dashboardModule').component('dashboard',{
                 this.cancelAysnc = true;
                 this.asyncData = [];
             }
+            this.sideSelectorItems = [];
         };
 
         this.showDataTab = function() {
@@ -123,6 +125,11 @@ angular.module('dashboardModule').component('dashboard',{
         this.toggleChartMenu = function(){
             $("#wrapper").toggleClass("toggledChart");
             this.dataTable.update();
+        };
+
+        this.passSelected = function(selected){
+            // console.log("Recieved selected", selected);
+            this.sideSelectorItems = selected;
         };
 
 

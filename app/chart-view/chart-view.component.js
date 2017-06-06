@@ -135,6 +135,7 @@ angular.module('chartViewModule').component('chartView', {
                 .hideDelay(0)
                 .contentGenerator(tooltipContentGenerator);
 
+
             var onChartMouseMove = function(e) {
                 var tooltipData = { series: [] };
 
@@ -148,7 +149,7 @@ angular.module('chartViewModule').component('chartView', {
                 tooltipData.series.pop();
 
                 if (filteredCharts.length) {
-                    tooltipData.value = charts[0].interactiveLayer.tooltip.data().value;
+                    tooltipData.value = filteredCharts[0].interactiveLayer.tooltip.data().value;
                 }
 
                 tooltip
@@ -191,11 +192,14 @@ angular.module('chartViewModule').component('chartView', {
                     chart.height(200);
                     chart.update();
                     $('#chart' + index).height(200);
+                    chart.closedByDragging = false;
                 }
 
+                /*
                 for (var series of this.dataset[index]) {
                     series.disabled = disabled;
                 }
+                */
             }
 
             this.buttonClass = function(index) {
@@ -269,9 +273,10 @@ angular.module('chartViewModule').component('chartView', {
                 chart: {
                     type: 'focus',
                     width: graphWidth,
+                    height: 120,
                     margin: {
-                        top: 20,
-                        bottom: 20,
+                        top: 40,
+                        bottom: 40,
                         left: lrMargin,
                         right: lrMargin
                     },
@@ -279,7 +284,7 @@ angular.module('chartViewModule').component('chartView', {
                     y: function(d) { return d.value; },
                     xAxis: {
                         tickFormat: xTickFormat,
-                        rotateLabels: 30,
+                        rotateLabels: 0,
                     },
                     dispatch: {
                         onBrush: onChangeFocus,

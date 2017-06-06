@@ -2,12 +2,12 @@ angular.module('dataTableModule')
 .component('datatable', {
     templateUrl: 'data-table/data-table.template.html',
     bindings: {
-        tableSrc:       '<',
-        searchEnabled:  '<',
-        reorderEnabled: '<',
-        elemName:       '<',   // passed to columnTemplate component to determine template type
-        selection:      '=',
-        api:            '='
+        tableSrc:          '<',
+        searchEnabled:     '<',
+        reorderEnabled:    '<',
+        selection:         '=',
+        api:               '=',
+        sideSelectorItems: '<'
     },
     controller: ['$filter', '$scope', '$timeout', 'conditionalFormatting', 'reduceColumn', function TableController($filter, $scope, $timeout, cf, rc) {
         var self = this;
@@ -21,6 +21,8 @@ angular.module('dataTableModule')
         this.showFormattingSettingsButtons = true;
         this.columnWidths = {};
         this.columNumWidths = [];
+
+        this.sideBarSelected = [];
         $scope.cf = cf; //Give html access to cf service
         this.rowName = "";
         this.rowsDisplayed = [];
@@ -96,6 +98,7 @@ angular.module('dataTableModule')
             }
         };
 
+
         // Called in html to open the CF settings modal
         this.openCogModal = function(col){
             this.currentFormattingSettingsCol = col;
@@ -112,13 +115,40 @@ angular.module('dataTableModule')
         };
 
         // Called in html to apply the CF settings
+        // // Called in html to apply the CF settings
+        // this.submitFormattingSettings = function(col){
+        //     col.max = document.getElementById("maxInput").value;
+        //     col.min = document.getElementById("minInput").value;
+        //     col.maxColor = document.getElementById("maxColor").value;
+        //     col.minColor = document.getElementById("minColor").value;
+        //     document.getElementById("conditionalFormatForm").reset();
+        // };
+
+
         this.submitFormattingSettings = function(col){
-            col.max = document.getElementById("maxInput").value;
-            col.min = document.getElementById("minInput").value;
+            var submittedMax = document.getElementById("maxInput").value;
+            var submittedMin = document.getElementById("minInput").value;
+
+            if(submittedMax.length != 0)
+                col.max = submittedMax;
+            else{
+                col.max = null
+            }
+            if(submittedMin.length != 0)
+                col.min = submittedMin;
+            else{
+                col.min = null
+            }
             col.maxColor = document.getElementById("maxColor").value;
             col.minColor = document.getElementById("minColor").value;
+
+            this.resetConditionalFormatForm();
+          };
+
+
+        this.resetConditionalFormatForm = function(){
             document.getElementById("conditionalFormatForm").reset();
-        };
+         };
 
         this.$onChanges = function() {
 
@@ -184,7 +214,6 @@ angular.module('dataTableModule')
                     Object.assign(element[name], { parentName: element.name, buildingName: element.building });
                 }
             }
-            // console.log(this.columnNamesObjs);
 
             this.displayed = this.data = this.tableSrc;
 
@@ -234,7 +263,7 @@ angular.module('dataTableModule')
         // Whenever the displayed data is changed, recalculate sum and average of the shown rows only
         $scope.$watch('$ctrl.displayed', function(newValue, oldValue) {
             // if nothing in data remove elms in columnNamesObjs to hide buttons/columns
-            //console.log(newValue);
+
             if(!(angular.isUndefined(newValue)) && newValue.length == 0){
                 self.columnNamesObjs.length = 0;
             }
@@ -346,3 +375,12 @@ angular.module('dataTableModule')
 
     }]
 });
+
+
+
+    function isNumberKey(evt){
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }

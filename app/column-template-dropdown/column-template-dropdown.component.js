@@ -1,27 +1,59 @@
+/* How templates currently work:
+    1. The first time you add something to the table - it will look for the default template with the exact match
+        of current piTemplates. If none exists then it will create one for those piTemplates. For example when you put in
+        AHU, 2 piTemplaes are in use so the default will be for both of those templates.
+    2.
+
+
+    Notes:
+        There will always be a default template for if only a single piTemplate is in use. Whenever you
+        go from no data to data a default will be made. However, if you have data then add new data
+        a default wont be made unless you make it.
+
+        However, in the case of AHU 2 piTemplates are in use so therefore there will be a default
+        for that one.
+        The only times there is not a default template available is when you add multiple piTempaltes
+        and one has not been set yet.
+
+
+*/
 angular.module('columnTemplateDropdownModule')
     .filter('type', function(){
-        return function(templates, type){
+        return function(templates, types){
+            // console.log("types:", types);
             var filteredTemplates = [];
-            for(var template of templates)
-            {
-                if(template.type == type){
-                    filteredTemplates.push(template);
+            for(var template of templates){
+                // there can be only one default so make sure it has an exact match with the type
+                if(template.name == "Default"){
+                    // console.log("this should be default", template);
+                    if(angular.equals(template.type, types)){
+                        filteredTemplates.push(template);
+                    }
+                }
+                // else show everything else with at least on of the piTemplates in use
+                else{
+                    for(piTemplate of template.type){
+                        if(types.includes(piTemplate) && !(filteredTemplates.includes(template))){
+                            filteredTemplates.push(template);
+                        }
+                    }
+
                 }
             }
+
             return filteredTemplates;
         }
-    }
-).component('columnTemplateDropdown', {
+    }).component('columnTemplateDropdown', {
     templateUrl: 'column-template-dropdown/column-template-dropdown.template.html',
     bindings: {
-        columns:        '<', //columnNamesObjs passed in (col order maintained),  current set of cols
-        rowData:        '<', //row order not maintained, has units
-        isAnalysis:     '<',
-        templateSets:   '<',
-        innerColumns:   '<', // Min, max, avg, st - this is needed for CSV
-        updateColObj:   '&', // Output binding to update the table
-        dateRange:      '<', // The date range to print on the csv
-        elemName:       '<'  // Element name to determine template type (from side-nav)
+        columns:           '<', //columnNamesObjs passed in (col order maintained),  current set of cols
+        rowData:           '<', //row order not maintained, has units
+        isAnalysis:        '<',
+        templateSets:      '<',
+        innerColumns:      '<', // Min, max, avg, st - this is needed for CSV
+        updateColObj:      '&', // Output binding to update the table
+        dateRange:         '<', // The date range to print on the csv
+        sideSelectorItems: '<'
     },
     controller: [
         '$scope', '$http', 'typeFilter',
@@ -29,41 +61,34 @@ angular.module('columnTemplateDropdownModule')
             var self = this;
             this.templates = [];
             this.filteredTemplates = [];
+            this.filteredColumns = [];
             this.showTemplates = false;
             this.includeDR = false;
             var numInnerColumns = 0;
             this.currentTemplate = {};
             this.filteredColumns = [];
+            this.search = {};
+            this.piTemplatesInUse = [];
 
+            this.unalteredCurrentTemplate = {}; // For the watcher
 
-            this.unalteredCurrentTemplate = {};
+            this.newTemplateName = "";
+
+            this.isAvailableDefaultTemplate = false;
+
 
 
             // Default file name for downloading to CSV
             this.fileName = "Data.csv";
             // an error message for the modal. Always set the error message before showing modal
             this.errorMessage = "";
-            // Determine the type of current element
-            this.curType = "";
-            // Keep track of the prev type
-            this.prevType = "";
-            if(this.elemName === undefined){
-                this.elemName = "";
-            }
-
-            this.$onInit = function(){
 
 
-                this.determineType();
-            }
-
-
-            // A watcher for the current template
+            // A watcher for the current template used to set the color of the Save button
             $scope.$watch('$ctrl.currentTemplate', function(newVal, oldVal){
-
+                // console.log("Watch");
                 if(angular.equals(self.unalteredCurrentTemplate, newVal.colObj)){
                     if(self.isAnalysis == "true"){
-
                         $('.saveTemplateButtonAnalysis').css({'color': 'green'});
                     }
                     else{
@@ -71,9 +96,7 @@ angular.module('columnTemplateDropdownModule')
                     }
                 }
                 else{
-
                     if(self.isAnalysis == "true"){
-
                         $('.saveTemplateButtonAnalysis').css({'color': 'red'});
                     }
                     else{
@@ -82,84 +105,117 @@ angular.module('columnTemplateDropdownModule')
                 }
             }, true);
 
+            this.toggleColumn = function(column){
+                column.isChecked = column.isChecked ? false: true;
+            };
+
 
             this.$onChanges = function(changes){
-                if(changes.columns){
 
-                    this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns))
+                console.log("CHANGES")
+                if(!angular.isUndefined(this.sideSelectorItems)){
 
-                    if(this.isAnalysis == "true"){
-                        $('.saveTemplateButtonAnalysis').css({'color': 'green'});
+                    if(changes.columns){
+                        this.updateFilteredColumns();
                     }
-                    else{
-                        $('.saveTemplateButtonData').css({'color': 'green'});
+
+
+                    // Check to see if there is no data - if not reset curtemplate
+                    if(this.sideSelectorItems.length == 1 && this.sideSelectorItems[0].building == "dummyItem"){
+                        this.currentTemplate = {};
                     }
-                }
 
-                this.prevType = this.currentTemplate.type;
-                this.determineType();
 
-                // Get templates from server
-                this.getTemplates();
+                    this.getPiTemplates();
+                    this.getTemplates().then(function(){
 
-                // If we changed type after clicking something
-                if(this.prevType != this.curType){  // do default stuff
-                    // If default doesnt exists yet
-                    if(self.templates.find(self.isDefault) == undefined && self.columns != undefined && self.columns.length > 0){
-                        console.log("Generating default");
-                        self.generateDefault();
-                    }
-                    else{
-                        // Set default when changing types
-                        if(self.currentTemplate.name != "" && self.currentTemplate.type != self.curType){
-                            for(var template of self.templates){
-                                if(template.name == "Default" && template.type == self.curType){
-                                    self.currentTemplate = template;
-                                }
+                        // if there was no changes to the columns do not do anything else.
+                        if(angular.isUndefined(changes.columns) || angular.isUndefined(changes.columns)){
+                            return;
+                        }
+
+
+
+                        // If there is no current template we need to set to default, after checking to make sure there is data
+                        if(angular.equals(self.currentTemplate, {}) || angular.isUndefined(self.currentTemplate)){
+                            console.log("Nothing on table to something")
+                            if(self.rowData.length != 0){
+                                // console.log("lengh does not equal 0, using default")
+                                self.restoreDefault(); // if no default is found this will call generateDefault()
                             }
                         }
-                    }
-                }
+
+                        // we didnt add or take anything out of the side bar, so no need to change template
+                        if(angular.isUndefined(changes.rowData)){
+                            return;
+                        }
 
 
-                // User clicked on something of same type
-                else if(this.curType != "" && this.currentTemplate.name != undefined){
-                    // Make template persist
-                    this.ApplyTemplate(this.currentTemplate);
+                        // Else we have just added to the table (with data already showing)
+                        // Is it possible that the lengths are the same but we still added things to the table?
+                        if(changes.rowData){
+                            console.log("we just added to the table")
+                            var temp;
+                            // Find an exact match of piTemplate types that is a default
+                            var found = false;
+                            for(temp of self.templates){
+                                if(temp.name == "Default" && angular.equals(temp.type, self.piTemplatesInUse)){
+                                    console.log("found default");
+                                    self.ApplyTemplate(temp);
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            if(!found){
+                                self.showIntersection();
+                                self.updateFiltered();
+                            }
+                        }
+
+                    });
+
+
                 }
+
                 this.updateFiltered();
 
             };
 
-            this.determineType = function(){
-                var regexpAHU = /ahu/gi;
-                var regexpRM = /ahu\d/gi;
-                // Check if name is undef
-                if(this.elemName === undefined){
-                    this.elemName = "";
+
+            // A function to apply a template to the data table
+            this.ApplyTemplate = function(template){
+                this.currentTemplate = template;
+                var colObjToAdd = JSON.parse(angular.toJson(template.colObj)); // Make clone
+                this.columns = template.colObj;
+                this.updateColObj({cols: template.colObj});  //output binding
+                $('.menuDropdown.open').removeClass('open'); // close dropdown if it is open
+                this.unalteredCurrentTemplate = JSON.parse(JSON.stringify(this.columns));
+                this.getTemplates();
+                if(this.isAnalysis == "true"){
+                    $('.saveTemplateButtonAnalysis').css({'color': 'green'});
                 }
-//                console.log("col template elemName: ", this.elemName);
-                if(self.elemName.match(regexpRM)){
-                    self.curType = "room";
-//                    console.log("ROOM TYPE");
-                }
-                else if (self.elemName.match(regexpAHU)) {
-                    self.curType = "ahu";
-//                    console.log("AHU TYPE");
+                else{
+                    $('.saveTemplateButtonData').css({'color': 'green'});
                 }
             };
 
-            this.updateFiltered = function(){
-                if(this.templates.length > 0){
-                    this.filteredTemplates = typeFilter(this.templates, self.curType);
+            this.restoreDefault = function(){
+                for(var temp of this.templates){
+                    if(angular.equals(temp.type, this.piTemplatesInUse) && temp.name == "Default"){
+                        this.ApplyTemplate(temp);
+                        return;
+                    }
                 }
+                // If we did not return from finding the default we need to create it
+                //console.log("generating default");
+                this.generateDefault();
+
             }
 
 
-
             // Generate default, push it to templates, and post to server
-            this.generateDefault = function(){
-                console.log("generating default...");
+            this.generateDefault = function(piTemplate){
+                // console.log("generating default...");
                 var firstValues = 0;
                 for(var col of self.columns){
                    if (firstValues < 10) {
@@ -172,13 +228,16 @@ angular.module('columnTemplateDropdownModule')
 
                 // Make clone, otherwise they are same reference
                 var colObjToAdd = JSON.parse(angular.toJson(self.columns));
+                if(colObjToAdd.length == 0){
+                    return;
+                }
                 var template = {
                     "name": "Default",
                     "colObj": colObjToAdd,
-                    "type": self.curType,
-                    "isDefault": "true"
+                    "type": this.piTemplatesInUse,
+                    "isDefault": "true",
                 };
-                self.currentTemplate = template;
+                self.ApplyTemplate(template);
 
                 // Push to templates
                 self.templates.push(template);
@@ -186,43 +245,186 @@ angular.module('columnTemplateDropdownModule')
 
                 // Post the default
                 self.postTemplate(template);
-            }
+            };
 
-            this.isDefault = function(template){
-                if(template.name == "Default" || template.name == "default"){
-                    if(template.isDefault == "true" && template.type == self.curType){
-                        return true;
+
+            // This is called when the user creates a custom default for more than one
+            // pi template
+            this.createDefault = function(columnObjs){
+                var colObjToAdd = JSON.parse(angular.toJson(columnObjs)); // Make clone
+
+                var template = {
+                    "name": "Default",
+                    "colObj": colObjToAdd,
+                    "type": this.piTemplatesInUse,
+                    "isDefault": "true"
+                };
+                this.templates.push(template);
+
+                // Close both modals
+                $(".saveModalData").modal('hide');
+                $(".saveModalAnalysis").modal('hide');
+
+                $(".saveDefaultModalData").modal('hide');
+                $(".saveDefaultModalAnalysis").modal('hide');
+
+                this.postTemplate(template);
+                this.ApplyTemplate(template);
+            };
+
+
+
+            Array.prototype.diff = function(a) {
+                return this.filter(function(i) {return a.indexOf(i) < 0;});
+            };
+
+            this.showIntersection = function(){
+                var intersection = [];
+                // console.log("rowData", this.rowData);
+
+                if(angular.isUndefined(this.rowData))
+                    return;
+
+
+
+                // Get all of the columns into an array
+                for(var col of this.columns){
+                    if(!intersection.includes(col.name)){
+                        intersection.push(col.name);
                     }
                 }
-                return false;
+
+
+
+                this.rowData.forEach(function(row){
+                    // console.log(row);
+                    var rowColumns = []
+                    Object.keys(row).forEach(function(key){
+                        rowColumns.push(row[key].name)
+                    });
+
+                    var difference = intersection.diff(rowColumns);
+                    intersection = intersection.diff(difference);
+                });
+
+
+
+                for(var column of this.columns){
+                   if (intersection.includes(column.name)) {
+                        column.isChecked = true;
+                    } else {
+                        column.isChecked = false;
+                    }
+                    column.max = undefined;
+                    column.min = undefined;
+                    column.maxColor = "Red";
+                    column.minColor = "Blue";
+                }
+                var colObjToAdd = JSON.parse(angular.toJson(this.columns));
+                var template = {
+                    "name": "Intersection",
+                    "colObj": colObjToAdd,
+                    "type": this.piTemplatesInUse,
+                    "isDefault": "false",
+                };
+                this.ApplyTemplate(template);
+
+
             };
+
+
+
+            this.getPiTemplates = function(){
+                var piTemplates = [];
+                if(!angular.isUndefined(this.sideSelectorItems)){
+                    for(item of this.sideSelectorItems){
+                        if(!piTemplates.includes(item.template))
+                            piTemplates.push(item.template)
+                    }
+                    this.piTemplatesInUse = piTemplates;
+                    // Remove "" from array
+                    for(var i = this.piTemplatesInUse.length - 1; i >= 0; i--) {
+                        if(this.piTemplatesInUse[i] === "") {
+                            this.piTemplatesInUse.splice(i, 1);
+                        }
+                    }
+                }
+                return this.piTemplatesInUse;
+            };
+
+
+            this.updateFiltered = function(){
+                this.filteredTemplates = typeFilter(this.templates, self.piTemplatesInUse);
+
+                // If we added piTemplates to the table need to check if there is a default
+                this.isAvailableDefaultTemplate = false;
+                for(var temp of this.filteredTemplates){
+                    if(temp.name == "Default")
+                        this.isAvailableDefaultTemplate = true;
+
+                }
+            };
+
+
+            this.updateFilteredColumns = function(){
+                this.filteredColumns = [];
+
+                var neededColumns = [];
+
+                this.rowData.forEach(function(row){ 
+                    // console.log(row);  
+                    Object.keys(row).forEach(function(key){
+                        if(!angular.isUndefined(row[key].name) && !neededColumns.includes(row[key].name))
+                            neededColumns.push(row[key].name)
+                    });
+                });
+
+
+                for(var col of this.columns){
+                    // console.log(col);
+                    if(neededColumns.includes(col.name)){
+                        this.filteredColumns.push(col);
+                    }
+                }
+                console.log(this.filteredColumns);
+            };
+
 
             this.getTemplates = function(){
                 // Get templates from server
-                $http({method: 'GET', url: '/getTemplates'}).then(function successCallback(response) {
+                var p = $http({method: 'GET', url: '/getTemplates'}).then(function successCallback(response){
                     //console.log("get templates success", response.data);
                     self.templates = response.data;
+                    //console.log("updating filtered");
                     self.updateFiltered();
 
-                    self.determineType();
+                    // self.determineType();
 
 
                 }, function errorCallback(response) {
                     console.error("get templates failed ", response);
                 });
 
-
+                return p;
             };
 
+            this.searchIsCheckedFilter = function() {
+                if (this.search.isChecked) {
+                    return { isChecked: true };
+                } else {
+                    return {};
+                }
+            }
+
             this.clearAll = function() {
-                for(var i = 0; i < this.filteredColumns.length; i++){
-                    this.filteredColumns[i].isChecked = false;
+                for (var column of this.filteredColumnsHTML) {
+                    column.isChecked = false;
                 }
             };
 
             this.selectAll = function(){
-                for(var i = 0; i < this.filteredColumns.length; i++){
-                    this.filteredColumns[i].isChecked = true;
+                for (var column of this.filteredColumnsHTML) {
+                    column.isChecked = true;
                 }
             };
 
@@ -410,17 +612,32 @@ angular.module('columnTemplateDropdownModule')
             // Save template/profile for cols
             // Called in html with $ctrl.columns
             this.saveTemplate = function(columnObjs) {
+                if(this.isAnalysis == "true"){
+                    this.newTemplateName = $(".newTemplateNameAnalysis").val();
+                }
+                else{
+                    this.newTemplateName = $(".newTemplateNameData").val();
+                }
 
                 // Check to make sure template is not named default or name is already taken
                 if(this.newTemplateName == "Default"){
-                    // console.log("Cant have a template named Default");
-                    this.errorMessage = "We're sorry but you can not have a template named Default";
+                    this.ShowSaveDefaultModal();
+                    return;
+                }
+                if(this.newTemplateName == ""){
+                    this.errorMessage = "Please enter a name for the template";
+                    this.ShowErrorModal();
+                    return;                   
+                }
+                if(this.newTemplateName == "Intersection" || this.newTemplateName == "intersection" ||
+                        this.newTemplateName == "default"){
+                    this.errorMessage = "Please pick another name for the template";
                     this.ShowErrorModal();
                     return;
                 }
                 for(templ of this.templates){
                     // New template name already exists and its type is the current type
-                    if(this.newTemplateName == templ.name && templ.type == self.curType){
+                    if(this.newTemplateName == templ.name){
                         this.ShowSaveAsModal();
                         return;
                     }
@@ -431,11 +648,10 @@ angular.module('columnTemplateDropdownModule')
                 var template = {
                     "name": this.newTemplateName,
                     "colObj": colObjToAdd,
-                    "type": this.curType,
+                    "type": this.piTemplatesInUse,
                     "isDefault": "false"
                 };
                 this.templates.push(template);
-                this.updateFiltered();
 
                 this.postTemplate(template);
                 $("#templateInput").val(''); // clear the inputbox
@@ -448,6 +664,7 @@ angular.module('columnTemplateDropdownModule')
                 // this.ShowSaveModal();
                 this.ClearTemplateNameInput();
             };
+
 
             // POST template/profile to server
             this.postTemplate = function(template){
@@ -466,13 +683,6 @@ angular.module('columnTemplateDropdownModule')
                 });
             }
 
-            // A function to apply a template to the data table
-            this.ApplyTemplate = function(template){
-                this.currentTemplate = template;
-                var colObjToAdd = JSON.parse(angular.toJson(template.colObj)); // Make clone
-                this.columns = template.colObj;
-                this.updateColObj({cols: template.colObj});  //output binding
-            };
 
 
 
@@ -488,13 +698,10 @@ angular.module('columnTemplateDropdownModule')
                     // Update templates
                     self.getTemplates();
 
-                    // Update currentTemplate
-                    for(var template of self.templates){
-                        // Is default of current type
-                        if(template.name == "Default" && template.isDefault == "true" && template.type == self.curType){
-                            self.currentTemplate = template;
-                        }
+                    if(self.templates.length == 1){
+                        self.templates = [];
                     }
+                    self.restoreDefault();
                     console.log("POST Templates Success");
                     document.getElementById("templateInput").value = "";
                 }, function errorCallback(response) {
@@ -512,18 +719,16 @@ angular.module('columnTemplateDropdownModule')
                 // Find template by name and type
                 for(template of self.templates){
                     // Is default of current type
-                    if(template.name == overWriteTemplateName && template.type == self.curType){
+                    if(template.name == overWriteTemplateName){
                         break;
                     }
                 }
                 template.colObj = templateCols;
-
                 $http({
                     method: 'POST',
                     url: '/templatesUpdate',
                     data: angular.toJson(template),
                 }).then(function successCallback(response) {
-
                     document.getElementById("templateInput").value = "";
                 }, function errorCallback(response) {
                     console.error("POST Failed ", response);
@@ -533,8 +738,55 @@ angular.module('columnTemplateDropdownModule')
                 $(".saveModalData").modal('hide');
                 $(".saveModalAnalysis").modal('hide');
 
+                this.getTemplates();
+                this.ApplyTemplate(template);
+                for(temp of self.templates){
+                    if(temp.name == overWriteTemplateName){
+                        this.ApplyTemplate(temp);
+                    }
+                }
                 this.ClearTemplateNameInput();
 
+            };
+
+
+            // A function to overwrite the template on the server
+            this.OverwriteDefaultTemplate = function(templateCols){
+                var template;
+
+                // Find template by name and type
+                for(var temp of self.templates){
+                    // Is default of current type
+                    if(temp.name == "Default" && angular.equals(temp.type, this.piTemplatesInUse)){
+                        template = temp;
+                        break;
+                    }
+                }
+                template.colObj = templateCols;
+                $http({
+                    method: 'POST',
+                    url: '/templatesUpdate',
+                    data: angular.toJson(template),
+                }).then(function successCallback(response) {
+                }, function errorCallback(response) {
+                    console.error("POST Failed ", response);
+                });
+
+                // Close both modals
+                $(".saveModalData").modal('hide');
+                $(".saveModalAnalysis").modal('hide');
+
+                this.getTemplates();
+                // console.log(this.templates);
+                this.ApplyTemplate(template);
+                this.ClearTemplateNameInput();
+            };
+
+
+            this.switchColumnIsChecked = function(col){
+                if(angular.isUndefined(col))
+                    return;
+                col.isChecked = !col.isChecked;
             };
 
 
@@ -542,11 +794,13 @@ angular.module('columnTemplateDropdownModule')
             //========-- Start of modal code --=========//
 
             this.ShowDeleteModal = function(){
-                if(this.isAnalysis == "true"){
-                    $(".deleteModalAnalysis").modal();
-                }
-                else{
-                    $(".deleteModalData").modal();
+                if(this.currentTemplate.name != "Intersection"){
+                    if(this.isAnalysis == "true"){
+                        $(".deleteModalAnalysis").modal();
+                    }
+                    else{
+                        $(".deleteModalData").modal();
+                    }
                 }
             }
 
@@ -588,9 +842,23 @@ angular.module('columnTemplateDropdownModule')
                 }
             }
 
-            this.ClearTemplateNameInput = function(){
-                $("#templateInput").val(''); // clear the inputbox
+            this.ShowSaveDefaultModal = function(){
+                if(this.isAnalysis == "true"){
+                    $(".saveDefaultModalAnalysis").modal();
+                }
+                else{
+                    $(".saveDefaultModalData").modal();
+                }
             }
+
+            this.ClearTemplateNameInput = function(){
+                this.newTemplateName = "";
+                // $("#templateInput").val(''); // clear the inputbox
+            }
+
+            $(document).on('click', '.dropdown-menu', function (e) {
+                e.stopPropagation();
+            });
 
 
         } //end controller

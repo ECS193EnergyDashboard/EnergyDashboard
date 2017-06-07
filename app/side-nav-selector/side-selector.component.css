@@ -1,16 +1,4 @@
 
-/*!
- * Start Bootstrap - Simple Sidebar (http://startbootstrap.com/)
- * Copyright 2013-2016 Start Bootstrap
- * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
- */
-
- body {
-    /*overflow-x: hidden;*/
- }
-
-/* Toggle Styles */
-
 #textHere {
     border: 3px solid #dddddd;
     border-radius: 5px;
@@ -21,17 +9,18 @@
 }
 
 .selectItem {
-   border-top: 2px solid ghostwhite;
+    border-top: 1px solid #d4d4d4;
+    border-bottom: 1px solid #d4d4d4;
 }
 
 .hiddenListItem {
     z-index: 1;
-    position: absolute;
-    opacity: 0;
-    top: 36px;
-    width: 86%;
+    position: relative;
+     opacity: 0;
+    /* top: 66px; */
+    width: 100%;
     height: 100%;
-    border: 5px solid rebeccapurple;/*for debugging*/
+    border: 5px solid rebeccapurple;
 }
 
 .hiddenListItem #selectorItem {
@@ -53,8 +42,9 @@
     flex-direction: row;
 }
 #selectionHolder{
+    overflow: hidden;
     display: flex;
-    /*position: absolute;*/
+    position: absolute;
     flex-direction: column;
     height: 100%;
     width: 100%;
@@ -65,18 +55,6 @@
     background-color: gainsboro;
 }
 
-#wrapper {
-    /*padding-left: 0;*/
-    -webkit-transition: all 0.1s ease;
-    -moz-transition: all 0.1s ease;
-    -o-transition: all 0.1s ease;
-    transition: all 0.1s ease;
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    /*border: 4px solid rebeccapurple;*/
-}
-
 #wrapper.toggledSelector {
     /*padding-left: 250px;*/
 }
@@ -85,10 +63,10 @@
     z-index: 1000;
     position: relative;
     left: 250px;
-    width: 0;
+    width: 100%;
     height: 100%;
     margin-left: -250px;
-    /* overflow-y: auto;*/
+    overflow-y: hidden;
     background: white;
     /* Closing animation */
     -webkit-transition: all 2s ease;
@@ -98,6 +76,10 @@
 }
 
 
+#sidebar-selector-wrapper .sidebar-item {
+    padding: 4px 2px;
+}
+
 #wrapper.toggledSelector #sidebar-selector-wrapper {
     width: 100%;
     -webkit-transition: all 0.5s ease;
@@ -106,174 +88,34 @@
     transition: all 0.5s ease;
 }
 
-#page-content-wrapper {
-    /*position: absolute;*/
-    flex: 1 1 auto;
-    width: 0;
-    /*border: 5px dotted blue;*/
-    overflow: auto;
-}
-
-#wrapper.toggledSelector #page-content-wrapper {
-    /*position: absolute;
-    margin-right: -250px;
-    flex: 1 1 auto;*/
-    width: 0;
-    /*border: 5px dotted blue;*/
-    overflow: auto;
-    -webkit-transition: all 2s ease;
-    -moz-transition: all 2s ease;
-    -o-transition: all 2s ease;
-    transition: all 2s ease;
-}
-
 /* Sidebar Styles */
 
-.sidebar-item {
-    cursor: pointer;
-    z-index: 2;
-}
 
-.sidebar-nav {
-    position: absolute;
-    top: 0;
-    width: 250px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.sidebar-nav li {
-    text-indent: 20px;
-    line-height: 40px;
-}
-
-.sidebar-nav li a {
-    display: block;
-    text-decoration: none;
-    color: #999999;
-}
-
-.sidebar-nav li a:hover {
-    text-decoration: none;
-    color: #fff;
-    background: rgba(255,255,255,0.2);
-}
-
-.sidebar-nav li a:active,
-.sidebar-nav li a:focus {
-    text-decoration: none;
-}
-
-.sidebar-nav > .sidebar-brand {
-    height: 65px;
-    font-size: 18px;
-    line-height: 60px;
-}
-
-.sidebar-nav > .sidebar-brand a {
-    color: #999999;
-}
-
-.sidebar-nav > .sidebar-brand a:hover {
-    color: #fff;
-    background: none;
-}
-
-@media(min-width:768px) {
-    #wrapper {
-        /* padding-left: 250px;*/
-    }
-
-    #wrapper.toggledSelector {
-        /*padding-left: 0;*/
-    }
-
-    #sidebar-selector-wrapper {
-        width: 100%;
-        /* Opening Transision */
-        transition: all 0.1s ease;
-    }
-
-    #wrapper.toggledSelector #sidebar-selector-wrapper {
-        width: 0;
-        /* Closing Transition */
-        transition: all 2s ease;
-    }
-
-    #page-content-wrapper {
-        /*position: relative;*/
-        flex: 5 1 auto;
-        width: 0;
-        /*border: 5px dotted blue;*/
-        overflow: auto;
-    }
-
-    #wrapper.toggledSelector #page-content-wrapper {
-        position: relative;
-        margin-right: 0;
-    }
-}
-
-/*-----------For hierarchy----------*/
-.just-padding {
-    padding: 0;
-    height: 100%;
-}
-
-.list-group .list-group{
-    padding-left: 20px;
-    margin-bottom: 20px;
-}
-
-.sidebar-item .list-group-item{
-    display: flex;
-}
-
-.selectorItem {
-    padding-top: 0;
-    padding-bottom: 0;
-    cursor: default;
-}
-
-
-.selectorItem:hover{
-    background-color: white;
-}
-
-.list-group.list-group-root {
+#side-bar-selector .list-group.list-group-root {
     padding: 1px;
-    overflow: hidden;
+    padding-bottom: 0px;
+    border: none;
+    overflow-x: hidden;
+    overflow-y: auto;
     flex: 1 1;
     margin-bottom: 0;
 }
 
-.list-group.list-group-root .list-group {
-  margin-bottom: 0;
-}
+/*@media(min-width:768px) {*/
 
-.list-group.list-group-root .list-group-item {
-  border-radius: 0;
-  border-width: 1px 0 0 0;
-}
+    /*#sidebar-selector-wrapper {*/
+        /*width: 100%;*/
+        /*!* Opening Transision *!*/
+        /*transition: all 0.1s ease;*/
+    /*}*/
 
-.list-group.list-group-root  .list-group-item:first-child {
-  border-top-width: 0;
-}
+    /*#wrapper.toggledSelector #sidebar-selector-wrapper {*/
+        /*width: 0;*/
+        /*!* Closing Transition *!*/
+        /*transition: all 2s ease;*/
+    /*}*/
+/*}*/
 
-.list-group.list-group-root  .list-group > .list-group-item {
-  padding-left: 30px;
-}
-
-.list-group.list-group-root  .list-group > .list-group > .list-group-item {
-  padding-left: 45px;
-}
-
-.pointer{
-    display: inline-block;
-    cursor: pointer;
-    vertical-align: top;
-}
 
 #buildingName {
     margin-bottom: 0;
@@ -286,7 +128,7 @@
 #itemBtn{
     display: inline-block;
     position: absolute;
-    right: 2%;
+    right: 5%;
     top: 2%;
     font-size: small;
 }
@@ -300,7 +142,7 @@
 #sideBarDrop {
     border-style: inset;
     border-width: 5px;
-    background-image: linear-gradient(to bottom,#e8e8e8 0,#f5f5f5 100%);
+    /*background-image: linear-gradient(to bottom,#e8e8e8 0,#f5f5f5 100%);*/
     overflow-y: auto;
 }
 
@@ -321,16 +163,15 @@
 }
 
 #sideBarDropText {
-    position: relative;
+    position: absolute;
+    /*border: 5px solid orange;*/
     margin: auto;
     text-align: center;
     top: 40%;
+    left: 25%;
     font-size: 3em;
-    color: white;
-    font-family: fantasy;
+    color: #888ca2;
+    font-family: Roboto;
     font-weight: bolder;
     letter-spacing: .005em;
-    -webkit-text-stroke-color: rgba(0, 0, 0, 0.39);
-    -webkit-text-stroke-width: 1px;
-
 }

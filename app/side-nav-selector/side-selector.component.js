@@ -7,12 +7,13 @@ angular.module('sideNavSelectorModule').component('sideBarSelector', {
         onClear: '&',
         loading: '<',
         onClick: '&',
-        selection: '<'
+        selection: '<',
+        passSelected: '&'
     },
-    controller: [ 'pi', function TableController(pi) {
+    controller: [ '$scope', 'pi', function TableController($scope, pi) {
         var self = this;
         var dummyItem = {
-            building: '',
+            building: "dummyItem",
             hasChildren: false,
             name: '',
             numId: -1,
@@ -35,7 +36,6 @@ angular.module('sideNavSelectorModule').component('sideBarSelector', {
         this.clearSelected = function() {
             this.selected.length = 0;
             this.selected.push(dummyItem);
-
             this.onClear();
         };
 
@@ -47,14 +47,14 @@ angular.module('sideNavSelectorModule').component('sideBarSelector', {
             this.onSelect({ item: element });
         };
 
+
         this.$onChanges = function(changes) {
             if (changes.itemsToAdd) {
-
                 var set = { };
                 for (var item of this.selected) {
                     set[item.numId] = true;
                 }
-                
+
                 for (var item of this.itemsToAdd) {
                     if (!set[item.numId]){
                         this.selected.splice(this.selected.length - 1, 0, item);
@@ -62,7 +62,16 @@ angular.module('sideNavSelectorModule').component('sideBarSelector', {
                     }
                 }
             }
-        }
+        };
+
+
+
+
+        $scope.$watch('$ctrl.selected', function(newVal, oldVal){
+            self.passSelected({selected: self.selected});
+        }, true);
+
+
 
     }]
 });

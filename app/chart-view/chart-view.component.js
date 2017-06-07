@@ -1,11 +1,14 @@
 angular.module('chartViewModule').component('chartView', {
         templateUrl: 'chart-view/chart-view.template.html',
-        controller: [ 'pi', '$q', '$location', function(pi, $q, $location) {
+        controller: [ 'pi', '$q', '$location', '$window', '$scope', function(pi, $q, $location, $window, $scope) {
             var self = this;
 
             this.isLoading = false;
             this.dataset = [];
             this.datasetFlat = [];
+            
+            var charts = [];
+            var focus = undefined;
 
             var collectAttributes = function(params) {
                 var attributes = [];
@@ -38,8 +41,6 @@ angular.module('chartViewModule').component('chartView', {
                 endTime: urlParams.end
             };
 
-            var chart;
-
             var xTickFormat = function(time) {
                 return d3.time.format('%m/%d %H:%M')(new Date(time));
             }
@@ -52,24 +53,173 @@ angular.module('chartViewModule').component('chartView', {
                 return d === null ? 'Bad' : yTickFormat(d);
             }
 
-            var graphWidth = 960;
+            $scope.$on('angular-resizable.resizing', function(event, args) {
+                if (args.height) {
+                    var index = event.targetScope.$parent.$index;
+                    var chart = charts[index];
+                    if (args.height <= 10 && !chart.disabled) {
+                        $scope.$apply(function() {
+                            chart.disabled = true;
+                            chart.closedByDragging = true;
+                        });
+                    } else {
+                        chart.height(args.height);
+                        chart.update();
+                    }
+                }
+            });
+
+            var graphWidth = $window.innerWidth;
             var lrMargin = 80;
+
+            $window.onresize = function(e) {
+                var width = $window.innerWidth;
+                var svg = $('svg.nvd3-svg');
+                svg.css('width', width);
+                svg.attr('width', width);
+                focus.width(innerWidth);
+                for (var chart of charts) {
+                    chart.width(width);
+                }
+            };
+
+            var tooltipContentGenerator = function(d, elem) {
+                    if (d === null) {
+                        return '';
+                    }
+
+                    var table = d3.select(document.createElement("table"));
+                    var theadEnter = table.selectAll("thead")
+                        .data([d])
+                        .enter().append("thead");
+
+                    theadEnter.append("tr")
+                        .append("td")
+                        .attr("colspan", 3)
+                        .append("strong")
+                        .classed("x-value", true)
+                        .html(xTickFormat(d.value));
+
+                    var tbodyEnter = table.selectAll("tbody")
+                        .data([d])
+                        .enter().append("tbody");
+
+                    var trowEnter = tbodyEnter.selectAll("tr")
+                            .data(function(p) { return p.series })
+                            .enter()
+                            .append("tr")
+                            .style('border-bottom', function(p) { return p === 'SEP' ? '1px solid rgba(0,0,0,0.2)' : 'none'; });
+
+                    trowEnter.append("td")
+                        .classed("legend-color-guide", function(p) { return p !== 'SEP'; })
+                        .append("div")
+                        .style("background-color", function(p) { return p.color});
+
+                    trowEnter.append("td")
+                        .classed("key",true)
+                        .html(function(p, i) { return p.key });
+
+                    trowEnter.append("td")
+                        .classed("value",true)
+                        .html(function(p, i) { return p === 'SEP' ? '' : tooltipValueFormat(p.value, i, p) });
+
+                    var html = table.node().outerHTML;
+                    if (d.footer !== undefined)
+                        html += "<div class='footer'>" + d.footer + "</div>";
+                    return html;
+
+            };
 
             var tooltip = nv.models.tooltip()
                 .duration(0)
                 .hideDelay(0)
-                .hidden(false)
-                .headerFormatter(xTickFormat)
-                .valueFormatter(tooltipValueFormat);
+                .contentGenerator(tooltipContentGenerator);
 
-            this.lineConfig = {
-                visible: true,
-                disabled: true
+
+            var onChartMouseMove = function(e) {
+                var tooltipData = { series: [] };
+
+                var filteredCharts = charts.filter(function(c) { return !c.disabled; });
+
+                for (var chart of filteredCharts) {
+                    chart.dispatch.onChartHover(e);
+
+                    tooltipData.series = tooltipData.series.concat(chart.interactiveLayer.tooltip.data().series).concat('SEP');
+                }
+                tooltipData.series.pop();
+
+                if (filteredCharts.length) {
+                    tooltipData.value = filteredCharts[0].interactiveLayer.tooltip.data().value;
+                }
+
+                tooltip
+                    .hidden(false)
+                    .data(tooltipData)
+                    ();
+            }
+
+            var onChartMouseOut = function(e) {
+                var filteredCharts = charts.filter(function(c) { return !c.disabled; });
+                for (var chart of filteredCharts) {
+                    chart.dispatch.onChartHoverOut(e);
+                }
+                tooltip.hidden(true);
+            }
+
+            var setupChartColor = function() {
+                var color = nv.utils.defaultColor();
+                var colorArray = self.datasetFlat.map(function(d, i) {
+                    return color(d, i);
+                })
+                var colorIdx = 0;
+                for (var i = 0; i < charts.length; i++) {
+                    var len = self.dataset[i].length;
+                    charts[i].color(colorArray.slice(colorIdx, colorIdx + len));
+                    colorIdx += len;
+                }
+            }
+
+            this.isChartEnabled = function(index) {
+                return charts[index] && !charts[index].disabled;
+            }
+
+            this.toggleChartEnabled = function(index) {
+                var chart = charts[index];
+                var disabled = !chart.disabled;
+                chart.disabled = disabled;
+
+                if (!disabled && chart.closedByDragging) {
+                    chart.height(200);
+                    chart.update();
+                    $('#chart' + index).height(200);
+                    chart.closedByDragging = false;
+                }
+
+                /*
+                for (var series of this.dataset[index]) {
+                    series.disabled = disabled;
+                }
+                */
+            }
+
+            this.buttonClass = function(index) {
+                if (charts[index] && charts[index].disabled) {
+                    return 'glyphicon glyphicon-eye-close';
+                } else {
+                    return 'glyphicon glyphicon-eye-open';
+                }
+            }
+
+
+            this.onChartReady = function(scope, element) {
+                var index = scope.$parent.$index;
+                var chart = scope.chart;
+                charts[index] = chart;
             }
 
             this.lineOptions = {
                 chart: {
-                    type: 'multiLineChart',
+                    type: 'multiAxisLineChart',
                     height: 200,
                     width: graphWidth,
                     margin: {
@@ -80,7 +230,7 @@ angular.module('chartViewModule').component('chartView', {
                     },
                     x: function(d) { return new Date(d.timestamp).getTime(); },
                     y: function(d) { return d.value; },
-                    useInteractiveGuideline: true, // if false use tooltipContent
+                    useInteractiveGuideline: true,
                     showXAxis: true,
                     xAxis: {
                         axisLabel: '',
@@ -94,35 +244,39 @@ angular.module('chartViewModule').component('chartView', {
                         axisLabel: '',
                         tickFormat: yTickFormat,
                     },
-                    callback: function(ch) {
-                        chart = ch;
+                    interactiveLayer: {
+                        tooltip: {
+                            enabled: false
+                        },
+                        dispatch: {
+                            elementMousemove: onChartMouseMove,
+                            elementMouseout: onChartMouseOut
+                        }
+                    },
+                    legend: {
+                        align: false,
+                        keyFormatter: function(d) { return ''; },
+                        margin: {
+                            top: 2
+                        }
                     }
                 }
             };
 
             var onChangeFocus = function(extent) {
-                if (chart) {
-                    self.extent = extent;
-
-                    chart.brushExtent(extent);
-                    chart.update();
-                }    
+                for (var chart of charts) {
+                    chart.dispatch.onBrush(extent);
+                }
             }
-
-            this.focusConfig = {
-                visible: true,
-                disabled: true
-            }
-
-            var focus = undefined;
 
             this.focusOptions = {
                 chart: {
                     type: 'focus',
                     width: graphWidth,
+                    height: 120,
                     margin: {
-                        top: 20,
-                        bottom: 20,
+                        top: 40,
+                        bottom: 40,
                         left: lrMargin,
                         right: lrMargin
                     },
@@ -130,7 +284,7 @@ angular.module('chartViewModule').component('chartView', {
                     y: function(d) { return d.value; },
                     xAxis: {
                         tickFormat: xTickFormat,
-                        rotateLabels: 30,
+                        rotateLabels: 0,
                     },
                     dispatch: {
                         onBrush: onChangeFocus,
@@ -228,6 +382,7 @@ angular.module('chartViewModule').component('chartView', {
 
             this.generateChart = function() {
                 this.isLoading = true;
+
                 this.numRequests = this.config.attributes.reduce(function(acc, attrib) {
                     return acc + attrib.length;
                 }, 0);
@@ -279,13 +434,16 @@ angular.module('chartViewModule').component('chartView', {
                         var idx = Math.floor(i / 2);
                         var chart = chartMap[idx];
                         var attribIdx = idxMap[idx];
-                        self.dataset[chart][attribIdx].values = replaceBadValues(responses[i + 1]);
-                        self.dataset[chart][attribIdx].key = attrib.element.building + ": " + attrib.element.name + " | " + attrib.name; 
+
+                        var series = self.dataset[chart][attribIdx];
+                        series.values = replaceBadValues(responses[i + 1]);
+                        series.key = attrib.element.building + ": " + attrib.element.name + " | " + attrib.name;
                     }
+
                     self.datasetFlat = d3.merge(self.dataset);
                     self.isLoading = false;
-                    self.lineConfig.disabled = false;
-                    self.focusConfig.disabled = false;
+
+                    setupChartColor();
                 });
             };
 

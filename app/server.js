@@ -15,7 +15,6 @@ var templatesLocation = './templates.json'
 jsonfile.readFile(templatesLocation, function(err, obj) {
     if(!(obj=== undefined || obj == null))
         templates = obj;
-    // console.dir(templates);
 });
 
 //This responds on the homepage
@@ -30,8 +29,6 @@ app.get('/', function(req, res) {
             'x-sent': true
         }
     };
-    //res.send('Hello POST');
-    //res.sendFile('index.html', options);
 
 })
 
@@ -50,17 +47,10 @@ app.post('/templates', function(req, res) {
 
 //This responds a POST request to /templatesDelete that deletes
 app.post('/templatesDelete', function(req, res) {
-    // console.log("Got a POST request for the templatesDelete");
-    // console.log("req.body: ", req.body);
-
-    // console.log(templates.length);
-    // console.dir(templates);
-
     // Remove the template
     var index = 0;
     for(var template of templates){
         if(template.name == req.body.name){
-            console.log("=======----------   DELETING  -----------=======  ", index)
             break;
         }
         index++;
@@ -82,8 +72,6 @@ app.post('/templatesUpdate', function(req, res) {
     // console.log("Got a POST request for the templatesUpdate");
     console.log("req.body: ", req.body);
 
-    // console.log(templates.length);
-
     // Find the template
     var index = 0;
     for(var template of templates){
@@ -95,8 +83,6 @@ app.post('/templatesUpdate', function(req, res) {
     }
     // Update the template
     template.colObj = req.body.colObj;
-
-    // JSON.stringify(template.type)==JSON.stringify(req.body.type)
 
 
     console.dir("template ", template);
@@ -129,7 +115,8 @@ app.get('/test', function(req, res) {
     res.status(200).send("This is a test");
 })
 
-
+// Replace with the following to see the host serving IP and port
+//var server = app.listen(8081, "127.0.0.1", function() {
 var server = app.listen(8081, function() {
 
     var host = server.address().address
@@ -154,7 +141,7 @@ function arraysEqual(a,b) {
     /*
         Array-aware equality checker:
         Returns whether arguments a and b are == to each other;
-        however if they are equal-lengthed arrays, returns whether their 
+        however if they are equal-lengthed arrays, returns whether their
         elements are pairwise == to each other recursively under this
         definition.
     */
@@ -180,30 +167,3 @@ To start the server: node server.js
 
 
 */
-// // This responds a DELETE request for the /del_user page.
-// app.delete('/del_user', function (req, res) {
-//    console.log("Got a DELETE request for /del_user");
-//    res.send('Hello DELETE');
-// })
-
-// This responds a GET request for the /list_user page.
-/*app.get('/list_user', function(req, res) {
-    console.log("Got a GET request for /list_user");
-    var options = {
-        root: __dirname,
-        dotfiles: 'allow',
-        headers: {
-            'x-timestamp': Date.now(),
-            'x-sent': true,
-            'Content-Type': 'application/json'
-        }
-    };
-
-    res.sendFile('index2.html', options);
-})*/
-
-// This responds a GET request for abcd, abxcd, ab123cd, and so on
-// app.get('/ab*cd', function(req, res) {
-//    console.log("Got a GET request for /ab*cd");
-//    res.send('Page Pattern Match');
-// })

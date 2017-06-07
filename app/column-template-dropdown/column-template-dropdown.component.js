@@ -785,11 +785,13 @@ angular.module('columnTemplateDropdownModule')
             //========-- Start of modal code --=========//
 
             this.ShowDeleteModal = function(){
-                if(this.isAnalysis == "true"){
-                    $(".deleteModalAnalysis").modal();
-                }
-                else{
-                    $(".deleteModalData").modal();
+                if(this.currentTemplate.name != "Intersection"){
+                    if(this.isAnalysis == "true"){
+                        $(".deleteModalAnalysis").modal();
+                    }
+                    else{
+                        $(".deleteModalData").modal();
+                    }
                 }
             }
 

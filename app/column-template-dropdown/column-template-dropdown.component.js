@@ -112,6 +112,7 @@ angular.module('columnTemplateDropdownModule')
 
             this.$onChanges = function(changes){
 
+                console.log("CHANGES")
                 if(!angular.isUndefined(this.sideSelectorItems)){
 
                     if(changes.columns){
@@ -137,6 +138,7 @@ angular.module('columnTemplateDropdownModule')
 
                         // If there is no current template we need to set to default, after checking to make sure there is data
                         if(angular.equals(self.currentTemplate, {}) || angular.isUndefined(self.currentTemplate)){
+                            console.log("Nothing on table to something")
                             if(self.rowData.length != 0){
                                 // console.log("lengh does not equal 0, using default")
                                 self.restoreDefault(); // if no default is found this will call generateDefault()
@@ -151,7 +153,8 @@ angular.module('columnTemplateDropdownModule')
 
                         // Else we have just added to the table (with data already showing)
                         // Is it possible that the lengths are the same but we still added things to the table?
-                        if(changes.columns.currentValue.length != changes.columns.previousValue.length){
+                        if(changes.rowData){
+                            console.log("we just added to the table")
                             var temp;
                             // Find an exact match of piTemplate types that is a default
                             var found = false;

@@ -2,6 +2,8 @@
     <html ng-app="energyDashboardModule" ng-controller="rootCtrl">
     <meta charset="UTF-8">
     <head>
+        <title>Energy Dashboard</title>
+
         <!-- Favicon stuff -->
         <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png?v=00rpnPBdWM">
         <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png?v=00rpnPBdWM">
@@ -14,8 +16,6 @@
         <meta name="msapplication-config" content="/img/browserconfig.xml?v=00rpnPBdWM">
         <meta name="theme-color" content="#ffffff">
 
-        <!-- BILLY: I deleted 2 other instances of JQUERY plz make sure that everything
-            for your parts of the dashboard still work-->
 
         <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
 
@@ -68,7 +68,7 @@
         <link rel="stylesheet" href="bower_components/nvd3/build/nv.d3.css">
 
         <!--==== Dev Scripts ====-->
-        
+
         <!-- Color Gradient JS -->
         <script src="gradient.js"></script>
         <!-- Color test module -->
@@ -212,6 +212,6 @@
 
 <script>
 $(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip();   
+    $('[data-toggle="tooltip"]').tooltip();
 });
 </script>

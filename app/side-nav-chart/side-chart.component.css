@@ -21,7 +21,7 @@
     z-index: 1000;
     position: relative;
     left: 250px;
-    width: 0;
+    width: 100%;
     height: 100%;
     margin-left: -250px;
     overflow-y: auto;
@@ -55,28 +55,28 @@
     margin-bottom: 0;
 }
 
-@media(min-width:768px) {
-    #wrapper {
-        /* padding-left: 250px;*/
-    }
+/*@media(min-width:768px) {*/
+    /*#wrapper {*/
+        /*!* padding-left: 250px;*!*/
+    /*}*/
 
-    #wrapper.toggledSelector {
-        /*padding-left: 0;*/
-    }
+    /*#wrapper.toggledSelector {*/
+        /*!*padding-left: 0;*!*/
+    /*}*/
 
-    #sidebar-chart-wrapper {
-        width: 100%;
-        /* Opening Transision */
-        transition: all 0.1s ease;
-    }
+    /*#sidebar-chart-wrapper {*/
+        /*width: 100%;*/
+        /*!* Opening Transision *!*/
+        /*transition: all 0.1s ease;*/
+    /*}*/
 
-    #wrapper.toggledChart #sidebar-chart-wrapper {
-        width: 0;
-        /* Closing Transition */
-        transition: all 2s ease;
-    }
+    /*#wrapper.toggledChart #sidebar-chart-wrapper {*/
+        /*width: 0;*/
+        /*!* Closing Transition *!*/
+        /*transition: all 2s ease;*/
+    /*}*/
 
-}
+/*}*/
 
 
 .pointer{

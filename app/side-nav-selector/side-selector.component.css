@@ -15,12 +15,12 @@
 
 .hiddenListItem {
     z-index: 1;
-    position: absolute;
-    opacity: 0;
-    top: 36px;
-    width: 86%;
+    position: relative;
+     opacity: 0;
+    /* top: 66px; */
+    width: 100%;
     height: 100%;
-    border: 5px solid rebeccapurple;/*for debugging*/
+    border: 5px solid rebeccapurple;
 }
 
 .hiddenListItem #selectorItem {
@@ -63,7 +63,7 @@
     z-index: 1000;
     position: relative;
     left: 250px;
-    width: 0;
+    width: 100%;
     height: 100%;
     margin-left: -250px;
     overflow-y: hidden;
@@ -101,27 +101,20 @@
     margin-bottom: 0;
 }
 
-@media(min-width:768px) {
-    #wrapper {
-        /* padding-left: 250px;*/
-    }
+/*@media(min-width:768px) {*/
 
-    #wrapper.toggledSelector {
-        /*padding-left: 0;*/
-    }
+    /*#sidebar-selector-wrapper {*/
+        /*width: 100%;*/
+        /*!* Opening Transision *!*/
+        /*transition: all 0.1s ease;*/
+    /*}*/
 
-    #sidebar-selector-wrapper {
-        width: 100%;
-        /* Opening Transision */
-        transition: all 0.1s ease;
-    }
-
-    #wrapper.toggledSelector #sidebar-selector-wrapper {
-        width: 0;
-        /* Closing Transition */
-        transition: all 2s ease;
-    }
-}
+    /*#wrapper.toggledSelector #sidebar-selector-wrapper {*/
+        /*width: 0;*/
+        /*!* Closing Transition *!*/
+        /*transition: all 2s ease;*/
+    /*}*/
+/*}*/
 
 
 #buildingName {
@@ -170,15 +163,15 @@
 }
 
 #sideBarDropText {
-    position: relative;
+    position: absolute;
+    /*border: 5px solid orange;*/
     margin: auto;
     text-align: center;
     top: 40%;
+    left: 25%;
     font-size: 3em;
     color: #888ca2;
     font-family: Roboto;
     font-weight: bolder;
     letter-spacing: .005em;
-    /* -webkit-text-stroke-color: rgba(0, 0, 0, 0.39); */
-    /* -webkit-text-stroke-width: 1px; */
 }

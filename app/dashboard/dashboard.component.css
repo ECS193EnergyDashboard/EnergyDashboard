@@ -107,14 +107,14 @@
 #side-bar-selector {
     /*border: 5px dotted red;*/
     width: 0;
-    flex: 0 1 auto;
+    flex: 1 1 auto;
     transition: all .5s ease;
     z-index: 2;
 }
 #side-bar-chart {
     /*border: 5px dotted red;*/
     width: 0;
-    flex: 0 1 auto;
+    flex: 1 1 auto;
     transition: all .5s ease;
     z-index: 2;
 }
@@ -158,29 +158,29 @@
     background-color: #b1d8e1;
 }
 
-@media(min-width:768px) {
-    #side-bar {
-        flex: 1 1 auto;
-    }
-    #wrapper.toggled #side-bar {
-        flex: 0 1 auto;
-    }
+/*@media(min-width:768px) {*/
+    /*#side-bar {*/
+        /*flex: 1 1 auto;*/
+    /*}*/
+    /*#wrapper.toggled #side-bar {*/
+        /*flex: 0 1 auto;*/
+    /*}*/
 
-    #side-bar-selector {
-        flex: 1 1 auto;
-    }
-    #wrapper.toggledSelector #side-bar-selector {
-        flex: 0 1 auto;
-    }
+    /*#side-bar-selector {*/
+        /*flex: 1 1 auto;*/
+    /*}*/
+    /*#wrapper.toggledSelector #side-bar-selector {*/
+        /*flex: 0 1 auto;*/
+    /*}*/
 
-    #side-bar-chart {
-        flex: 1 1 auto;
-    }
+    /*#side-bar-chart {*/
+        /*flex: 1 1 auto;*/
+    /*}*/
 
-    #wrapper.toggledChart #side-bar-chart {
-        flex: 0 1 auto;
-    }
-}
+    /*#wrapper.toggledChart #side-bar-chart {*/
+        /*flex: 0 1 auto;*/
+    /*}*/
+/*}*/
 
 .buttonLoad {
     background-color: #fff4ce;

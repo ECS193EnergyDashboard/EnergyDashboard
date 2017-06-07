@@ -73,7 +73,7 @@
 #sidebar-wrapper {
     z-index: 1000;
     position: relative;
-    width: 0;
+    width: 100%;
     flex-grow: 1;
     overflow-y: auto;
     /*background: rgb(231, 237, 241);*/
@@ -327,32 +327,27 @@
     background: none;
 }
 
-@media(min-width:768px) {
-    #wrapper {
-    }
+/*@media(min-width:768px) {*/
 
-    #wrapper.toggled {
-    }
+    /*#sidebar-wrapper {*/
+        /*width: 100%;*/
+        /*transition: all 0.1s ease;*/
+    /*}*/
 
-    #sidebar-wrapper {
-        width: 100%;
-        transition: all 0.1s ease;
-    }
+    /*#wrapper.toggled #sidebar-wrapper {*/
+        /*width: 0;*/
+        /*transition: all 2s ease;*/
+    /*}*/
 
-    #wrapper.toggled #sidebar-wrapper {
-        width: 0;
-        transition: all 2s ease;
-    }
+    /*#page-content-wrapper {*/
+        /*!*flex: 4 1 auto;*!*/
+    /*}*/
 
-    #page-content-wrapper {
-        /*flex: 4 1 auto;*/
-    }
-
-    #wrapper.toggled #page-content-wrapper {
-        position: relative;
-        margin-right: 0;
-    }
-}
+    /*#wrapper.toggled #page-content-wrapper {*/
+        /*position: relative;*/
+        /*margin-right: 0;*/
+    /*}*/
+/*}*/
 
 /*-----------For hierarchy----------*/
 .just-padding {

@@ -118,3 +118,7 @@
     padding: 0px 10px 0px 10px; !important;
 
 }
+#cf-toggle{
+    margin-left: 5.5%;
+    cursor: pointer;
+}

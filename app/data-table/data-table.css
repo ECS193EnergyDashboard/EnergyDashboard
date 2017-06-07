@@ -184,6 +184,7 @@ column-template-dropdown {
 
 #tableMenuBtn1{
     flex: 1 1;
+    cursor: pointer;
 }
 
 #tableMenuBtn2{
@@ -215,4 +216,3 @@ column-template-dropdown {
 .colNameCell{
     /*max-height: 50px;*/
 }
-

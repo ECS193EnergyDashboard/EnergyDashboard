@@ -183,17 +183,6 @@ angular.module('analysisModule').component('analysis', {
                 outerCol[innerCol.name].showConditionalFormat = !outerCol[innerCol.name].showConditionalFormat;
             };
 
-            // // Called in html to apply the CF settings
-            // this.submitFormattingSettings = function(outerCol){
-            //     outerCol[outerCol.currInner.name] = {};
-            //     outerCol[outerCol.currInner.name].max = document.getElementById("maxInputAnalysis").value;
-            //     outerCol[outerCol.currInner.name].min = document.getElementById("minInputAnalysis").value;
-            //     outerCol[outerCol.currInner.name].maxColor = document.getElementById("maxColorAnalysis").value;
-            //     outerCol[outerCol.currInner.name].minColor = document.getElementById("minColorAnalysis").value;
-            //     document.getElementById("conditionalFormatFormAnalysis").reset();
-            // };
-
-
             this.submitFormattingSettings = function(outerCol){
                 outerCol[outerCol.currInner.name] = {};
                 var submittedMax = document.getElementById("maxInputAnalysis").value;
@@ -213,6 +202,10 @@ angular.module('analysisModule').component('analysis', {
                 outerCol[outerCol.currInner.name].minColor = document.getElementById("minColorAnalysis").value;
 
                 document.getElementById("conditionalFormatFormAnalysis").reset();
+              };
+
+              this.showHideSettingsButtons = function(){
+                  this.showFormattingSettingsButtons = !this.showFormattingSettingsButtons;
               };
 
 

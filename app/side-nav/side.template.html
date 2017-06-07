@@ -38,7 +38,7 @@
                         <span id="sideBarAddBtn" ng-click="$ctrl.onSelectElem(element);$event.stopPropagation()" class="glyphicon glyphicon-ok"></span>
                         <div id="itemText">
                             <span ng-if="$ctrl.isFiltered && $ctrl.searchInput[$ctrl.filterType]">
-                                <h6 id="buildingName">{{element.building}} | {{element.template}}</h6>
+                                <h6 id="buildingName">{{element.building ? element.building + ' | ' : ''}}{{element.template}}</h6>
                                 <br>
                             </span>
                             {{element.name}}

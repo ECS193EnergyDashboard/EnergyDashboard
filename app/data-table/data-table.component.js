@@ -67,10 +67,10 @@ angular.module('dataTableModule')
         this.formatValue = function(value) {
             if (value === undefined || value.value === undefined) {
                 return "N/A";
-            } else if (typeof(value.value) === "number") {
+            } else if (typeof(value.value) === "number" && value.good) {
                 return $filter('number')(value.value, 2);
             } else {
-                return value.value;
+                return "BAD";
             }
         };
 

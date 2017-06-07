@@ -213,7 +213,6 @@ angular.module('sideNavModule').component('sideBar', {
         };
 
         this.dblClickedItem = function (e){
-            console.log("double clicked "+e.name);
             clearTimeout(timer);
             prevent = true;
             //console.log("setting prevent true");

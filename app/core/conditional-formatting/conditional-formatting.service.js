@@ -4,7 +4,6 @@ angular.module('core.conditionalFormatting').
             var cf = {};
 
             // Easily make rgb obj
-            cf.colsPoints = {};
             function rgb(r, g, b) {
                 return { r: r, g: g, b: b };
             }
@@ -54,25 +53,12 @@ angular.module('core.conditionalFormatting').
 
                 // Remove conditional formatting for data tab
                 if(col.showConditionalFormat == false){
-                    return {"background-color": "white"}
-                }
-                // Remove conditional formatting for analysis tab
-                // NOTE col[value.name] gets the inner col in analysis
-                if(!angular.isUndefined(col[value.name]) && col[value.name].showConditionalFormat == false){
-                    return {"background-color": "white"}
+                    return {};
                 }
                 // Check is there is a user submitted max and min else use the max/ min of current data.
                 var max, min;
                 if(!angular.isUndefined(col.max) && col.max != null){
                     max = Number(col.max)
-                }
-                else if(!angular.isUndefined(col[value.name]) && !angular.isUndefined(col[value.name].max)){
-                    if(col[value.name].max == null){
-                        max = maxAndMin[value.name].max;
-                    }
-                    else{
-                        max = Number(col[value.name].max);
-                    }
                 }
                 else{
                     max = maxAndMin[value.name].max;
@@ -80,15 +66,6 @@ angular.module('core.conditionalFormatting').
 
                 if(!angular.isUndefined(col.min) && col.min != null){
                     min = Number(col.min)
-                }
-                else if(!angular.isUndefined(col[value.name]) && !angular.isUndefined(col[value.name].min)){
-                    if(col[value.name].min == null){
-                        min = maxAndMin[value.name].min;
-                    }
-                    else{
-                        min = Number(col[value.name].min);
-                    }
-                    min = Number(col[value.name].min);
                 }
                 else{
                     min = maxAndMin[value.name].min;
@@ -99,53 +76,43 @@ angular.module('core.conditionalFormatting').
 
                 // Check if user submitted color, if not default to red and blue for max and min respectivly.
                 var maxColor = cf.red, minColor = cf.blue;
-                if(col.maxColor == "Red" || (col[value.name] != undefined && col[value.name].maxColor == "Red")){
+                if(col.maxColor == "Red"){
                     maxColor = cf.red;
                 }
-                else if(col.maxColor == "Blue" || (col[value.name] != undefined && col[value.name].maxColor == "Blue")){
+                else if(col.maxColor == "Blue"){
                     maxColor = cf.blue;
                 }
-                else if(col.maxColor == "Green" || (col[value.name] != undefined && col[value.name].maxColor == "Green")){
+                else if(col.maxColor == "Green"){
                     maxColor = cf.green;
                 }
-                else if(col.maxColor == "Purple" || (col[value.name] != undefined && col[value.name].maxColor == "Purple")){
+                else if(col.maxColor == "Purple"){
                     maxColor = cf.purple;
                 }
 
-                if(col.minColor == "Red" || (col[value.name] != undefined && col[value.name].minColor == "Red")){
+                if(col.minColor == "Red"){
                     minColor = cf.red;
                 }
-                else if(col.minColor == "Blue" || (col[value.name] != undefined && col[value.name].minColor == "Blue")){
+                else if(col.minColor == "Blue"){
                     minColor = cf.blue;
                 }
-                else if(col.minColor == "Green" || (col[value.name] != undefined && col[value.name].minColor == "Green")){
+                else if(col.minColor == "Green"){
                     minColor = cf.green;
                 }
-                else if(col.minColor == "Purple" || (col[value.name] != undefined && col[value.name].minColor == "Purple")){
+                else if(col.minColor == "Purple"){
                     minColor = cf.purple;
                 }
 
 
-                var color;
-                if(isAnalysis == 'true')
-                {
-                    cf.colsPoints[col.name][value.name] =  [
-                        { value: min, color: minColor},
-                        { value: (max+min)/2, color: cf.white },
-                        { value: max, color: maxColor},
-                    ];
+                var grad = ecoUtils.gradient([
+                    { value: min, color: minColor},
+                    { value: (max+min)/2, color: cf.white },
+                    { value: max, color: maxColor},
+                ]);
 
-                    color = gradient(cf.colsPoints[col.name][value.name])(value.value);
-                }
-                // Is data table
-                else{
-                    cf.colsPoints[value.name] = [
-                        { value: min, color: minColor},
-                        { value: (max+min)/2, color: cf.white },
-                        { value: max, color: maxColor},
-                    ];
+                color = grad(value.value);
 
-                    color = gradient(cf.colsPoints[col.name])(value.value);
+                if (color === undefined) {
+                    return {};
                 }
 
                 var textColor = "white";

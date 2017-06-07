@@ -88,7 +88,7 @@
                             <!-- For each AHU01, AHU02 ... -->
                             <tr ng-repeat="element in $ctrl.displayed">
                                 <!-- For each "sensor" -->
-                                <td ng-repeat="innerColumn in $ctrl.innerColumnNames" ng-if="innerColumn.isChecked" ng-class="$ctrl.valueStyle(element[outerColumn.name][innerColumn.name])" ng-style="cf.conditionalFormat(element[outerColumn.name][innerColumn.name], outerColumn, $ctrl.maxAndMin[outerColumn.name], 'true')">
+                                <td ng-repeat="innerColumn in $ctrl.innerColumnNames" ng-if="innerColumn.isChecked" ng-class="$ctrl.valueStyle(element[outerColumn.name][innerColumn.name])" ng-style="$ctrl.conditionalStyle(element, outerColumn, innerColumn)">
                                     {{$ctrl.formatValue(element[outerColumn.name][innerColumn.name])}}
                                 </td>
                             </tr>

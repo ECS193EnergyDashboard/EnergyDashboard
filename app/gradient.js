@@ -1,4 +1,5 @@
-gradient = function(points) {
+ecoUtils = {};
+ecoUtils.gradient = function(points) {
 
     function lerp(a, b, ratio) {
         return Math.round((1 - ratio) * a + ratio * b);
@@ -43,6 +44,10 @@ gradient = function(points) {
     function g(value) {
         var values = points.map(function(p) { return p.value; });
         var bucket = findBucket(values, value);
+
+        if (bucket[0] === undefined && bucket[1] === undefined) {
+            return undefined;
+        }
 
         if (bucket[0] === undefined) { // Value is smaller than min value
             return points[bucket[1]].color;

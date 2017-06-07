@@ -103,13 +103,17 @@ angular.module('core.conditionalFormatting').
                 }
 
 
-                var grad = gradient([
+                var grad = ecoUtils.gradient([
                     { value: min, color: minColor},
                     { value: (max+min)/2, color: cf.white },
                     { value: max, color: maxColor},
                 ]);
 
                 color = grad(value.value);
+
+                if (color === undefined) {
+                    return {};
+                }
 
                 var textColor = "white";
                 // Calculate overall intensity of color to determine text color

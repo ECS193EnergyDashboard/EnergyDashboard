@@ -2,7 +2,8 @@ angular.module('dashboardModule').component('dashboard',{
 	templateUrl: 'dashboard/dashboard.template.html',
     bindings: {
         showSidebar: '=',
-        show: '='
+        show: '=',
+        loading: '='
     },
 	controller: ['pi', function TableController(pi){
 		var self = this;
@@ -12,7 +13,7 @@ angular.module('dashboardModule').component('dashboard',{
         this.cancelAysnc = false;
         this.webIds = [];
         this.itemsToAdd = [];
-		this.loading = { sidebar: 0, data: 0, analysis: 0 };
+		// this.loading = { sidebar: 0, data: 0, analysis: 0 };
         this.chartSelection = [];
 
         this.sideSelectorItems = [];

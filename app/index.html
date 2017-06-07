@@ -149,10 +149,12 @@
             <div ng-click="toggleSidebar('sidebar1')"  class="rSidebarBtn" data-toggle="tooltip" title="Navigator">
                 <span class="glyphicon glyphicon-search"></span>
                 <span ng-if="toggled('sidebar1')" class="glyphicon glyphicon-chevron-right rightPtr" ></span>
+
             </div>
             <div ng-click="toggleSidebar('sidebar2')"  class="rSidebarBtn" data-toggle="tooltip" title="Selected Items">
                 <span class="glyphicon glyphicon-inbox"></span>
                 <span ng-if="toggled('sidebar2')" class="glyphicon glyphicon-chevron-right rightPtr" ></span>
+
             </div>
             <div ng-click="toggleSidebar('sidebar3')" class="rSidebarBtn" data-toggle="tooltip" title="Graphed Items">
                 <span class="glyphicon glyphicon-stats"></span>
@@ -165,16 +167,30 @@
 
             <div ng-click="showFunc(0)"  class="rSidebarBtn2" data-toggle="tooltip" title="Data-Table Tab">
                 <span class="glyphicon glyphicon-th-list"></span>
+                <div ng-if="isLoading('data')" class="progress loadCntr">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar"
+                         aria-valuenow="{{valueNow('data')}}" aria-valuemin="0" aria-valuemax="100" style="width: {{valueNow('data')}}%">
+                        {{valueNow('data')}}%
+                    </div>
+                </div>
             </div>
             <div ng-click="showFunc(1)"  class="rSidebarBtn2" data-toggle="tooltip" title="Analysis Tab">
                 <span class="glyphicon glyphicon-dashboard"></span>
+                <span ng-if="isLoading('analysis')" class="glyphicon glyphicon-hourglass loadCntr" >{{loading['analysis']}}</span>
+                <!--<div ng-if="isLoading('analysis')" class="progress loadCntr">-->
+                    <!--<div class="progress-bar progress-bar-striped active" role="progressbar"-->
+                         <!--aria-valuenow="{{valueNow('analysis')}}" aria-valuemin="0" aria-valuemax="100" style="width: {{valueNow('analysis')}}%">-->
+                        <!--{{valueNow('analysis')}}%-->
+                    <!--</div>-->
+                <!--</div>-->
             </div>
             <div ng-click="showFunc(2)"  class="rSidebarBtn2" data-toggle="tooltip" title="Graphing Tab">
                 <span class="glyphicon glyphicon-picture"></span>
+
             </div>
         </div>
         <div id="rMain">
-            <dashboard show-sidebar="showSidebar" show="show" id="dashbboard"></dashboard>
+            <dashboard show-sidebar="showSidebar" show="show" id="dashbboard" loading="loading"></dashboard>
         </div>
     </body>
 </html>

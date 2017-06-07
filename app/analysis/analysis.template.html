@@ -1,6 +1,6 @@
 <div id="tableParent">
     <div id="tableMenus" >
-        <div  class="tableMenuItem" id="tableMenuDatePicker">
+        <div  class="topMenuItem" id="tableMenuDatePicker">
             <!--Date Range Picker-->
             <div class = "drp-contain">
                 <div> <!--This div for border-->
@@ -9,16 +9,16 @@
                 </div>
             </div>
         </div>
-        <div class="tableMenuRange tableMenuItem " >
+        <div class="tableMenuRange topMenuItem " >
             <div class="tableMenuRangeText">FROM : </div>
             {{$ctrl.datePicker.date.startDate}}
         </div>
-        <div  class="tableMenuItem tableMenuRange" >
+        <div  class="topMenuItem tableMenuRange" >
             <div class="tableMenuRangeText">UNTIL : </div>
             {{$ctrl.datePicker.date.endDate}}
         </div>
-        <div class="tableMenuItem" id="tableMenuBtn2">
-            <div ng-if="$ctrl.outerColumnNames.length != 0" ng-click="$ctrl.showHideSettingsButtons()" class="tableMenuItem" id="cf-toggle">
+        <div class="" id="tableMenuBtn2">
+            <div ng-if="$ctrl.outerColumnNames.length != 0" ng-click="$ctrl.showHideSettingsButtons()" class="topMenuItem" id="cf-toggle">
                 Conditional
                 <span class="glyphicon glyphicon-menu-hamburger"></span>
             </div>
@@ -29,10 +29,10 @@
     </div>
 
     <div id="tableMenus" >
-        <div id="analysisTableButtons" class="tableMenuItem">
+        <div id="analysisTableButtons" class="topMenuItem">
             <button class="btn btn-primary" ng-click="$ctrl.startAnalysis()">Start Analysis</button>
         </div>
-        <div ng-repeat="innerCol in $ctrl.innerColumnNames" class="tableMenuItem checkTableMenu">
+        <div ng-repeat="innerCol in $ctrl.innerColumnNames" class="topMenuItem checkTableMenu">
             <input class="checkboxesTableMenu" ng-model="innerCol.isChecked" type="checkbox">
             {{innerCol.display}}
         </div>

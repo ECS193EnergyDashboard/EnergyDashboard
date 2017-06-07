@@ -1,17 +1,17 @@
 <!--NOTE: for this we use the  columnNamesObjs however in the actual table we use columnNames -->
 <div id="tableParent">
     <div id="tableMenus" ng-if="$ctrl.displayed">
-        <div class="tableMenuItem" id="tableMenuSearch">
+        <div class="topMenuItem" id="tableMenuSearch">
             <div id="tableMenuSearchText">
                 SEARCH:
             </div>
             <input id="dataTableSearch" ng-model="$ctrl.rowName" placeholder="Enter row name..." class="input-sm form-control" type="search"/>
         </div>
-        <div ng-if="$ctrl.columnNamesObjs.length != 0" ng-click="$ctrl.showHideSettingsButtons()" class="tableMenuItem" id="tableMenuBtn1">
+        <div ng-if="$ctrl.columnNamesObjs.length != 0" ng-click="$ctrl.showHideSettingsButtons()" class="topMenuItem" id="tableMenuBtn1">
             Conditional
             <span class="glyphicon glyphicon-menu-hamburger"></span>
         </div>
-        <div class="tableMenuItem" id="tableMenuBtn2">
+        <div class="" id="tableMenuBtn2">
             <column-template-dropdown columns="$ctrl.columnNamesObjs" update-col-obj= "$ctrl.updateCol(cols)"  row-data="$ctrl.data" is-analysis="'false'" elem-name="$ctrl.elemName" class=""
                                       side-selector-items="$ctrl.sideSelectorItems"></column-template-dropdown>
         </div>

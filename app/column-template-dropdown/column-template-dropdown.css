@@ -9,6 +9,7 @@
     display: flex;
     justify-content: flex-end;
     flex-wrap: wrap;
+    align-items: center;
 }
 
 .tableSettingsButtons .topMenuItem .dropdown-menu{
@@ -21,7 +22,7 @@
     /* min-width: 100px; */
     height: 100%;
     width: 100%;
-    padding: 0px 8px 0px 8px;
+    /*padding: 0px 8px 0px 8px;*/
     background-color: #4a5571;
     color: #c6cdd9;
     text-shadow: initial;

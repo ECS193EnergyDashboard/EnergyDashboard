@@ -240,7 +240,9 @@
                         //Sets index to index of item that cursor is dropping on
                         dropIndex = scope.$index;
                         //Sets index to be after or before the item cursor is dropping on
-                        dropIndex = isAfter(evt.offsetX, evt.offsetY) ? dropIndex + 1 : dropIndex;
+                        // dropIndex = isAfter(evt.offsetX, evt.offsetY) ? dropIndex + 1 : dropIndex;
+                        //Disabled to avoid dropping items after hidden list item in sidebar selector
+
                         //srcCollection=targetCollection => we may need to apply a correction
                         //Checks if item was removed from source collection
                         if (collectionCopy.length > collection.length) {

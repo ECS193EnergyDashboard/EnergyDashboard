@@ -1,49 +1,47 @@
-<h4>Settings</h4>
-
-<button class="btn btn-primary" type="button" ng-click="$ctrl.launchChart()">Graph</button>
-
-<!--
-<h4>Selected Attributes to Graph</h4>
-    <a class="btn btn-default" ng-click="$ctrl.clearAttributes()">
-        <span class="glyphicon glyphicon-trash"></span>
-    </a>
-<ul class="list-group">
-    <li class="list-group-item" ng-repeat="attrib in $ctrl.attributes"> 
-        {{ attrib.buildingName + ": " + attrib.parentName + " | " + attrib.name + " axis=" + attrib.axis }}
-        <div class="pull-right">
-            <label class="radio-inline"><input type="radio" name="{{axis + $index}}" ng-value="1" ng-model="attrib.axis">Axis 1</label>
-            <label class="radio-inline"><input type="radio" name="{{axis + $index}}" ng-value="2" ng-model="attrib.axis">Axis 2</label>
-            <a class="btn btn-default" ng-click="$ctrl.removeAttribute($index)">
-                <span class="glyphicon glyphicon-remove"></span>
-            </a>
+<div id="tableParent">
+    <div id="tableMenus" >
+        <div class="" id="chartMenuText">
+            <h4>Settings</h4>
         </div>
-    </li>
-</ul>
--->
-
-<button class="btn btn-default" type="button" ng-click="$ctrl.pushChart()">Add Chart</button>
-<button class="btn btn-default" type="button" ng-click="$ctrl.popChart()">Remove Chart</button>
-<button class="btn btn-default" type="button" ng-click="$ctrl.clearAttributes()">Clear Attributes</button>
-<table class="table table-striped table-bordered">
-    <thead>
-        <tr>
-            <th>Attribute</th>
-            <th ng-repeat="chartId in  $ctrl.range($ctrl.numCharts)">
-                {{"Chart " + (chartId + 1) + " Axis"}}
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr ng-repeat="attrib in $ctrl.attributes">
-            <td>
-                {{ attrib.buildingName + ": " + attrib.parentName + " | " + attrib.name}}
-                <span class="glyphicon glyphicon-remove pointer pull-right" ng-click="$ctrl.removeAttribute($index)"></span>
-            </td>
-            <td ng-repeat="chartId in $ctrl.range($ctrl.numCharts)">
-                <label class="radio-inline"><input type="radio" name="{{$parent.attribIndex}}" ng-value="0" ng-model="attrib.charts[chartId]">Left</label>
-                <label class="radio-inline"><input type="radio" name="{{$parent.attribIndex}}" ng-value="1" ng-model="attrib.charts[chartId]">Right</label>
-                <span class="glyphicon glyphicon-remove pointer pull-right" ng-click="$ctrl.clearAxis(attrib, chartId)"></span>
-            </td>
-        </tr>
-    </tbody>
-</table>
+        <div  ng-click="$ctrl.pushChart()" class="topMenuItem topMenuIcon">
+            <!--<button class="btn btn-default" type="button" >Add Chart</button>-->
+            <span class="glyphicon glyphicon-plus"></span>
+        </div>
+        <div  ng-click="$ctrl.popChart()" class="topMenuItem topMenuIcon">
+            <!--<button class="btn btn-default" type="button" ng-click="$ctrl.popChart()">Remove Chart</button>-->
+            <span class="glyphicon glyphicon-minus"></span>
+        </div>
+        <div  ng-click="$ctrl.clearAttributes()" class="topMenuItem topMenuIcon">
+            <!--<button class="btn btn-default" type="button" ng-click="$ctrl.clearAttributes()">Clear Attributes</button>-->
+            <span class="glyphicon glyphicon-trash"></span>
+        </div>
+        <div  class="topMenuItem">
+            <button class="btn btn-primary tableButton" type="button" ng-click="$ctrl.launchChart()">Graph</button>
+        </div>
+    </div>
+    <div id="chartTable">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Attribute</th>
+                    <th ng-repeat="chartId in  $ctrl.range($ctrl.numCharts)">
+                        {{"Chart " + (chartId + 1) + " Axis"}}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="attrib in $ctrl.attributes">
+                    <td>
+                        {{ attrib.buildingName + ": " + attrib.parentName + " | " + attrib.name}}
+                        <span class="glyphicon glyphicon-remove pointer pull-right" ng-click="$ctrl.removeAttribute($index)"></span>
+                    </td>
+                    <td ng-repeat="chartId in $ctrl.range($ctrl.numCharts)">
+                        <label class="radio-inline"><input type="radio" name="{{$parent.attribIndex}}" ng-value="0" ng-model="attrib.charts[chartId]">Left</label>
+                        <label class="radio-inline"><input type="radio" name="{{$parent.attribIndex}}" ng-value="1" ng-model="attrib.charts[chartId]">Right</label>
+                        <span class="glyphicon glyphicon-remove pointer pull-right" ng-click="$ctrl.clearAxis(attrib, chartId)"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

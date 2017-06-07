@@ -127,10 +127,10 @@
         </div>
     <div class="modal-body">
 
-   <!--      <input id="templateNameInput"  autofocus="autofocus" class="form-control" type="text"> -->
-
-        <input ng-class="{'newTemplateNameData': $ctrl.isAnalysis=='false', 'newTemplateNameAnalysis': $ctrl.isAnalysis=='true'}"  autofocus="autofocus" class="form-control" type="text" value="{{$ctrl.currentTemplate.name}}">
+        <input ng-class="{'newTemplateNameData': $ctrl.isAnalysis=='false', 'newTemplateNameAnalysis': $ctrl.isAnalysis=='true'}"  autofocus="autofocus" class="form-control" type="text" ng-attr-value="{{$ctrl.currentTemplate.name != 'Intersection' && $ctrl.currentTemplate.name || ''}}">
          <br> <br> <br>
+
+         <!-- ng-attr-class="{{someBoolean && 'class-when-true' || 'class-when-false' }}" -->
     </div>
         <div class="modal-footer">
             <button ng-click="$ctrl.ClearTemplateNameInput()" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -227,7 +227,7 @@
         </div>
 
         <div ng-if="$ctrl.isAvailableDefaultTemplate" class="modal-body">
-        By overwriting the default template you will change the columns that first show when displaying these piTemplates:
+        By overwriting the default template you will change the columns that first show when <br> displaying these piTemplates:
         <ul>
             <li ng-repeat="piTemplate in $ctrl.piTemplatesInUse">
                 <div> {{piTemplate}}</div>
@@ -236,7 +236,7 @@
         </div>
 
         <div ng-if="!$ctrl.isAvailableDefaultTemplate" class="modal-body">
-        You are creating a default template which will appear first for all users when displaying these piTemplates:
+        You are creating a default template which will appear first for all users when <br>displaying these piTemplates:
         <ul>
             <li ng-repeat="piTemplate in $ctrl.piTemplatesInUse">
                 <div> {{piTemplate}}</div>

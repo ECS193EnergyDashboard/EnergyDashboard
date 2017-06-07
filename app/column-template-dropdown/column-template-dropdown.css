@@ -1,21 +1,31 @@
 .tableSettingsButtons{
-    /* float: right; */
-    position: fixed;
+    /*float: right; */
+    /* position: fixed; */
     /* display: inline-block; */
     z-index: 999;
-    transform: translate(0%, -100%);
+    /* transform: translate(0%, -100%); */
     right: 0px;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
-/*.dropdownPullRight {
-  float: right !important;
-  right: 0;
-  left: auto;
-}*/
+.tableSettingsButtons .topMenuItem .dropdown-menu{
+    right: 0px;
+    left: inherit;
+}
 
-.tableButton{
-	/*padding: 14px 40px;*/
-	min-width: 100px;
+.topMenuButton{
+    /* padding: 14px 40px; */
+    /* min-width: 100px; */
+    height: 100%;
+    width: 100%;
+    /*padding: 0px 8px 0px 8px;*/
+    background-color: #4a5571;
+    color: #c6cdd9;
+    text-shadow: initial;
 }
 
 .saveTemplateButton{
@@ -35,6 +45,39 @@
 
 #columnBtnThrash {
 
+}
+
+.dropdownelm{
+    border: 1px solid gray;
+}
+
+.dropdownelm:hover{
+    background-color: #66afe9;
+    border: 1px solid black;
+}
+
+.colSelected{
+    background-color: rgba(33, 137, 195, 0.32);
+}
+
+.dropdownFilters{
+    position: relative;
+    flex-shrink: 0;
+}
+.dropdownList{
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.open > #menuDropdownContent {
+    display: flex;
+    flex-direction: column;
+    left: inherit;
+    right: 0px;
+}
+
+.colCheckedFilterBtn {
+    background-color: red;
 }
 
 .columnChecked{

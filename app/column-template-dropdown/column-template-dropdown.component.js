@@ -1,21 +1,21 @@
 /* How templates currently work:
     1. The first time you add something to the table - it will look for the default template with the exact match
         of current piTemplates. If none exists then it will create one for those piTemplates. For example when you put in
-        AHU, 2 piTemplaes are in use so the default will be for both of those templates. 
-    2. 
+        AHU, 2 piTemplaes are in use so the default will be for both of those templates.
+    2.
 
 
     Notes:
         There will always be a default template for if only a single piTemplate is in use. Whenever you
-        go from no data to data a default will be made. However, if you have data then add new data 
+        go from no data to data a default will be made. However, if you have data then add new data
         a default wont be made unless you make it.
 
-        However, in the case of AHU 2 piTemplates are in use so therefore there will be a default 
+        However, in the case of AHU 2 piTemplates are in use so therefore there will be a default
         for that one.
         The only times there is not a default template available is when you add multiple piTempaltes
         and one has not been set yet.
 
-    
+
 */
 angular.module('columnTemplateDropdownModule')
     .filter('type', function(){
@@ -43,8 +43,7 @@ angular.module('columnTemplateDropdownModule')
 
             return filteredTemplates;
         }
-    }
-).component('columnTemplateDropdown', {
+    }).component('columnTemplateDropdown', {
     templateUrl: 'column-template-dropdown/column-template-dropdown.template.html',
     bindings: {
         columns:           '<', //columnNamesObjs passed in (col order maintained),  current set of cols
@@ -62,12 +61,13 @@ angular.module('columnTemplateDropdownModule')
             var self = this;
             this.templates = [];
             this.filteredTemplates = [];
+            this.filteredColumns = [];
             this.showTemplates = false;
             this.includeDR = false;
             var numInnerColumns = 0;
             this.currentTemplate = {};
             this.filteredColumns = [];
-
+            this.search = {};
             this.piTemplatesInUse = [];
 
             this.unalteredCurrentTemplate = {}; // For the watcher
@@ -96,9 +96,7 @@ angular.module('columnTemplateDropdownModule')
                     }
                 }
                 else{
-
                     if(self.isAnalysis == "true"){
-
                         $('.saveTemplateButtonAnalysis').css({'color': 'red'});
                     }
                     else{
@@ -107,15 +105,19 @@ angular.module('columnTemplateDropdownModule')
                 }
             }, true);
 
+            this.toggleColumn = function(column){
+                column.isChecked = column.isChecked ? false: true;
+            };
 
 
             this.$onChanges = function(changes){
 
+                console.log("CHANGES")
                 if(!angular.isUndefined(this.sideSelectorItems)){
-                                        console.log(changes);
 
-                        // console.log(changes.columns.currentValue, "and ", changes.columns.previousValue);
-                        // console.log(changes.columns.currentValue === changes.columns.previousValue);
+                    if(changes.columns){
+                        this.updateFilteredColumns();
+                    }
 
 
                     // Check to see if there is no data - if not reset curtemplate
@@ -136,6 +138,7 @@ angular.module('columnTemplateDropdownModule')
 
                         // If there is no current template we need to set to default, after checking to make sure there is data
                         if(angular.equals(self.currentTemplate, {}) || angular.isUndefined(self.currentTemplate)){
+                            console.log("Nothing on table to something")
                             if(self.rowData.length != 0){
                                 // console.log("lengh does not equal 0, using default")
                                 self.restoreDefault(); // if no default is found this will call generateDefault()
@@ -150,7 +153,8 @@ angular.module('columnTemplateDropdownModule')
 
                         // Else we have just added to the table (with data already showing)
                         // Is it possible that the lengths are the same but we still added things to the table?
-                        if(changes.columns.currentValue.length != changes.columns.previousValue.length){
+                        if(changes.rowData){
+                            console.log("we just added to the table")
                             var temp;
                             // Find an exact match of piTemplate types that is a default
                             var found = false;
@@ -225,7 +229,7 @@ angular.module('columnTemplateDropdownModule')
                 // Make clone, otherwise they are same reference
                 var colObjToAdd = JSON.parse(angular.toJson(self.columns));
                 if(colObjToAdd.length == 0){
-                    return;   
+                    return;
                 }
                 var template = {
                     "name": "Default",
@@ -282,7 +286,7 @@ angular.module('columnTemplateDropdownModule')
                     return;
 
 
-                
+
                 // Get all of the columns into an array
                 for(var col of this.columns){
                     if(!intersection.includes(col.name)){
@@ -292,9 +296,9 @@ angular.module('columnTemplateDropdownModule')
 
 
 
-                this.rowData.forEach(function(row){ 
-                    // console.log(row);  
-                    var rowColumns = [] 
+                this.rowData.forEach(function(row){
+                    // console.log(row);
+                    var rowColumns = []
                     Object.keys(row).forEach(function(key){
                         rowColumns.push(row[key].name)
                     });
@@ -359,9 +363,31 @@ angular.module('columnTemplateDropdownModule')
                         this.isAvailableDefaultTemplate = true;
 
                 }
-            }
+            };
 
 
+            this.updateFilteredColumns = function(){
+                this.filteredColumns = [];
+
+                var neededColumns = [];
+
+                this.rowData.forEach(function(row){ 
+                    // console.log(row);  
+                    Object.keys(row).forEach(function(key){
+                        if(!angular.isUndefined(row[key].name) && !neededColumns.includes(row[key].name))
+                            neededColumns.push(row[key].name)
+                    });
+                });
+
+
+                for(var col of this.columns){
+                    // console.log(col);
+                    if(neededColumns.includes(col.name)){
+                        this.filteredColumns.push(col);
+                    }
+                }
+                console.log(this.filteredColumns);
+            };
 
 
             this.getTemplates = function(){
@@ -382,15 +408,23 @@ angular.module('columnTemplateDropdownModule')
                 return p;
             };
 
+            this.searchIsCheckedFilter = function() {
+                if (this.search.isChecked) {
+                    return { isChecked: true };
+                } else {
+                    return {};
+                }
+            }
+
             this.clearAll = function() {
-                for(var i = 0; i < this.filteredColumns.length; i++){
-                    this.filteredColumns[i].isChecked = false;
+                for (var column of this.filteredColumnsHTML) {
+                    column.isChecked = false;
                 }
             };
 
             this.selectAll = function(){
-                for(var i = 0; i < this.filteredColumns.length; i++){
-                    this.filteredColumns[i].isChecked = true;
+                for (var column of this.filteredColumnsHTML) {
+                    column.isChecked = true;
                 }
             };
 
@@ -595,11 +629,11 @@ angular.module('columnTemplateDropdownModule')
                     this.ShowErrorModal();
                     return;                   
                 }
-                if(this.newTemplateName == "Intersection" || this.newTemplateName == "intersection" || 
+                if(this.newTemplateName == "Intersection" || this.newTemplateName == "intersection" ||
                         this.newTemplateName == "default"){
                     this.errorMessage = "Please pick another name for the template";
                     this.ShowErrorModal();
-                    return;                      
+                    return;
                 }
                 for(templ of this.templates){
                     // New template name already exists and its type is the current type
@@ -760,11 +794,13 @@ angular.module('columnTemplateDropdownModule')
             //========-- Start of modal code --=========//
 
             this.ShowDeleteModal = function(){
-                if(this.isAnalysis == "true"){
-                    $(".deleteModalAnalysis").modal();
-                }
-                else{
-                    $(".deleteModalData").modal();
+                if(this.currentTemplate.name != "Intersection"){
+                    if(this.isAnalysis == "true"){
+                        $(".deleteModalAnalysis").modal();
+                    }
+                    else{
+                        $(".deleteModalData").modal();
+                    }
                 }
             }
 

@@ -21,6 +21,7 @@ angular.module('analysisModule').component('analysis', {
                 startDate: moment().startOf('day'),
                 endDate: moment()
             };
+
             this.DRPOptions = {
                 "showDropdowns": true,
                 "timePicker": true,
@@ -47,7 +48,7 @@ angular.module('analysisModule').component('analysis', {
                         moment()
                     ]
                 }
-            }
+            };
             this.data = [];
 
             this.outerColumnNames = [];
@@ -125,13 +126,14 @@ angular.module('analysisModule').component('analysis', {
                     self.outerColumnNames.forEach(function(currOuter, index, array){
                         self.innerColumnNames.forEach(function(currInner, indexInner, array){
                             if(currOuter[currInner.name] == undefined){
-                                currOuter[currInner.name] = {};
+                                currOuter[currInner.name] = { 
+                                    showConditionalFormat: true,
+                                    maxColor: 'Red',
+                                    minColor: 'Blue'
+                                };
                             }
-                            // Set conditionalFormatting to true initially
-                            cf.init(currOuter[currInner.name]);
-                        })
-                    })
-
+                        });
+                    });
                     self.onEndLoad();
                 });
             };
@@ -157,8 +159,8 @@ angular.module('analysisModule').component('analysis', {
                 }
                 this.currentFormattingSettingsCol.display = String(this.currentFormattingSettingsCol.name) + " [" + String(this.currentFormattingSettingsCol.currInner.name) + "]";
                 cf.showFormattingSettings(outerCol, 'formattingSettingsModalAnalysis');
-                console.log(this.currentFormattingSettingsCol);
-            }
+                //console.log(this.currentFormattingSettingsCol);
+            };
 
             this.printMaxOrMin = function(maxMin){
                 // Avoid erorr in console (when this runs before we have data)
@@ -173,7 +175,7 @@ angular.module('analysisModule').component('analysis', {
                 return this.currentFormattingSettingsCol.currInner[maxMin];
 
 
-            }
+            };
 
             // Called in html to toggle CF
             this.toggleConditionalFormatting = function(outerCol, innerCol){
@@ -183,22 +185,11 @@ angular.module('analysisModule').component('analysis', {
                 outerCol[innerCol.name].showConditionalFormat = !outerCol[innerCol.name].showConditionalFormat;
             };
 
-            // // Called in html to apply the CF settings
-            // this.submitFormattingSettings = function(outerCol){
-            //     outerCol[outerCol.currInner.name] = {};
-            //     outerCol[outerCol.currInner.name].max = document.getElementById("maxInputAnalysis").value;
-            //     outerCol[outerCol.currInner.name].min = document.getElementById("minInputAnalysis").value;
-            //     outerCol[outerCol.currInner.name].maxColor = document.getElementById("maxColorAnalysis").value;
-            //     outerCol[outerCol.currInner.name].minColor = document.getElementById("minColorAnalysis").value;
-            //     document.getElementById("conditionalFormatFormAnalysis").reset();
-            // };
-
-
             this.submitFormattingSettings = function(outerCol){
                 outerCol[outerCol.currInner.name] = {};
                 var submittedMax = document.getElementById("maxInputAnalysis").value;
                 var submittedMin = document.getElementById("minInputAnalysis").value;
-      
+
                 if(submittedMax.length != 0)
                     outerCol[outerCol.currInner.name].max = submittedMax;
                 else{
@@ -211,8 +202,12 @@ angular.module('analysisModule').component('analysis', {
                 }
                 outerCol[outerCol.currInner.name].maxColor = document.getElementById("maxColorAnalysis").value;
                 outerCol[outerCol.currInner.name].minColor = document.getElementById("minColorAnalysis").value;
-      
+
                 document.getElementById("conditionalFormatFormAnalysis").reset();
+              };
+
+              this.showHideSettingsButtons = function(){
+                  this.showFormattingSettingsButtons = !this.showFormattingSettingsButtons;
               };
 
 
@@ -227,19 +222,34 @@ angular.module('analysisModule').component('analysis', {
             };
 
             this.valueStyle = function(value) {
+                var style = 'dataCell ';
                 if (value === undefined) {
-                    return 'missingValue';
-                } else if (value.good) {
-                    return 'goodValue';
-                } else {
-                    return 'badValue';
+                    style += 'missing';
+                } else if (!value.good) {
+                    style += 'bad ';
                 }
+                return style;
+            };
+
+            this.conditionalStyle = function(element, outer, inner) {
+                return cf.conditionalFormat(element[outer.name][inner.name], outer[inner.name], this.maxAndMin[outer.name], true);
             }
 
             // Callback for column-template-dropdown component
             this.updateCol = function(cols) {
+                this.outerColumnNames.forEach(function(outer, index) {
+                    for (var inner of self.innerColumnNames) {
+                        if (cols[index][inner.name] === undefined) {
+                            cols[index][inner.name] = { 
+                                showConditionalFormat: true,
+                                maxColor: 'Red',
+                                minColor: 'Blue'
+                            };
+                        }
+                    }
+                });
                 this.outerColumnNames = cols;
-            }
+            };
 
             this.updateCalculations = function() {
                 this.sums = {};
@@ -301,8 +311,6 @@ angular.module('analysisModule').component('analysis', {
             $scope.$watch('$ctrl.data', function(newValue, oldValue) {
                 self.updateCalculations();
             });
-
-
         }
     ]
 });
@@ -313,4 +321,4 @@ angular.module('analysisModule').component('analysis', {
         if (charCode > 31 && (charCode < 48 || charCode > 57))
             return false;
         return true;
-    } 
+    }

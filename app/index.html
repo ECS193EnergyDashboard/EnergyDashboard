@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="energyDashboardModule">
+<html ng-app="energyDashboardModule" ng-controller="rootCtrl">
 <meta charset="UTF-8">
     <head>
         <!-- BILLY: I deleted 2 other instances of JQUERY plz make sure that everything
@@ -129,14 +129,77 @@
         <!-- Table CSS -->
         <link href="data-table/data-table.css" rel="stylesheet">
 
-        <!-- Chart Options JS -->
+        <!-- Chart Options -->
         <script src="chart-options/chart-options.module.js"></script>
         <script src="chart-options/chart-options.component.js"></script>
+        <link href="chart-options/chart-options.component.css" rel="stylesheet">
+
+        <link href="index.css" rel="stylesheet">
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+        <script src="app.component.js"></script>
 
     </head>
-    <body>
-        <!-- MenuBar module -->
-        <menu-bar id="menu-bar"></menu-bar>
-        <dashboard id="dashbboard"></dashboard>
+    <!--<body>-->
+
+    <body id="rBody">
+        <div id="rSidebar">
+            <div class="rSidebarBtn" id="rSidebarLogoBtn">
+                <img id="rEcoLogo" src="../img/ecoLogoTransparent.png">
+            </div>
+            <div ng-click="toggleSidebar('sidebar1')"  class="rSidebarBtn" data-toggle="tooltip" title="Navigator">
+                <span class="glyphicon glyphicon-search"></span>
+                <span ng-if="toggled('sidebar1')" class="glyphicon glyphicon-chevron-right rightPtr" ></span>
+
+            </div>
+            <div ng-click="toggleSidebar('sidebar2')"  class="rSidebarBtn" data-toggle="tooltip" title="Selected Items">
+                <span class="glyphicon glyphicon-inbox"></span>
+                <span ng-if="toggled('sidebar2')" class="glyphicon glyphicon-chevron-right rightPtr" ></span>
+
+            </div>
+            <div ng-click="toggleSidebar('sidebar3')" class="rSidebarBtn" data-toggle="tooltip" title="Graphed Items">
+                <span class="glyphicon glyphicon-stats"></span>
+                <span ng-if="toggled('sidebar3')" class="glyphicon glyphicon-chevron-right rightPtr" ></span>
+            </div>
+
+            <div class="rSidebarBtn" id="rSidebarBreak">
+                <hr id="rSidebarBreakHR">
+            </div>
+
+            <div ng-click="showFunc(0)"  class="rSidebarBtn2" data-toggle="tooltip" title="Data-Table Tab">
+                <span class="glyphicon glyphicon-th-list"></span>
+                <div ng-if="isLoading('data')" class="progress loadCntr">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar"
+                         aria-valuenow="{{valueNow('data')}}" aria-valuemin="0" aria-valuemax="100" style="width: {{valueNow('data')}}%">
+                        {{valueNow('data')}}%
+                    </div>
+                </div>
+            </div>
+            <div ng-click="showFunc(1)"  class="rSidebarBtn2" data-toggle="tooltip" title="Analysis Tab">
+                <span class="glyphicon glyphicon-dashboard"></span>
+                <span ng-if="isLoading('analysis')" class="glyphicon glyphicon-hourglass loadCntr" >{{loading['analysis']}}</span>
+                <!--<div ng-if="isLoading('analysis')" class="progress loadCntr">-->
+                    <!--<div class="progress-bar progress-bar-striped active" role="progressbar"-->
+                         <!--aria-valuenow="{{valueNow('analysis')}}" aria-valuemin="0" aria-valuemax="100" style="width: {{valueNow('analysis')}}%">-->
+                        <!--{{valueNow('analysis')}}%-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+            <div ng-click="showFunc(2)"  class="rSidebarBtn2" data-toggle="tooltip" title="Graphing Tab">
+                <span class="glyphicon glyphicon-picture"></span>
+
+            </div>
+        </div>
+        <div id="rMain">
+            <dashboard show-sidebar="showSidebar" show="show" id="dashbboard" loading="loading"></dashboard>
+        </div>
     </body>
 </html>
+
+
+
+
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+});
+</script>

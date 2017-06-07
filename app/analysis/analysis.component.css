@@ -8,29 +8,32 @@
 
 .drp-contain {
     display: flex;
-    display: -webkit-flex;
-    flex-direction: row;
-    -webkit-flex-direction: row;
-    justify-content: flex-start;
-    width:100%;
-    padding-top: 1%
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
-.drp-contain .border{
-    border: 1px solid #4099FF;
-    border-radius: 5px;
-    display: inline-flex;
+.drp-contain div{
+    border: 1px solid #ebebeb;
+    /* border-radius: 5px; */
+    height: 100%;
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
 }
-.drp-contain div input {
+.drp-contain div input, .drp-contain div p {
     margin-top: 1%;
 }
 .drp-contain div input{
     border: none;
     cursor: pointer;
+    margin: 0px;
+    padding: 0px;
 }
 .drp-contain div span{
     font-size: 150%;
-    top: 20%;
-    padding-left: 2%;
+    /*top: 20%;*/
+    /*padding-left: 2%;*/
 }
 
 .drp-contain span p{
@@ -50,4 +53,72 @@
 }
 .formattingSettingsModalAnalysis div form label{
     text-align: left !important;
+}
+
+#analysisTable{
+    flex: 20 1;
+    /*border: 5px solid forestgreen;*/
+    /* position: relative; */
+    /* width: 62%; */
+    height: 100%;
+    overflow: scroll;
+    z-index: 0;
+}
+
+
+#analysisTableButtons{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 2em;
+    flex: 0 0;
+    height: 100%;
+}
+#analysisTableButtons .btn{
+    height: 100%;
+}
+
+#tableMenus .checkTableMenu{
+    max-width: 60px;
+}
+
+#tableMenus .tableMenuRange{
+    white-space: nowrap;
+    border: 1px solid #ebebeb;
+    background-color: white;
+    margin: 0px 10px 0px 10px;
+    padding: 0px 10px 0px 0px;
+}
+
+.tableMenuItem .drp-contain .glyphicon{
+    margin: 0px;
+}
+
+.tableMenuRangeText{
+    background-color: #f2f7fa;
+    height: 100%;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+    padding: 0px 10px 0px 5px;
+    font-weight: bold;
+}
+
+#tableMenuDatePicker{
+    min-width: 215px;
+    padding: 0px;
+}
+
+#tableMenuDatePicker .date-picker{
+    height: 100%;
+}
+
+
+.checkTableMenu{
+    padding: 0px 10px 0px 10px; !important;
+
+}
+#cf-toggle{
+    margin-left: 5.5%;
+    cursor: pointer;
 }

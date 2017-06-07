@@ -10,18 +10,17 @@ angular.
             pi.buildingNameFromPath = function(path) {
                 var splitPath = path.split('\\');
                 var foundIndex = -1, index = 0;
-
-                for (var pathName of splitPath) {
-                    if (pathName === 'Buildings') {
-                        foundIndex = index + 1;
-                        break;
+                var regex = /Buildings/;
+                for (var str of splitPath) {
+                    if (regex.exec(str)) {
+                        foundIndex = index;
                     }
                     index++;
                 }
-                if (foundIndex === -1) {
+                if (foundIndex === -1 || foundIndex === splitPath.length - 1) {
                     return '';
                 } 
-                return splitPath[foundIndex];
+                return splitPath[foundIndex + 1];
             }
 
             pi.getElement = function(webId) {
@@ -107,7 +106,6 @@ angular.
                 var url = 'https://ucd-pi-iis.ou.ad3.ucdavis.edu/piwebapi/elements/' + parentWebId + '/elements?selectedFields=Items.Name;Items.WebId;Items.TemplateName;Items.HasChildren;Items.Path'
                 return $http.get(url).then(function(response) {
                     var children = response.data.Items;
-                    var building = children.length > 0 ? pi.buildingNameFromPath(children[0].Path) : '';
                     for (var child of children) {
                         var c = { 
                             name: child.Name || '',
@@ -115,7 +113,7 @@ angular.
                             template: child.TemplateName || 'none',
                             webId: child.WebId || '', 
                             hasChildren: child.HasChildren || false,
-                            building: building
+                            building: pi.buildingNameFromPath(child.Path)
                         };
                         result.push(c);
                     }

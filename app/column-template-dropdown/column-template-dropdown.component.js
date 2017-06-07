@@ -382,12 +382,7 @@ angular.module('columnTemplateDropdownModule')
                         this.filteredColumns.push(col);
                     }
                 }
-
-                this.updateColObj({cols: template.colObj});  //output binding
             };
-
-
-
 
 
             this.getTemplates = function(){

@@ -33,10 +33,13 @@ angular.module('dashboardModule').component('dashboard',{
             return this.loading[name] > 0;
         };
 
-        this.addChildElements = function(parent) {
-            // console.log("add child elems")
-            this.itemsToAdd = parent.elements;
-            this.elemName = parent.name;
+        this.addNavElement = function(elem) {
+            this.elemName = elem.name;
+            if (elem.hasChildren) {
+                this.itemsToAdd = elem.elements;
+            } else {
+                this.itemsToAdd = [ elem ];
+            }
         };
 
         this.addElement = function(element) {

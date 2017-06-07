@@ -139,12 +139,10 @@ angular.module('sideNavModule').component('sideBar', {
 
         this.onSelectElem = function(element) {
             // console.log("on sellect elem");
-            if (element.hasChildren) {
-                self.onClick({ element: element });
+            self.onClick({ element: element });
 
-                //Set highlighted item index to elements id
-                self.hlIndex = element.numId;
-            }
+            //Set highlighted item index to elements id
+            self.hlIndex = element.numId;
         };
 
         // Functions to evaluate conditions for showing/hiding certain icons/classes

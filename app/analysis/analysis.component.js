@@ -227,13 +227,13 @@ angular.module('analysisModule').component('analysis', {
             };
 
             this.valueStyle = function(value) {
+                var style = 'dataCell ';
                 if (value === undefined) {
-                    return 'missingValue';
-                } else if (value.good) {
-                    return 'goodValue';
-                } else {
-                    return 'badValue';
+                    style += 'missing';
+                } else if (!value.good) {
+                    style += 'bad ';
                 }
+                return style;
             };
 
             // Callback for column-template-dropdown component

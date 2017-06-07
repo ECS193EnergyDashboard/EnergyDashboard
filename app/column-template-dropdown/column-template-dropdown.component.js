@@ -386,6 +386,7 @@ angular.module('columnTemplateDropdownModule')
                         this.filteredColumns.push(col);
                     }
                 }
+                console.log(this.filteredColumns);
             };
 
 
@@ -407,15 +408,23 @@ angular.module('columnTemplateDropdownModule')
                 return p;
             };
 
+            this.searchIsCheckedFilter = function() {
+                if (this.search.isChecked) {
+                    return { isChecked: true };
+                } else {
+                    return {};
+                }
+            }
+
             this.clearAll = function() {
-                for(var i = 0; i < this.filteredColumns.length; i++){
-                    this.filteredColumns[i].isChecked = false;
+                for (var column of this.filteredColumnsHTML) {
+                    column.isChecked = false;
                 }
             };
 
             this.selectAll = function(){
-                for(var i = 0; i < this.filteredColumns.length; i++){
-                    this.filteredColumns[i].isChecked = true;
+                for (var column of this.filteredColumnsHTML) {
+                    column.isChecked = true;
                 }
             };
 

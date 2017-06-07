@@ -23,9 +23,9 @@
             <div class="dropdown-menu dropdown-content" id="menuDropdownContent">
                 <div class="dropdownFilters">
                     <div class="btn-group" style="width: 100%; display: flex;">
-                        <button style="flex: 1 1" ng-class="{colCheckedFilterBtn: $ctrl.colCheckedFilter()}"  ng-click="$ctrl.toggleColCheckedFilter(); $event.stopPropagation();" type="button" class="btn btn-primary">
+                        <button style="flex: 1 1" ng-class="{colCheckedFilterBtn: $ctrl.search.isChecked}"  ng-click="$ctrl.search.isChecked = !$ctrl.search.isChecked; $event.stopPropagation();" type="button" class="btn btn-primary">
                             Selected
-                            <span class="glyphicon glyphicon-ok-circle pointer" ng-click="$ctrl.search.isChecked = { isChecked: 'true'} ;$event.stopPropagation()"></span>
+                            <span class="glyphicon glyphicon-ok-circle pointer"></span>
                         </button>
                         <button style="flex: 1 1" ng-click="$ctrl.clearAll();$event.stopPropagation()" type="button" class="btn btn-primary">
                             Clear
@@ -40,7 +40,7 @@
                     <input ng-model="$ctrl.search.columnName" class="form-control" type="text" placeholder="Search For Column...">
                 </div>
                 <div class="dropdownList">
-                    <div ng-click="$ctrl.switchColumnIsChecked(column); $event.stopPropagation()"  ng-repeat="column in ($ctrl.filteredColumnsHTML = ($ctrl.filteredColumns | orderBy:'name' | filter: $ctrl.search.columnName| filter: $ctrl.search.isChecked))  ">
+                    <div ng-click="$ctrl.switchColumnIsChecked(column); $event.stopPropagation()"  ng-repeat="column in ($ctrl.filteredColumnsHTML = ($ctrl.filteredColumns | orderBy:'name' | filter: $ctrl.search.columnName | filter: $ctrl.searchIsCheckedFilter() ))  ">
                         <div  class="dropdownelm" ng-class="{colSelected: column.isChecked}">
                             <input ng-click="$event.stopPropagation();" class="dropDownCheckBox" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}"> {{column.name}}
                         </div>

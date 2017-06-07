@@ -126,10 +126,12 @@ angular.module('analysisModule').component('analysis', {
                     self.outerColumnNames.forEach(function(currOuter, index, array){
                         self.innerColumnNames.forEach(function(currInner, indexInner, array){
                             if(currOuter[currInner.name] == undefined){
-                                currOuter[currInner.name] = {};
+                                currOuter[currInner.name] = { 
+                                    showConditionalFormat: true,
+                                    maxColor: 'Red',
+                                    minColor: 'Blue'
+                                };
                             }
-                            // Set conditionalFormatting to true initially
-                            cf.init(currOuter[currInner.name]);
                         });
                     });
                     self.onEndLoad();
@@ -229,8 +231,23 @@ angular.module('analysisModule').component('analysis', {
                 return style;
             };
 
+            this.conditionalStyle = function(element, outer, inner) {
+                return cf.conditionalFormat(element[outer.name][inner.name], outer[inner.name], this.maxAndMin[outer.name], true);
+            }
+
             // Callback for column-template-dropdown component
             this.updateCol = function(cols) {
+                this.outerColumnNames.forEach(function(outer, index) {
+                    for (var inner of self.innerColumnNames) {
+                        if (cols[index][inner.name] === undefined) {
+                            cols[index][inner.name] = { 
+                                showConditionalFormat: true,
+                                maxColor: 'Red',
+                                minColor: 'Blue'
+                            };
+                        }
+                    }
+                });
                 this.outerColumnNames = cols;
             };
 

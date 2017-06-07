@@ -21,6 +21,7 @@ angular.module('analysisModule').component('analysis', {
                 startDate: moment().startOf('day'),
                 endDate: moment()
             };
+
             this.DRPOptions = {
                 "showDropdowns": true,
                 "timePicker": true,
@@ -47,7 +48,7 @@ angular.module('analysisModule').component('analysis', {
                         moment()
                     ]
                 }
-            }
+            };
             this.data = [];
 
             this.outerColumnNames = [];
@@ -129,9 +130,8 @@ angular.module('analysisModule').component('analysis', {
                             }
                             // Set conditionalFormatting to true initially
                             cf.init(currOuter[currInner.name]);
-                        })
-                    })
-
+                        });
+                    });
                     self.onEndLoad();
                 });
             };
@@ -157,8 +157,8 @@ angular.module('analysisModule').component('analysis', {
                 }
                 this.currentFormattingSettingsCol.display = String(this.currentFormattingSettingsCol.name) + " [" + String(this.currentFormattingSettingsCol.currInner.name) + "]";
                 cf.showFormattingSettings(outerCol, 'formattingSettingsModalAnalysis');
-                console.log(this.currentFormattingSettingsCol);
-            }
+                //console.log(this.currentFormattingSettingsCol);
+            };
 
             this.printMaxOrMin = function(maxMin){
                 // Avoid erorr in console (when this runs before we have data)
@@ -173,7 +173,7 @@ angular.module('analysisModule').component('analysis', {
                 return this.currentFormattingSettingsCol.currInner[maxMin];
 
 
-            }
+            };
 
             // Called in html to toggle CF
             this.toggleConditionalFormatting = function(outerCol, innerCol){
@@ -198,7 +198,7 @@ angular.module('analysisModule').component('analysis', {
                 outerCol[outerCol.currInner.name] = {};
                 var submittedMax = document.getElementById("maxInputAnalysis").value;
                 var submittedMin = document.getElementById("minInputAnalysis").value;
-      
+
                 if(submittedMax.length != 0)
                     outerCol[outerCol.currInner.name].max = submittedMax;
                 else{
@@ -211,7 +211,7 @@ angular.module('analysisModule').component('analysis', {
                 }
                 outerCol[outerCol.currInner.name].maxColor = document.getElementById("maxColorAnalysis").value;
                 outerCol[outerCol.currInner.name].minColor = document.getElementById("minColorAnalysis").value;
-      
+
                 document.getElementById("conditionalFormatFormAnalysis").reset();
               };
 
@@ -234,12 +234,12 @@ angular.module('analysisModule').component('analysis', {
                 } else {
                     return 'badValue';
                 }
-            }
+            };
 
             // Callback for column-template-dropdown component
             this.updateCol = function(cols) {
                 this.outerColumnNames = cols;
-            }
+            };
 
             this.updateCalculations = function() {
                 this.sums = {};
@@ -301,8 +301,6 @@ angular.module('analysisModule').component('analysis', {
             $scope.$watch('$ctrl.data', function(newValue, oldValue) {
                 self.updateCalculations();
             });
-
-
         }
     ]
 });
@@ -313,4 +311,4 @@ angular.module('analysisModule').component('analysis', {
         if (charCode > 31 && (charCode < 48 || charCode > 57))
             return false;
         return true;
-    } 
+    }

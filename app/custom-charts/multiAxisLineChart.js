@@ -40,7 +40,7 @@ nv.models.multiAxisLineChart = function() {
         yAxis1 = nv.models.axis().scale(yScale1).orient('left').duration(duration),
         yAxis2 = nv.models.axis().scale(yScale2).orient('right').duration(duration),
 
-        legend = nv.models.legend().height(30),
+        legend = nv.models.hoverLegend().height(30),
         tooltip = nv.models.tooltip(),
         dispatch = d3.dispatch('onBrush', 'onChartHover', 'onChartHoverOut');
 

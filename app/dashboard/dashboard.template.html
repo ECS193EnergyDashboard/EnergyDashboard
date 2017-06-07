@@ -1,42 +1,64 @@
 <!-- /#wrapper -->
-<div id="wrapper" class="toggledSelector toggledChart">
-    <!-- SideBar module -->
-
-    <side-bar id="side-bar" is-loading="$ctrl.isLoading" on-click="$ctrl.addChildElements(element)"></side-bar>
-    <side-bar-selector id="side-bar-selector" on-select="$ctrl.addElement(item)"  on-deselect="$ctrl.removeElement(item)" on-clear="$ctrl.clearElements()" items-to-add="$ctrl.itemsToAdd"
-    pass-selected="$ctrl.passSelected(selected)"></side-bar-selector>
-    <side-bar-chart id="side-bar-chart" selection="$ctrl.chartSelection" ></side-bar-chart>
-
-    <!-- Page Content -->
-    <div id="page-content-wrapper">
-        <!--Tab buttons-->
-        <div id="dashboardBtns" class="btn-group menuButtons" role="group" aria-label="...">
-            <a ng-click="$ctrl.toggleMenu()" class="btn btn-default " id="menu-toggle">
-                <span class="glyphicon glyphicon-menu-hamburger"></span>
-            </a>
-            <a ng-click="$ctrl.toggleSelectorMenu()" class="btn btn-default" id="menu-selector-toggle">
-                <span class="glyphicon glyphicon-inbox"></span>
-            </a>
-            <a ng-click="$ctrl.toggleChartMenu()" class="btn btn-default" id="menu-chart-toggle">
-                <span class="glyphicon glyphicon-stats"></span>
-            </a>
-            <button ng-click="$ctrl.showDataTab()" type="button" class="btn btn-default" ng-class="{buttonLoad: $ctrl.isLoading('data')}">Data
-                <span  ng-show="$ctrl.isLoading('data')" class="buttonLoadIcon glyphicon glyphicon-hourglass" ></span>
-            </button>
-            <button ng-click="$ctrl.showAnalyzeTab()" type="button" class="btn btn-default" ng-class="{buttonLoad: $ctrl.isLoading('analysis')}">Analysis
-                <span ng-show="$ctrl.isLoading('analysis')" class="buttonLoadIcon glyphicon glyphicon-hourglass" ></span>
-            </button>
-            <button ng-click="$ctrl.showGraphTab()" type="button" class="btn btn-default">
-                Graph
-            </button>
+<div id="wrapper" class="">
+    <div id="rMainTopBar">
+        <div class="rMainTopBarItem" id="rMainTopBarAppName">
+            Energy Dashboard
+        </div>
+        <div class="rMainTopBarItem" id="rMainTopBarAccName">
+            Justin Energy
+        </div>
+        <div class="rMainTopBarItem" id="rMainTopBarPic">
+            <img src="../img/profile.png">
+        </div>
+    </div>
+    <div id="rMainContent">
+        <div class="rMainSidebar" id="rMainSidebar1" ng-class="{'showSidebar': $ctrl.showSidebar['sidebar1']}">
+            <side-bar id="side-bar" is-loading="$ctrl.isLoading" on-click="$ctrl.addChildElements(element)"></side-bar>
+        </div>
+        <div class="rMainSidebar" id="rMainSidebar2 hideSidebar" ng-class="{'showSidebar': $ctrl.showSidebar['sidebar2']}">
+            <side-bar-selector id="side-bar-selector" on-select="$ctrl.addElement(item)"  on-deselect="$ctrl.removeElement(item)" on-clear="$ctrl.clearElements()" items-to-add="$ctrl.itemsToAdd"
+                               pass-selected="$ctrl.passSelected(selected)">
+            </side-bar-selector>
+        </div>
+        <div class="rMainSidebar" id="rMainSidebar3 hideSidebar" ng-class="{'showSidebar': $ctrl.showSidebar['sidebar3']}">
+            <side-bar-chart id="side-bar-chart" selection="$ctrl.chartSelection" ></side-bar-chart>
         </div>
 
-        <!-- Table modules -->
-        <datatable ng-show="$ctrl.isDataTabShown()" table-src="$ctrl.data" selection="$ctrl.chartSelection" search-enabled="true" elem-name="$ctrl.elemName" api="$ctrl.dataTable"
-        side-selector-items="$ctrl.sideSelectorItems"></datatable>
-        <analysis ng-show="$ctrl.isAnalyzeTabShown()" web-ids="$ctrl.webIds" on-start-load="$ctrl.loadingUp('analysis')" on-end-load="$ctrl.loadingDown('analysis')" selection="$ctrl.chartSelection" side-selector-items="$ctrl.sideSelectorItems"></analysis>
-        <chart-options ng-show="$ctrl.isGraphTabShown()" attributes="$ctrl.chartSelection"></chart-options>
+        <div id="rMainContentView">
+            <!-- Page Content -->
+            <div id="page-content-wrapper" >
+                <!--Tab buttons-->
+                <div ng-if="0" id="dashboardBtns" class="btn-group menuButtons" role="group" aria-label="...">
+                    <a ng-click="$ctrl.toggleMenu()" class="btn btn-default " id="menu-toggle">
+                        <span class="glyphicon glyphicon-menu-hamburger"></span>
+                    </a>
+                    <a ng-click="$ctrl.toggleSelectorMenu()" class="btn btn-default" id="menu-selector-toggle">
+                        <span class="glyphicon glyphicon-inbox"></span>
+                    </a>
+                    <a ng-click="$ctrl.toggleChartMenu()" class="btn btn-default" id="menu-chart-toggle">
+                        <span class="glyphicon glyphicon-stats"></span>
+                    </a>
+                    <button ng-click="$ctrl.showDataTab()" type="button" class="btn btn-default" ng-class="{buttonLoad: $ctrl.isLoading('data')}">Data
+                        <span  ng-show="$ctrl.isLoading('data')" class="buttonLoadIcon glyphicon glyphicon-hourglass" ></span>
+                    </button>
+                    <button ng-click="$ctrl.showAnalyzeTab()" type="button" class="btn btn-default" ng-class="{buttonLoad: $ctrl.isLoading('analysis')}">Analysis
+                        <span ng-show="$ctrl.isLoading('analysis')" class="buttonLoadIcon glyphicon glyphicon-hourglass" ></span>
+                    </button>
+                    <button ng-click="$ctrl.showGraphTab()" type="button" class="btn btn-default">
+                        Graph
+                    </button>
+                </div>
+
+                <img ng-if="$ctrl.isDataTabShown() && $ctrl.data.length < 1" id="mainLogo" src="../img/ecoMainLogo.png">
+
+                <!-- Table modules -->
+                <datatable ng-show="$ctrl.isDataTabShown() && $ctrl.data.length > 0" table-src="$ctrl.data" selection="$ctrl.chartSelection" search-enabled="true" elem-name="$ctrl.elemName" api="$ctrl.dataTable"
+                           side-selector-items="$ctrl.sideSelectorItems"></datatable>
+                <analysis ng-show="$ctrl.isAnalyzeTabShown()" web-ids="$ctrl.webIds" on-start-load="$ctrl.loadingUp('analysis')" on-end-load="$ctrl.loadingDown('analysis')" selection="$ctrl.chartSelection" elem-name="$ctrl.elemName" side-selector-items="$ctrl.sideSelectorItems"></analysis>
+                <chart-options ng-show="$ctrl.isGraphTabShown()" attributes="$ctrl.chartSelection"></chart-options>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
     </div>
-    <!-- /#page-content-wrapper -->
 </div>
 <!-- /#wrapper -->

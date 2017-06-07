@@ -73,6 +73,16 @@ angular.module('sideNavModule').component('sideBar', {
             //console.log(self.filterType);
             //console.log(self.searchInput);
             //console.log(self.filteredItems);
+            if(self.searchInput[self.filterType] === "") {
+                self.isFiltered = 0;
+                if(self.filterType === "name"){
+                    self.filteredItems = self.buildings;
+                }
+                else{
+                    self.filteredItems = self.templateList;
+                }
+                return;
+            }
             self.filteredItems = treeFilterFilter(self.buildings, self.searchInput[self.filterType], self.filterType);
             self.isFiltered = 1;
             // console.log("Copying search");
@@ -128,10 +138,13 @@ angular.module('sideNavModule').component('sideBar', {
 
 
         this.onSelectElem = function(element) {
-            self.onClick({ element: element });
+            // console.log("on sellect elem");
+            if (element.hasChildren) {
+                self.onClick({ element: element });
 
-            //Set highlighted item index to elements id
-            self.hlIndex = element.numId;
+                //Set highlighted item index to elements id
+                self.hlIndex = element.numId;
+            }
         };
 
         // Functions to evaluate conditions for showing/hiding certain icons/classes
@@ -170,9 +183,15 @@ angular.module('sideNavModule').component('sideBar', {
             self.filterType = "template";
             self.searchPlaceHolder = "Search Templates...";
             // console.log(Array.from(new set(self.templateList)));
-
-
             self.filteredItems = self.templateList;
+        };
+
+        this.isRegularSearch = function(){
+            return self.filterType === "name";
+        };
+
+        this.isTemplateSearch = function(){
+            return self.filterType === "template";
         };
 
         var timer = 0;
@@ -194,7 +213,7 @@ angular.module('sideNavModule').component('sideBar', {
         };
 
         this.dblClickedItem = function (e){
-            //console.log("double clicked "+e.name);
+            console.log("double clicked "+e.name);
             clearTimeout(timer);
             prevent = true;
             //console.log("setting prevent true");
@@ -204,6 +223,10 @@ angular.module('sideNavModule').component('sideBar', {
         this.loadingList = function(){
 
             return self.loadingElems;
+        };
+
+        this.toggleMenu = function(){
+            $("#wrapper").toggleClass("toggled");
         };
 
     }]

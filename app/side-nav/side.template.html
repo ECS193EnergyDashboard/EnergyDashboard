@@ -1,53 +1,77 @@
 <!-- Sidebar -->
-
-<div class="fixedButtons">
-    <div class="btn-group" role="group" aria-label="...">
-        <button ng-click="$ctrl.searchNames()" type="button" class="btn btn-default glyphicon glyphicon-home"></button>
-        <button ng-click="$ctrl.searchTemplates()" type="button" class="btn btn-default glyphicon glyphicon-book"></button>
-        <button ng-click="$ctrl.applyFilter()" ng-class="{filterBtn: $ctrl.isFiltered}" type="button" class="btn btn-default glyphicon glyphicon-filter"></button>
+<div id="inside">
+    <div class="fixedButtons">
+        <div class="btn-group" role="group" aria-label="...">
+            <div ng-click="$ctrl.searchNames()" type="button" class="rSidebarSearchToggle" ng-class="{'rSidebarRegSearch': $ctrl.isRegularSearch()}"><span class="glyphicon glyphicon-home"></span> </div>
+            <div ng-click="$ctrl.searchTemplates()" type="button" class="rSidebarSearchToggle" ng-class="{'rSidebarTemSearch': $ctrl.isTemplateSearch()}"><span class="glyphicon glyphicon-book"></span> </div>
+        </div>
+        <div class="form-wrapper">
+            <form ng-submit="$ctrl.applyFilter()"  >
+                <input type="text" class="form-control" id="usr" placeholder="{{$ctrl.searchPlaceHolder}}" ng-model="$ctrl.searchInput[$ctrl.filterType]">
+                <div ng-click="$ctrl.applyFilter()" ng-class="{filterBtn: $ctrl.isFiltered}" type="button" class=""><span class="glyphicon glyphicon-search"></span></div>
+                <!--<button id="clearFilterButton" ng-click="$ctrl.clearFilter()" type="button" class="btn btn-default "><span class="glyphicon glyphicon-trash"></span></button>-->
+            </form>
+        </div>
+        <div ng-if="$ctrl.isFiltered && $ctrl.searchInput[$ctrl.filterType]"  class="rSidebarSearchText">
+            {{$ctrl.filteredItems.length}} results found for "{{$ctrl.searchInput[$ctrl.filterType]}}"
+        </div>
     </div>
-    <form ng-submit="$ctrl.applyFilter()" class="form-wrapper">
-        <input type="text" class="form-control" id="usr" placeholder="{{$ctrl.searchPlaceHolder}}" ng-model="$ctrl.searchInput[$ctrl.filterType]">
-        <button id="clearFilterButton" ng-click="$ctrl.clearFilter()" type="button" class="btn btn-default glyphicon glyphicon-trash"></button>
-    </form>
-</div>
 
-<p ng-if="$ctrl.loadingList()" id="loadingText">
-    Loading
-</p>
+    <p ng-if="$ctrl.loadingList()" id="loadingText">
+        Loading
+    </p>
 
-<!--
-<div ng-if="$ctrl.loadingList()" id="loadingOverlay">
-</div>
 
-<div ng-if="$ctrl.loadingList()"  class="spinner"></div>
+    <div id="sidebar-wrapper">
+        <div class="just-padding" ng-class="{loadingList: $ctrl.loadingList()}">
+            <div class="list-group list-group-root well" >
+                <div dummy="$ctrl.search.name.length" index="$index" custom-drag-src-safe="side-selector" ng-repeat="element in $ctrl.filteredItems" >
+                    <div ng-click="$ctrl.clickedItem(element);$event.stopPropagation()"  ng-dblclick="$ctrl.dblClickedItem(element);$event.stopPropagation()" class="sidebar-item list-group-item" ng-class="{selected: $ctrl.isSelectedElem(element), loading: $ctrl.elemIsLoading(element)}" >
+                        <span ng-show="$ctrl.showClosedIcon(element)" class="glyphicon glyphicon-triangle-right pointer" ng-click="$ctrl.clickElem(element);$event.stopPropagation()"></span>
+                        <span ng-show="$ctrl.showOpenIcon(element)" class="glyphicon glyphicon-triangle-bottom pointer" ng-click="$ctrl.clickElem(element);$event.stopPropagation()"></span>
+                        <span ng-show="$ctrl.showLeafNodeIcon(element)" class="glyphicon glyphicon-asterisk" ></span>
+                        <span ng-show="$ctrl.showLeafNodeIcon(element)" class="glyphicon glyphicon-modal-window" ></span>
 
-<div ng-if="$ctrl.loadingList()" class="cssload-battery">
-    <div class="cssload-liquid"></div>
-</div>
--->
+                        <span ng-show="!$ctrl.showLeafNodeIcon(element) && $ctrl.showClosedIcon(element)" class="glyphicon glyphicon glyphicon-folder-close" ></span>
+                        <span ng-show="!$ctrl.showLeafNodeIcon(element) && $ctrl.showOpenIcon(element)" class="glyphicon glyphicon glyphicon-folder-open" ></span>
 
-<div id="sidebar-wrapper">
+                        <span id="sideBarAddBtn" ng-click="$ctrl.onSelectElem(element);$event.stopPropagation()" class="glyphicon glyphicon-ok"></span>
+                        <div id="itemText">
+                            <span ng-if="$ctrl.isFiltered && $ctrl.searchInput[$ctrl.filterType]">
+                                <h6 id="buildingName">{{element.building}} | {{element.template}}</h6>
+                                <br>
+                            </span>
+                            {{element.name}}
+                        </div>
 
-    <div class="just-padding" ng-class="{loadingList: $ctrl.loadingList()}">
 
-        <!--Tab buttons-->
-        <div class="list-group list-group-root well" >
-
-            <div dummy="$ctrl.search.name.length" index="$index" custom-drag-src-safe="side-selector" ng-repeat="element in $ctrl.filteredItems" >
-                <div ng-click="$ctrl.clickedItem(element);$event.stopPropagation()"  ng-dblclick="$ctrl.dblClickedItem(element);$event.stopPropagation()" class="sidebar-item list-group-item" ng-class="{selected: $ctrl.isSelectedElem(element), loading: $ctrl.elemIsLoading(element)}" >
-                    <span ng-show="$ctrl.showClosedIcon(element)" class="glyphicon glyphicon-chevron-right pointer" ng-click="$ctrl.clickElem(element);$event.stopPropagation()"></span>
-                    <span ng-show="$ctrl.showOpenIcon(element)" class="glyphicon glyphicon-chevron-down pointer" ng-click="$ctrl.clickElem(element);$event.stopPropagation()"></span>
-                    <span ng-show="$ctrl.showLeafNodeIcon(element)" class="glyphicon glyphicon-modal-window" ></span>
-                    <span class="">{{element.name}} </span>
+                    </div>
+                    <div class="list-group" ng-include="'side-nav/side-heirarchy-template.html'" ng-if="element.show">
+                    </div>
                 </div>
-                <div class="list-group" ng-include="'side-nav/side-heirarchy-template.html'" ng-if="element.show">
-                </div>
+                <!-- <p ng-hide="blds.length">Loading items....</p> -->
+
             </div>
-            <!-- <p ng-hide="blds.length">Loading items....</p> -->
 
         </div>
-
+    </div>
+</div>
+<!--<div id="sidebarLoadingBar" ng-if="$ctrl.isLoading['data']">-->
+    <!--<div class="progress">-->
+        <!--<div class="progress-bar progress-bar-striped active" role="progressbar"-->
+             <!--aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">-->
+            <!--40%-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+<div id="sidebar-border" ng-click="$ctrl.toggleMenu()">
+    <div id="btnBorder">
+    <span class="glyphicon glyphicon-chevron-left pointer" ></span>
+        <span class="glyphicon glyphicon-chevron-left pointer" ></span>
+        <span class="glyphicon glyphicon-chevron-left pointer" ></span>
+    <span class="glyphicon glyphicon-chevron-right pointer" ></span>
+        <span class="glyphicon glyphicon-chevron-right pointer" ></span>
+        <span class="glyphicon glyphicon-chevron-right pointer" ></span>
     </div>
 </div>
 <!-- /#sidebar-wrapper -->

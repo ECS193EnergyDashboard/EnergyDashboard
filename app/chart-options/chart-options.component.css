@@ -1,0 +1,50 @@
+#chartTable{
+    flex: 20 1;
+    /*border: 5px solid forestgreen;*/
+    /* position: relative; */
+    /* width: 62%; */
+    height: 100%;
+    overflow: scroll;
+    z-index: 0;
+}
+
+#chartMenu{
+    flex: 1 1;
+    /* float: right; */
+    /*border: 5px solid red;*/
+    display: flex;
+    justify-content: flex-end;
+    background-color: #d6dde3;
+    align-items: center;
+}
+.topMenuItem{
+    /* border: 2px solid yellow; */
+    /* background-color: #fffdfb; */
+    /* min-height: 55px; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a6acba;
+    font-size: 1em;
+    height: 100%;
+    padding-left: .2%;
+    padding-right: .2%;
+    position: relative;
+}
+
+.topMenuItem:hover{
+    background-color: #4b5473;
+}
+
+.topMenuIcon{
+    min-width: 30px;
+}
+
+#chartMenuText{
+    justify-content: flex-start;
+    flex: 100 1;
+}
+
+#chartMenuText h4{
+    padding-left: 7px;
+}

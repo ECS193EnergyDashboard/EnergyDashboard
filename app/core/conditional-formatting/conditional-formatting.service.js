@@ -11,11 +11,16 @@ angular.module('core.conditionalFormatting').
 
             // Predefined colors
             cf.white = rgb(255, 255, 255);
-            cf.blue = rgb(0, 0, 255);
-            cf.red = rgb(255, 0, 0);
-            cf.green = rgb(0,100,0);
-            cf.purple = rgb(160,32,240);
+            // cf.blue = rgb(0, 0, 255);
+            cf.blue = rgb(106, 166, 186);
+            // cf.red = rgb(255, 0, 0);
+            cf.red = rgb(244,99,106);
 
+            // cf.green = rgb(0,100,0);
+            cf.green = rgb(162, 243, 216);
+            // cf.purple = rgb(160,32,240);
+            cf.purple = rgb(136, 142, 164);
+            cf.yellow = rgb(248, 194, 0);
             cf.init = function(column){
                 //All columns start showing conditional formating
                 column.showConditionalFormat = true;

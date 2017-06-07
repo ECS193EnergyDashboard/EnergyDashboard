@@ -1,48 +1,63 @@
-<div class="columnTemplateParent" ng-hide="$ctrl.rowData.length == 0">
+<div class="columnTemplateParent" >
 <!-- <div class="columnTemplateParent"> -->
     <div class="tableSettingsButtons">
+        <!--Save Template button for Data Tab-->
+        <div ng-class="{'saveTemplateButtonData': $ctrl.isAnalysis=='false', 'saveTemplateButtonAnalysis': $ctrl.isAnalysis=='true'}" ng-click="$ctrl.ShowSaveModal()" class="topMenuItem chartMenuIcon" >
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+        </div>
 
+        <!-- Delete Template button for Data Tab -->
+        <div ng-click="$ctrl.ShowDeleteModal()" class="topMenuItem topMenuIcon">
+            <span class="glyphicon glyphicon-trash"></span>
+        </div>
+
+        <!--Download CSV button for Data Tab-->
+        <div ng-click="$ctrl.ShowDownloadModal()" class="topMenuItem topMenuIcon">
+            <span class="glyphicon glyphicon-save-file"></span>
+        </div>
         <!-- Columns show/hide dropdown -->
-        <div class="menuDropdown">
-            <button type="button" class="btn btn-default dropdown-toggle tableButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <div class="topMenuItem ">
+            <button type="button" class="btn btn-default dropdown-toggle topMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Columns <span class="caret"></span>
             </button>
+            <div class="dropdown-menu dropdown-content" id="menuDropdownContent">
+                <div class="dropdownFilters">
+                    <div class="btn-group" style="width: 100%; display: flex;">
+                        <button style="flex: 1 1" ng-class="{colCheckedFilterBtn: $ctrl.colCheckedFilter()}"  ng-click="$ctrl.toggleColCheckedFilter(); $event.stopPropagation();" type="button" class="btn btn-primary">
+                            Selected
+                            <span class="glyphicon glyphicon-ok-circle pointer" ng-click="$ctrl.search.isChecked = { isChecked: 'true'} ;$event.stopPropagation()"></span>
+                        </button>
+                        <button style="flex: 1 1" ng-click="$ctrl.clearAll();$event.stopPropagation()" type="button" class="btn btn-primary">
+                            Clear
+                            <span class="glyphicon glyphicon-remove pointer" ></span>
+                        </button>
+                        <button style="flex: 1 1" ng-click="$ctrl.selectAll();$event.stopPropagation()" type="button" class="btn btn-primary">
+                            Select
+                            <span class="glyphicon glyphicon-ok pointer" ></span>
+                        </button>
 
-            <div class="dropdown-menu dropdown-content">
-                <!--- START: From columnDropwdownSearch-->
-                <div id="columnBtnSelected">
-                    Selected
-                    <span class="glyphicon glyphicon-ok-circle pointer" ng-click="search.isChecked = { isChecked: 'true'} ;$event.stopPropagation()"></span>
-                    <span class="glyphicon glyphicon-ban-circle pointer" ng-click="search.isChecked = { } ;$event.stopPropagation()"></span>
+                    </div>
+                    <input ng-model="$ctrl.search.columnName" class="form-control" type="text" placeholder="Search For Column...">
                 </div>
-                <br>
-                <div id="columnBtnCheck">
-                    Trash Shown
-                    <span class="glyphicon glyphicon-remove pointer" ng-click="$ctrl.clearAll();$event.stopPropagation()"></span>
-                </div>
-                <div id="columnBtnCheck">
-                    Select Shown
-                    <span class="glyphicon glyphicon-ok pointer" ng-click="$ctrl.selectAll();$event.stopPropagation()"></span>
-                </div>
-                <!--- END: From columnDropwdownSearch-->
-
-                <input ng-model="search.columnName" class="form-control" type="text" placeholder="Search For Column...">
-                <div class="dropdownelm" ng-repeat="column in ($ctrl.filteredColumnsHTML = ($ctrl.filteredColumns | orderBy:'name' | filter: search.columnName| filter: search.isChecked))  " ng-click="$ctrl.switchColumnIsChecked(column)" ng-class="{'columnChecked': column.isChecked}"> 
-                    {{column.name}}
+                <div class="dropdownList">
+                    <div ng-click="$ctrl.switchColumnIsChecked(column); $event.stopPropagation()"  ng-repeat="column in ($ctrl.filteredColumnsHTML = ($ctrl.filteredColumns | orderBy:'name' | filter: $ctrl.search.columnName| filter: $ctrl.search.isChecked))  ">
+                        <div  class="dropdownelm" ng-class="{colSelected: column.isChecked}">
+                            <input ng-click="$event.stopPropagation();" class="dropDownCheckBox" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}"> {{column.name}}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-
         <!-- Templates dropdown -->
-        <div class="menuDropdown">
-            <button type="button" class="btn btn-default dropdown-toggle tableButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <div class="topMenuItem ">
+            <button type="button" class="btn btn-default dropdown-toggle topMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{$ctrl.currentTemplate.name}} <span class="caret"></span>
             </button>
             <ul class="dropdown-menu dropdown-content">
                 <input ng-model="templateFilter" class="form-control" type="text" placeholder="Search For Template...">
 
-                <li ng-if="$ctrl.piTemplatesInUse.length > 1"><a ng-click="$ctrl.showIntersection()"> 
+                <li ng-if="$ctrl.piTemplatesInUse.length > 1"><a ng-click="$ctrl.showIntersection()">
                     Show Intersection
                 </a> </li>
 
@@ -51,27 +66,6 @@
                 </li>
             </ul>
         </div>
-
-
-        <!--Save Template button for Data Tab-->
-        <button ng-class="{'saveTemplateButtonData': $ctrl.isAnalysis=='false', 'saveTemplateButtonAnalysis': $ctrl.isAnalysis=='true'}" ng-click="$ctrl.ShowSaveModal()" data-toggle="modal" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false">
-            Save Template
-        </button>
-
-
-        <!-- Delete Template button for Data Tab -->
-        <button ng-click="$ctrl.ShowDeleteModal()" ng-class="{'disabled': $ctrl.currentTemplate.name=='Default' || $ctrl.currentTemplate.name=='Intersection'}" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false">
-            Delete Template
-        </button>
-
-
-        <!--Download CSV button for Data Tab-->
-        <button ng-click="$ctrl.ShowDownloadModal()" type="button" class="btn btn-default tableButton" aria-haspopup="true" aria-expanded="false" data-toggle="modal" >
-            Download As CSV
-            <span class="glyphicon glyphicon-save-file"></span>
-        </button>
-
-
     </div> <!--end tableSettingsButtons -->
 
 
@@ -242,7 +236,7 @@
         </div>
 
         <div ng-if="!$ctrl.isAvailableDefaultTemplate" class="modal-body">
-        You are creating a default template which will appear first for all users when displaying these piTemplates: 
+        You are creating a default template which will appear first for all users when displaying these piTemplates:
         <ul>
             <li ng-repeat="piTemplate in $ctrl.piTemplatesInUse">
                 <div> {{piTemplate}}</div>

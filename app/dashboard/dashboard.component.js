@@ -1,8 +1,11 @@
 angular.module('dashboardModule').component('dashboard',{
 	templateUrl: 'dashboard/dashboard.template.html',
+    bindings: {
+        showSidebar: '=',
+        show: '='
+    },
 	controller: ['pi', function TableController(pi){
 		var self = this;
-        this.show = 0;
 		this.data = [];
 		this.showData = true;
 		this.asyncData = [];
@@ -18,22 +21,23 @@ angular.module('dashboardModule').component('dashboard',{
         // Example: multiple async requests, each one UPs when sent, each one DOWNs when done, 0 signals loading is done
         this.loadingUp = function(name) {
             this.loading[name]++;
-        }
+        };
 
         this.loadingDown = function(name) {
             if (this.loading[name] > 0) {
                 this.loading[name]--;
             }
-        }
+        };
 
         this.isLoading = function(name) {
             return this.loading[name] > 0;
         };
 
         this.addChildElements = function(parent) {
+            // console.log("add child elems")
             this.itemsToAdd = parent.elements;
             this.elemName = parent.name;
-        }
+        };
 
         this.addElement = function(element) {
             this.loadingUp('data');
@@ -69,7 +73,8 @@ angular.module('dashboardModule').component('dashboard',{
         }
 
         this.clearElements = function() {
-            console.log("Clearning elements");
+            // console.log("Clearning elements");
+            this.itemsToAdd = [];
             this.webIds.length = 0;
             this.data.length = 0;
 
@@ -81,45 +86,54 @@ angular.module('dashboardModule').component('dashboard',{
         };
 
         this.showDataTab = function() {
-            this.show = 0;
-            this.dataTable.update();
+            self.show = 0;
+            // this.dataTable.update();
         };
 
         this.showAnalyzeTab = function() {
-            this.show = 1;
+            self.show = 1;
+            // this.dataTable.update();
         };
 
         this.showGraphTab = function() {
-            this.show = 2;
+            self.show = 2;
+            // this.dataTable.update();
         };
 
         this.isDataTabShown = function() {
-            return this.show === 0;
+            return self.show === 0;
+            // this.dataTable.update();
         };
 
         this.isAnalyzeTabShown = function() {
-            return this.show === 1;
+            return self.show === 1;
+            // this.dataTable.update();
         };
 
         this.isGraphTabShown = function() {
-            return this.show === 2;
+            return self.show === 2;
+            // this.dataTable.update();
         };
 
 
         this.toggleMenu = function(){
             $("#wrapper").toggleClass("toggled");
+            this.dataTable.update();
         };
         this.toggleSelectorMenu = function(){
             $("#wrapper").toggleClass("toggledSelector");
+            this.dataTable.update();
         };
         this.toggleChartMenu = function(){
             $("#wrapper").toggleClass("toggledChart");
+            this.dataTable.update();
         };
 
         this.passSelected = function(selected){
             // console.log("Recieved selected", selected);
             this.sideSelectorItems = selected;
         };
+
 
 
         /* @Note: not sure e.pageX will work in IE8 */

@@ -1,21 +1,21 @@
 /* How templates currently work:
     1. The first time you add something to the table - it will look for the default template with the exact match
         of current piTemplates. If none exists then it will create one for those piTemplates. For example when you put in
-        AHU, 2 piTemplaes are in use so the default will be for both of those templates. 
-    2. 
+        AHU, 2 piTemplaes are in use so the default will be for both of those templates.
+    2.
 
 
     Notes:
         There will always be a default template for if only a single piTemplate is in use. Whenever you
-        go from no data to data a default will be made. However, if you have data then add new data 
+        go from no data to data a default will be made. However, if you have data then add new data
         a default wont be made unless you make it.
 
-        However, in the case of AHU 2 piTemplates are in use so therefore there will be a default 
+        However, in the case of AHU 2 piTemplates are in use so therefore there will be a default
         for that one.
         The only times there is not a default template available is when you add multiple piTempaltes
         and one has not been set yet.
 
-    
+
 */
 angular.module('columnTemplateDropdownModule')
     .filter('type', function(){
@@ -67,7 +67,7 @@ angular.module('columnTemplateDropdownModule')
             var numInnerColumns = 0;
             this.currentTemplate = {};
             this.filteredColumns = [];
-
+            this.search = {};
             this.piTemplatesInUse = [];
 
             this.unalteredCurrentTemplate = {}; // For the watcher
@@ -96,9 +96,7 @@ angular.module('columnTemplateDropdownModule')
                     }
                 }
                 else{
-
                     if(self.isAnalysis == "true"){
-
                         $('.saveTemplateButtonAnalysis').css({'color': 'red'});
                     }
                     else{
@@ -107,6 +105,9 @@ angular.module('columnTemplateDropdownModule')
                 }
             }, true);
 
+            this.toggleColumn = function(column){
+                column.isChecked = column.isChecked ? false: true;
+            };
 
 
             this.$onChanges = function(changes){
@@ -225,7 +226,7 @@ angular.module('columnTemplateDropdownModule')
                 // Make clone, otherwise they are same reference
                 var colObjToAdd = JSON.parse(angular.toJson(self.columns));
                 if(colObjToAdd.length == 0){
-                    return;   
+                    return;
                 }
                 var template = {
                     "name": "Default",
@@ -282,7 +283,7 @@ angular.module('columnTemplateDropdownModule')
                     return;
 
 
-                
+
                 // Get all of the columns into an array
                 for(var col of this.columns){
                     if(!intersection.includes(col.name)){
@@ -292,9 +293,9 @@ angular.module('columnTemplateDropdownModule')
 
 
 
-                this.rowData.forEach(function(row){ 
-                    // console.log(row);  
-                    var rowColumns = [] 
+                this.rowData.forEach(function(row){
+                    // console.log(row);
+                    var rowColumns = []
                     Object.keys(row).forEach(function(key){
                         rowColumns.push(row[key].name)
                     });
@@ -616,11 +617,11 @@ angular.module('columnTemplateDropdownModule')
                     this.ShowErrorModal();
                     return;                   
                 }
-                if(this.newTemplateName == "Intersection" || this.newTemplateName == "intersection" || 
+                if(this.newTemplateName == "Intersection" || this.newTemplateName == "intersection" ||
                         this.newTemplateName == "default"){
                     this.errorMessage = "Please pick another name for the template";
                     this.ShowErrorModal();
-                    return;                      
+                    return;
                 }
                 for(templ of this.templates){
                     // New template name already exists and its type is the current type

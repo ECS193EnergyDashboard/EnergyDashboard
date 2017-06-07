@@ -35,6 +35,7 @@
 .topMenuItem:hover{
     color: #d6dde3;
     background-color: #4b5473;
+    color: rgb(120, 223, 111);
 }
 
 .topMenuIcon{

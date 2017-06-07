@@ -16,20 +16,20 @@ angular.module('core.conditionalFormatting').
             cf.red = rgb(244,99,106);
 
             // cf.green = rgb(0,100,0);
-            cf.green = rgb(162, 243, 216);
+            cf.green = rgb(120, 223, 111);
             // cf.purple = rgb(160,32,240);
-            cf.purple = rgb(136, 142, 164);
+            cf.purple = rgb(161, 116, 164);
             cf.yellow = rgb(248, 194, 0);
             cf.init = function(column){
                 //All columns start showing conditional formating
                 column.showConditionalFormat = true;
-            }
+            };
 
             // =====--- CONDITIONAL FORMATTING ---===== //
 
             cf.isUndefined = function(thing) {
                 return angular.isUndefined(thing);
-            }
+            };
 
 
 

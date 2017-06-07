@@ -15,7 +15,6 @@ var templatesLocation = './templates.json'
 jsonfile.readFile(templatesLocation, function(err, obj) {
     if(!(obj=== undefined || obj == null))
         templates = obj;
-    // console.dir(templates);
 });
 
 //This responds on the homepage
@@ -30,8 +29,6 @@ app.get('/', function(req, res) {
             'x-sent': true
         }
     };
-    //res.send('Hello POST');
-    //res.sendFile('index.html', options);
 
 })
 
@@ -54,7 +51,6 @@ app.post('/templatesDelete', function(req, res) {
     var index = 0;
     for(var template of templates){
         if(template.name == req.body.name){
-            console.log("=======----------   DELETING  -----------=======  ", index)
             break;
         }
         index++;
@@ -76,8 +72,6 @@ app.post('/templatesUpdate', function(req, res) {
     // console.log("Got a POST request for the templatesUpdate");
     console.log("req.body: ", req.body);
 
-    // console.log(templates.length);
-
     // Find the template
     var index = 0;
     for(var template of templates){
@@ -89,8 +83,6 @@ app.post('/templatesUpdate', function(req, res) {
     }
     // Update the template
     template.colObj = req.body.colObj;
-
-    // JSON.stringify(template.type)==JSON.stringify(req.body.type)
 
 
     console.dir("template ", template);

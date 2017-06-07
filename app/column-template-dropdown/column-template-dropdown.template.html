@@ -40,7 +40,7 @@
                     <input ng-model="$ctrl.search.columnName" class="form-control" type="text" placeholder="Search For Column...">
                 </div>
                 <div class="dropdownList">
-                    <div ng-click="$ctrl.switchColumnIsChecked(column); $event.stopPropagation()"  ng-repeat="column in ($ctrl.filteredColumns = ($ctrl.columns | orderBy:'name' | filter: $ctrl.search.columnName| filter: $ctrl.search.isChecked))  ">
+                    <div ng-click="$ctrl.switchColumnIsChecked(column); $event.stopPropagation()"  ng-repeat="column in ($ctrl.filteredColumnsHTML = ($ctrl.filteredColumns | orderBy:'name' | filter: $ctrl.search.columnName| filter: $ctrl.search.isChecked))  ">
                         <div  class="dropdownelm" ng-class="{colSelected: column.isChecked}">
                             <input ng-click="$event.stopPropagation();" class="dropDownCheckBox" ng-model="column.isChecked" type="checkbox" name="{{column.name}}" value="{{column.name}}"> {{column.name}}
                         </div>

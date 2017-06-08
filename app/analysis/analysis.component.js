@@ -244,12 +244,14 @@ angular.module('analysisModule').component('analysis', {
             this.updateCol = function(cols) {
                 this.outerColumnNames.forEach(function(outer, index) {
                     for (var inner of self.innerColumnNames) {
-                        if (cols[index][inner.name] === undefined) {
-                            cols[index][inner.name] = { 
-                                showConditionalFormat: true,
-                                maxColor: 'Red',
-                                minColor: 'Blue'
-                            };
+                        if(!angular.isUndefined(cols[index])){
+                            if (cols[index][inner.name] === undefined) {
+                                cols[index][inner.name] = { 
+                                    showConditionalFormat: true,
+                                    maxColor: 'Red',
+                                    minColor: 'Blue'
+                                };
+                            }
                         }
                     }
                 });

@@ -41,7 +41,8 @@
     </div>
 
 
-    <div id="analysisTable">
+    <div id="analysisTable" ng-hide="$ctrl.sideSelectorItems.length == 1 && 
+    $ctrl.sideSelectorItems[0].building == 'dummyItem'">
 
         <table st-table="$ctrl.displayed" st-safe-src="$ctrl.data" class="table table-striped" ng-hide="$ctrl.data == undefined || $ctrl.data.length == 0">
             <thead>

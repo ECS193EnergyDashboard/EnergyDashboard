@@ -138,6 +138,17 @@ angular.module('analysisModule').component('analysis', {
                 });
             };
 
+            this.$onChanges = function(changes){
+                console.log(changes)
+                if(!angular.isUndefined(changes.sideSelectorItems)){
+                    if(changes.sideSelectorItems.currentValue.length == 1 &&
+                        changes.sideSelectorItems.currentValue[0].building == "dummyItem"){
+                        this.data = [];
+                    }
+
+                }
+            }
+
             this.getters = {
                 value: function(outerName, innerName, element) {
                     return element[outerName][innerName].value;
@@ -232,19 +243,26 @@ angular.module('analysisModule').component('analysis', {
             };
 
             this.conditionalStyle = function(element, outer, inner) {
-                return cf.conditionalFormat(element[outer.name][inner.name], outer[inner.name], this.maxAndMin[outer.name], true);
+                var innerCol = outer[inner.name], outerVal = element[outer.name];
+                if (innerCol !== undefined && outerVal !== undefined) {
+                    return cf.conditionalFormat(outerVal[inner.name], innerCol, this.maxAndMin[outer.name], true);
+                } else {
+                    return {};
+                }
             }
 
             // Callback for column-template-dropdown component
             this.updateCol = function(cols) {
                 this.outerColumnNames.forEach(function(outer, index) {
                     for (var inner of self.innerColumnNames) {
-                        if (cols[index][inner.name] === undefined) {
-                            cols[index][inner.name] = { 
-                                showConditionalFormat: true,
-                                maxColor: 'Red',
-                                minColor: 'Blue'
-                            };
+                        if(!angular.isUndefined(cols[index])){
+                            if (cols[index][inner.name] === undefined) {
+                                cols[index][inner.name] = { 
+                                    showConditionalFormat: true,
+                                    maxColor: 'Red',
+                                    minColor: 'Blue'
+                                };
+                            }
                         }
                     }
                 });

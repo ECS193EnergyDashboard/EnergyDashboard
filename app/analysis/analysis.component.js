@@ -232,7 +232,12 @@ angular.module('analysisModule').component('analysis', {
             };
 
             this.conditionalStyle = function(element, outer, inner) {
-                return cf.conditionalFormat(element[outer.name][inner.name], outer[inner.name], this.maxAndMin[outer.name], true);
+                var innerCol = outer[inner.name], outerVal = element[outer.name];
+                if (innerCol !== undefined && outerVal !== undefined) {
+                    return cf.conditionalFormat(outerVal[inner.name], innerCol, this.maxAndMin[outer.name], true);
+                } else {
+                    return {};
+                }
             }
 
             // Callback for column-template-dropdown component

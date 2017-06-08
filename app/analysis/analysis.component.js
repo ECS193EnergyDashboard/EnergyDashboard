@@ -138,6 +138,17 @@ angular.module('analysisModule').component('analysis', {
                 });
             };
 
+            this.$onChanges = function(changes){
+                console.log(changes)
+                if(!angular.isUndefined(changes.sideSelectorItems)){
+                    if(changes.sideSelectorItems.currentValue.length == 1 &&
+                        changes.sideSelectorItems.currentValue[0].building == "dummyItem"){
+                        this.data = [];
+                    }
+
+                }
+            }
+
             this.getters = {
                 value: function(outerName, innerName, element) {
                     return element[outerName][innerName].value;

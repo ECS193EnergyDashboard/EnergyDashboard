@@ -69,10 +69,8 @@ angular.module('dataTableModule')
                 return "N/A";
             } else if (typeof(value.value) === "number" && value.good) {
                 return $filter('number')(value.value, 2);
-            } else if (value.good) {
-                return value.value;
             } else {
-                return 'BAD';
+                return value.value;
             }
         };
 
